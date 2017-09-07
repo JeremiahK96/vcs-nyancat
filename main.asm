@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 09-03-2017 Version 1.0
+; 09-04-2017 Version 1.1
 ;
-; Set up the spacing of the kernel zones
+; Test a possible color scheme
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -51,7 +51,6 @@ RamStart
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     SEG CODE
-    ORG $F800	; 2K ROM
     ORG $F000	; 4K ROM
 
 
@@ -114,14 +113,13 @@ VblankTimerLoop
 
     lda #0
     sta VBLANK	; enable display
-    
-    
 
-    lda #$FF
-    sta GRP0
 
+
+    lda #$90
+    sta COLUBK
+    
     ldy #27
-    sty COLUBK
 KernelLoop
     sta WSYNC
     
@@ -131,16 +129,30 @@ KernelLoop
     ldx #7
 KernelLoopA
 
-    ldy #5
-    sty COLUBK
-KernelLoopB
+
+
+    lda #$94
+    sta COLUBK
+    sta WSYNC
+    lda #$9A
+    sta COLUBK
+    sta WSYNC
+    lda #$9E
+    sta COLUBK
+    sta WSYNC
+    lda #$9A
+    sta COLUBK
+    sta WSYNC
+    lda #$94
+    sta COLUBK
     sta WSYNC
     
-    dey
-    bne KernelLoopB
     
+        
+    lda #$90
+    sta COLUBK
+
     ldy #14
-    sty COLUBK
 KernelLoopC
     sta WSYNC
 
@@ -150,16 +162,30 @@ KernelLoopC
     dex
     bne KernelLoopA
 
-    ldy #5
-    sty COLUBK
-KernelLoopD
+
+
+    lda #$94
+    sta COLUBK
     sta WSYNC
-    
-    dey
-    bne KernelLoopD
+    lda #$9A
+    sta COLUBK
+    sta WSYNC
+    lda #$9E
+    sta COLUBK
+    sta WSYNC
+    lda #$9A
+    sta COLUBK
+    sta WSYNC
+    lda #$94
+    sta COLUBK
+    sta WSYNC
+
+
+
+    lda #$90
+    sta COLUBK
 
     ldy #27
-    sty COLUBK
 KernelLoopE
     sta WSYNC
     
