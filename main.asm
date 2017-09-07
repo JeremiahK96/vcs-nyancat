@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 09-05-2017 Version 1.2
+; 09-06-2017 Version 1.3
 ;
-; Add a 6-digit score
+; Add a level counter
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -43,9 +43,10 @@
 RamStart
 
 BCDScore	ds 3	; 3-byte array for score value which will be stored as a
-			; BCD encoded 6-digit number
+			; BCD encoded 6-digit number and used to control the
+			; 6-digit score display
 
-; Pointers for digit graphics
+; pointers for digit graphics
 DigitPtr0	ds 2
 DigitPtr1	ds 2
 DigitPtr2	ds 2
@@ -53,7 +54,13 @@ DigitPtr3	ds 2
 DigitPtr4	ds 2
 DigitPtr5	ds 2
 
-; Temporary variables
+BCDLevel	ds 1	; value for the current level which will be stored as a
+			; BCD encoded 2-digit number and used to control the
+			; level counter display
+
+LvlGfxPtr	ds 2	; pointer for LevelGfx table
+
+; temporary variables
 Temp		ds 1
 TempLoop	ds 1
 
@@ -110,64 +117,57 @@ VerticalSync:
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 ; Prepare the NUSIZx, VDELPx and COLUPx values for the player graphics
-    lda #3
-    sta NUSIZ0	; 3 copies close
+    lda #%00010011
+    sta NUSIZ0	; 3 copies close with missiles at width 2
     sta NUSIZ1
     
     lda #1
     sta VDELP0	; bit 0 is still set
     sta VDELP1	; (turn on both player's vertical delays)
     
-    lda #$0E	; white
+    lda #$42
     sta COLUP0
-    LDA #$9E
     sta COLUP1
+    sta COLUPF
+    sta COLUBK
     
-; Set player positions for 6-digit score
+; Set player positions for 6-digit score (extremely inefficiently)
     sta WSYNC
     SLEEP 25
     sta RESP0
     sta RESP1
     lda #$F0
     sta HMP0
+    SLEEP 4
+    lda #$80
+    sta HMBL
+    lda #$80
+    sta HMM0
+    lda #$D0
+    sta HMM1
+    sta RESBL
+    sta RESM0
+    sta RESM1
+    sta WSYNC
+    sta HMOVE
+    sta WSYNC
+    sta HMCLR
+    lda #$B0
+    sta HMBL
     sta WSYNC
     sta HMOVE
     sta WSYNC
     sta HMCLR
 
-; Prepare gfx pointers for 6-digit score
-    SUBROUTINE
-    
-    ldx #0		; leftmost bitmap pointer
-    ldy #2		; start with most-significant BCD value
-.Loop
-    lda BCDScore,y	; get BCD value
-    and #$F0		; isolate high nybble
-    lsr			; value * 8
-    sta DigitPtr0,x	; store low byte
-    lda #>DigitGfx
-    sta DigitPtr0+1,x	; store high byte
-    inx
-    inx			; next bitmap pointer
-    lda BCDScore,y	; get BCD value (again)
-    and #$0F		; isolate low nybble
-    asl
-    asl
-    asl			; value * 8
-    sta DigitPtr0,x	; store low byte
-    lda #>DigitGfx
-    sta DigitPtr0+1,x	; store high byte
-    inx
-    inx			; next bitmap pointer
-    dey
-    bpl .Loop		; next BCD value
-    
-    SUBROUTINE
-
 ; Increment the score
-    lda #$99		; we are adding 99
-    ldx #0
-    ldy #0
+    inc TempLoop
+    lda TempLoop
+    and #%00000111
+    bne .SkipScoreInc
+
+    lda #$21		; we are adding 54,321
+    ldx #$43
+    ldy #$05
     
     sed			; enable BCD mode
     clc
@@ -183,8 +183,77 @@ VerticalSync:
     lda BCDScore+2
     adc Temp
     sta BCDScore+2
+    
+    clc
+    lda BCDLevel
+    adc #1
+    sta BCDLevel
+    
     cld		; disable BCD mode
+.SkipScoreInc
 
+; Prepare gfx pointers for 6-digit score
+    SUBROUTINE
+    
+    ldx #0		; leftmost bitmap pointer
+    ldy #2		; start with most-significant BCD value
+.Loop
+    lda BCDScore,y	; get BCD value
+    and #$F0		; isolate high nybble
+    lsr			; value * 8
+    sta DigitPtr0,x	; store low byte
+    lda #>ScoreGfx
+    sta DigitPtr0+1,x	; store high byte
+    inx
+    inx			; next bitmap pointer
+    lda BCDScore,y	; get BCD value (again)
+    and #$0F		; isolate low nybble
+    asl
+    asl
+    asl			; value * 8
+    sta DigitPtr0,x	; store low byte
+    lda #>ScoreGfx
+    sta DigitPtr0+1,x	; store high byte
+    inx
+    inx			; next bitmap pointer
+    dey
+    bpl .Loop		; next BCD value
+
+; Prepare gfx pointer for level counter
+    lda BCDLevel
+    and #$0F		; isolate right nybble
+    asl
+    asl
+    asl
+    clc
+    adc #<LevelGfx
+    sta LvlGfxPtr	; store low byte
+    lda #>LevelGfx
+    sta LvlGfxPtr+1	; store high byte
+
+; Load stack with the gfx for the 6-digit score and level counter
+    SUBROUTINE
+    
+    ldy #0
+.LoadStack
+    lda (DigitPtr3),y
+    pha
+    lda (DigitPtr4),y
+    pha
+    lda (DigitPtr5),y
+    pha
+    lda (LvlGfxPtr),y
+    pha
+    lda (DigitPtr2),y
+    pha
+    lda (DigitPtr1),y
+    pha
+    lda (DigitPtr0),y
+    pha
+    iny
+    cpy #8
+    bne .LoadStack
+    
 ; Loop until the end of vertical blanking
 VblankTimerLoop
     lda INTIM
@@ -202,18 +271,15 @@ VblankTimerLoop
     sta WSYNC
     sta VBLANK	; enable display
 
-
-
-    lda #$90
-    sta COLUBK
     
     lda #$FF
     sta PF0
+    lda #$15
     sta CTRLPF
-    lda #$80
+    lda #$C0
     sta PF1
     
-    ldy #4
+    ldy #6
 KernelLoop1
     sta WSYNC
     
@@ -221,67 +287,76 @@ KernelLoop1
     bne KernelLoop1
     
     
-; 6-digit score display
+; Draw ball?
+    SUBROUTINE
+    
+    lda #$9E
+    sta COLUBK
+    
+    sta WSYNC
+    lda #$80
+    sta PF1
+    sta WSYNC
+    
+    lda BCDLevel
+    lsr
+    lsr
+    lsr
+    sta ENABL	; draw ball if bit 4 is set (if level > 9)
+    
+    SLEEP 33
 
+; 6-digit score and level counter display
     SUBROUTINE
-    
-    SLEEP 35		; start near end of scanline
-    lda #7
-    sta TempLoop
 .Loop
-    ldy TempLoop	; count backwards
-    lda (DigitPtr0),y	; load B0 (1st sprite byte)
-    sta GRP0		; B0 -> [GRP0]
-    lda (DigitPtr1),y	; load B1 -> A
-    sta GRP1		; B1 -> [GRP1], B0 -> GRP0
-    sta WSYNC
-    lda (DigitPtr2),y	; load B2 -> A
-    sta GRP0		; B2 -> [GRP0], B1 -> GRP1
-    lda (DigitPtr5),y	; load B5 -> A
-    sta Temp		; B5 -> temp
-    lda (DigitPtr4),y	; load B4
-    tax			; -> X
-    lda (DigitPtr3),y	; load B3 -> A
-    ldy Temp		; load B5 -> Y
-    sta GRP1		; B3 ->[GRP1], B2 -> GRP0
-    stx GRP0		; B4 -> [GRP0], B3 -> GRP1
-    sty GRP1		; B5 -> [GRP1], B4 -> GRP0
-    sta GRP0		; ?? -> [GRP0], B5 -> GRP1
+    pla			; 49 load B0 (1st sprite byte)
+    sta GRP0		; 52 B0 -> [GRP0]
+    pla			; 56 load B1 -> A
+    sta GRP1		; 59 B1 -> [GRP1], B0 -> GRP0
+    pla			; 63 load B2 -> A
+    sta GRP0		; 66 B2 -> [GRP0], B1 -> GRP1
     
+    pla			; 70
+    tax			; 72
+    lsr			; 74
+    lsr			; 76
+    hex	8D 04 00	; 04 means "sta NUSIZ0" (NUSIZ0 = $04 in zero page)
+    			;    (force absolute addressing to waste 1 extra cycle)
+    txa			; 06
+    sta ENAM0		; 09
+    asl			; 11
+    sta ENAM1		; 14
     
-    ldy TempLoop
-    lda (DigitPtr0),y	; repeat graphics for another scanline
-    sta GRP0
-    lda (DigitPtr1),y
-    sta GRP1
-    sta WSYNC
-    lda (DigitPtr2),y
-    sta GRP0
-    lda (DigitPtr5),y
-    sta Temp
-    lda (DigitPtr4),y
-    tax
-    lda (DigitPtr3),y
-    ldy Temp
-    sta GRP1
-    stx GRP0
-    sty GRP1
-    sta GRP0
+    pla			; 18 load B5 -> A
+    tay			; 20 B5 -> Y
+    pla			; 24 load B4
+    tax			; 26 -> X
+    pla			; 30 load B3 -> A
+    sta GRP1		; 33 B3 ->[GRP1], B2 -> GRP0
+    stx GRP0		; 36 B4 -> [GRP0], B3 -> GRP1
+    sty GRP1		; 39 B5 -> [GRP1], B4 -> GRP0
+    sta GRP0		; 42 ?? -> [GRP0], B5 -> GRP1
     
-    dec TempLoop
-    bpl .Loop		; next line
+    bne .Loop		; 45 next line
     
     SUBROUTINE
     
     
-    ; y = 0
     lda #0
     sta GRP0
     sta GRP1
     sta GRP0
     sta GRP1
+    sta ENABL
+    sta ENAM0
+    sta ENAM1
     
-    ldy #6
+    sta WSYNC
+    sta PF1
+    sta WSYNC
+    sta PF0
+    
+    ldy #8
 KernelLoop3
     sta WSYNC
     
@@ -292,26 +367,19 @@ KernelLoop3
     sta PF0
     sta PF1
 
+
+
+    lda #$9A
+    sta COLUBK
+    sta WSYNC
+    lda #$94
+    sta COLUBK
+    sta WSYNC
+    
+    
+
     ldx #7
 KernelLoopA
-
-
-
-    lda #$94
-    sta COLUBK
-    sta WSYNC
-    lda #$9A
-    sta COLUBK
-    sta WSYNC
-    lda #$9E
-    sta COLUBK
-    sta WSYNC
-    lda #$9A
-    sta COLUBK
-    sta WSYNC
-    lda #$94
-    sta COLUBK
-    sta WSYNC
     
     
         
@@ -325,10 +393,6 @@ KernelLoopC
     dey
     bne KernelLoopC
     
-    dex
-    bne KernelLoopA
-
-
 
     lda #$94
     sta COLUBK
@@ -347,11 +411,14 @@ KernelLoopC
     sta WSYNC
 
 
+    dex
+    bne KernelLoopA
+
 
     lda #$90
     sta COLUBK
 
-    ldy #28
+    ldy #31
 KernelLoopE
     sta WSYNC
     
@@ -371,7 +438,7 @@ KernelLoopE
 ; Waste time to finish the frame
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    ldy #29+15
+    ldy #29
 FinishFrame
     sta WSYNC
     
@@ -384,13 +451,22 @@ FinishFrame
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Graphics Tables
+;
+; All the data in these tables is upside-down,
+; i.e. the last byte in each section is the first byte of information
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     ALIGN $100	; align to page
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Digit graphics for the scoreboard
-DigitGfx
+;
+; Table takes up $50 (80) bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
+ScoreGfx
+
+    .byte %00000000
     .byte %00011100	; digit 0
     .byte %00110010
     .byte %01100011
@@ -398,8 +474,8 @@ DigitGfx
     .byte %01100011
     .byte %00100110
     .byte %00011100
-    .byte %00000000
 
+    .byte %00000000
     .byte %01111110	; digit 1
     .byte %00011000
     .byte %00011000
@@ -407,8 +483,8 @@ DigitGfx
     .byte %00011000
     .byte %00111000
     .byte %00011000
-    .byte %00000000
 
+    .byte %00000000
     .byte %01111111	; digit 2
     .byte %01110000
     .byte %00111100
@@ -416,8 +492,8 @@ DigitGfx
     .byte %00000111
     .byte %01100011
     .byte %00111110
-    .byte %00000000
 
+    .byte %00000000
     .byte %00111110	; digit 3
     .byte %01100011
     .byte %00000011
@@ -425,8 +501,8 @@ DigitGfx
     .byte %00001100
     .byte %00000110
     .byte %01111111
-    .byte %00000000
 
+    .byte %00000000
     .byte %00000110	; digit 4
     .byte %00000110
     .byte %01111111
@@ -434,8 +510,8 @@ DigitGfx
     .byte %00110110
     .byte %00011110
     .byte %00001110
-    .byte %00000000
 
+    .byte %00000000
     .byte %00111110	; digit 5
     .byte %01100011
     .byte %00000011
@@ -443,8 +519,8 @@ DigitGfx
     .byte %01111110
     .byte %01100000
     .byte %01111110
-    .byte %00000000
 
+    .byte %00000000
     .byte %00111110	; digit 6
     .byte %01100011
     .byte %01100011
@@ -452,8 +528,8 @@ DigitGfx
     .byte %01100000
     .byte %00110000
     .byte %00011110
-    .byte %00000000
 
+    .byte %00000000
     .byte %00011000	; digit 7
     .byte %00011000
     .byte %00011000
@@ -461,8 +537,8 @@ DigitGfx
     .byte %00000110
     .byte %01100011
     .byte %01111111
-    .byte %00000000
 
+    .byte %00000000
     .byte %00111110	; digit 8
     .byte %01000011
     .byte %01000011
@@ -470,8 +546,8 @@ DigitGfx
     .byte %01110010
     .byte %01100010
     .byte %00111100
-    .byte %00000000
 
+    .byte %00000000
     .byte %00111100	; digit 9
     .byte %00000110
     .byte %00000011
@@ -479,8 +555,139 @@ DigitGfx
     .byte %01100011
     .byte %01100011
     .byte %00111110
-    .byte %00000000
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Nusiz data for level counter graphics
+;
+; This table controls the leftmost missile's width in the level counter
+; line-by-line. The rightmost missile's width is not changed.
+; In each byte, the right nybble controls the number of player copies,
+; and the left nybble controls the width of the missile.
+; The right nybble is always $3 to keep the score graphics correct.
+;
+; Table takes up $50 (80) bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+LevelGfx
+
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 0
+    .byte %10001111
+    .byte %01001111
+    .byte %01001111
+    .byte %01001111
+    .byte %01001111
+    .byte %01001111
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 1
+    .byte %10001101
+    .byte %01001101
+    .byte %01001101
+    .byte %10001101
+    .byte %01001101
+    .byte %01001101
+    .byte %10001101
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 2
+    .byte %10001111
+    .byte %01001110
+    .byte %01001110
+    .byte %10001111
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 3
+    .byte %10001111
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 4
+    .byte %01001101
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    .byte %01001111
+    .byte %01001111
+    .byte %01001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 5
+    .byte %10001111
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    .byte %01001110
+    .byte %01001110
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 6
+    .byte %10001111
+    .byte %01001111
+    .byte %01001111
+    .byte %10001111
+    .byte %01001110
+    .byte %01001110
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 7
+    .byte %10001101
+    .byte %01001101
+    .byte %01001101
+    .byte %10001101
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 8
+    .byte %10001111
+    .byte %01001111
+    .byte %01001111
+    .byte %10001111
+    .byte %01001111
+    .byte %01001111
+    .byte %10001111
+    
+	; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+	; ^^^^^^^^^
+    .byte %00000000	; digit 9
+    .byte %10001111
+    .byte %01001101
+    .byte %01001101
+    .byte %10001111
+    .byte %01001111
+    .byte %01001111
+    .byte %10001111
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Enam0 and Enam1 data for level counter graphics
+;
+; This table enables or disables each missile in the level counter line-by-line.
+; Only bits 1 and 0 are used.
+; Bit 1 is used for the leftmost missile,
+; and bit 0 is used for the rightmost missile.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 ; Animated graphics for the throbbing lines
 
