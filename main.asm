@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 09-06-2017 Version 1.3
+; 09-07-2017 Version 1.4
 ;
-; Add a level counter
+; Clean up and optimize code
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -28,6 +28,52 @@
     
     include vcs.h
     include macro.h
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; TIA Register Value Equates
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+; NUSIZx player size and player/missile copies
+ONE_COPY		equ	$00
+TWO_CLOSE		equ	$01
+TWO_MED			equ	$02
+THREE_CLOSE		equ	$03
+TWO_WIDE		equ	$04
+DOUBLE_SIZE		equ	$05
+THREE_MED		equ	$06
+QUAD_SIZE		equ	$07
+
+; NUSIZx missile size
+MSL_SIZE_1		equ	$00
+MSL_SIZE_2		equ	$10
+MSL_SIZE_4		equ	$20
+MSL_SIZE_8		equ	$30
+
+; CTRLPF values
+PF_REFLECT		equ	$01
+PF_SCORE_MODE		equ	$02
+PF_PRIORITY		equ	$04
+BALL_SIZE_1		equ	$00
+BALL_SIZE_2		equ	$10
+BALL_SIZE_4		equ	$20
+BALL_SIZE_8		equ	$30
+
+; VDELxx values
+VDEL_FALSE		equ	#0
+VDEL_TRUE		equ	#1
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Program Equates
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+; colors
+COL_SCORE		equ $42
+COL_SCOREBOARD		equ $9E
+COL_BACKGROUND		equ $90
 
 
 
@@ -116,16 +162,17 @@ VerticalSync:
 ; Do the vertical blanking
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-; Prepare the NUSIZx, VDELPx and COLUPx values for the player graphics
-    lda #%00010011
-    sta NUSIZ0	; 3 copies close with missiles at width 2
+; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
+
+    lda #THREE_CLOSE | MSL_SIZE_2
+    sta NUSIZ0
     sta NUSIZ1
     
-    lda #1
-    sta VDELP0	; bit 0 is still set
-    sta VDELP1	; (turn on both player's vertical delays)
+    lda #VDEL_TRUE
+    sta VDELP0
+    sta VDELP1
     
-    lda #$42
+    lda #COL_SCORE
     sta COLUP0
     sta COLUP1
     sta COLUPF
@@ -272,10 +319,10 @@ VblankTimerLoop
     sta VBLANK	; enable display
 
     
+    lda #PF_REFLECT | PF_PRIORITY | BALL_SIZE_2
+    sta CTRLPF
     lda #$FF
     sta PF0
-    lda #$15
-    sta CTRLPF
     lda #$C0
     sta PF1
     
@@ -290,7 +337,7 @@ KernelLoop1
 ; Draw ball?
     SUBROUTINE
     
-    lda #$9E
+    lda #COL_SCOREBOARD
     sta COLUBK
     
     sta WSYNC
@@ -383,7 +430,7 @@ KernelLoopA
     
     
         
-    lda #$90
+    lda #COL_BACKGROUND
     sta COLUBK
 
     ldy #14
@@ -415,7 +462,7 @@ KernelLoopC
     bne KernelLoopA
 
 
-    lda #$90
+    lda #COL_BACKGROUND
     sta COLUBK
 
     ldy #31
