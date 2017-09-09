@@ -62,14 +62,14 @@ KernelLoop1
     asl			; 11
     sta ENAM1		; 14
     
-    pla			; 18 load B5 -> A
-    tay			; 20 B5 -> Y
+    pla			; 18 load B3 -> A
+    tay			; 20 B3 -> Y
     pla			; 24 load B4
     tax			; 26 -> X
-    pla			; 30 load B3 -> A
-    sta GRP1		; 33 B3 ->[GRP1], B2 -> GRP0
+    pla			; 30 load B5 -> A
+    sty GRP1		; 33 B3 ->[GRP1], B2 -> GRP0
     stx GRP0		; 36 B4 -> [GRP0], B3 -> GRP1
-    sty GRP1		; 39 B5 -> [GRP1], B4 -> GRP0
+    sta GRP1		; 39 B5 -> [GRP1], B4 -> GRP0
     sta GRP0		; 42 ?? -> [GRP0], B5 -> GRP1
     
     bne .Loop		; 45 next line

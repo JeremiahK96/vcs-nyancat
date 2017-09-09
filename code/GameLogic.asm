@@ -4,6 +4,21 @@
 ; Waste time to finish the frame
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
+    lda #OVERSCAN_TIMER
+    sta TIM64T
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Finish Overscan
+;
+; Loop until the end of overscan
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+OverscanTimerLoop
+    lda INTIM
+    bne OverscanTimerLoop
+
 Overscan:
 
     ldy #29
@@ -25,7 +40,7 @@ FinishFrame
     sta WSYNC
     sta VSYNC	; enable VSYNC
     
-    lda #45	; for the VBLANK timer
+    lda #VBLANK_TIMER
     sta WSYNC
     sta WSYNC
     sta TIM64T	; start VBLANK timer
@@ -42,6 +57,9 @@ FinishFrame
 ; Do the vertical blanking
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
+; Increment the frame number
+    inc Frame
+    
 ; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
 
     lda #THREE_CLOSE | MSL_SIZE_2
@@ -87,29 +105,28 @@ FinishFrame
     sta HMCLR
 
 ; Increment the score
-    inc TempLoop
-    lda TempLoop
-    and #%00000111
-    bne .SkipScoreInc
+    lda Frame
+    and #%00000000
+    beq .SkipScoreInc
 
-    lda #$21		; we are adding 54,321
-    ldx #$43
-    ldy #$05
+    lda #$21		; we are adding 21
+    ldx #$00
+    ldy #$00
     
     sed			; enable BCD mode
     clc
     sta Temp
-    lda BCDScore
+    lda BCDScore+2
     adc Temp
-    sta BCDScore
+    sta BCDScore+2
     stx Temp
     lda BCDScore+1
     adc Temp
     sta BCDScore+1
     sty Temp
-    lda BCDScore+2
+    lda BCDScore+0
     adc Temp
-    sta BCDScore+2
+    sta BCDScore+0
     
     clc
     lda BCDLevel
@@ -119,69 +136,75 @@ FinishFrame
     cld		; disable BCD mode
 .SkipScoreInc
 
-; Prepare gfx pointers for 6-digit score
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Load Scoreboard
+;
+; Get graphics data for the scoreboard and push it onto the stack
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
     SUBROUTINE
-    
-    ldx #0		; leftmost bitmap pointer
-    ldy #2		; start with most-significant BCD value
+
+    lda #7		; start with bottom of digit graphics
+    sta TempLoop
 .Loop
-    lda BCDScore,y	; get BCD value
-    and #$F0		; isolate high nybble
-    lsr			; value * 8
-    sta DigitPtr0,x	; store low byte
-    lda #>ScoreGfx
-    sta DigitPtr0+1,x	; store high byte
-    inx
-    inx			; next bitmap pointer
-    lda BCDScore,y	; get BCD value (again)
-    and #$0F		; isolate low nybble
+    ldx #5		; start with rightmost digit
+    			; (we must push to stack in reverse of drawing order)
+.DigitLoop
+    cpx #2		; if this is not the 4th iteration of X loop
+    bne .NotLevel	; then don't push level counter graphics
+			; else, do push level counter graphics
+    lda BCDLevel	; get level counter
+    and #$0F		; isolate left nybble/digit
     asl
     asl
-    asl			; value * 8
-    sta DigitPtr0,x	; store low byte
-    lda #>ScoreGfx
-    sta DigitPtr0+1,x	; store high byte
-    inx
-    inx			; next bitmap pointer
-    dey
-    bpl .Loop		; next BCD value
-
-; Prepare gfx pointer for level counter
-    lda BCDLevel
-    and #$0F		; isolate right nybble
+    asl			; digit value * 8
+    			; no need to clc, carry will always be clear
+    adc TempLoop
+    tay
+    lda LevelGfx,y
+    pha
+.NotLevel
+    ldy BCDOffset,x	; get byte offset for current BCD value
+    txa			; get current digit
+    lsr			; load bit 0 into carry flag to check if even/odd
+    bcs .Odd		; branch if A was odd
+;Even
+    lda BCDScore,y	; get current BCD value (contains 2 digits)
+    and #$F0		; isolate left nybble/digit
+    lsr			; digit value * 8
+    bcc .GetGfx		; always taken
+.Odd
+    lda BCDScore,y	; get current BCD value (contains 2 digits)
+    and #$0F		; isolate right nybble/digit
     asl
     asl
-    asl
-    clc
-    adc #<LevelGfx
-    sta LvlGfxPtr	; store low byte
-    lda #>LevelGfx
-    sta LvlGfxPtr+1	; store high byte
-
-; Load stack with the gfx for the 6-digit score and level counter
+    asl			; digit value * 8
+    
+.GetGfx
+    			; no need to clc, carry will always be clear
+    adc TempLoop
+    tay
+    lda ScoreGfx,y
+    pha
+    
+    dex
+    bpl .DigitLoop
+    
+    dec TempLoop
+    bpl .Loop
+    
     SUBROUTINE
     
-    ldy #0
-.LoadStack
-    lda (DigitPtr3),y
-    pha
-    lda (DigitPtr4),y
-    pha
-    lda (DigitPtr5),y
-    pha
-    lda (LvlGfxPtr),y
-    pha
-    lda (DigitPtr2),y
-    pha
-    lda (DigitPtr1),y
-    pha
-    lda (DigitPtr0),y
-    pha
-    iny
-    cpy #8
-    bne .LoadStack
-    
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Finish Vertical Blanking
+;
 ; Loop until the end of vertical blanking
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
 VblankTimerLoop
     lda INTIM
     bne VblankTimerLoop

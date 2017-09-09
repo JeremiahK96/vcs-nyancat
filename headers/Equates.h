@@ -44,6 +44,14 @@ VDEL_TRUE		equ	#1
 ; Equates for constant program values.
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
+; number of scanlines in vertical blank and overscan
+VBLANK_SCANLINES	equ	#37
+OVERSCAN_SCANLINES	equ	#29
+
+; converted values to store to TIM64T
+VBLANK_TIMER		equ	[[VBLANK_SCANLINES + 1] * 76 + 13] / 64
+OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
+
 ; colors
 COL_SCORE		equ $42
 COL_SCOREBOARD		equ $9E
