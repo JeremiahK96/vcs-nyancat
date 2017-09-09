@@ -8,7 +8,7 @@
 ;
 ;
 ;
-; 09-08-2017 Version 1.4
+; 09-09-2017 Version 1.4
 ;
 ; Clean up and optimize code
 ;
@@ -21,21 +21,15 @@
 ; Include headers and set address of binary
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-; Add directories to be included from
-    incdir headers/
-    incdir code/
-    incdir data/
-
-
 ; Define CPU type and include standard VCS header files
     PROCESSOR 6502
     
-    include vcs.h
-    include macro.h
+    include headers/vcs.h
+    include headers/macro.h
 
 ; Include TIA/program equates and RAM labels
-    include Equates.h
-    include RamVariables.h
+    include headers/Equates.h
+    include headers/RamVariables.h
 
 
 ; Ensure that the code is placed in the proper place in the binary
@@ -61,7 +55,7 @@ SystemClear:
 ; along with any game logic
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    include GameLogic.asm
+    include code/GameLogic.asm
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -70,7 +64,9 @@ SystemClear:
 ; Draw the screen
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    include Kernel.asm
+    include code/Kernel.asm
+    
+Z_EndOfCode	; label to show how much ROM is used on the code
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -80,7 +76,7 @@ SystemClear:
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 ; Include graphics data tables
-    include Graphics.asm
+    include data/Graphics.asm
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

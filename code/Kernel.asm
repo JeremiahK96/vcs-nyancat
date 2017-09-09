@@ -9,75 +9,109 @@
     
     lda #PF_REFLECT | PF_PRIORITY | BALL_SIZE_2
     sta CTRLPF
+    
     lda #$FF
     sta PF0
-    lda #$C0
-    sta PF1
+    
+    sta GRP0	; This forces a collision between P0 and PF, setting bit-7
+    sta GRP1	; in CXP0FB, which will be used to end the scoreboard
+    sta PF1	; display kernel loop.
     
     ldy #6
-KernelLoop1
+KernelLoop1	; draw border above scoreboard
     sta WSYNC
+    
+    lda #0
+    sta GRP0
+    sta GRP1
     
     dey
     bne KernelLoop1
     
-    
-; Draw ball?
-    SUBROUTINE
+    lda #$C0
+    sta PF1
     
     lda #COL_SCOREBOARD
     sta COLUBK
     
     sta WSYNC
+    
     lda #$80
     sta PF1
+    
     sta WSYNC
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Scoreboard Display
+;
+; Draw the 6-digit score and level counter.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    SUBROUTINE
+    
+    SLEEP 48
     
     lda BCDLevel
     lsr
     lsr
     lsr
-    sta ENABL	; draw ball if bit 4 is set (if level > 9)
+    sta ENABL	; draw ball if bit-4 is set (if level > 9)
     
-    SLEEP 33
-
-; 6-digit score and level counter display
-    SUBROUTINE
+    jmp .EntrancePoint
+    
 .Loop
-    pla			; 49 load B0 (1st sprite byte)
-    sta GRP0		; 52 B0 -> [GRP0]
-    pla			; 56 load B1 -> A
-    sta GRP1		; 59 B1 -> [GRP1], B0 -> GRP0
-    pla			; 63 load B2 -> A
-    sta GRP0		; 66 B2 -> [GRP0], B1 -> GRP1
+
+    ; A contains gfx for digit3
+    sta GRP0		; 69	digit3 -> [GRP0]	digit2 -> GRP1
     
-    pla			; 70
-    tax			; 72
-    lsr			; 74
-    lsr			; 76
-    hex	8D 04 00	; 04 means "sta NUSIZ0" (NUSIZ0 = $04 in zero page)
-    			;    (force absolute addressing to waste 1 extra cycle)
-    txa			; 06
-    sta ENAM0		; 09
-    asl			; 11
-    sta ENAM1		; 14
+    ; gfx for the first 3 digits are now pre-loaded into the GRPx registers
     
-    pla			; 18 load B3 -> A
-    tay			; 20 B3 -> Y
-    pla			; 24 load B4
-    tax			; 26 -> X
-    pla			; 30 load B5 -> A
-    sty GRP1		; 33 B3 ->[GRP1], B2 -> GRP0
-    stx GRP0		; 36 B4 -> [GRP0], B3 -> GRP1
-    sta GRP1		; 39 B5 -> [GRP1], B4 -> GRP0
-    sta GRP0		; 42 ?? -> [GRP0], B5 -> GRP1
+    pla			; 18	pull gfx for digit4...
+    tay			; 20	...and store in Y
+    pla			; 24	pull gfx data for digit5...
+    tax			; 26	...and store in X
+    pla			; 30	pull gfx data for digit6 to A
     
-    bne .Loop		; 45 next line
+    sty GRP1		; 33	digit4 -> [GRP1]	digit3 -> GRP0
+    stx GRP0		; 36	digit5 -> [GRP0]	digit4 -> GRP1
+    sta GRP1		; 39	digit6 -> [GRP1]	digit5 -> GRP0
+    sta GRP0		; 42	digit6 -> [GRP0]	digit6 -> GRP1
     
-    SUBROUTINE
+    pla			; 73	pull gfx data for level counter
+    sta ENAM0		; 00	use bit 1 of data for ENAM0
+    rol			; 02	
+    sta ENAM1		; 05	use bit 0 of data for ENAM1
+    ror			; 07	
+    ror			; 09	
+    ror			; 11	
+    sta NUSIZ0		; 14	use bits 2-7 of data (re-aligned) for NUSIZ0
     
+.EntrancePoint
+
+    pla			; 46	pull gfx for digit1
+    sta GRP0		; 49	digit1 -> [GRP0]
     
-    lda #0
+    pla			; 53	pull gfx for digit2
+    sta.w GRP1		; 57	digit2 -> [GRP1]	digit1 -> GRP0
+    			;	(use an extra cycle for timing reasons)
+    
+    pla			; 61	pull gfx for digit3
+    			
+	; On the final iteration of the loop, the stack will have wrapped
+	; and pulled from location $02 at this point.
+	; This happens to be the collision register CXP0FB.
+	; Bit-7 will always be set in this register,
+	; and bit-7 is always clear in the score graphics,
+	; so checking bit-7 of the data pulled is all that you need
+	; to determine when to terminate the loop.
+    			
+    tax			; 63	set flags according to pulled data
+    
+    bpl .Loop		; 66	check negative flag to see if the loop is over
+    
+    lda #0		; disable the players/missiles/ball
     sta GRP0
     sta GRP1
     sta GRP0
@@ -86,13 +120,16 @@ KernelLoop1
     sta ENAM0
     sta ENAM1
     
+    ldx #$FF
+    txs			; reset the stack pointer
+    
     sta WSYNC
-    sta PF1
+    sta PF1		; disable PF1
     sta WSYNC
-    sta PF0
+    sta PF0		; disable PF0
     
     ldy #8
-KernelLoop3
+KernelLoop3	; draw border below scoreboard
     sta WSYNC
     
     dey
@@ -114,7 +151,7 @@ KernelLoop3
     
 
     ldx #7
-KernelLoopA
+KernelLoopA	; draw the gameplay display
     
     
         
@@ -122,11 +159,13 @@ KernelLoopA
     sta COLUBK
 
     ldy #14
-KernelLoopC
+KernelLoopC	; draw a row
     sta WSYNC
 
     dey
     bne KernelLoopC
+    
+    ; draw a row seperator
     
 
     lda #$94
@@ -154,7 +193,7 @@ KernelLoopC
     sta COLUBK
 
     ldy #31
-KernelLoopE
+KernelLoopE	; draw bottom of screen
     sta WSYNC
     
     dey
