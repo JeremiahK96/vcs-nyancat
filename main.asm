@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 09-09-2017 Version 1.4
+; 09-09-2017 Version 1.5
 ;
-; Clean up and optimize code
+; Add throbbing lines between rows and progress bar/health to bottom of screen
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -66,7 +66,7 @@ SystemClear:
 
     include code/Kernel.asm
     
-Z_EndOfCode	; label to show how much ROM is used on the code
+Z_EndOfCode	; label to show how much ROM is used for the code
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

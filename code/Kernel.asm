@@ -17,7 +17,7 @@
     sta GRP1	; in CXP0FB, which will be used to end the scoreboard
     sta PF1	; display kernel loop.
     
-    ldy #6
+    ldy #5
 KernelLoop1	; draw border above scoreboard
     sta WSYNC
     
@@ -28,17 +28,13 @@ KernelLoop1	; draw border above scoreboard
     dey
     bne KernelLoop1
     
-    lda #$C0
+    lda #$80
     sta PF1
     
     lda #COL_SCOREBOARD
     sta COLUBK
     
     sta WSYNC
-    
-    lda #$80
-    sta PF1
-    
     sta WSYNC
 
 
@@ -124,29 +120,33 @@ KernelLoop1	; draw border above scoreboard
     txs			; reset the stack pointer
     
     sta WSYNC
-    sta PF1		; disable PF1
+    ;sta PF1		; disable PF1
     sta WSYNC
-    sta PF0		; disable PF0
+    ;sta PF0		; disable PF0
     
-    ldy #8
+    ldy #1
 KernelLoop3	; draw border below scoreboard
     sta WSYNC
     
     dey
     bne KernelLoop3
+
+
+
+    lda #COL_SCOREBOARD - 4
+    sta COLUBK
+    lda #COL_SCORE + 2
+    sta COLUPF
+    sta WSYNC
+    lda #COL_SCOREBOARD - 8
+    sta COLUBK
+    lda #COL_BACKGROUND + 2
+    sta COLUPF
+    sta WSYNC
     
     lda #$00
     sta PF0
     sta PF1
-
-
-
-    lda #$9A
-    sta COLUBK
-    sta WSYNC
-    lda #$94
-    sta COLUBK
-    sta WSYNC
     
     
 
@@ -168,19 +168,25 @@ KernelLoopC	; draw a row
     ; draw a row seperator
     
 
-    lda #$94
+    ldy ThrobFrame
+    
+    lda #LineThrobGfx,y
     sta COLUBK
     sta WSYNC
-    lda #$9A
+    
+    lda #LineThrobGfx+1,y
     sta COLUBK
     sta WSYNC
-    lda #$9E
+    
+    lda #LineThrobGfx+2,y
     sta COLUBK
     sta WSYNC
-    lda #$9A
+    
+    lda #LineThrobGfx+1,y
     sta COLUBK
     sta WSYNC
-    lda #$94
+    
+    lda #LineThrobGfx,y
     sta COLUBK
     sta WSYNC
 
@@ -192,7 +198,7 @@ KernelLoopC	; draw a row
     lda #COL_BACKGROUND
     sta COLUBK
 
-    ldy #31
+    ldy #39
 KernelLoopE	; draw bottom of screen
     sta WSYNC
     

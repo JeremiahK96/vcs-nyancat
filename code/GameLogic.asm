@@ -135,6 +135,23 @@ OverscanTimerLoop
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare for Throbbing Lines
+;
+; Set the offset value for the throbbing line graphics
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda Frame		; get the current frame number
+    and #%00011100	; change animation frame every 4 game frames
+    lsr
+    lsr			; shift to get a frame value from 0-7
+    sta Temp
+    adc Temp		; carry flag will always be clear
+    adc Temp		; multiply by 3
+    sta ThrobFrame	; store the gfx offset
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load Scoreboard
 ;
 ; Get graphics data for the scoreboard and push it onto the stack

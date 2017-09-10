@@ -237,3 +237,49 @@ LevelGfx
     .byte %01001101
     .byte %10001111
     .byte %00000000
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Throbbing Line Graphics
+;
+; Graphics tables for the throbbing lines
+;
+; Table takes up $18 (24) bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+LineThrobGfx
+
+    .byte COL_LINES + LUM_0	; frame 0
+    .byte COL_LINES + LUM_2
+    .byte COL_LINES + LUM_4
+
+    .byte COL_LINES + LUM_0	; frame 1
+    .byte COL_LINES + LUM_4
+    .byte COL_LINES + LUM_6
+
+    .byte COL_LINES + LUM_0	; frame 2
+    .byte COL_LINES + LUM_6
+    .byte COL_LINES + LUM_8
+
+    .byte COL_LINES + LUM_2	; frame 3
+    .byte COL_LINES + LUM_8
+    .byte COL_LINES + LUM_C
+
+    .byte COL_LINES + LUM_4	; frame 4
+    .byte COL_LINES + LUM_A
+    .byte COL_LINES + LUM_E
+
+    .byte COL_LINES + LUM_2	; frame 5
+    .byte COL_LINES + LUM_8
+    .byte COL_LINES + LUM_C
+
+    .byte COL_LINES + LUM_0	; frame 6
+    .byte COL_LINES + LUM_6
+    .byte COL_LINES + LUM_A
+
+    .byte COL_LINES + LUM_0	; frame 7
+    .byte COL_LINES + LUM_4
+    .byte COL_LINES + LUM_6
+
+; $48 (72) bytes left in this page

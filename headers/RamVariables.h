@@ -19,6 +19,8 @@ BCDLevel	ds 1	; value for the current level which will be stored as a
 			; BCD encoded 2-digit number and used to control the
 			; level counter display
 
+ThrobFrame	ds 1	; offset for line throb animation frame
+
 ; temporary variables
 Temp		ds 1
 TempLoop	ds 1

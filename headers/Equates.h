@@ -53,6 +53,17 @@ VBLANK_TIMER		equ	[[VBLANK_SCANLINES + 1] * 76 + 13] / 64
 OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
 
 ; colors
-COL_SCORE		equ $42
-COL_SCOREBOARD		equ $9E
+COL_SCORE		equ $00	;$42
+COL_SCOREBOARD		equ $4C	;$9E
 COL_BACKGROUND		equ $90
+COL_LINES		equ COL_BACKGROUND
+
+; luminosity masks, which can be added to any dark color to set the luminosity
+LUM_0			equ $00
+LUM_2			equ $02
+LUM_4			equ $04
+LUM_6			equ $06
+LUM_8			equ $08
+LUM_A			equ $0A
+LUM_C			equ $0C
+LUM_E			equ $0E
