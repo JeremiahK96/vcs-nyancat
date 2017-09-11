@@ -23,6 +23,10 @@ MSL_SIZE_2		equ	$10
 MSL_SIZE_4		equ	$20
 MSL_SIZE_8		equ	$30
 
+; REFPx values
+REFP_TRUE		equ	$08
+REFP_FALSE		equ	$00
+
 ; CTRLPF values
 PF_REFLECT		equ	$01
 PF_SCORE_MODE		equ	$02
@@ -53,10 +57,11 @@ VBLANK_TIMER		equ	[[VBLANK_SCANLINES + 1] * 76 + 13] / 64
 OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
 
 ; colors
-COL_SCORE		equ $00	;$42
-COL_SCOREBOARD		equ $4C	;$9E
+COL_SCORE		equ $40
+COL_SCOREBOARD		equ $4C
 COL_BACKGROUND		equ $90
 COL_LINES		equ COL_BACKGROUND
+COL_CAT_FACE		equ $06
 
 ; luminosity masks, which can be added to any dark color to set the luminosity
 LUM_0			equ $00

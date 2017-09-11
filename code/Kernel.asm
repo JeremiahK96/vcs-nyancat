@@ -119,28 +119,20 @@ KernelLoop1	; draw border above scoreboard
     ldx #$FF
     txs			; reset the stack pointer
     
-    sta WSYNC
-    ;sta PF1		; disable PF1
-    sta WSYNC
-    ;sta PF0		; disable PF0
     
-    ldy #1
-KernelLoop3	; draw border below scoreboard
+    
+    sta WSYNC
+    sta WSYNC
     sta WSYNC
     
-    dey
-    bne KernelLoop3
-
-
-
-    lda #COL_SCOREBOARD - 4
+    lda #COL_SCOREBOARD; - 4
     sta COLUBK
-    lda #COL_SCORE + 2
+    lda #COL_SCORE
     sta COLUPF
     sta WSYNC
-    lda #COL_SCOREBOARD - 8
+    lda #COL_SCOREBOARD + 2; - 8
     sta COLUBK
-    lda #COL_BACKGROUND + 2
+    lda #COL_SCORE + 2
     sta COLUPF
     sta WSYNC
     
@@ -150,7 +142,7 @@ KernelLoop3	; draw border below scoreboard
     
     
 
-    ldx #7
+    ldx #6
 KernelLoopA	; draw the gameplay display
     
     
@@ -197,13 +189,115 @@ KernelLoopC	; draw a row
 
     lda #COL_BACKGROUND
     sta COLUBK
-
-    ldy #39
-KernelLoopE	; draw bottom of screen
+    
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
     sta WSYNC
     
+    lda #COL_SCORE
+    sta COLUBK
+    lda #COL_CAT_FACE
+    sta COLUPF
+    lda #BALL_SIZE_4
+    sta CTRLPF
+    
+    sta WSYNC
+    
+    lda VDEL_FALSE
+    sta VDELP0
+    sta VDELP1
+    
+    SLEEP 44
+    
+    lda #$20
+    sta HMP0
+    lda #$B0
+    sta HMP1
+    
+    sta RESP0
+    sta RESP1
+    
+    sta WSYNC
+    SLEEP 71
+    sta HMOVE
+    
+    lda #$00
+    sta COLUP0
+    sta COLUP1
+    
+    lda #DOUBLE_SIZE
+    sta NUSIZ0
+    sta NUSIZ1
+
+    lda #REFP_TRUE
+    sta REFP1
+    
+    SUBROUTINE
+    
+    ldy #4
+HealthTop	; draw top of health
+    ldx #3
+.Loop
+    lda HealthTopGfx,y
+    sta GRP0
+    sta GRP1
+    lda #$00
+    sta PF2
+    SLEEP 20
+    lda HealthBgGfx+8,y
+    sta PF2
+    sta WSYNC
+    
+    dex
+    bne .Loop
+    
     dey
-    bne KernelLoopE
+    bpl HealthTop
+    
+    SUBROUTINE
+    
+    ldy #7
+HealthBottom	; draw bottom of health
+    ldx #3
+.Loop
+    lda HealthLeftGfx,y
+    sta GRP0
+    lda HealthRightGfx,y
+    sta GRP1
+    lda #$00
+    sta PF2
+    SLEEP 16
+    lda HealthBgGfx,y
+    sta PF2
+    sta WSYNC
+    
+    dex
+    bne .Loop
+    
+    dey
+    bpl HealthBottom
+
+    
+    lda #$00
+    sta GRP0
+    sta GRP1
+    sta REFP0
+    sta REFP1
+    sta PF2
+    
+    sta WSYNC
+    sta WSYNC
     
     
     

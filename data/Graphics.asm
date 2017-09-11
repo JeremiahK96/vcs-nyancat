@@ -282,4 +282,126 @@ LineThrobGfx
     .byte COL_LINES + LUM_4
     .byte COL_LINES + LUM_6
 
-; $48 (72) bytes left in this page
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Table takes up $45 (69) bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+HealthTopGfx
+
+    .byte %01000000	; left top of health (right is mirror of left)
+    .byte %01000011
+    .byte %01000100
+    .byte %01001000
+    .byte %00110000
+
+HealthLeftGfx
+
+    .byte %00011111	; left health full
+    .byte %00100000
+    .byte %01000111
+    .byte %10000100
+    .byte %10000000
+    .byte %10001100
+    .byte %10000100
+    .byte %10000000
+
+    .byte %00011111	; left health medium
+    .byte %00100000
+    .byte %01000111
+    .byte %10000000
+    .byte %10000000
+    .byte %10001100
+    .byte %10000100
+    .byte %10000000
+
+    .byte %00011111	; left health low
+    .byte %00100000
+    .byte %01000100
+    .byte %10000011
+    .byte %10000000
+    .byte %10001100
+    .byte %10000100
+    .byte %10000000
+
+    .byte %00011111	; left health empty
+    .byte %00100000
+    .byte %01000100
+    .byte %10000011
+    .byte %10000000
+    .byte %10001000
+    .byte %10011100
+    .byte %10001000
+
+HealthRightGfx
+
+    .byte %00011111	; right health full
+    .byte %00100000
+    .byte %01001111
+    .byte %10001001
+    .byte %10000000
+    .byte %10011010
+    .byte %10010000
+    .byte %10000000
+
+    .byte %00011111	; right health medium
+    .byte %00100000
+    .byte %01001111
+    .byte %10000001
+    .byte %10000000
+    .byte %10011010
+    .byte %10001000
+    .byte %10000000
+
+    .byte %00011111	; right health low
+    .byte %00100000
+    .byte %01001000
+    .byte %10000111
+    .byte %10000000
+    .byte %10011010
+    .byte %10001000
+    .byte %10000000
+
+    .byte %00011111	; right health empty
+    .byte %00100000
+    .byte %01001000
+    .byte %10000111
+    .byte %10000000
+    .byte %10010010
+    .byte %10111000
+    .byte %10010000
+
+; $03 (3) bytes left in this page
+
+    ALIGN $100	; align to page
+
+HealthBgGfx
+
+    .byte %00000000
+    .byte %00111110
+    .byte %01111111
+    .byte %01111111
+    .byte %01111111
+    .byte %01111111
+    .byte %01111111
+    .byte %01111111
+    .byte %01111111
+    .byte %01111111
+    .byte %01100011
+    .byte %01100011
+    .byte %00000000
+
+CatRainbowGfx
+
+    .byte %01010000
+    .byte %01110000
+    
+    .byte %01110000
+    .byte %01010000
+    
+    .byte %01000000
+    .byte %01100000
+    
+    .byte %01100000
+    .byte %01000000

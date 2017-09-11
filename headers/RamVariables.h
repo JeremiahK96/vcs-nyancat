@@ -11,6 +11,8 @@ RamStart
 
 Frame		ds 1	; Current frame
 
+ThrobFrame	ds 1	; offset for line throb animation frame
+
 BCDScore	ds 3	; 3-byte array for score value which will be stored as a
 			; BCD encoded 6-digit number and used to control the
 			; 6-digit score display
@@ -19,7 +21,7 @@ BCDLevel	ds 1	; value for the current level which will be stored as a
 			; BCD encoded 2-digit number and used to control the
 			; level counter display
 
-ThrobFrame	ds 1	; offset for line throb animation frame
+CatPosY		ds 1	; number of scanlines to skip before drawing cat
 
 ; temporary variables
 Temp		ds 1
