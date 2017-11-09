@@ -100,14 +100,14 @@ Overscan:
 ; Set playfield graphics in RAM for the progress bar
     SUBROUTINE
     
-    ldx Progress
-    inx
-    cpx 121
-    bne .Skip
-    ldx #0
-    
+    lda Frame
+    lsr
+    sec
+    sbc #7
+    bpl .Skip
+    lda #120
 .Skip
-    stx Progress
+    sta Progress
     
     lda #%11100000	; reset all progress bar playfield graphics RAM
     sta ProgressBar+0
