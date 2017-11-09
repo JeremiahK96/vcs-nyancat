@@ -10,51 +10,6 @@ Overscan:
     sta WSYNC
     sta TIM64T
     
-    
-    inc Frame		; increment the frame number
-    
-; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
-
-    lda #THREE_CLOSE | MSL_SIZE_2
-    sta NUSIZ0
-    sta NUSIZ1
-    
-    lda #VDEL_TRUE
-    sta VDELP0
-    sta VDELP1
-    
-    lda #COL_SCORE
-    sta COLUP0
-    sta COLUP1
-    sta COLUPF
-    sta COLUBK
-    
-    lda #COL_SCORE
-    sta ScoreColor
-    lda #$56
-    sta PgBarColor
-    
-    lda #<(HealthLeftGfx+4)
-    sta HthGfxLPtr
-    lda #>(HealthLeftGfx+4)
-    sta HthGfxLPtr+1
-    
-    lda #<(HealthRightGfx+4)
-    sta HthGfxRPtr
-    lda #>(HealthRightGfx+4)
-    sta HthGfxRPtr+1
-    
-    ;lda #%00000000
-    ;sta ProgressBar+0
-    ;lda #%00011111
-    ;sta ProgressBar+1
-    ;lda #%11111111
-    ;sta ProgressBar+2
-    ;lda #%11110000
-    ;sta ProgressBar+3
-    ;lda #%11111110
-    ;sta ProgressBar+4
-    
 ; Set object positions for scoreboard kernel (extremely inefficiently)
     sta WSYNC
     lda #$B0
@@ -84,6 +39,31 @@ Overscan:
     sta HMOVE
     sta WSYNC
     sta HMCLR
+    
+    
+    
+    inc Frame		; increment the frame number
+    
+; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
+
+    lda #THREE_CLOSE | MSL_SIZE_2
+    sta NUSIZ0
+    sta NUSIZ1
+    
+    lda #VDEL_TRUE
+    sta VDELP0
+    sta VDELP1
+    
+    lda #COL_SCORE
+    sta COLUP0
+    sta COLUP1
+    sta COLUPF
+    sta COLUBK
+    sta ScoreColor
+    lda #$56
+    sta PgBarColor
+    
+    
 
 ; Increment the score
     lda Frame
@@ -211,6 +191,33 @@ Overscan:
 
 .Finish
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare Health Display
+;
+; Set the pointers for the health graphics
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda Frame
+    and #%11000000
+    lsr
+    lsr
+    lsr
+    sta Temp
+    
+    clc
+    
+    lda #<HealthLeftGfx
+    adc Temp
+    sta HthGfxLPtr
+    lda #>HealthLeftGfx
+    sta HthGfxLPtr+1
+    
+    lda #<HealthRightGfx
+    adc Temp
+    sta HthGfxRPtr
+    lda #>HealthRightGfx
+    sta HthGfxRPtr+1
+
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -234,9 +241,8 @@ OverscanTimerLoop
     sta WSYNC
     sta VSYNC	; enable VSYNC
     
-    lda #VBLANK_TIMER
     sta WSYNC
-    sta CXCLR
+    lda #VBLANK_TIMER
     sta WSYNC
     sta TIM64T	; start VBLANK timer
     

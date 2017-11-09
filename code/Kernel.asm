@@ -57,6 +57,8 @@ KernelLoop1	; draw border above scoreboard
     
     jmp .EntrancePoint
     
+    ALIGN $100
+    
 .Loop
 
     ; A contains gfx for digit3
@@ -337,18 +339,20 @@ HealthMiddle	; draw middle of health, with progress bar
     sta PF0
     sta PF1
     
-    ldy #3
+    ldy #7
 HealthBottom	; draw bottom of health
     ldx #3
 .Loop
-    lda HealthLeftGfx,y
+    lda (HthGfxLPtr),y
     sta GRP0
-    lda HealthRightGfx,y
+    lda (HthGfxRPtr),y
     sta GRP1
     lda #$00
     sta PF2
-    SLEEP 16
-    lda HealthBgGfx,y
+    
+    SLEEP 14
+    
+    lda HealthBgGfx-4,y
     sta PF2
     sta WSYNC
     
@@ -356,7 +360,8 @@ HealthBottom	; draw bottom of health
     bne .Loop
     
     dey
-    bpl HealthBottom
+    cpy #3
+    bne HealthBottom
     
     
     SUBROUTINE
