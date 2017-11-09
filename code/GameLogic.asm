@@ -29,6 +29,32 @@ Overscan:
     sta COLUPF
     sta COLUBK
     
+    lda #COL_SCORE
+    sta ScoreColor
+    lda #$56
+    sta PgBarColor
+    
+    lda #<(HealthLeftGfx+4)
+    sta HthGfxLPtr
+    lda #>(HealthLeftGfx+4)
+    sta HthGfxLPtr+1
+    
+    lda #<(HealthRightGfx+4)
+    sta HthGfxRPtr
+    lda #>(HealthRightGfx+4)
+    sta HthGfxRPtr+1
+    
+    lda #%00000000
+    sta ProgressBar+0
+    lda #%00011111
+    sta ProgressBar+1
+    lda #%11111111
+    sta ProgressBar+2
+    lda #%11110000
+    sta ProgressBar+3
+    lda #%11111110
+    sta ProgressBar+4
+    
 ; Set object positions for scoreboard kernel (extremely inefficiently)
     sta WSYNC
     lda #$B0
