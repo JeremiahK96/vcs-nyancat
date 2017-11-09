@@ -31,6 +31,8 @@ ProgressBar	ds 5	; array of the 5 values to be written to the playfield
 
 PgBarColor	ds 1	; color for the full part of the progress bar
 
+Health		ds 1	; amount of health, from 0 to 3
+
 HthGfxLPtr	ds 2	; pointer for the left half of the health graphics
 HthGfxRPtr	ds 2	; pointer for the right half of the health graphics
 

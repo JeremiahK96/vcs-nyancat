@@ -392,6 +392,31 @@ HealthBgGfx
     .byte %01100011
     .byte %00000000
 
+; Progress Bar Graphics
+
+PgBarGfx
+
+    .byte %11111111	; 1st PF1
+    .byte %01111111	; 2nd PF1 (then 1 shift left)
+    .byte %00111111
+    .byte %00011111
+    .byte %00001111
+    .byte %00000111
+    .byte %00000011
+    .byte %00000001
+    .byte %00000000
+
+PgBarGfxR
+
+    .byte %11111111	; PF2
+    .byte %11111110
+    .byte %11111100
+    .byte %11111000
+    .byte %11110000	; 2nd PF0
+    .byte %11100000	; 1st PF0
+    .byte %11000000
+    .byte %10000000
+
 CatRainbowGfx
 
     .byte %01010000

@@ -44,16 +44,16 @@ Overscan:
     lda #>(HealthRightGfx+4)
     sta HthGfxRPtr+1
     
-    lda #%00000000
-    sta ProgressBar+0
-    lda #%00011111
-    sta ProgressBar+1
-    lda #%11111111
-    sta ProgressBar+2
-    lda #%11110000
-    sta ProgressBar+3
-    lda #%11111110
-    sta ProgressBar+4
+    ;lda #%00000000
+    ;sta ProgressBar+0
+    ;lda #%00011111
+    ;sta ProgressBar+1
+    ;lda #%11111111
+    ;sta ProgressBar+2
+    ;lda #%11110000
+    ;sta ProgressBar+3
+    ;lda #%11111110
+    ;sta ProgressBar+4
     
 ; Set object positions for scoreboard kernel (extremely inefficiently)
     sta WSYNC
@@ -116,6 +116,100 @@ Overscan:
     
     cld		; disable BCD mode
 .SkipScoreInc
+
+; Set playfield graphics in RAM for the progress bar
+    SUBROUTINE
+    
+    ldx Progress
+    inx
+    cpx 121
+    bne .Skip
+    ldx #0
+    
+.Skip
+    stx Progress
+    
+    lda #%11100000	; reset all progress bar playfield graphics RAM
+    sta ProgressBar+0
+    lda #%11111111
+    sta ProgressBar+1
+    sta ProgressBar+2
+    sta ProgressBar+3
+    lda #%11111110
+    sta ProgressBar+4
+    
+    lda Progress	; get the amount of progress (color clock range 0-120)
+    lsr
+    lsr			; divide by 4 (playfield range 0-30)
+    
+    ; The level progress bar uses the following playfield bits:
+    ; (note that PF0 and PF2 are NOT reversed in this diagram)
+    ;
+    ; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
+    ; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
+    ; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
+    ;
+    ; When the progress bar is empty, every bit labeled "X" above should be
+    ; set (1), and when it is full, every "X" bit should be cleared (0).
+    ; The bits labeled "o" must ALWAYS be cleared.
+    ;
+    ; The leftmost playfield value (the 1st PF0) will be calculated first,
+    ; and then each playfield value to the right until the 2nd PF1
+    ; will be calculated.
+    
+    ldy #%00000000	; value to store when a playfield byte is full
+    
+    sec
+    sbc #3		; 3 PF bits in 1st PF0 are used, so subtract 3
+    bmi .Underflow1
+    sty ProgressBar	; this playfield byte is full
+    
+    sbc #8		; 8 PF bits in 1st PF1 are used, so subtract 8
+    bmi .Underflow2
+    sty ProgressBar+1	; this playfield byte is full
+    
+    sbc #8		; 8 PF bits in PF2 are used, so subtract 8
+    bmi .Underflow3
+    sty ProgressBar+2	; this playfield byte is full
+    
+    sbc #4		; 4 PF bits in 2nd PF1 are used, so subtract 4
+    bmi .Underflow4
+    sty ProgressBar+3	; this playfield byte is full
+    
+    tax
+    lda PgBarGfx+1,x	; load from normal set of playfield graphics
+    asl
+    sta ProgressBar+4
+    jmp .Finish
+    
+.Underflow1	; for 1st PF0
+    adc #3	; add back the 3
+    tax
+    lda PgBarGfxR+5,x	; load from reversed set of playfield graphics
+    sta ProgressBar
+    jmp .Finish
+    
+.Underflow2	; for 1st PF1
+    adc #8		; add back the 8
+    tax
+    lda PgBarGfx,x	; load from normal set of playfield graphics
+    sta ProgressBar+1
+    jmp .Finish
+    
+.Underflow3	; for PF2
+    adc #8		; add back the 8
+    tax
+    lda PgBarGfxR,x	; load from reversed set of playfield graphics
+    sta ProgressBar+2
+    jmp .Finish
+    
+.Underflow4	; for 2nd PF0
+    adc #4		; add back the 4
+    tax
+    lda PgBarGfxR+4,x	; load from reversed set of playfield graphics
+    sta ProgressBar+3
+
+.Finish
 
 
 
