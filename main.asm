@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 11-09-2017 Version 1.5
+; 11-15-2017 Version 1.6
 ;
-; Add throbbing lines between rows and progress bar/health to bottom of screen
+; Clean up code
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 

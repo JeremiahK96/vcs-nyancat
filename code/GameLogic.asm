@@ -8,38 +8,133 @@ Overscan:
 
     lda #OVERSCAN_TIMER
     sta WSYNC
-    sta TIM64T
+    sta TIM64T	; 03
     
-; Set object positions for scoreboard kernel (extremely inefficiently)
-    sta WSYNC
-    lda #$B0
-    sta HMP0
-    lda #$C0
-    sta HMP1
-    SLEEP 14
-    sta RESP0
-    sta RESP1
-    SLEEP 11
-    lda #$80
-    sta HMBL
-    lda #$80
-    sta HMM0
-    lda #$D0
-    sta HMM1
-    sta RESBL
-    sta RESM0
-    sta RESM1
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare for Scoreboard and Level Progress
+;
+; Set object positions for scoreboard kernel.
+; Also load the values for the playfield registers in RAM
+; for drawing the level progress bar.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda #$B0	; 05 - set HMOVE offsets for both player objects
+    sta HMP0	; 08
+    lda #$C0	; 10
+    sta HMP1	; 13
+    lda #$80	; 15 - set HMOVE offsets for ball and missile0
+    sta HMBL	; 18
+    sta HMM0	; 21
+    
+    SLEEP 2	; 24
+    
+    sta RESP0	; 27 - set player positions
+    sta RESP1	; 30
+    
+    lda #$D0	; 32 - set HMOVE offset for missile1
+    sta HMM1	; 35
+    
+; Use up 21 cycles
+
+    ; reset all progress bar playfield graphics RAM
+    
+    lda #%11100000	; 37
+    sta ProgressBar+0	; 40
+    lda #%11111111	; 42
+    sta ProgressBar+1	; 45
+    sta ProgressBar+2	; 48
+    sta ProgressBar+3	; 51
+    lda #%11111110	; 53
+    sta ProgressBar+4	; 56
+    
+    sta RESBL	; 59 - set ball and missile positions
+    sta RESM0	; 62
+    sta RESM1	; 65
+    
     sta WSYNC
     sta HMOVE
-    sta WSYNC
-    sta HMCLR
-    lda #$B0
-    sta HMBL
+    
+; Load RAM for progress bar display (takes 32-57 cycles)
+    lda Progress	; 3 - get amount of progress (color clock range 0-120)
+    lsr			; 2
+    lsr			; 2 - divide by 4 (playfield range 0-30)
+    
+    ; The level progress bar uses the following playfield bits:
+    ; (note that PF0 and PF2 are NOT reversed in this diagram)
+    ;
+    ; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
+    ; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
+    ; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
+    ;
+    ; When the progress bar is empty, every bit labeled "X" above should be
+    ; set (1), and when it is full, every "X" bit should be cleared (0).
+    ; The bits labeled "o" must ALWAYS be cleared.
+    ;
+    ; The leftmost playfield value (the 1st PF0) will be calculated first,
+    ; and then each playfield value to the right until the 2nd PF1
+    ; will be calculated.
+    
+    ldy #%00000000	; 2 - value to store when a playfield byte is full
+    
+    sec			; 2
+    sbc #3		; 3 - 3 PF bits in 1st PF0 are used, so subtract 3
+    bmi .Underflow1	; 2/3
+    sty ProgressBar	; 3 - this playfield byte is full
+    
+    sbc #8		; 3 - 8 PF bits in 1st PF1 are used, so subtract 8
+    bmi .Underflow2	; 2/3
+    sty ProgressBar+1	; 3 - this playfield byte is full
+    
+    sbc #8		; 3 - 8 PF bits in PF2 are used, so subtract 8
+    bmi .Underflow3	; 2/3
+    sty ProgressBar+2	; 3 - this playfield byte is full
+    
+    sbc #4		; 3 - 4 PF bits in 2nd PF1 are used, so subtract 4
+    bmi .Underflow4	; 2/3
+    sty ProgressBar+3	; 3 - this playfield byte is full
+    
+    tax			; 2
+    lda PgBarGfx+1,x	; 4 - load from normal set of playfield graphics
+    asl			; 2
+    sta ProgressBar+4	; 3
+    jmp .Finish		; 3
+    
+.Underflow1	; for 1st PF0
+    adc #3		; 3 - add back the 3
+    tax			; 2
+    lda PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
+    sta ProgressBar	; 3
+    jmp .Finish		; 3
+    
+.Underflow2	; for 1st PF1
+    adc #8		; 3 - add back the 8
+    tax			; 2
+    lda PgBarGfx,x	; 4 - load from normal set of playfield graphics
+    sta ProgressBar+1	; 3
+    jmp .Finish		; 3
+    
+.Underflow3	; for PF2
+    adc #8		; 3 - add back the 8
+    tax			; 2
+    lda PgBarGfxR,x	; 4 - load from reversed set of playfield graphics
+    sta ProgressBar+2	; 3
+    jmp .Finish		; 3
+    
+.Underflow4	; for 2nd PF0
+    adc #4		; 3 - add back the 4
+    tax			; 2
+    lda PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
+    sta ProgressBar+3	; 3
+.Finish
+
+
+    
+    sta HMCLR	; 60
+    lda #$B0	; 62 - another HMOVE is neccesary for the ball
+    sta HMBL	; 65
+    
     sta WSYNC
     sta HMOVE
-    sta WSYNC
-    sta HMCLR
-    
     
     
     inc Frame		; increment the frame number
@@ -109,87 +204,9 @@ Overscan:
 .Skip
     sta Progress
     
-    lda #%11100000	; reset all progress bar playfield graphics RAM
-    sta ProgressBar+0
-    lda #%11111111
-    sta ProgressBar+1
-    sta ProgressBar+2
-    sta ProgressBar+3
-    lda #%11111110
-    sta ProgressBar+4
-    
-    lda Progress	; get the amount of progress (color clock range 0-120)
-    lsr
-    lsr			; divide by 4 (playfield range 0-30)
-    
-    ; The level progress bar uses the following playfield bits:
-    ; (note that PF0 and PF2 are NOT reversed in this diagram)
-    ;
-    ; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
-    ; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
-    ; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
-    ;
-    ; When the progress bar is empty, every bit labeled "X" above should be
-    ; set (1), and when it is full, every "X" bit should be cleared (0).
-    ; The bits labeled "o" must ALWAYS be cleared.
-    ;
-    ; The leftmost playfield value (the 1st PF0) will be calculated first,
-    ; and then each playfield value to the right until the 2nd PF1
-    ; will be calculated.
-    
-    ldy #%00000000	; value to store when a playfield byte is full
-    
-    sec
-    sbc #3		; 3 PF bits in 1st PF0 are used, so subtract 3
-    bmi .Underflow1
-    sty ProgressBar	; this playfield byte is full
-    
-    sbc #8		; 8 PF bits in 1st PF1 are used, so subtract 8
-    bmi .Underflow2
-    sty ProgressBar+1	; this playfield byte is full
-    
-    sbc #8		; 8 PF bits in PF2 are used, so subtract 8
-    bmi .Underflow3
-    sty ProgressBar+2	; this playfield byte is full
-    
-    sbc #4		; 4 PF bits in 2nd PF1 are used, so subtract 4
-    bmi .Underflow4
-    sty ProgressBar+3	; this playfield byte is full
-    
-    tax
-    lda PgBarGfx+1,x	; load from normal set of playfield graphics
-    asl
-    sta ProgressBar+4
-    jmp .Finish
-    
-.Underflow1	; for 1st PF0
-    adc #3	; add back the 3
-    tax
-    lda PgBarGfxR+5,x	; load from reversed set of playfield graphics
-    sta ProgressBar
-    jmp .Finish
-    
-.Underflow2	; for 1st PF1
-    adc #8		; add back the 8
-    tax
-    lda PgBarGfx,x	; load from normal set of playfield graphics
-    sta ProgressBar+1
-    jmp .Finish
-    
-.Underflow3	; for PF2
-    adc #8		; add back the 8
-    tax
-    lda PgBarGfxR,x	; load from reversed set of playfield graphics
-    sta ProgressBar+2
-    jmp .Finish
-    
-.Underflow4	; for 2nd PF0
-    adc #4		; add back the 4
-    tax
-    lda PgBarGfxR+4,x	; load from reversed set of playfield graphics
-    sta ProgressBar+3
 
-.Finish
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Prepare Health Display
@@ -217,6 +234,10 @@ Overscan:
     sta HthGfxRPtr
     lda #>HealthRightGfx
     sta HthGfxRPtr+1
+    
+    
+    
+    sta HMCLR
 
 
 
@@ -264,16 +285,18 @@ OverscanTimerLoop
 ; Prepare for Throbbing Lines
 ;
 ; Set the offset value for the throbbing line graphics
+;
+; Takes 20 cycles to complete
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda Frame		; get the current frame number
-    and #%00011100	; change animation frame every 4 game frames
-    lsr
-    lsr			; shift to get a frame value from 0-7
-    sta Temp
-    adc Temp		; carry flag will always be clear
-    adc Temp		; multiply by 3
-    sta ThrobFrame	; store the gfx offset
+    lda Frame		; 3 - get the current frame number
+    and #%00011100	; 2 - change animation frame every 4 game frames
+    lsr			; 2
+    lsr			; 2 - shift to get a value from 0-7
+    sta Temp		; 3
+    asl			; 2 - carry flag will always be clear after this
+    adc Temp		; 3 - multiply by 3
+    sta ThrobFrame	; 3 - store the gfx offset
 
 
 
@@ -281,58 +304,60 @@ OverscanTimerLoop
 ; Load Scoreboard
 ;
 ; Get graphics data for the scoreboard and push it onto the stack
+;
+; Takes 1245 cycles to complete (16 full scanlines + 29 cycles)
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     SUBROUTINE
 
-    lda #6		; start with bottom of digit graphics data
-    sta TempLoop
+    lda #6		; 2 - start with bottom of digit graphics data
+    sta TempLoop	; 3
 
 .Loop
 
 ; push level counter graphics data
-    lda BCDLevel	; get level counter
-    and #$0F		; isolate left nybble/digit
-    asl
-    asl
-    asl			; digit value * 8
+    lda BCDLevel	; 3 - get level counter
+    and #$0F		; 2 - isolate left nybble/digit
+    asl			; 2
+    asl			; 2
+    asl			; 2 - digit value * 8
     			; no need to clc, carry will always be clear
-    adc TempLoop
-    tay
-    lda LevelGfx,y
-    pha
+    adc TempLoop	; 3 - add offset for current loop iteration
+    tay			; 2
+    lda LevelGfx,y	; 4
+    pha			; 3
     
-    ldx #2		; start with rightmost BCD score value
+    ldx #2		; 2 - start with rightmost BCD score value
     			; (we must push to stack in reverse of drawing order)
 .DigitLoop
 
 ; right nybble
-    lda BCDScore,x	; get current BCD value (contains 2 digits)
-    and #$0F		; isolate right nybble/digit
-    asl
-    asl
-    asl			; digit value * 8
+    lda BCDScore,x	; 4 - get current BCD value (contains 2 digits)
+    and #$0F		; 2 - isolate right nybble/digit
+    asl			; 2
+    asl			; 2
+    asl			; 2 - digit value * 8
     			; no need to clc, carry will always be clear
-    adc TempLoop
-    tay
-    lda ScoreGfx,y
-    pha
+    adc TempLoop	; 3 - add offset for current loop iteration
+    tay			; 2
+    lda ScoreGfx,y	; 4
+    pha			; 3
     
 ; left nybble
-    lda BCDScore,x	; get current BCD value (contains 2 digits)
-    and #$F0		; isolate left nybble/digit
-    lsr			; digit value * 8
+    lda BCDScore,x	; 4 - get current BCD value (contains 2 digits)
+    and #$F0		; 2 - isolate left nybble/digit
+    lsr			; 2 - digit value * 8
     			; no need to clc, carry will always be clear
-    adc TempLoop
-    tay
-    lda ScoreGfx,y
-    pha
+    adc TempLoop	; 3 - add offset for current loop iteration
+    tay			; 2
+    lda ScoreGfx,y	; 4
+    pha			; 3
 
-    dex
-    bpl .DigitLoop
+    dex			; 2
+    bpl .DigitLoop	; 2/3
     
-    dec TempLoop
-    bpl .Loop
+    dec TempLoop	; 5
+    bpl .Loop		; 2/3
 
 
 
