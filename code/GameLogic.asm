@@ -54,10 +54,8 @@ Overscan:
     sta WSYNC
     sta HMOVE
     
-; Load RAM for progress bar display (takes 32-57 cycles)
+; Load RAM for progress bar display (takes 28-53 cycles)
     lda Progress	; 3 - get amount of progress (color clock range 0-120)
-    lsr			; 2
-    lsr			; 2 - divide by 4 (playfield range 0-30)
     
     ; The level progress bar uses the following playfield bits:
     ; (note that PF0 and PF2 are NOT reversed in this diagram)
@@ -129,15 +127,15 @@ Overscan:
 
 
     
-    sta HMCLR	; 60
-    lda #$B0	; 62 - another HMOVE is neccesary for the ball
-    sta HMBL	; 65
+    sta HMCLR	; 56
+    lda #$B0	; 58 - another HMOVE is neccesary for the ball
+    sta HMBL	; 61
+    inc Frame	; 66 increment the frame number
     
     sta WSYNC
     sta HMOVE
     
     
-    inc Frame		; increment the frame number
     
 ; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
 
@@ -158,18 +156,21 @@ Overscan:
     lda #$56
     sta PgBarColor
     
+    lda #$00
+    sta BCDScoreAdd
+    lda #$00
+    sta BCDScoreAdd+1
+    
     
 
-; Increment the score
-    lda Frame
-    and #%00000111
-    bne .SkipScoreInc
+; Add to the score
 
-    lda #$21		; we are adding 21
-    ldx #$00
+    lda BCDScoreAdd+1
+    ldx BCDScoreAdd
     ldy #$00
     
     sed			; enable BCD mode
+    
     clc
     sta Temp
     lda BCDScore+2
@@ -184,27 +185,7 @@ Overscan:
     adc Temp
     sta BCDScore+0
     
-    clc
-    lda BCDLevel
-    adc #1
-    sta BCDLevel
-    
     cld		; disable BCD mode
-.SkipScoreInc
-
-; Set playfield graphics in RAM for the progress bar
-    SUBROUTINE
-    
-    lda Frame
-    lsr
-    sec
-    sbc #7
-    bpl .Skip
-    lda #120
-.Skip
-    sta Progress
-    
-
 
 
 
@@ -214,70 +195,17 @@ Overscan:
 ; Set the pointers for the health graphics
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda Frame
-    and #%11000000
-    lsr
-    lsr
-    lsr
-    sta Temp
-    
-    clc
-    
     lda #<HealthLeftGfx
-    adc Temp
+    adc Health
     sta HthGfxLPtr
     lda #>HealthLeftGfx
     sta HthGfxLPtr+1
     
     lda #<HealthRightGfx
-    adc Temp
+    adc Health
     sta HthGfxRPtr
     lda #>HealthRightGfx
     sta HthGfxRPtr+1
-    
-    
-    
-    sta HMCLR
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Finish Overscan
-;
-; Loop until the end of overscan
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-OverscanTimerLoop
-    lda INTIM
-    bne OverscanTimerLoop
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Vertical Sync
-;
-; Do the vertical sync and start the vertical blanking timer
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    lda #2
-    sta WSYNC
-    sta VSYNC	; enable VSYNC
-    
-    sta WSYNC
-    lda #VBLANK_TIMER
-    sta WSYNC
-    sta TIM64T	; start VBLANK timer
-    
-    lda #0
-    sta WSYNC
-    sta VSYNC	; disable VSYNC
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Vertical Blank
-;
-; Do the vertical blanking and game logic
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 
 
@@ -358,6 +286,48 @@ OverscanTimerLoop
     
     dec TempLoop	; 5
     bpl .Loop		; 2/3
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Finish Overscan
+;
+; Loop until the end of overscan
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+OverscanTimerLoop
+    lda INTIM
+    bne OverscanTimerLoop
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Vertical Sync
+;
+; Do the vertical sync and start the vertical blanking timer
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda #2
+    sta WSYNC
+    sta VSYNC	; enable VSYNC
+    
+    sta WSYNC
+    lda #VBLANK_TIMER
+    sta WSYNC
+    sta TIM64T	; start VBLANK timer
+    
+    sta HMCLR	; clear any HMOVE offsets
+    
+    lda #0
+    sta WSYNC
+    sta VSYNC	; disable VSYNC
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Vertical Blank
+;
+; Do the vertical blanking and game logic
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 
 

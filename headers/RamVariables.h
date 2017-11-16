@@ -17,6 +17,9 @@ BCDScore	ds 3	; 3-byte array for score value which will be stored as a
 			; BCD encoded 6-digit number and used to control the
 			; 6-digit score display
 
+BCDScoreAdd	ds 2	; 2-byte array for the value to be added to the score
+			; on the next frame (max of 9,999)
+
 BCDLevel	ds 1	; value for the current level which will be stored as a
 			; BCD encoded 2-digit number and used to control the
 			; level counter display
@@ -31,7 +34,8 @@ ProgressBar	ds 5	; array of the 5 values to be written to the playfield
 
 PgBarColor	ds 1	; color for the full part of the progress bar
 
-Health		ds 1	; amount of health, from 0 to 3
+Health		ds 1	; amount of health
+			; 0=full 8=medium 16=low 24=empty
 
 HthGfxLPtr	ds 2	; pointer for the left half of the health graphics
 HthGfxRPtr	ds 2	; pointer for the right half of the health graphics
