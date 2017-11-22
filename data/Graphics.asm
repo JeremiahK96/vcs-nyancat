@@ -106,6 +106,8 @@ ScoreGfx
     .byte %00111100
     .byte %00000000
 
+
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; NUSIZx and ENAMx data for level counter graphics
 ;
@@ -285,12 +287,26 @@ LineThrobGfx
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Health Graphics
+;
+; All of these tables are upside-down, and they are supposed to be used with the
+; left player not mirrored, and the right player mirrored. This makes it easier
+; to draw the top 5 lines since they are always mirrored. Because of this, all
+; the graphics for the lower right are flipped.
+; The graphics tables for the lower 8 lines (HealthLeftGfx and HealthRightGfx)
+; are set up in a confusing way. They are upside-down, but they are split
+; into 2 sections. The first 4 bytes correspond to the UPPER 4 lines
+; of graphics (upside-down), and the last 4 bytes correspond to the
+; LOWER 4 lines of graphics (also upside-down).
+; The last table (HealthBgGfx) is for the grey background of the
+; health graphics drawn with the playfield.
+;
 ; Table takes up $45 (69) bytes of ROM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 HealthTopGfx
 
-    .byte %01000000	; left top of health (right is mirror of left)
+    .byte %01000000	; graphics for left top of health
     .byte %01000011
     .byte %01000100
     .byte %01001000
@@ -298,81 +314,81 @@ HealthTopGfx
 
 HealthLeftGfx
 
-    .byte %10000000
+    .byte %10000000	; left health full (upper)
     .byte %10001100
     .byte %10000100
     .byte %10000000
-    .byte %00011111	; left health full
+    .byte %00011111	; left health full (lower)
     .byte %00100000
     .byte %01000111
     .byte %10000100
 
-    .byte %10000000
+    .byte %10000000	; left health medium (upper)
     .byte %10001100
     .byte %10000100
     .byte %10000000
-    .byte %00011111	; left health medium
+    .byte %00011111	; left health medium (lower)
     .byte %00100000
     .byte %01000111
     .byte %10000000
 
-    .byte %10000000
+    .byte %10000000	; left health low (upper)
     .byte %10001100
     .byte %10000100
     .byte %10000000
-    .byte %00011111	; left health low
+    .byte %00011111	; left health low (lower)
     .byte %00100000
     .byte %01000100
     .byte %10000111
 
-    .byte %10000000
+    .byte %10000000	; left health empty (upper)
     .byte %10011100
     .byte %10000000
     .byte %10000000
-    .byte %00011111	; left health empty
+    .byte %00011111	; left health empty (lower)
     .byte %00100000
     .byte %01000110
     .byte %10000001
 
 HealthRightGfx
 
-    .byte %10000000
+    .byte %10000000	; right health full (upper)
     .byte %10011010
     .byte %10010000
     .byte %10000000
-    .byte %00011111	; right health full
+    .byte %00011111	; right health full (lower)
     .byte %00100000
     .byte %01001111
     .byte %10001001
 
-    .byte %10000000
+    .byte %10000000	; right health medium (upper)
     .byte %10011010
     .byte %10010000
     .byte %10000000
-    .byte %00011111	; right health medium
+    .byte %00011111	; right health medium (lower)
     .byte %00100000
     .byte %01001111
     .byte %10000000
 
-    .byte %10000000
+    .byte %10000000	; right health low (upper)
     .byte %10011010
     .byte %10001000
     .byte %10000000
-    .byte %00011111	; right health low
+    .byte %00011111	; right health low (lower)
     .byte %00100000
     .byte %01001000
     .byte %10001111
 
-    .byte %10000000
+    .byte %10000000	; right health empty (upper)
     .byte %10111010
     .byte %10000000
     .byte %10000000
-    .byte %00011111	; right health empty
+    .byte %00011111	; right health empty (lower)
     .byte %00100000
     .byte %01001100
     .byte %10000011
 
-; $03 (3) bytes left in this page
+; 3 bytes left in this page
 
     ALIGN $100	; align to page
 
@@ -392,7 +408,13 @@ HealthBgGfx
     .byte %01100011
     .byte %00000000
 
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Progress Bar Graphics
+;
+; 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 PgBarGfx
 
@@ -417,16 +439,92 @@ PgBarGfxR
     .byte %11000000
     .byte %10000000
 
-CatRainbowGfx
 
-    .byte %01010000
-    .byte %01110000
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Cat Rainbow Graphics
+;
+; 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+RainbowGfx
+
+    REPEAT 18
+    hex 00
+    REPEND
     
-    .byte %01110000
-    .byte %01010000
+    .byte %00000000	; "straight ahead" rainbow graphics data frame 1
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+
+    REPEAT 18
+    hex 00
+    REPEND
     
-    .byte %01000000
-    .byte %01100000
+    .byte %00100000	; "straight ahead" rainbow graphics data frame 2
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+    .byte %00100000
+    .byte %00000000
+
+    REPEAT 18
+    hex 00
+    REPEND
     
-    .byte %01100000
-    .byte %01000000
+    .byte %00110000	; "moving up" rainbow graphics data
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+
+    REPEAT 18
+    hex 00
+    REPEND
+    
+    .byte %00010000	; "moving down" rainbow graphics data
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+    .byte %00010000
+    .byte %00110000
+
+    REPEAT 18
+    hex 00
+    REPEND

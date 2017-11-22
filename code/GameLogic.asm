@@ -22,7 +22,6 @@ Overscan:
 
     lda BCDScoreAdd+1	; 2
     ldx BCDScoreAdd	; 2
-    ldy #$00		; 2
     
     sed			; 2 - enable BCD mode
     
@@ -35,7 +34,8 @@ Overscan:
     lda BCDScore+1	; 2
     adc Temp		; 3
     sta BCDScore+1	; 3
-    sty Temp		; 3
+    lda #$00		; 2
+    sta Temp		; 3
     lda BCDScore+0	; 2
     adc Temp		; 3
     sta BCDScore+0	; 3
@@ -87,7 +87,7 @@ OverscanTimerLoop
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare for Scoreboard and Level Progress
+; Prepare Scoreboard and Level Progress Displays
 ;
 ; Set object positions for scoreboard kernel.
 ; Also load the values for the playfield registers in RAM

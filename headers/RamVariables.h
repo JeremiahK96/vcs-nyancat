@@ -42,6 +42,13 @@ HthGfxRPtr	ds 2	; pointer for the right half of the health graphics
 
 CatPosY		ds 1	; number of scanlines to skip before drawing cat
 
-; temporary variables
+PreCatRows	ds 1	; number of rows to draw before the two "cat" rows
+PostCatRows	ds 1	; number of rows to draw after the two "cat" rows
+
+; 26 of 81 bytes used
+
+; temporary variables (can be shared with stack space)
 Temp		ds 1
 TempLoop	ds 1
+
+; last 49 bytes are used for stack space
