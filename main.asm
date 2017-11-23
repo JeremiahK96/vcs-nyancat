@@ -10,7 +10,7 @@
 ;
 ; 11-22-2017 Version 2.0
 ;
-; Add vertically moveable cat sprite
+; Add comments explaining the gameplay kernel
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 

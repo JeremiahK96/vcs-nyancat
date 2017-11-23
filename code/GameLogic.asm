@@ -277,6 +277,18 @@ OverscanTimerLoop
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare for Main Gameplay Kernel
+;
+; Figure out how many rows to draw before and after the two cat rows
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda CatPosY
+    
+    
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load Scoreboard
 ;
 ; Get graphics data for the scoreboard and push it onto the stack

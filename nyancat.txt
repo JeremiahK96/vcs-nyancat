@@ -11,7 +11,7 @@
      10  10000 ????						;
      11  10000 ????						; 11-22-2017 Version 2.0
      12  10000 ????						;
-     13  10000 ????						; Add vertically moveable cat sprite
+     13  10000 ????						; Add comments explaining the gameplay kernel
      14  10000 ????						;
      15  10000 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      16  10000 ????
@@ -522,13 +522,17 @@
      45 U0096		       00	   PreCatRows ds	1	; number of rows to draw before the two "cat" rows
      46 U0097		       00	   PostCatRows ds	1	; number of rows to draw after the two "cat" rows
      47 U0098
-     48 U0098							; 26 of 81 bytes used
+     48 U0098
      49 U0098
-     50 U0098							; temporary variables (can be shared with stack space)
-     51 U0098		       00	   Temp       ds	1
-     52 U0099		       00	   TempLoop   ds	1
-     53 U009a
-     54 U009a							; last 49 bytes are used for stack space
+     50 U0098							; temporary variables which cannot be shared with stack space
+     51 U0098		       00	   TempLoop   ds	1
+     52 U0099
+     53 U0099							; 25 of 79 available bytes used
+     54 U0099
+     55 U0099							; temporary variables which can be shared with stack space
+     56 U0099		       00	   Temp       ds	1
+     57 U009a
+     58 U009a							; last 49 bytes are used for stack space
 ------- FILE main.asm
      33 U009a
      34 U009a
@@ -596,18 +600,18 @@
      26  f016		       f8		      sed		; 2 - enable BCD mode
      27  f017
      28  f017		       18		      clc		; 2
-     29  f018		       85 98		      sta	Temp	; 3
+     29  f018		       85 99		      sta	Temp	; 3
      30  f01a		       a5 84		      lda	BCDScore+2	; 2
-     31  f01c		       65 98		      adc	Temp	; 3
+     31  f01c		       65 99		      adc	Temp	; 3
      32  f01e		       85 84		      sta	BCDScore+2	; 3
-     33  f020		       86 98		      stx	Temp	; 3
+     33  f020		       86 99		      stx	Temp	; 3
      34  f022		       a5 83		      lda	BCDScore+1	; 2
-     35  f024		       65 98		      adc	Temp	; 3
+     35  f024		       65 99		      adc	Temp	; 3
      36  f026		       85 83		      sta	BCDScore+1	; 3
      37  f028		       a9 00		      lda	#$00	; 2
-     38  f02a		       85 98		      sta	Temp	; 3
+     38  f02a		       85 99		      sta	Temp	; 3
      39  f02c		       a5 82		      lda	BCDScore+0	; 2
-     40  f02e		       65 98		      adc	Temp	; 3
+     40  f02e		       65 99		      adc	Temp	; 3
      41  f030		       85 82		      sta	BCDScore+0	; 3
      42  f032
      43  f032		       d8		      cld		; 2 - disable BCD mode
@@ -858,165 +862,173 @@
     269  f118		       29 1c		      and	#%00011100	; 2 - change animation frame every 4 game frames
     270  f11a		       4a		      lsr		; 2
     271  f11b		       4a		      lsr		; 2 - shift to get a value from 0-7
-    272  f11c		       85 98		      sta	Temp	; 3
+    272  f11c		       85 99		      sta	Temp	; 3
     273  f11e		       0a		      asl		; 2 - carry flag will always be clear after this
-    274  f11f		       65 98		      adc	Temp	; 3 - multiply by 3
+    274  f11f		       65 99		      adc	Temp	; 3 - multiply by 3
     275  f121		       85 81		      sta	ThrobFrame	; 3 - store the gfx offset
     276  f123
     277  f123
     278  f123
     279  f123							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    280  f123							; Load Scoreboard
+    280  f123							; Prepare for Main Gameplay Kernel
     281  f123							;
-    282  f123							; Get graphics data for the scoreboard and push it onto the stack
-    283  f123							;
-    284  f123							; Takes 1245 cycles to complete (16 full scanlines + 29 cycles)
-    285  f123							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    286  f123
-    287  f123					      SUBROUTINE
-    288  f123
-    289  f123		       a9 06		      lda	#6	; 2 - start with bottom of digit graphics data
-    290  f125		       85 99		      sta	TempLoop	; 3
-    291  f127
-    292  f127				   .Loop
-    293  f127
-    294  f127							; push level counter graphics data
-    295  f127		       a5 87		      lda	BCDLevel	; 3 - get level counter
-    296  f129		       29 0f		      and	#$0F	; 2 - isolate left nybble/digit
-    297  f12b		       0a		      asl		; 2
-    298  f12c		       0a		      asl		; 2
-    299  f12d		       0a		      asl		; 2 - digit value * 8
-    300  f12e							; no need to clc, carry will always be clear
-    301  f12e		       65 99		      adc	TempLoop	; 3 - add offset for current loop iteration
-    302  f130		       a8		      tay		; 2
-    303  f131		       b9 50 f5 	      lda	LevelGfx,y	; 4
-    304  f134		       48		      pha		; 3
-    305  f135
-    306  f135		       a2 02		      ldx	#2	; 2 - start with rightmost BCD score value
-    307  f137							; (we must push to stack in reverse of drawing order)
-    308  f137				   .DigitLoop
-    309  f137
-    310  f137							; right nybble
-    311  f137		       b5 82		      lda	BCDScore,x	; 4 - get current BCD value (contains 2 digits)
-    312  f139		       29 0f		      and	#$0F	; 2 - isolate right nybble/digit
-    313  f13b		       0a		      asl		; 2
-    314  f13c		       0a		      asl		; 2
-    315  f13d		       0a		      asl		; 2 - digit value * 8
-    316  f13e							; no need to clc, carry will always be clear
-    317  f13e		       65 99		      adc	TempLoop	; 3 - add offset for current loop iteration
-    318  f140		       a8		      tay		; 2
-    319  f141		       b9 00 f5 	      lda	ScoreGfx,y	; 4
-    320  f144		       48		      pha		; 3
-    321  f145
-    322  f145							; left nybble
-    323  f145		       b5 82		      lda	BCDScore,x	; 4 - get current BCD value (contains 2 digits)
-    324  f147		       29 f0		      and	#$F0	; 2 - isolate left nybble/digit
-    325  f149		       4a		      lsr		; 2 - digit value * 8
-    326  f14a							; no need to clc, carry will always be clear
-    327  f14a		       65 99		      adc	TempLoop	; 3 - add offset for current loop iteration
-    328  f14c		       a8		      tay		; 2
-    329  f14d		       b9 00 f5 	      lda	ScoreGfx,y	; 4
-    330  f150		       48		      pha		; 3
-    331  f151
-    332  f151		       ca		      dex		; 2
-    333  f152		       10 e3		      bpl	.DigitLoop	; 2/3
-    334  f154
-    335  f154		       c6 99		      dec	TempLoop	; 5
-    336  f156		       10 cf		      bpl	.Loop	; 2/3
-    337  f158
-    338  f158
-    339  f158
-    340  f158							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    341  f158							; Finish Vertical Blanking
-    342  f158							;
-    343  f158							; Loop until the end of vertical blanking
-    344  f158							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    345  f158
-    346  f158				   VblankTimerLoop
-    347  f158		       ad 84 02 	      lda	INTIM
-    348  f15b		       d0 fb		      bne	VblankTimerLoop
+    282  f123							; Figure out how many rows to draw before and after the two cat rows
+    283  f123							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    284  f123
+    285  f123		       a5 95		      lda	CatPosY
+    286  f125
+    287  f125
+    288  f125
+    289  f125
+    290  f125
+    291  f125							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    292  f125							; Load Scoreboard
+    293  f125							;
+    294  f125							; Get graphics data for the scoreboard and push it onto the stack
+    295  f125							;
+    296  f125							; Takes 1245 cycles to complete (16 full scanlines + 29 cycles)
+    297  f125							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    298  f125
+    299  f125					      SUBROUTINE
+    300  f125
+    301  f125		       a9 06		      lda	#6	; 2 - start with bottom of digit graphics data
+    302  f127		       85 98		      sta	TempLoop	; 3
+    303  f129
+    304  f129				   .Loop
+    305  f129
+    306  f129							; push level counter graphics data
+    307  f129		       a5 87		      lda	BCDLevel	; 3 - get level counter
+    308  f12b		       29 0f		      and	#$0F	; 2 - isolate left nybble/digit
+    309  f12d		       0a		      asl		; 2
+    310  f12e		       0a		      asl		; 2
+    311  f12f		       0a		      asl		; 2 - digit value * 8
+    312  f130							; no need to clc, carry will always be clear
+    313  f130		       65 98		      adc	TempLoop	; 3 - add offset for current loop iteration
+    314  f132		       a8		      tay		; 2
+    315  f133		       b9 50 f5 	      lda	LevelGfx,y	; 4
+    316  f136		       48		      pha		; 3
+    317  f137
+    318  f137		       a2 02		      ldx	#2	; 2 - start with rightmost BCD score value
+    319  f139							; (we must push to stack in reverse of drawing order)
+    320  f139				   .DigitLoop
+    321  f139
+    322  f139							; right nybble
+    323  f139		       b5 82		      lda	BCDScore,x	; 4 - get current BCD value (contains 2 digits)
+    324  f13b		       29 0f		      and	#$0F	; 2 - isolate right nybble/digit
+    325  f13d		       0a		      asl		; 2
+    326  f13e		       0a		      asl		; 2
+    327  f13f		       0a		      asl		; 2 - digit value * 8
+    328  f140							; no need to clc, carry will always be clear
+    329  f140		       65 98		      adc	TempLoop	; 3 - add offset for current loop iteration
+    330  f142		       a8		      tay		; 2
+    331  f143		       b9 00 f5 	      lda	ScoreGfx,y	; 4
+    332  f146		       48		      pha		; 3
+    333  f147
+    334  f147							; left nybble
+    335  f147		       b5 82		      lda	BCDScore,x	; 4 - get current BCD value (contains 2 digits)
+    336  f149		       29 f0		      and	#$F0	; 2 - isolate left nybble/digit
+    337  f14b		       4a		      lsr		; 2 - digit value * 8
+    338  f14c							; no need to clc, carry will always be clear
+    339  f14c		       65 98		      adc	TempLoop	; 3 - add offset for current loop iteration
+    340  f14e		       a8		      tay		; 2
+    341  f14f		       b9 00 f5 	      lda	ScoreGfx,y	; 4
+    342  f152		       48		      pha		; 3
+    343  f153
+    344  f153		       ca		      dex		; 2
+    345  f154		       10 e3		      bpl	.DigitLoop	; 2/3
+    346  f156
+    347  f156		       c6 98		      dec	TempLoop	; 5
+    348  f158		       10 cf		      bpl	.Loop	; 2/3
+    349  f15a
+    350  f15a
+    351  f15a
+    352  f15a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    353  f15a							; Finish Vertical Blanking
+    354  f15a							;
+    355  f15a							; Loop until the end of vertical blanking
+    356  f15a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    357  f15a
+    358  f15a				   VblankTimerLoop
+    359  f15a		       ad 84 02 	      lda	INTIM
+    360  f15d		       d0 fb		      bne	VblankTimerLoop
 ------- FILE main.asm
-     59  f15d
-     60  f15d
-     61  f15d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     62  f15d							; Kernel
-     63  f15d							;
-     64  f15d							; Draw the screen
-     65  f15d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     66  f15d
+     59  f15f
+     60  f15f
+     61  f15f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     62  f15f							; Kernel
+     63  f15f							;
+     64  f15f							; Draw the screen
+     65  f15f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     66  f15f
 ------- FILE code/Kernel.asm LEVEL 2 PASS 2
-      0  f15d					      include	code/Kernel.asm
-      1  f15d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  f15d							; Kernel
-      3  f15d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  f15d
-      5  f15d		       a9 00		      lda	#0
-      6  f15f		       85 02		      sta	WSYNC
-      7  f161		       85 01		      sta	VBLANK	; enable display
-      8  f163
-      9  f163							; Include kernel routines
+      0  f15f					      include	code/Kernel.asm
+      1  f15f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  f15f							; Kernel
+      3  f15f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  f15f
+      5  f15f		       a9 00		      lda	#0
+      6  f161		       85 02		      sta	WSYNC
+      7  f163		       85 01		      sta	VBLANK	; enable display
+      8  f165
+      9  f165							; Include kernel routines
 ------- FILE code/ScoreboardKernel.asm LEVEL 3 PASS 2
-      0  f163					      include	code/ScoreboardKernel.asm
-      1  f163							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  f163							; Scoreboard Display
-      3  f163							;
-      4  f163							; Draw the 6-digit score and level counter.
-      5  f163							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      6  f163
-      7  f163					      SUBROUTINE
-      8  f163
-      9  f163		       a9 15		      lda	#PF_REFLECT | PF_PRIORITY | BALL_SIZE_2
-     10  f165		       85 0a		      sta	CTRLPF
-     11  f167
-     12  f167		       a9 ff		      lda	#$FF
-     13  f169		       85 0d		      sta	PF0
-     14  f16b
-     15  f16b		       85 1b		      sta	GRP0	; This forces a collision between P0 and PF, setting bit-7
-     16  f16d		       85 1c		      sta	GRP1	; in CXP0FB, which will be used to end the scoreboard
-     17  f16f		       85 0e		      sta	PF1	; display kernel loop.
-     18  f171
-     19  f171		       a0 05		      ldy	#5
-     20  f173				   ScoreTop		; draw border above scoreboard
-     21  f173		       85 02		      sta	WSYNC
-     22  f175
-     23  f175		       a9 00		      lda	#0
-     24  f177		       85 1b		      sta	GRP0
-     25  f179		       85 1c		      sta	GRP1
-     26  f17b
-     27  f17b		       88		      dey
-     28  f17c		       d0 f5		      bne	ScoreTop
-     29  f17e
-     30  f17e		       a9 80		      lda	#$80
-     31  f180		       85 0e		      sta	PF1
-     32  f182
-     33  f182		       a9 4c		      lda	#COL_SCOREBOARD
-     34  f184		       85 09		      sta	COLUBK
-     35  f186
-     36  f186		       85 02		      sta	WSYNC
-     37  f188		       85 02		      sta	WSYNC
-     38  f18a
-      0  f18a					      SLEEP	48
-      1  f18a				   .CYCLES    SET	48
-      2  f18a
-      3  f18a				  -	      IF	.CYCLES < 2
-      4  f18a				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f18a				  -	      ERR
-      6  f18a					      ENDIF
-      7  f18a
-      8  f18a				  -	      IF	.CYCLES & 1
-      9  f18a				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f18a				  -	      nop	0
-     11  f18a				  -	      ELSE
-     12  f18a				  -	      bit	VSYNC
-     13  f18a				  -	      ENDIF
-     14  f18a				  -.CYCLES    SET	.CYCLES - 3
-     15  f18a					      ENDIF
-     16  f18a
-     17  f18a					      REPEAT	.CYCLES / 2
-     18  f18a		       ea		      nop
-     17  f18a					      REPEND
-     18  f18b		       ea		      nop
-     17  f18b					      REPEND
+      0  f165					      include	code/ScoreboardKernel.asm
+      1  f165							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  f165							; Scoreboard Display
+      3  f165							;
+      4  f165							; Draw the 6-digit score and level counter.
+      5  f165							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      6  f165
+      7  f165					      SUBROUTINE
+      8  f165
+      9  f165		       a9 15		      lda	#PF_REFLECT | PF_PRIORITY | BALL_SIZE_2
+     10  f167		       85 0a		      sta	CTRLPF
+     11  f169
+     12  f169		       a9 ff		      lda	#$FF
+     13  f16b		       85 0d		      sta	PF0
+     14  f16d
+     15  f16d		       85 1b		      sta	GRP0	; This forces a collision between P0 and PF, setting bit-7
+     16  f16f		       85 1c		      sta	GRP1	; in CXP0FB, which will be used to end the scoreboard
+     17  f171		       85 0e		      sta	PF1	; display kernel loop.
+     18  f173
+     19  f173		       a0 05		      ldy	#5
+     20  f175				   ScoreTop		; draw border above scoreboard
+     21  f175		       85 02		      sta	WSYNC
+     22  f177
+     23  f177		       a9 00		      lda	#0
+     24  f179		       85 1b		      sta	GRP0
+     25  f17b		       85 1c		      sta	GRP1
+     26  f17d
+     27  f17d		       88		      dey
+     28  f17e		       d0 f5		      bne	ScoreTop
+     29  f180
+     30  f180		       a9 80		      lda	#$80
+     31  f182		       85 0e		      sta	PF1
+     32  f184
+     33  f184		       a9 4c		      lda	#COL_SCOREBOARD
+     34  f186		       85 09		      sta	COLUBK
+     35  f188
+     36  f188		       85 02		      sta	WSYNC
+     37  f18a		       85 02		      sta	WSYNC
+     38  f18c
+      0  f18c					      SLEEP	48
+      1  f18c				   .CYCLES    SET	48
+      2  f18c
+      3  f18c				  -	      IF	.CYCLES < 2
+      4  f18c				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f18c				  -	      ERR
+      6  f18c					      ENDIF
+      7  f18c
+      8  f18c				  -	      IF	.CYCLES & 1
+      9  f18c				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f18c				  -	      nop	0
+     11  f18c				  -	      ELSE
+     12  f18c				  -	      bit	VSYNC
+     13  f18c				  -	      ENDIF
+     14  f18c				  -.CYCLES    SET	.CYCLES - 3
+     15  f18c					      ENDIF
+     16  f18c
+     17  f18c					      REPEAT	.CYCLES / 2
      18  f18c		       ea		      nop
      17  f18c					      REPEND
      18  f18d		       ea		      nop
@@ -1060,16 +1072,20 @@
      18  f1a0		       ea		      nop
      17  f1a0					      REPEND
      18  f1a1		       ea		      nop
-     19  f1a2					      REPEND
-     40  f1a2
-     41  f1a2		       a5 87		      lda	BCDLevel
-     42  f1a4		       4a		      lsr
-     43  f1a5		       4a		      lsr
-     44  f1a6		       4a		      lsr
-     45  f1a7		       85 1f		      sta	ENABL	; draw ball if bit-4 is set (if level > 9)
-     46  f1a9
-     47  f1a9		       4c 1a f2 	      jmp	.EntrancePoint
-     48  f1ac
+     17  f1a1					      REPEND
+     18  f1a2		       ea		      nop
+     17  f1a2					      REPEND
+     18  f1a3		       ea		      nop
+     19  f1a4					      REPEND
+     40  f1a4
+     41  f1a4		       a5 87		      lda	BCDLevel
+     42  f1a6		       4a		      lsr
+     43  f1a7		       4a		      lsr
+     44  f1a8		       4a		      lsr
+     45  f1a9		       85 1f		      sta	ENABL	; draw ball if bit-4 is set (if level > 9)
+     46  f1ab
+     47  f1ab		       4c 1a f2 	      jmp	.EntrancePoint
+     48  f1ae
      49  f200		       00 00 00 00*	      ALIGN	$100
      50  f200
      51  f200				   .ScoreDigitLoop
@@ -1136,113 +1152,234 @@
 ------- FILE code/Kernel.asm
 ------- FILE code/GameplayKernel.asm LEVEL 3 PASS 2
       0  f238					      include	code/GameplayKernel.asm
-      1  f238
-      2  f238		       85 02		      sta	WSYNC
-      3  f23a		       85 02		      sta	WSYNC
-      4  f23c		       85 02		      sta	WSYNC
-      5  f23e		       85 02		      sta	WSYNC
-      6  f240		       85 02		      sta	WSYNC
-      7  f242
-      8  f242		       a9 00		      lda	#$00
-      9  f244							;sta PF0
-     10  f244		       85 0e		      sta	PF1
-     11  f246
-     12  f246		       a2 06		      ldx	#6
-     13  f248				   KernelLoopA		; draw the gameplay display
-     14  f248
-     15  f248
-     16  f248
-     17  f248		       a9 90		      lda	#COL_BACKGROUND
-     18  f24a		       85 09		      sta	COLUBK
-     19  f24c
-     20  f24c		       a0 0e		      ldy	#14
-     21  f24e				   KernelLoopC		; draw a row
-     22  f24e		       85 02		      sta	WSYNC
-     23  f250
-     24  f250		       88		      dey
-     25  f251		       d0 fb		      bne	KernelLoopC
-     26  f253
-     27  f253							; draw a row seperator
-     28  f253
-     29  f253
-     30  f253		       a4 81		      ldy	ThrobFrame
-     31  f255
-     32  f255		       b9 a0 f5 	      lda	#LineThrobGfx,y
-     33  f258		       85 09		      sta	COLUBK
-     34  f25a		       85 02		      sta	WSYNC
-     35  f25c
-     36  f25c		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
-     37  f25f		       85 09		      sta	COLUBK
-     38  f261		       85 02		      sta	WSYNC
-     39  f263
-     40  f263		       b9 a2 f5 	      lda	#LineThrobGfx+2,y
-     41  f266		       85 09		      sta	COLUBK
-     42  f268		       85 02		      sta	WSYNC
-     43  f26a
-     44  f26a		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
-     45  f26d		       85 09		      sta	COLUBK
-     46  f26f		       85 02		      sta	WSYNC
-     47  f271
-     48  f271		       b9 a0 f5 	      lda	#LineThrobGfx,y
-     49  f274		       85 09		      sta	COLUBK
-     50  f276		       85 02		      sta	WSYNC
-     51  f278
-     52  f278
-     53  f278		       ca		      dex
-     54  f279		       d0 cd		      bne	KernelLoopA
-     55  f27b
-     56  f27b
-     57  f27b		       a9 90		      lda	#COL_BACKGROUND
-     58  f27d		       85 09		      sta	COLUBK
-     59  f27f
-     60  f27f		       85 02		      sta	WSYNC
-     61  f281		       85 02		      sta	WSYNC
-     62  f283		       85 02		      sta	WSYNC
-     63  f285		       85 02		      sta	WSYNC
-     64  f287		       85 02		      sta	WSYNC
-     65  f289		       85 02		      sta	WSYNC
-     66  f28b		       85 02		      sta	WSYNC
-     67  f28d		       85 02		      sta	WSYNC
-     68  f28f		       85 02		      sta	WSYNC
-     69  f291		       85 02		      sta	WSYNC
-     70  f293		       85 02		      sta	WSYNC
-     71  f295		       85 02		      sta	WSYNC
-     72  f297		       85 02		      sta	WSYNC
-     73  f299		       85 02		      sta	WSYNC
+      1  f238							; The rainbow will be drawn using both the playfield (PF0) and the background.
+      2  f238
+      3  f238							; The pop-tart will be a single-color rectangle drawn with the background.
+      4  f238
+      5  f238							; The cat's head and front paws will be drawn with player 0. If it is possible,
+      6  f238							; the rear paws will be drawn with missile 0.
+      7  f238
+      8  f238							; All the food items will be drawn with player 1. It's NUSIZ will be set to
+      9  f238							; 2 copies wide, and it will use flicker to draw up to 4 food items per row,
+     10  f238							; 2 for each frame.
+     11  f238
+     12  f238							; The cat's face color will be drawn with the ball, behind the head.
+     13  f238
+     14  f238							; The PF0 register will be written to twice per scanline, the playfield
+     15  f238							; color will be set twice per scanline, and the background color 3 times
+     16  f238							; per scanline. If this is not possible, I can draw the rainbow with only the
+     17  f238							; playfield, saving 2 register writes at the expense of graphics.
+     18  f238
+     19  f238							; Player 0's graphics will be written to once per scanline, while player 1's
+     20  f238							; will be written to twice. Player 0's color will never change, while player 1's
+     21  f238							; will need also 2 writes per scanline.
+     22  f238
+     23  f238							; The ball will also need to be enabled or disabled each scanline. I am planning
+     24  f238							; on using the graphics table for PF0 to control the ball and missile as well,
+     25  f238							; since PF0 only uses the 4 high bits, saving cycles by only having to read once
+     26  f238							; for three writes (a shift will be neccesary).
+     27  f238
+     28  f238							; I may have to push some of the cat graphics onto the stack to save cycles
+     29  f238							; in the kernel. I can reuse the RAM that was needed to draw the score graphics.
+     30  f238
+     31  f238
+     32  f238
+     33  f238							; Output 4 blank scanlines, while setting up the graphics objects.
+     34  f238				   PreKernel
+     35  f238
+     36  f238							; Align player 0 and the ball for drawing the cat's face, set up both
+     37  f238							; missiles to draw the rear paws, and align player 1 to draw
+     38  f238							; the current frame's food items for the top row.
+     39  f238
+     40  f238							; Depending on how tight the cycles will be, it may also be neccesary to push
+     41  f238							; some of the graphics into RAM here so they can be loaded more quickly
+     42  f238							; in the kernel.
+     43  f238
+     44  f238							; If any part of the cat needs to be drawn in the top row,
+     45  f238							; skip straight to CatRows.
+     46  f238
+     47  f238
+     48  f238
+     49  f238							; Draw all the rows above the cat's two rows.
+     50  f238				   HiRows
+     51  f238
+     52  f238							; First, output a single-color line to draw the bottom of a "throb" line.
+     53  f238							; This will probably be a good time to prepare the pointers for the
+     54  f238							; food items' graphics, as well as loading the colors for the food items.
+     55  f238
+     56  f238							; After that, output 14 lines to draw a single row with food items,
+     57  f238							; but without drawing the cat. The food graphics will be updated every line,
+     58  f238							; but there will probably not be enough time to also update the food colors
+     59  f238							; every line throughout the kernel.
+     60  f238
+     61  f238							; Lastly, output four single-color lines to draw most of a "throb" line,
+     62  f238							; while setting the position of player 1 to draw the next set of food items.
+     63  f238
+     64  f238							; If this is not the last row before drawing the cat's rows,
+     65  f238							; loop back to HiRows to draw the next row.
+     66  f238
+     67  f238
+     68  f238
+     69  f238							; Draw the two rows that contain the cat.
+     70  f238				   CatRows
+     71  f238
+     72  f238							; Output a line to finish the bottom of a "throb" line, like in HiRows.
+     73  f238							; If the cat is at the very top of the row, draw the top of the pop-tart.
+     74  f238
+     75  f238							; Then output the 14 lines to draw a single row. This will include drawing
+     76  f238							; the rainbow, the pop-tart, the head and face or paws, and the food items.
+     77  f238							; All graphics will be updated every line.
+     78  f238
+     79  f238							; Then output the 5 lines to draw a "throb" line, but also draw the entire
+     80  f238							; cat with the rainbow. In order to align player 1 for the next row's
+     81  f238							; food items, it will be neccesary to have three versions of this kernel,
+     82  f238							; one for each of the three 60-color-clock spaced positions to reset.
+     83  f238							; HMOVE will be written to on the first four scanlines. With a maximum
+     84  f238							; movement of 15 color-clocks per scanline, this will allow a movement of
+     85  f238							; up to 60 color clocks. With three versions of the kernel, it should be
+     86  f238							; possible to put player 1 anywhere on the screen.
+     87  f238
+     88  f238							; Then output 14 lines to draw the next row, exactly the same way as the
+     89  f238							; previous one. It will be neccesary to have multiple versions of this, as well,
+     90  f238							; since GRP1 needs to be updated at the correct time depending on the position
+     91  f238							; of player 1.
+     92  f238
+     93  f238							; Lastly, output only one line (not four) to draw the top of a "throb" line.
+     94  f238							; Use this time to prepare the next row's food item pointers (unless this is
+     95  f238							; the last row). If this is the last row, skip over LoRows.
+     96  f238
+     97  f238							; If the cat is at the very bottom of the screen, don't disable the
+     98  f238							; missile/player graphics until after they are drawn, so they don't get
+     99  f238							; clipped at the bottom of the screen. An easy way to do this would be to
+    100  f238							; simply disable them after they would have been drawn, whether they are
+    101  f238							; already disabled or not.
+    102  f238
+    103  f238
+    104  f238
+    105  f238
+    106  f238
+    107  f238
+    108  f238
+    109  f238
+    110  f238
+    111  f238
+    112  f238
+    113  f238							; Draw all the rows below the cat's two rows.
+    114  f238				   LoRows
+    115  f238
+    116  f238							; Output 4 lines, drawing the rest of the "throb" line, while preparing
+    117  f238							; player 1 for the next row's food items.
+    118  f238
+    119  f238							; Output 14 lines to draw a row, exactly the same as in HiRows.
+    120  f238							; It may be possible to code this as a subroutine to save ROM space.
+    121  f238
+    122  f238							; Lastly, output
+    123  f238							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    124  f238
+    125  f238
+    126  f238
+    127  f238		       85 02		      sta	WSYNC
+    128  f23a		       85 02		      sta	WSYNC
+    129  f23c		       85 02		      sta	WSYNC
+    130  f23e		       85 02		      sta	WSYNC
+    131  f240		       85 02		      sta	WSYNC
+    132  f242
+    133  f242		       a9 00		      lda	#$00
+    134  f244		       85 0d		      sta	PF0
+    135  f246		       85 0e		      sta	PF1
+    136  f248
+    137  f248		       a2 06		      ldx	#6
+    138  f24a				   KernelLoopA		; draw the gameplay display
+    139  f24a
+    140  f24a
+    141  f24a
+    142  f24a		       a9 90		      lda	#COL_BACKGROUND
+    143  f24c		       85 09		      sta	COLUBK
+    144  f24e
+    145  f24e		       a0 0e		      ldy	#14
+    146  f250				   KernelLoopC		; draw a row
+    147  f250		       85 02		      sta	WSYNC
+    148  f252
+    149  f252		       88		      dey
+    150  f253		       d0 fb		      bne	KernelLoopC
+    151  f255
+    152  f255							; draw a row seperator
+    153  f255
+    154  f255
+    155  f255		       a4 81		      ldy	ThrobFrame
+    156  f257
+    157  f257		       b9 a0 f5 	      lda	#LineThrobGfx,y
+    158  f25a		       85 09		      sta	COLUBK
+    159  f25c		       85 02		      sta	WSYNC
+    160  f25e
+    161  f25e		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
+    162  f261		       85 09		      sta	COLUBK
+    163  f263		       85 02		      sta	WSYNC
+    164  f265
+    165  f265		       b9 a2 f5 	      lda	#LineThrobGfx+2,y
+    166  f268		       85 09		      sta	COLUBK
+    167  f26a		       85 02		      sta	WSYNC
+    168  f26c
+    169  f26c		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
+    170  f26f		       85 09		      sta	COLUBK
+    171  f271		       85 02		      sta	WSYNC
+    172  f273
+    173  f273		       b9 a0 f5 	      lda	#LineThrobGfx,y
+    174  f276		       85 09		      sta	COLUBK
+    175  f278		       85 02		      sta	WSYNC
+    176  f27a
+    177  f27a
+    178  f27a		       ca		      dex
+    179  f27b		       d0 cd		      bne	KernelLoopA
+    180  f27d
+    181  f27d
+    182  f27d		       a9 90		      lda	#COL_BACKGROUND
+    183  f27f		       85 09		      sta	COLUBK
+    184  f281
+    185  f281		       85 02		      sta	WSYNC
+    186  f283		       85 02		      sta	WSYNC
+    187  f285		       85 02		      sta	WSYNC
+    188  f287		       85 02		      sta	WSYNC
+    189  f289		       85 02		      sta	WSYNC
+    190  f28b		       85 02		      sta	WSYNC
+    191  f28d		       85 02		      sta	WSYNC
+    192  f28f		       85 02		      sta	WSYNC
+    193  f291		       85 02		      sta	WSYNC
+    194  f293		       85 02		      sta	WSYNC
+    195  f295		       85 02		      sta	WSYNC
+    196  f297		       85 02		      sta	WSYNC
+    197  f299		       85 02		      sta	WSYNC
+    198  f29b		       85 02		      sta	WSYNC
 ------- FILE code/Kernel.asm
 ------- FILE code/ProgressHealthKernel.asm LEVEL 3 PASS 2
-      0  f29b					      include	code/ProgressHealthKernel.asm
-      1  f29b		       a9 40		      lda	#COL_SCORE
-      2  f29d		       85 09		      sta	COLUBK
-      3  f29f		       a9 06		      lda	#COL_CAT_FACE
-      4  f2a1		       85 08		      sta	COLUPF
-      5  f2a3		       a9 00		      lda	#0
-      6  f2a5		       85 0a		      sta	CTRLPF
-      7  f2a7
-      8  f2a7		       85 02		      sta	WSYNC
-      9  f2a9
-      0  f2a9					      SLEEP	53	; 53
-      1  f2a9				   .CYCLES    SET	53
-      2  f2a9
-      3  f2a9				  -	      IF	.CYCLES < 2
-      4  f2a9				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f2a9				  -	      ERR
-      6  f2a9					      ENDIF
+      0  f29d					      include	code/ProgressHealthKernel.asm
+      1  f29d		       a9 40		      lda	#COL_SCORE
+      2  f29f		       85 09		      sta	COLUBK
+      3  f2a1		       a9 06		      lda	#COL_CAT_FACE
+      4  f2a3		       85 08		      sta	COLUPF
+      5  f2a5		       a9 00		      lda	#0
+      6  f2a7		       85 0a		      sta	CTRLPF
       7  f2a9
-      8  f2a9					      IF	.CYCLES & 1
-      9  f2a9					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f2a9		       04 00		      nop	0
-     11  f2ab				  -	      ELSE
-     12  f2ab				  -	      bit	VSYNC
-     13  f2ab					      ENDIF
-     14  f2ab				   .CYCLES    SET	.CYCLES - 3
-     15  f2ab					      ENDIF
-     16  f2ab
-     17  f2ab					      REPEAT	.CYCLES / 2
-     18  f2ab		       ea		      nop
-     17  f2ab					      REPEND
-     18  f2ac		       ea		      nop
-     17  f2ac					      REPEND
+      8  f2a9		       85 02		      sta	WSYNC
+      9  f2ab
+      0  f2ab					      SLEEP	53	; 53
+      1  f2ab				   .CYCLES    SET	53
+      2  f2ab
+      3  f2ab				  -	      IF	.CYCLES < 2
+      4  f2ab				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f2ab				  -	      ERR
+      6  f2ab					      ENDIF
+      7  f2ab
+      8  f2ab					      IF	.CYCLES & 1
+      9  f2ab					      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f2ab		       04 00		      nop	0
+     11  f2ad				  -	      ELSE
+     12  f2ad				  -	      bit	VSYNC
+     13  f2ad					      ENDIF
+     14  f2ad				   .CYCLES    SET	.CYCLES - 3
+     15  f2ad					      ENDIF
+     16  f2ad
+     17  f2ad					      REPEAT	.CYCLES / 2
      18  f2ad		       ea		      nop
      17  f2ad					      REPEND
      18  f2ae		       ea		      nop
@@ -1288,68 +1425,68 @@
      18  f2c2		       ea		      nop
      17  f2c2					      REPEND
      18  f2c3		       ea		      nop
-     19  f2c4					      REPEND
-     11  f2c4
-     12  f2c4		       a9 20		      lda	#$20	; 55
-     13  f2c6		       85 20		      sta	HMP0	; 58
-     14  f2c8		       a9 b0		      lda	#$B0	; 60
-     15  f2ca		       85 21		      sta	HMP1	; 63
-     16  f2cc
-     17  f2cc		       85 10		      sta	RESP0	; 66
-     18  f2ce		       85 11		      sta	RESP1	; 69
-     19  f2d0
-     20  f2d0		       a9 00		      lda	#$00	; 71
-     21  f2d2
-     22  f2d2		       85 2a		      sta	HMOVE	; 74
-     23  f2d4
-     24  f2d4		       85 06		      sta	COLUP0
-     25  f2d6		       85 07		      sta	COLUP1
-     26  f2d8
-     27  f2d8		       a9 05		      lda	#DOUBLE_SIZE	; 08
-     28  f2da		       85 04		      sta	NUSIZ0
-     29  f2dc		       85 05		      sta	NUSIZ1
-     30  f2de
-     31  f2de		       a9 08		      lda	#REFP_TRUE
-     32  f2e0		       85 0c		      sta	REFP1
-     33  f2e2
-     34  f2e2					      SUBROUTINE
-     35  f2e2
-     36  f2e2		       a0 04		      ldy	#4
-     37  f2e4		       85 02		      sta	WSYNC
-     38  f2e6
-     39  f2e6				   .HealthTop		; draw top of health
-     40  f2e6
-     41  f2e6		       a2 03		      ldx	#3
-     42  f2e8				   .Loop
-     43  f2e8		       85 02		      sta	WSYNC
-     44  f2ea
-     45  f2ea		       b9 b8 f5 	      lda	HealthTopGfx,y	; 04
-     46  f2ed		       85 1b		      sta	GRP0	; 07
-     47  f2ef		       85 1c		      sta	GRP1	; 10
-     48  f2f1		       a9 00		      lda	#$00	; 12
-     49  f2f3		       85 0f		      sta	PF2	; 15
-      0  f2f5					      SLEEP	26	; 37
-      1  f2f5				   .CYCLES    SET	26
-      2  f2f5
-      3  f2f5				  -	      IF	.CYCLES < 2
-      4  f2f5				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f2f5				  -	      ERR
-      6  f2f5					      ENDIF
-      7  f2f5
-      8  f2f5				  -	      IF	.CYCLES & 1
-      9  f2f5				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f2f5				  -	      nop	0
-     11  f2f5				  -	      ELSE
-     12  f2f5				  -	      bit	VSYNC
-     13  f2f5				  -	      ENDIF
-     14  f2f5				  -.CYCLES    SET	.CYCLES - 3
-     15  f2f5					      ENDIF
-     16  f2f5
-     17  f2f5					      REPEAT	.CYCLES / 2
-     18  f2f5		       ea		      nop
-     17  f2f5					      REPEND
-     18  f2f6		       ea		      nop
-     17  f2f6					      REPEND
+     17  f2c3					      REPEND
+     18  f2c4		       ea		      nop
+     17  f2c4					      REPEND
+     18  f2c5		       ea		      nop
+     19  f2c6					      REPEND
+     11  f2c6
+     12  f2c6		       a9 20		      lda	#$20	; 55
+     13  f2c8		       85 20		      sta	HMP0	; 58
+     14  f2ca		       a9 b0		      lda	#$B0	; 60
+     15  f2cc		       85 21		      sta	HMP1	; 63
+     16  f2ce
+     17  f2ce		       85 10		      sta	RESP0	; 66
+     18  f2d0		       85 11		      sta	RESP1	; 69
+     19  f2d2
+     20  f2d2		       a9 00		      lda	#$00	; 71
+     21  f2d4
+     22  f2d4		       85 2a		      sta	HMOVE	; 74
+     23  f2d6
+     24  f2d6		       85 06		      sta	COLUP0
+     25  f2d8		       85 07		      sta	COLUP1
+     26  f2da
+     27  f2da		       a9 05		      lda	#DOUBLE_SIZE	; 08
+     28  f2dc		       85 04		      sta	NUSIZ0
+     29  f2de		       85 05		      sta	NUSIZ1
+     30  f2e0
+     31  f2e0		       a9 08		      lda	#REFP_TRUE
+     32  f2e2		       85 0c		      sta	REFP1
+     33  f2e4
+     34  f2e4					      SUBROUTINE
+     35  f2e4
+     36  f2e4		       a0 04		      ldy	#4
+     37  f2e6		       85 02		      sta	WSYNC
+     38  f2e8
+     39  f2e8				   .HealthTop		; draw top of health
+     40  f2e8
+     41  f2e8		       a2 03		      ldx	#3
+     42  f2ea				   .Loop
+     43  f2ea		       85 02		      sta	WSYNC
+     44  f2ec
+     45  f2ec		       b9 b8 f5 	      lda	HealthTopGfx,y	; 04
+     46  f2ef		       85 1b		      sta	GRP0	; 07
+     47  f2f1		       85 1c		      sta	GRP1	; 10
+     48  f2f3		       a9 00		      lda	#$00	; 12
+     49  f2f5		       85 0f		      sta	PF2	; 15
+      0  f2f7					      SLEEP	26	; 37
+      1  f2f7				   .CYCLES    SET	26
+      2  f2f7
+      3  f2f7				  -	      IF	.CYCLES < 2
+      4  f2f7				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f2f7				  -	      ERR
+      6  f2f7					      ENDIF
+      7  f2f7
+      8  f2f7				  -	      IF	.CYCLES & 1
+      9  f2f7				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f2f7				  -	      nop	0
+     11  f2f7				  -	      ELSE
+     12  f2f7				  -	      bit	VSYNC
+     13  f2f7				  -	      ENDIF
+     14  f2f7				  -.CYCLES    SET	.CYCLES - 3
+     15  f2f7					      ENDIF
+     16  f2f7
+     17  f2f7					      REPEAT	.CYCLES / 2
      18  f2f7		       ea		      nop
      17  f2f7					      REPEND
      18  f2f8		       ea		      nop
@@ -1371,26 +1508,30 @@
      18  f300		       ea		      nop
      17  f300					      REPEND
      18  f301		       ea		      nop
-     19  f302					      REPEND
-     51  f302		       b9 08 f6 	      lda	HealthBgGfx+8,y	; 41
-     52  f305		       85 0f		      sta	PF2	; 44
-     53  f307
-     54  f307		       ca		      dex
-     55  f308		       d0 de		      bne	.Loop
-     56  f30a
-     57  f30a		       88		      dey
-     58  f30b		       10 d9		      bpl	.HealthTop
-     59  f30d
-     60  f30d
-     61  f30d					      SUBROUTINE
-     62  f30d
-     63  f30d
-     64  f30d		       a0 03		      ldy	#3
-     65  f30f		       a2 03		      ldx	#3
-     66  f311		       86 98		      stx	Temp
-     67  f313
-     68  f313		       4c 00 f4 	      jmp	.HealthMiddle
-     69  f316
+     17  f301					      REPEND
+     18  f302		       ea		      nop
+     17  f302					      REPEND
+     18  f303		       ea		      nop
+     19  f304					      REPEND
+     51  f304		       b9 08 f6 	      lda	HealthBgGfx+8,y	; 41
+     52  f307		       85 0f		      sta	PF2	; 44
+     53  f309
+     54  f309		       ca		      dex
+     55  f30a		       d0 de		      bne	.Loop
+     56  f30c
+     57  f30c		       88		      dey
+     58  f30d		       10 d9		      bpl	.HealthTop
+     59  f30f
+     60  f30f
+     61  f30f					      SUBROUTINE
+     62  f30f
+     63  f30f
+     64  f30f		       a0 03		      ldy	#3
+     65  f311		       a2 03		      ldx	#3
+     66  f313		       86 99		      stx	Temp
+     67  f315
+     68  f315		       4c 00 f4 	      jmp	.HealthMiddle
+     69  f318
      70  f400		       00 00 00 00*	      ALIGN	$100	; align to page
      71  f400
      72  f400				   .HealthMiddle		; draw middle of health, with progress bar
@@ -1427,7 +1568,7 @@
     103  f42b		       ca		      dex		; 66
     104  f42c		       d0 d2		      bne	.HealthMiddle	; 68
     105  f42e
-    106  f42e		       a6 98		      ldx	Temp	; 71
+    106  f42e		       a6 99		      ldx	Temp	; 71
     107  f430
     108  f430		       88		      dey		; 73
     109  f431		       10 cf		      bpl	.Loop	; 76 / 00
