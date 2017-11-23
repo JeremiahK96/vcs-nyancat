@@ -1256,100 +1256,98 @@
     102  f238
     103  f238
     104  f238
-    105  f238
-    106  f238
+    105  f238							; Draw all the rows below the cat's two rows.
+    106  f238				   LoRows
     107  f238
-    108  f238
-    109  f238
+    108  f238							; Output 4 lines, drawing the rest of the "throb" line, while preparing
+    109  f238							; player 1 for the next row's food items.
     110  f238
-    111  f238
-    112  f238
-    113  f238							; Draw all the rows below the cat's two rows.
-    114  f238				   LoRows
+    111  f238							; Output 14 lines to draw a row, exactly the same as in HiRows.
+    112  f238							; It may be possible to code this as a subroutine to save ROM space.
+    113  f238
+    114  f238							; Lastly, output the final blank scanline of the kernel.
     115  f238
-    116  f238							; Output 4 lines, drawing the rest of the "throb" line, while preparing
-    117  f238							; player 1 for the next row's food items.
+    116  f238
+    117  f238
     118  f238
-    119  f238							; Output 14 lines to draw a row, exactly the same as in HiRows.
-    120  f238							; It may be possible to code this as a subroutine to save ROM space.
+    119  f238
+    120  f238
     121  f238
-    122  f238							; Lastly, output
-    123  f238							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    122  f238
+    123  f238
     124  f238
-    125  f238
-    126  f238
-    127  f238		       85 02		      sta	WSYNC
-    128  f23a		       85 02		      sta	WSYNC
-    129  f23c		       85 02		      sta	WSYNC
-    130  f23e		       85 02		      sta	WSYNC
-    131  f240		       85 02		      sta	WSYNC
-    132  f242
-    133  f242		       a9 00		      lda	#$00
-    134  f244		       85 0d		      sta	PF0
-    135  f246		       85 0e		      sta	PF1
-    136  f248
-    137  f248		       a2 06		      ldx	#6
-    138  f24a				   KernelLoopA		; draw the gameplay display
+    125  f238		       85 02		      sta	WSYNC
+    126  f23a		       85 02		      sta	WSYNC
+    127  f23c		       85 02		      sta	WSYNC
+    128  f23e		       85 02		      sta	WSYNC
+    129  f240		       85 02		      sta	WSYNC
+    130  f242
+    131  f242		       a9 00		      lda	#$00
+    132  f244		       85 0d		      sta	PF0
+    133  f246		       85 0e		      sta	PF1
+    134  f248
+    135  f248		       a2 06		      ldx	#6
+    136  f24a				   KernelLoopA		; draw the gameplay display
+    137  f24a
+    138  f24a
     139  f24a
-    140  f24a
-    141  f24a
-    142  f24a		       a9 90		      lda	#COL_BACKGROUND
-    143  f24c		       85 09		      sta	COLUBK
-    144  f24e
-    145  f24e		       a0 0e		      ldy	#14
-    146  f250				   KernelLoopC		; draw a row
-    147  f250		       85 02		      sta	WSYNC
-    148  f252
-    149  f252		       88		      dey
-    150  f253		       d0 fb		      bne	KernelLoopC
+    140  f24a		       a9 90		      lda	#COL_BACKGROUND
+    141  f24c		       85 09		      sta	COLUBK
+    142  f24e
+    143  f24e		       a0 0e		      ldy	#14
+    144  f250				   KernelLoopC		; draw a row
+    145  f250		       85 02		      sta	WSYNC
+    146  f252
+    147  f252		       88		      dey
+    148  f253		       d0 fb		      bne	KernelLoopC
+    149  f255
+    150  f255							; draw a row seperator
     151  f255
-    152  f255							; draw a row seperator
-    153  f255
-    154  f255
-    155  f255		       a4 81		      ldy	ThrobFrame
-    156  f257
-    157  f257		       b9 a0 f5 	      lda	#LineThrobGfx,y
-    158  f25a		       85 09		      sta	COLUBK
-    159  f25c		       85 02		      sta	WSYNC
-    160  f25e
-    161  f25e		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
-    162  f261		       85 09		      sta	COLUBK
-    163  f263		       85 02		      sta	WSYNC
-    164  f265
-    165  f265		       b9 a2 f5 	      lda	#LineThrobGfx+2,y
-    166  f268		       85 09		      sta	COLUBK
-    167  f26a		       85 02		      sta	WSYNC
-    168  f26c
-    169  f26c		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
-    170  f26f		       85 09		      sta	COLUBK
-    171  f271		       85 02		      sta	WSYNC
-    172  f273
-    173  f273		       b9 a0 f5 	      lda	#LineThrobGfx,y
-    174  f276		       85 09		      sta	COLUBK
-    175  f278		       85 02		      sta	WSYNC
-    176  f27a
-    177  f27a
-    178  f27a		       ca		      dex
-    179  f27b		       d0 cd		      bne	KernelLoopA
-    180  f27d
-    181  f27d
-    182  f27d		       a9 90		      lda	#COL_BACKGROUND
-    183  f27f		       85 09		      sta	COLUBK
-    184  f281
-    185  f281		       85 02		      sta	WSYNC
-    186  f283		       85 02		      sta	WSYNC
-    187  f285		       85 02		      sta	WSYNC
-    188  f287		       85 02		      sta	WSYNC
-    189  f289		       85 02		      sta	WSYNC
-    190  f28b		       85 02		      sta	WSYNC
-    191  f28d		       85 02		      sta	WSYNC
-    192  f28f		       85 02		      sta	WSYNC
-    193  f291		       85 02		      sta	WSYNC
-    194  f293		       85 02		      sta	WSYNC
-    195  f295		       85 02		      sta	WSYNC
-    196  f297		       85 02		      sta	WSYNC
-    197  f299		       85 02		      sta	WSYNC
-    198  f29b		       85 02		      sta	WSYNC
+    152  f255
+    153  f255		       a4 81		      ldy	ThrobFrame
+    154  f257
+    155  f257		       b9 a0 f5 	      lda	#LineThrobGfx,y
+    156  f25a		       85 09		      sta	COLUBK
+    157  f25c		       85 02		      sta	WSYNC
+    158  f25e
+    159  f25e		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
+    160  f261		       85 09		      sta	COLUBK
+    161  f263		       85 02		      sta	WSYNC
+    162  f265
+    163  f265		       b9 a2 f5 	      lda	#LineThrobGfx+2,y
+    164  f268		       85 09		      sta	COLUBK
+    165  f26a		       85 02		      sta	WSYNC
+    166  f26c
+    167  f26c		       b9 a1 f5 	      lda	#LineThrobGfx+1,y
+    168  f26f		       85 09		      sta	COLUBK
+    169  f271		       85 02		      sta	WSYNC
+    170  f273
+    171  f273		       b9 a0 f5 	      lda	#LineThrobGfx,y
+    172  f276		       85 09		      sta	COLUBK
+    173  f278		       85 02		      sta	WSYNC
+    174  f27a
+    175  f27a
+    176  f27a		       ca		      dex
+    177  f27b		       d0 cd		      bne	KernelLoopA
+    178  f27d
+    179  f27d
+    180  f27d		       a9 90		      lda	#COL_BACKGROUND
+    181  f27f		       85 09		      sta	COLUBK
+    182  f281
+    183  f281		       85 02		      sta	WSYNC
+    184  f283		       85 02		      sta	WSYNC
+    185  f285		       85 02		      sta	WSYNC
+    186  f287		       85 02		      sta	WSYNC
+    187  f289		       85 02		      sta	WSYNC
+    188  f28b		       85 02		      sta	WSYNC
+    189  f28d		       85 02		      sta	WSYNC
+    190  f28f		       85 02		      sta	WSYNC
+    191  f291		       85 02		      sta	WSYNC
+    192  f293		       85 02		      sta	WSYNC
+    193  f295		       85 02		      sta	WSYNC
+    194  f297		       85 02		      sta	WSYNC
+    195  f299		       85 02		      sta	WSYNC
+    196  f29b		       85 02		      sta	WSYNC
 ------- FILE code/Kernel.asm
 ------- FILE code/ProgressHealthKernel.asm LEVEL 3 PASS 2
       0  f29d					      include	code/ProgressHealthKernel.asm

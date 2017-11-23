@@ -102,14 +102,6 @@ CatRows:
 
 
 
-
-
-
-
-
-
-
-
 ; Draw all the rows below the cat's two rows.
 LoRows:
 
@@ -119,8 +111,14 @@ LoRows:
     ; Output 14 lines to draw a row, exactly the same as in HiRows.
     ; It may be possible to code this as a subroutine to save ROM space.
     
-    ; Lastly, output     
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    ; Lastly, output the final blank scanline of the kernel.
+
+
+
+
+
+
+
 
 
 
