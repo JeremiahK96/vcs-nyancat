@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dasm main.asm -v5 -f3 -lnyancat.txt -onyancat.bin
+dasm main.asm -v5 -f3 -snyancat.sym -lnyancat.lst -onyancat.bin

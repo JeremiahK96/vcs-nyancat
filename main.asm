@@ -8,7 +8,7 @@
 ;
 ;
 ;
-; 11-22-2017 Version 2.0
+; 11-23-2017 Version 2.0
 ;
 ; Add comments explaining the gameplay kernel
 ;
@@ -28,11 +28,12 @@
     include headers/macro.h
 
 ; Include TIA/program equates and RAM labels
+
     include headers/Equates.h
     include headers/RamVariables.h
 
-
 ; Ensure that the code is placed in the proper place in the binary
+
     SEG CODE
     ORG $F000	; 4K ROM
 

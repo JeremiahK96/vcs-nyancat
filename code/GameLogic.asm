@@ -112,7 +112,9 @@ OverscanTimerLoop
     lda #$D0	; 32 - set HMOVE offset for missile1
     sta HMM1	; 35
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; reset all progress bar playfield graphics RAM (and use 21 cycles)
+
     lda #%11100000	; 37
     sta ProgressBar+0	; 40
     lda #%11111111	; 42
@@ -128,8 +130,10 @@ OverscanTimerLoop
     
     sta WSYNC
     sta HMOVE
-    
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>    
 ; Load RAM for progress bar display (takes 28-53 cycles)
+
     lda Progress	; 3 - get amount of progress
     
     ; The level progress bar uses the following playfield bits:
@@ -172,32 +176,42 @@ OverscanTimerLoop
     sta ProgressBar+4	; 3
     jmp .Finish		; 3
     
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Underflow1	; for 1st PF0
+
     adc #3		; 3 - add back the 3
     tax			; 2
     lda PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
     sta ProgressBar	; 3
     jmp .Finish		; 3
     
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Underflow2	; for 1st PF1
+
     adc #8		; 3 - add back the 8
     tax			; 2
     lda PgBarGfx,x	; 4 - load from normal set of playfield graphics
     sta ProgressBar+1	; 3
     jmp .Finish		; 3
     
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Underflow3	; for PF2
+
     adc #8		; 3 - add back the 8
     tax			; 2
     lda PgBarGfxR,x	; 4 - load from reversed set of playfield graphics
     sta ProgressBar+2	; 3
     jmp .Finish		; 3
     
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Underflow4	; for 2nd PF0
+
     adc #4		; 3 - add back the 4
     tax			; 2
     lda PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
     sta ProgressBar+3	; 3
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Finish
     
     sta HMCLR	; 56
@@ -208,7 +222,10 @@ OverscanTimerLoop
     sta WSYNC
     sta HMOVE
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
     lda #THREE_CLOSE | MSL_SIZE_2	; 2
     sta NUSIZ0		; 3
     sta NUSIZ1		; 3
@@ -273,6 +290,16 @@ OverscanTimerLoop
     asl			; 2 - carry flag will always be clear after this
     adc Temp		; 3 - multiply by 3
     sta ThrobFrame	; 3 - store the gfx offset
+    
+    
+    
+    tay
+    lda LineThrobGfx+0,y
+    sta ThrobColor+0
+    lda LineThrobGfx+1,y
+    sta ThrobColor+1
+    lda LineThrobGfx+2,y
+    sta ThrobColor+2
 
 
 
@@ -284,7 +311,10 @@ OverscanTimerLoop
 
     lda CatPosY
     
-    
+    lda #3
+    sta PreCatRows
+    lda #2
+    sta PostCatRows
 
 
 
@@ -301,6 +331,7 @@ OverscanTimerLoop
     lda #6		; 2 - start with bottom of digit graphics data
     sta TempLoop	; 3
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Loop
 
 ; push level counter graphics data

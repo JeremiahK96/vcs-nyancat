@@ -1,13 +1,11 @@
-    lda #COL_SCORE
+    lda ThrobColor+1
     sta COLUBK
     lda #COL_CAT_FACE
     sta COLUPF
     lda #0
     sta CTRLPF
     
-    sta WSYNC
-    
-    SLEEP 53	; 53
+    SLEEP 35	; 53
     
     lda #$20	; 55
     sta HMP0	; 58
@@ -24,6 +22,9 @@
     sta COLUP0
     sta COLUP1
     
+    lda #COL_SCOREBOARD
+    sta COLUBK
+    
     lda #DOUBLE_SIZE	; 08
     sta NUSIZ0
     sta NUSIZ1
@@ -35,10 +36,12 @@
     
     ldy #4
     sta WSYNC
-    
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .HealthTop	; draw top of health
 
     ldx #3
+
 .Loop
     sta WSYNC	
     
@@ -69,7 +72,9 @@
     
     ALIGN $100	; align to page
     
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .HealthMiddle	; draw middle of health, with progress bar
+
     sta WSYNC
 .Loop
     lda ProgressBar+0	; 03 - get the 1st playfield register value
@@ -97,8 +102,8 @@
     lda #%01111111	; 54 - get the 6th playfield register value
     sta.w PF2		; 58 - for the health background and set it
     
-    lda ScoreColor	; 61 - get the color for the background
-    sta COLUBK		; 64 - and set it at cycle 64
+    lda #COL_SCOREBOARD	; 60 - get the color for the background
+    sta.w COLUBK	; 64 - and set it at cycle 64
     
     dex			; 66
     bne .HealthMiddle	; 68
@@ -124,7 +129,10 @@
     sta PF1
     
     ldy #7
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .HealthBottom	; draw bottom of health
+
     ldx #3
 .Loop
     lda (HthGfxLPtr),y
@@ -147,9 +155,7 @@
     cpy #3
     bne .HealthBottom
     
-    
-    SUBROUTINE
-
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     
     lda #$00
     sta GRP0
@@ -159,3 +165,4 @@
     sta PF2
     
     sta WSYNC
+    

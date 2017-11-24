@@ -1,0 +1,185 @@
+--- Symbol List (sorted by symbol)
+0.Finish                 f0d1              (R )
+0.FREE_BYTES             0000                  
+0.Underflow1             f0a8              (R )
+0.Underflow2             f0b3              (R )
+0.Underflow3             f0be              (R )
+0.Underflow4             f0c9              (R )
+1.CLEAR_STACK            f006              (R )
+10.HealthBottom          f43c              (R )
+10.Loop                  f43e              (R )
+11.CYCLES                000e              (R )
+2.CYCLES                 0000              (R )
+3.DigitLoop              f151              (R )
+3.Loop                   f141              (R )
+4.EntrancePoint          f21a              (R )
+4.Loop1                  f254              (R )
+4.Loop2                  f281              (R )
+4.Loop3                  f2aa              (R )
+4.Loop4                  f2d3              (R )
+4.ScoreDigitLoop         f200              (R )
+5.CYCLES                 0030              (R )
+6.CYCLES                 0020              (R )
+7.HealthTop              f326              (R )
+7.Loop                   f328              (R )
+8.CYCLES                 001a              (R )
+9.HealthMiddle           f400              (R )
+9.Loop                   f402              (R )
+AUDC0                    0015                  
+AUDC1                    0016                  
+AUDF0                    0017                  
+AUDF1                    0018                  
+AUDV0                    0019                  
+AUDV1                    001a                  
+BALL_SIZE_1              0000                  
+BALL_SIZE_2              0010              (R )
+BALL_SIZE_4              0020                  
+BALL_SIZE_8              0030                  
+BCDLevel                 0087              (R )
+BCDScore                 0081              (R )
+BCDScoreAdd              0084              (R )
+CatFaceGfxPtr            0099                  
+CatPosY                  0094              (R )
+CatRbowColPtr            0097                  
+CatRbowGfxPtr            0095                  
+CatRows                  f275                  
+COL_BACKGROUND           0090              (R )
+COL_CAT_FACE             0006              (R )
+COL_LINES                0090              (R )
+COL_SCORE                0040              (R )
+COL_SCOREBOARD           009e              (R )
+COLUBK                   0009              (R )
+COLUP0                   0006              (R )
+COLUP1                   0007              (R )
+COLUPF                   0008              (R )
+CTRLPF                   000a              (R )
+CXBLPF                   0006                  
+CXCLR                    002c                  
+CXM0FB                   0004                  
+CXM0P                    0000                  
+CXM1FB                   0005                  
+CXM1P                    0001                  
+CXP0FB                   0002                  
+CXP1FB                   0003                  
+CXPPMM                   0007                  
+DOUBLE_SIZE              0005              (R )
+ENABL                    001f              (R )
+ENAM0                    001d              (R )
+ENAM1                    001e              (R )
+Frame                    0080              (R )
+GRP0                     001b              (R )
+GRP1                     001c              (R )
+Health                   008f              (R )
+HealthBgGfx              f600              (R )
+HealthLeftGfx            f5bd              (R )
+HealthRightGfx           f5dd              (R )
+HealthTopGfx             f5b8              (R )
+HiRows                   f248              (R )
+HMBL                     0024              (R )
+HMCLR                    002b              (R )
+HMM0                     0022              (R )
+HMM1                     0023              (R )
+HMOVE                    002a              (R )
+HMP0                     0020              (R )
+HMP1                     0021              (R )
+HthGfxLPtr               0090              (R )
+HthGfxRPtr               0092              (R )
+INPT0                    0008                  
+INPT1                    0009                  
+INPT2                    000a                  
+INPT3                    000b                  
+INPT4                    000c                  
+INPT5                    000d                  
+INTIM                    0284              (R )
+LevelGfx                 f550              (R )
+LineThrobGfx             f5a0              (R )
+LoRows                   f2b5              (R )
+LUM_0                    0000              (R )
+LUM_2                    0002              (R )
+LUM_4                    0004              (R )
+LUM_6                    0006              (R )
+LUM_8                    0008              (R )
+LUM_A                    000a              (R )
+LUM_C                    000c              (R )
+LUM_E                    000e              (R )
+MSL_SIZE_1               0000                  
+MSL_SIZE_2               0010              (R )
+MSL_SIZE_4               0020                  
+MSL_SIZE_8               0030                  
+NO_ILLEGAL_OPCODES       0000 ????         (R )
+NUSIZ0                   0004              (R )
+NUSIZ1                   0005              (R )
+ONE_COPY                 0000                  
+Overscan                 f00b              (R )
+OVERSCAN_SCANLINES       001d              (R )
+OVERSCAN_TIMER           0023              (R )
+OverscanTimerLoop        f033              (R )
+PF0                      000d              (R )
+PF1                      000e              (R )
+PF2                      000f              (R )
+PF_PRIORITY              0004              (R )
+PF_REFLECT               0001              (R )
+PF_SCORE_MODE            0002                  
+PgBarColor               008e              (R )
+PgBarGfx                 f60d              (R )
+PgBarGfxR                f616              (R )
+PostCatRows              009c              (R )
+PreCatRows               009b              (R )
+PreKernel                f23c                  
+Progress                 0088              (R )
+ProgressBar              0089              (R )
+QUAD_SIZE                0007                  
+RainbowGfx               f61e                  
+RamStart                 0080                  
+REFP0                    000b              (R )
+REFP1                    000c              (R )
+REFP_FALSE               0000                  
+REFP_TRUE                0008              (R )
+RESBL                    0014              (R )
+RESM0                    0012              (R )
+RESM1                    0013              (R )
+RESMP0                   0028                  
+RESMP1                   0029                  
+RESP0                    0010              (R )
+RESP1                    0011              (R )
+RSYNC                    0003                  
+ScoreColor               0086              (R )
+ScoreGfx                 f500              (R )
+ScoreTop                 f18d              (R )
+SWACNT                   0281                  
+SWBCNT                   0283                  
+SWCHA                    0280                  
+SWCHB                    0282                  
+SystemClear              f000              (R )
+T1024T                   0297                  
+Temp                     00a2              (R )
+TempLoop                 00a1              (R )
+THREE_CLOSE              0003              (R )
+THREE_MED                0006                  
+ThrobColor               009e              (R )
+ThrobFrame               009d              (R )
+TIA_BASE_ADDRESS         0000              (R )
+TIA_BASE_READ_ADDRESS    0000              (R )
+TIA_BASE_WRITE_ADDRESS   0000              (R )
+TIM1T                    0294                  
+TIM64T                   0296              (R )
+TIM8T                    0295                  
+TIMINT                   0285                  
+TWO_CLOSE                0001                  
+TWO_MED                  0002                  
+TWO_WIDE                 0004                  
+VBLANK                   0001              (R )
+VBLANK_SCANLINES         0025              (R )
+VBLANK_TIMER             002d              (R )
+VblankTimerLoop          f172              (R )
+VDEL_FALSE               0000                  
+VDEL_TRUE                0001              (R )
+VDELBL                   0027                  
+VDELP0                   0025              (R )
+VDELP1                   0026              (R )
+VERSION_MACRO            006a                  
+VERSION_VCS              0069                  
+VSYNC                    0000              (R )
+WSYNC                    0002              (R )
+Z_EndOfCode              f475                  
+--- End of Symbol List.

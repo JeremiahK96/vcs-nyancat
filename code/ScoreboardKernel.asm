@@ -17,7 +17,10 @@
     sta PF1	; display kernel loop.
     
     ldy #5
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ScoreTop	; draw border above scoreboard
+
     sta WSYNC
     
     lda #0
@@ -47,7 +50,8 @@ ScoreTop	; draw border above scoreboard
     jmp .EntrancePoint
     
     ALIGN $100
-    
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .ScoreDigitLoop
 
     ; A contains gfx for digit3
@@ -98,14 +102,18 @@ ScoreTop	; draw border above scoreboard
     
     bpl .ScoreDigitLoop	; 10/11	check negative flag to see if the loop is over
     
-    lda #0	; 12
-    sta GRP0	; 15 - disable player graphics
-    sta GRP1	; 18
-    sta VDELP0	; 21 - disable player vertical delays
-    sta VDELP1	; 24
-    sta ENABL	; 27 - disable ball
-    sta ENAM0	; 30 - disable missiles
-    sta ENAM1	; 33
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     
-    ldx #$FF	; 35
-    txs		; 37 - reset the stack pointer
+    lda #0
+    sta ENAM0	; disable missiles
+    sta ENAM1
+    sta GRP0	; disable player graphics
+    sta GRP1
+    sta VDELP0	; disable player vertical delays
+    sta VDELP1
+    sta ENABL	; disable ball
+    sta PF0	; disable playfield
+    sta PF1
+    
+    ldx #$FF
+    txs		; reset the stack pointer
