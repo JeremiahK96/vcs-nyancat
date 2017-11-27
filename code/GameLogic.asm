@@ -289,10 +289,6 @@ OverscanTimerLoop
     sta Temp		; 3
     asl			; 2 - carry flag will always be clear after this
     adc Temp		; 3 - multiply by 3
-    sta ThrobFrame	; 3 - store the gfx offset
-    
-    
-    
     tay
     lda LineThrobGfx+0,y
     sta ThrobColor+0
@@ -309,7 +305,7 @@ OverscanTimerLoop
 ; Figure out how many rows to draw before and after the two cat rows
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda CatPosY
+    ;lda CatPosY
     
     lda #3
     sta PreCatRows

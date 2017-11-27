@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 11-23-2017 Version 2.0
+; 11-26-2017 Version 2.1
 ;
-; Add comments explaining the gameplay kernel
+; Add cat with rainbow and food items
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 

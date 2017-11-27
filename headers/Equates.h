@@ -68,12 +68,13 @@ OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; colors
 
-COL_SCORE		equ $40
+COL_SCORE		equ $02
 ;COL_SCOREBOARD		equ $4C
-COL_SCOREBOARD		equ $9E
-COL_BACKGROUND		equ $90
+COL_SCOREBOARD		equ $0E
+COL_BACKGROUND		equ $00
 COL_LINES		equ COL_BACKGROUND
 COL_CAT_FACE		equ $06
+COL_CAT_TART		equ $4A
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; luminosity masks, which can be added to any dark color to set the luminosity

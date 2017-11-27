@@ -104,16 +104,15 @@ ScoreTop	; draw border above scoreboard
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     
-    lda #0
-    sta ENAM0	; disable missiles
-    sta ENAM1
-    sta GRP0	; disable player graphics
-    sta GRP1
-    sta VDELP0	; disable player vertical delays
-    sta VDELP1
-    sta ENABL	; disable ball
-    sta PF0	; disable playfield
-    sta PF1
+    lda #0	; 12
+    sta ENAM0	; 15 - disable missiles
+    sta ENAM1	; 18
+    sta GRP0	; 21 - disable player graphics
+    sta GRP1	; 24
+    sta VDELP0	; 27 - disable player vertical delays
+    sta VDELP1	; 30
+    sta ENABL	; 33 - disable ball
+    sta CTRLPF	; 36 - disable playfield mirroring
     
-    ldx #$FF
-    txs		; reset the stack pointer
+    ldx #$FF	; 38
+    txs		; 40 - reset the stack pointer

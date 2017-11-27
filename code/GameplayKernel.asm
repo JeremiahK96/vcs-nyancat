@@ -1,56 +1,130 @@
 ; The rainbow will be drawn using both the playfield (PF0) and the background.
 
-; The pop-tart will be a single-color rectangle drawn with the background.
+; The pop-tart will be a single-color rectangle drawn with PF1.
 
-; The cat's head and front paws will be drawn with player 0. If it is possible,
-; the rear paws will be drawn with missile 0.
+; The cat's head and front paws will be drawn with player 0.
 
 ; All the food items will be drawn with player 1. It's NUSIZ will be set to
 ; 2 copies wide, and it will use flicker to draw up to 4 food items per row,
 ; 2 for each frame.
 
-; The cat's face color will be drawn with the ball, behind the head.
 
-; The PF0 register will be written to only once before the kernel.
-; The playfield and background colors will be written to 3 times each per line.
-; If this is not possible, I can draw the rainbow with only the
-; playfield, saving register writes at the expense of graphics.
 
-; Player 0's graphics will be written to once per scanline, while player 1's
-; will be written to twice. Player 0's color will never change, while player 1's
-; will also need 2 writes per scanline.
-
-; The ball will also need to be enabled or disabled each scanline. I am planning
-; on using the graphics table for PF0 to control the ball and missile as well,
-; since PF0 only uses the 4 high bits, saving cycles by only having to read once
-; for three writes (a shift will be neccesary).
-
-; I may have to push some of the cat graphics onto the stack to save cycles
-; in the kernel. I can reuse the RAM that was needed to draw the score graphics.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; We are currently at cycle 40 in the current scanline.
 
 
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Output 4 blank scanlines, while setting up the graphics objects.
-PreKernel:
-    
-    ; Align player 0 and the ball for drawing the cat's face, set up
-    ; missile 0 to draw the rear paws, and align player 1 to draw
-    ; the current frame's food items for the top row.
 
-    ; Depending on how tight the cycles will be, it may also be neccesary to push
-    ; some of the graphics into RAM here so they can be loaded more quickly
-    ; in the kernel.
+PreKernel:
+
+    sta CurrentRow	; 43 - reset row counter ('A' still contains zero)
     
-    ; If any part of the cat needs to be drawn in the top row,
-    ; skip straight to CatRows.
+    lda #>FoodGfx	; 45 - prepare MSB's for both food graphics pointers
+    sta FoodGfxPtr1+1	; 48 - (the LSB's will be calculated later,
+    sta FoodGfxPtr2+1	; 51 - before each row is drawn)
+    
+    lda #<CatTartGfx
+    sta TartGfxPtr
+    lda #>CatTartGfx
+    sta TartGfxPtr+1
+    
+    ldx #<RainbowColors
+    stx RbowColPtr1
+    inx
+    stx RbowColPtr2
+    
+    lda #>RainbowColors
+    sta RbowColPtr1+1
+    sta RbowColPtr2+1
+    
+    lda Frame
+    ror
+    bcs .Do1
+    
+    lda #0
+    jmp .Do2
+    
+.Do1
+    rol
+    and #$F0
+
+.Do2
+    sta FoodItemL
+    sta FoodItemR
+    
+    lda #<CatFaceGfx
+    sta CatGfxPtr
+    lda #>CatFaceGfx
+    sta CatGfxPtr+1
+    
+    lda #%10100000
+    sta PF0
+    
+    lda #COL_CAT_FACE
+    sta COLUP0
+    
+    ;lda #88
+    
+    lda Frame
+    and #%00111111
+    clc
+    adc #24
+    
+    sta FoodPosX
+    
+    lda #$80
+    sta HMP0
+    
+    ; Player 0 is already aligned for drawing the cat's face.
+    
+    ; Align player 1 to draw the current frame's food items for the top row.
+    
+    ; food item can be placed anywhere from 0-88
+    ; RESP1 can be strobed on cycle 27/32/37/42/47/52
     
     sta WSYNC
-    sta WSYNC
+    
+    ldy CurrentRow	; 03 - get the row we are drawing
+    lda FoodPosX,y	; 07 - get the food's position for this row
+    
+    sec			; 09
+.DivideLoop
+    sbc #15		; 11
+    bcs .DivideLoop	; 13
+    
+    eor #7		; 15
+    asl			; 17
+    asl			; 19
+    asl			; 21
+    asl			; 23
+    
+    sta RESP1		; 26
+    sta HMP1		; 29
+    
     sta WSYNC
     
     lda ThrobColor+1
     sta COLUBK
-    sta WSYNC
+    
+    lda #ONE_COPY
+    sta NUSIZ0
+    lda #TWO_WIDE
+    sta NUSIZ1
+    
+    SLEEP 51
+    
+    jmp .KJump
+    
+    ALIGN $100
+.KJump
+    sta HMOVE
+    SLEEP 3
+    
+    ; If any part of the cat needs to be drawn in the top row,
+    ; skip straight to CatRows.
 
 
 
@@ -61,8 +135,25 @@ HiRows:
     ; This will probably be a good time to prepare the pointers for the
     ; food items' graphics, as well as loading the colors for the food items.
     
-    lda ThrobColor+0
-    sta COLUBK
+    lda ThrobColor+0	; 02
+    sta COLUBK		; 05
+    
+    ldy CurrentRow	; 08
+    lda FoodItemL,y	; 12
+    and #$F0		; 14
+    sta FoodGfxPtr1	; 17
+    tax			; 19
+    lda FoodGfx+14,x	; 23
+    sta FoodColor1	; 26
+    
+    lda FoodItemR,y	; 30
+    and #$F0		; 32
+    sta FoodGfxPtr2	; 35
+    tax			; 37
+    lda FoodGfx+14,x	; 41
+    sta FoodColor2	; 44
+    
+    
     sta WSYNC
     
     ; After that, output 14 lines to draw a single row with food items,
@@ -92,6 +183,9 @@ HiRows:
     
     lda ThrobColor+2
     sta COLUBK
+    ldx #0
+    stx GRP0
+    ldx #COL_BACKGROUND
     sta WSYNC
     
     lda ThrobColor+1
@@ -114,21 +208,58 @@ CatRows:
     
     lda ThrobColor+0
     sta COLUBK
-    sta WSYNC
+    ldy #13
+    
+    SLEEP 57
     
     ; Then output the 14 lines to draw a single row. This will include drawing
     ; the rainbow, the pop-tart, the head and face or paws, and the food items.
     ; All graphics will be updated every line.
     
-    lda #COL_BACKGROUND
-    sta COLUBK
+.KernelLoop
+    ; 16 cycles to prepare rainbow colors
+    lda (RbowColPtr1),y	; 5
+    sta COLUPF		; 3
+    lda (RbowColPtr2),y	; 5
+    sta COLUBK		; 3
     
-    ldy 14
-.Loop2
-    sta WSYNC
-    dey
-    bne .Loop2
+    ; 8 cycles to prepare cat face graphics
+    lda (CatGfxPtr),y	; 5
+    sta GRP0		; 3
     
+    ; 8 cycles to prepare tart graphics
+    lda (TartGfxPtr),y	; 5
+    sta PF1		; 3
+    
+    ; 5 cycles to set tart color
+    lda #COL_CAT_TART	; 2 (25)
+    sta COLUPF		; 3 (28) MUST end on cycle 28
+    
+    ; 6 cycles to clear PF/BK colors to black
+    ; x is pre-loaded with 0, the color black
+    stx COLUBK		; 3 (31) MUST end on cycle 31
+    stx COLUPF		; 3 (34)
+    
+    ; 14 cycles to prepare 1st food item's graphics
+    lda (FoodGfxPtr1),y	; 5
+    sta GRP1		; 3
+    lda FoodColor1	; 3
+    sta COLUP1		; 3
+    
+    ; 14 cycles to prepare 2nd food item's graphics
+    lda (FoodGfxPtr2),y	; 5
+    sta GRP1		; 3
+    lda FoodColor2	; 3
+    sta COLUP1		; 3
+    
+    ; 5 cycles to finish the loop mechanism
+    dey			; 2
+    bpl .KernelLoop	; 3
+    
+    ; exactly 76 cycles total
+
+
+
     ; Then output the 5 lines to draw a "throb" line, but also draw the entire
     ; cat with the rainbow. In order to align player 1 for the next row's
     ; food items, it will be neccesary to have three versions of this kernel,
@@ -140,6 +271,8 @@ CatRows:
     
     lda ThrobColor+0
     sta COLUBK
+    stx GRP0
+    stx GRP1
     sta WSYNC
     
     lda ThrobColor+1
