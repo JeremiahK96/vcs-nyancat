@@ -9,9 +9,9 @@
       8  10000 ????						;
       9  10000 ????						;
      10  10000 ????						;
-     11  10000 ????						; 11-26-2017 Version 2.1
+     11  10000 ????						; 11-28-2017 Version 2.2
      12  10000 ????						;
-     13  10000 ????						; Add cat with rainbow and food items
+     13  10000 ????						; Optimize cycle timings in the cat row kernel loop
      14  10000 ????						;
      15  10000 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      16  10000 ????
@@ -831,7 +831,7 @@
     171  f09c		       84 8c		      sty	ProgressBar+3	; 3 - this playfield byte is full
     172  f09e
     173  f09e		       aa		      tax		; 2
-    174  f09f		       bd 0e f7 	      lda	PgBarGfx+1,x	; 4 - load from normal set of playfield graphics
+    174  f09f		       bd 0e f8 	      lda	PgBarGfx+1,x	; 4 - load from normal set of playfield graphics
     175  f0a2		       0a		      asl		; 2
     176  f0a3		       85 8d		      sta	ProgressBar+4	; 3
     177  f0a5		       4c d1 f0 	      jmp	.Finish	; 3
@@ -841,7 +841,7 @@
     181  f0a8
     182  f0a8		       69 03		      adc	#3	; 3 - add back the 3
     183  f0aa		       aa		      tax		; 2
-    184  f0ab		       bd 1b f7 	      lda	PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
+    184  f0ab		       bd 1b f8 	      lda	PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
     185  f0ae		       85 89		      sta	ProgressBar	; 3
     186  f0b0		       4c d1 f0 	      jmp	.Finish	; 3
     187  f0b3
@@ -850,7 +850,7 @@
     190  f0b3
     191  f0b3		       69 08		      adc	#8	; 3 - add back the 8
     192  f0b5		       aa		      tax		; 2
-    193  f0b6		       bd 0d f7 	      lda	PgBarGfx,x	; 4 - load from normal set of playfield graphics
+    193  f0b6		       bd 0d f8 	      lda	PgBarGfx,x	; 4 - load from normal set of playfield graphics
     194  f0b9		       85 8a		      sta	ProgressBar+1	; 3
     195  f0bb		       4c d1 f0 	      jmp	.Finish	; 3
     196  f0be
@@ -859,7 +859,7 @@
     199  f0be
     200  f0be		       69 08		      adc	#8	; 3 - add back the 8
     201  f0c0		       aa		      tax		; 2
-    202  f0c1		       bd 16 f7 	      lda	PgBarGfxR,x	; 4 - load from reversed set of playfield graphics
+    202  f0c1		       bd 16 f8 	      lda	PgBarGfxR,x	; 4 - load from reversed set of playfield graphics
     203  f0c4		       85 8b		      sta	ProgressBar+2	; 3
     204  f0c6		       4c d1 f0 	      jmp	.Finish	; 3
     205  f0c9
@@ -868,7 +868,7 @@
     208  f0c9
     209  f0c9		       69 04		      adc	#4	; 3 - add back the 4
     210  f0cb		       aa		      tax		; 2
-    211  f0cc		       bd 1a f7 	      lda	PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
+    211  f0cc		       bd 1a f8 	      lda	PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
     212  f0cf		       85 8c		      sta	ProgressBar+3	; 3
     213  f0d1
     214  f0d1							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -923,13 +923,13 @@
     263  f102		       a9 bd		      lda	#<HealthLeftGfx	; 2
     264  f104		       65 8f		      adc	Health	; 3
     265  f106		       85 90		      sta	HthGfxLPtr	; 3
-    266  f108		       a9 f6		      lda	#>HealthLeftGfx	; 2
+    266  f108		       a9 f7		      lda	#>HealthLeftGfx	; 2
     267  f10a		       85 91		      sta	HthGfxLPtr+1	; 3
     268  f10c
     269  f10c		       a9 dd		      lda	#<HealthRightGfx	; 2
     270  f10e		       65 8f		      adc	Health	; 3
     271  f110		       85 92		      sta	HthGfxRPtr	; 3
-    272  f112		       a9 f6		      lda	#>HealthRightGfx	; 2
+    272  f112		       a9 f7		      lda	#>HealthRightGfx	; 2
     273  f114		       85 93		      sta	HthGfxRPtr+1	; 3
     274  f116
     275  f116
@@ -950,11 +950,11 @@
     290  f11e		       0a		      asl		; 2 - carry flag will always be clear after this
     291  f11f		       65 b8		      adc	Temp	; 3 - multiply by 3
     292  f121		       a8		      tay
-    293  f122		       b9 a0 f6 	      lda	LineThrobGfx+0,y
+    293  f122		       b9 a0 f7 	      lda	LineThrobGfx+0,y
     294  f125		       85 b4		      sta	ThrobColor+0
-    295  f127		       b9 a1 f6 	      lda	LineThrobGfx+1,y
+    295  f127		       b9 a1 f7 	      lda	LineThrobGfx+1,y
     296  f12a		       85 b5		      sta	ThrobColor+1
-    297  f12c		       b9 a2 f6 	      lda	LineThrobGfx+2,y
+    297  f12c		       b9 a2 f7 	      lda	LineThrobGfx+2,y
     298  f12f		       85 b6		      sta	ThrobColor+2
     299  f131
     300  f131
@@ -999,7 +999,7 @@
     339  f144							; no need to clc, carry will always be clear
     340  f144		       65 b7		      adc	TempLoop	; 3 - add offset for current loop iteration
     341  f146		       a8		      tay		; 2
-    342  f147		       b9 50 f6 	      lda	LevelGfx,y	; 4
+    342  f147		       b9 50 f7 	      lda	LevelGfx,y	; 4
     343  f14a		       48		      pha		; 3
     344  f14b
     345  f14b		       a2 02		      ldx	#2	; 2 - start with rightmost BCD score value
@@ -1015,7 +1015,7 @@
     355  f154							; no need to clc, carry will always be clear
     356  f154		       65 b7		      adc	TempLoop	; 3 - add offset for current loop iteration
     357  f156		       a8		      tay		; 2
-    358  f157		       b9 00 f6 	      lda	ScoreGfx,y	; 4
+    358  f157		       b9 00 f7 	      lda	ScoreGfx,y	; 4
     359  f15a		       48		      pha		; 3
     360  f15b
     361  f15b							; left nybble
@@ -1025,7 +1025,7 @@
     365  f160							; no need to clc, carry will always be clear
     366  f160		       65 b7		      adc	TempLoop	; 3 - add offset for current loop iteration
     367  f162		       a8		      tay		; 2
-    368  f163		       b9 00 f6 	      lda	ScoreGfx,y	; 4
+    368  f163		       b9 00 f7 	      lda	ScoreGfx,y	; 4
     369  f166		       48		      pha		; 3
     370  f167
     371  f167		       ca		      dex		; 2
@@ -1246,147 +1246,143 @@
     112  f22f		       85 25		      sta	VDELP0	; 27 - disable player vertical delays
     113  f231		       85 26		      sta	VDELP1	; 30
     114  f233		       85 1f		      sta	ENABL	; 33 - disable ball
-    115  f235		       85 0a		      sta	CTRLPF	; 36 - disable playfield mirroring
-    116  f237
-    117  f237		       a2 ff		      ldx	#$FF	; 38
-    118  f239		       9a		      txs		; 40 - reset the stack pointer
+    115  f235
+    116  f235		       a2 ff		      ldx	#$FF	; 35
+    117  f237		       9a		      txs		; 37 - reset the stack pointer
 ------- FILE code/Kernel.asm
-------- FILE code/GameplayKernel.asm LEVEL 3 PASS 2
-      0  f23a					      include	code/GameplayKernel.asm
-      1  f23a							; The rainbow will be drawn using both the playfield (PF0) and the background.
-      2  f23a
-      3  f23a							; The pop-tart will be a single-color rectangle drawn with PF1.
-      4  f23a
-      5  f23a							; The cat's head and front paws will be drawn with player 0.
-      6  f23a
-      7  f23a							; All the food items will be drawn with player 1. It's NUSIZ will be set to
-      8  f23a							; 2 copies wide, and it will use flicker to draw up to 4 food items per row,
-      9  f23a							; 2 for each frame.
-     10  f23a
-     11  f23a
+------- FILE code/Gameplay Kernel/GameplayKernel.asm LEVEL 3 PASS 2
+      0  f238					      include	code/Gameplay Kernel/GameplayKernel.asm
+      1  f238							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  f238							; We are currently at cycle 47 in the current scanline.
+      3  f238
+      4  f238
+      5  f238
+      6  f238							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      7  f238							; Output 4 blank scanlines, while setting up the graphics objects.
+      8  f238
+      9  f238				   PreKernel
+     10  f238
+     11  f238		       85 b9		      sta	CurrentRow
      12  f23a
-     13  f23a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     14  f23a							; We are currently at cycle 40 in the current scanline.
-     15  f23a
-     16  f23a
-     17  f23a
-     18  f23a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     19  f23a							; Output 4 blank scanlines, while setting up the graphics objects.
-     20  f23a
-     21  f23a				   PreKernel
-     22  f23a
-     23  f23a		       85 b9		      sta	CurrentRow	; 43 - reset row counter ('A' still contains zero)
-     24  f23c
-     25  f23c		       a9 f8		      lda	#>FoodGfx	; 45 - prepare MSB's for both food graphics pointers
-     26  f23e		       85 bb		      sta	FoodGfxPtr1+1	; 48 - (the LSB's will be calculated later,
-     27  f240		       85 be		      sta	FoodGfxPtr2+1	; 51 - before each row is drawn)
-     28  f242
-     29  f242		       a9 00		      lda	#<CatTartGfx
-     30  f244		       85 99		      sta	TartGfxPtr
-     31  f246		       a9 f9		      lda	#>CatTartGfx
-     32  f248		       85 9a		      sta	TartGfxPtr+1
-     33  f24a
-     34  f24a		       a2 0e		      ldx	#<RainbowColors
-     35  f24c		       86 95		      stx	RbowColPtr1
-     36  f24e		       e8		      inx
-     37  f24f		       86 97		      stx	RbowColPtr2
-     38  f251
-     39  f251		       a9 f9		      lda	#>RainbowColors
-     40  f253		       85 96		      sta	RbowColPtr1+1
-     41  f255		       85 98		      sta	RbowColPtr2+1
-     42  f257
-     43  f257		       a5 80		      lda	Frame
-     44  f259		       6a		      ror
-     45  f25a		       b0 05		      bcs	.Do1
-     46  f25c
-     47  f25c		       a9 00		      lda	#0
-     48  f25e		       4c 64 f2 	      jmp	.Do2
-     49  f261
-     50  f261				   .Do1
-     51  f261		       2a		      rol
-     52  f262		       29 f0		      and	#$F0
-     53  f264
-     54  f264				   .Do2
-     55  f264		       85 9f		      sta	FoodItemL
-     56  f266		       85 a6		      sta	FoodItemR
-     57  f268
-     58  f268		       a9 5e		      lda	#<CatFaceGfx
-     59  f26a		       85 9b		      sta	CatGfxPtr
-     60  f26c		       a9 f7		      lda	#>CatFaceGfx
-     61  f26e		       85 9c		      sta	CatGfxPtr+1
-     62  f270
-     63  f270		       a9 a0		      lda	#%10100000
-     64  f272		       85 0d		      sta	PF0
-     65  f274
-     66  f274		       a9 06		      lda	#COL_CAT_FACE
-     67  f276		       85 06		      sta	COLUP0
-     68  f278
-     69  f278							;lda #88
-     70  f278
-     71  f278		       a5 80		      lda	Frame
-     72  f27a		       29 3f		      and	#%00111111
-     73  f27c		       18		      clc
-     74  f27d		       69 18		      adc	#24
-     75  f27f
-     76  f27f		       85 ad		      sta	FoodPosX
-     77  f281
-     78  f281		       a9 80		      lda	#$80
-     79  f283		       85 20		      sta	HMP0
-     80  f285
-     81  f285							; Player 0 is already aligned for drawing the cat's face.
-     82  f285
-     83  f285							; Align player 1 to draw the current frame's food items for the top row.
-     84  f285
-     85  f285							; food item can be placed anywhere from 0-88
-     86  f285							; RESP1 can be strobed on cycle 27/32/37/42/47/52
-     87  f285
-     88  f285		       85 02		      sta	WSYNC
-     89  f287
-     90  f287		       a4 b9		      ldy	CurrentRow	; 03 - get the row we are drawing
-     91  f289		       b9 ad 00 	      lda	FoodPosX,y	; 07 - get the food's position for this row
-     92  f28c
-     93  f28c		       38		      sec		; 09
-     94  f28d				   .DivideLoop
-     95  f28d		       e9 0f		      sbc	#15	; 11
-     96  f28f		       b0 fc		      bcs	.DivideLoop	; 13
-     97  f291
-     98  f291		       49 07		      eor	#7	; 15
-     99  f293		       0a		      asl		; 17
-    100  f294		       0a		      asl		; 19
-    101  f295		       0a		      asl		; 21
-    102  f296		       0a		      asl		; 23
-    103  f297
-    104  f297		       85 11		      sta	RESP1	; 26
-    105  f299		       85 21		      sta	HMP1	; 29
-    106  f29b
-    107  f29b		       85 02		      sta	WSYNC
-    108  f29d
-    109  f29d		       a5 b5		      lda	ThrobColor+1
-    110  f29f		       85 09		      sta	COLUBK
-    111  f2a1
-    112  f2a1		       a9 00		      lda	#ONE_COPY
-    113  f2a3		       85 04		      sta	NUSIZ0
-    114  f2a5		       a9 04		      lda	#TWO_WIDE
-    115  f2a7		       85 05		      sta	NUSIZ1
-    116  f2a9
-      0  f2a9					      SLEEP	51
-      1  f2a9				   .CYCLES    SET	51
-      2  f2a9
-      3  f2a9				  -	      IF	.CYCLES < 2
-      4  f2a9				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f2a9				  -	      ERR
-      6  f2a9					      ENDIF
-      7  f2a9
-      8  f2a9					      IF	.CYCLES & 1
-      9  f2a9					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f2a9		       04 00		      nop	0
-     11  f2ab				  -	      ELSE
-     12  f2ab				  -	      bit	VSYNC
-     13  f2ab					      ENDIF
-     14  f2ab				   .CYCLES    SET	.CYCLES - 3
-     15  f2ab					      ENDIF
-     16  f2ab
-     17  f2ab					      REPEAT	.CYCLES / 2
+     13  f23a		       a5 01		      lda	PF_REFLECT
+     14  f23c		       85 0a		      sta	CTRLPF
+     15  f23e
+     16  f23e		       a9 f9		      lda	#>FoodGfx
+     17  f240		       85 bb		      sta	FoodGfxPtr1+1
+     18  f242		       85 be		      sta	FoodGfxPtr2+1
+     19  f244
+     20  f244		       a9 10		      lda	#<CatTartGfx
+     21  f246		       85 99		      sta	TartGfxPtr
+     22  f248		       a9 fa		      lda	#>CatTartGfx
+     23  f24a		       85 9a		      sta	TartGfxPtr+1
+     24  f24c
+     25  f24c		       a2 00		      ldx	#<RainbowColors
+     26  f24e		       86 95		      stx	RbowColPtr1
+     27  f250		       e8		      inx
+     28  f251		       86 97		      stx	RbowColPtr2
+     29  f253
+     30  f253		       a9 fa		      lda	#>RainbowColors
+     31  f255		       85 96		      sta	RbowColPtr1+1
+     32  f257		       85 98		      sta	RbowColPtr2+1
+     33  f259
+     34  f259		       a9 50		      lda	#$50
+     35  f25b		       85 9f		      sta	FoodItemL
+     36  f25d		       a9 90		      lda	#$90
+     37  f25f		       85 a6		      sta	FoodItemR
+     38  f261
+     39  f261		       a9 66		      lda	#<CatFaceGfx
+     40  f263		       85 9b		      sta	CatGfxPtr
+     41  f265		       a9 f8		      lda	#>CatFaceGfx
+     42  f267		       85 9c		      sta	CatGfxPtr+1
+     43  f269
+     44  f269		       a9 a0		      lda	#%10100000
+     45  f26b		       85 0d		      sta	PF0
+     46  f26d
+     47  f26d		       a9 06		      lda	#COL_CAT_FACE
+     48  f26f		       85 06		      sta	COLUP0
+     49  f271
+     50  f271		       a5 80		      lda	Frame
+     51  f273		       29 3f		      and	#%00111111
+     52  f275
+     53  f275		       a9 58		      lda	#88
+     54  f277		       85 ad		      sta	FoodPosX
+     55  f279
+     56  f279		       a9 80		      lda	#$80
+     57  f27b		       85 20		      sta	HMP0
+     58  f27d
+     59  f27d							; Player 0 is already aligned for drawing the cat's face.
+     60  f27d
+     61  f27d							; Align player 1 to draw the current frame's food items for the top row.
+     62  f27d
+     63  f27d							; food item can be placed anywhere from 0-88
+     64  f27d							; RESP1 can be strobed on cycle 27/32/37/42/47/52
+     65  f27d
+     66  f27d		       85 02		      sta	WSYNC
+     67  f27f
+     68  f27f		       a4 b9		      ldy	CurrentRow	; 03 - get the row we are drawing
+     69  f281		       b9 ad 00 	      lda	FoodPosX,y	; 07 - get the food's position for this row
+     70  f284
+     71  f284		       38		      sec		; 09
+     72  f285				   .DivideLoop
+     73  f285		       e9 0f		      sbc	#15	; 11
+     74  f287		       b0 fc		      bcs	.DivideLoop	; 13
+     75  f289
+     76  f289		       49 07		      eor	#7	; 15
+     77  f28b		       69 01		      adc	#1
+     78  f28d		       0a		      asl		; 17
+     79  f28e		       0a		      asl		; 19
+     80  f28f		       0a		      asl		; 21
+     81  f290
+     82  f290		       85 11		      sta	RESP1	; 26
+     83  f292
+     84  f292		       0a		      asl		; 23
+     85  f293
+     86  f293		       85 21		      sta	HMP1	; 29
+     87  f295
+     88  f295		       85 02		      sta	WSYNC
+     89  f297
+     90  f297		       a5 b5		      lda	ThrobColor+1
+     91  f299		       85 09		      sta	COLUBK
+     92  f29b
+     93  f29b		       a9 00		      lda	#ONE_COPY
+     94  f29d		       85 04		      sta	NUSIZ0
+     95  f29f		       a9 04		      lda	#TWO_WIDE
+     96  f2a1		       85 05		      sta	NUSIZ1
+     97  f2a3
+      0  f2a3					      SLEEP	54
+      1  f2a3				   .CYCLES    SET	54
+      2  f2a3
+      3  f2a3				  -	      IF	.CYCLES < 2
+      4  f2a3				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f2a3				  -	      ERR
+      6  f2a3					      ENDIF
+      7  f2a3
+      8  f2a3				  -	      IF	.CYCLES & 1
+      9  f2a3				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f2a3				  -	      nop	0
+     11  f2a3				  -	      ELSE
+     12  f2a3				  -	      bit	VSYNC
+     13  f2a3				  -	      ENDIF
+     14  f2a3				  -.CYCLES    SET	.CYCLES - 3
+     15  f2a3					      ENDIF
+     16  f2a3
+     17  f2a3					      REPEAT	.CYCLES / 2
+     18  f2a3		       ea		      nop
+     17  f2a3					      REPEND
+     18  f2a4		       ea		      nop
+     17  f2a4					      REPEND
+     18  f2a5		       ea		      nop
+     17  f2a5					      REPEND
+     18  f2a6		       ea		      nop
+     17  f2a6					      REPEND
+     18  f2a7		       ea		      nop
+     17  f2a7					      REPEND
+     18  f2a8		       ea		      nop
+     17  f2a8					      REPEND
+     18  f2a9		       ea		      nop
+     17  f2a9					      REPEND
+     18  f2aa		       ea		      nop
+     17  f2aa					      REPEND
      18  f2ab		       ea		      nop
      17  f2ab					      REPEND
      18  f2ac		       ea		      nop
@@ -1424,1640 +1420,1740 @@
      18  f2bc		       ea		      nop
      17  f2bc					      REPEND
      18  f2bd		       ea		      nop
-     17  f2bd					      REPEND
-     18  f2be		       ea		      nop
-     17  f2be					      REPEND
-     18  f2bf		       ea		      nop
-     17  f2bf					      REPEND
-     18  f2c0		       ea		      nop
-     17  f2c0					      REPEND
-     18  f2c1		       ea		      nop
-     17  f2c1					      REPEND
-     18  f2c2		       ea		      nop
-     19  f2c3					      REPEND
-    118  f2c3
-    119  f2c3		       4c 00 f3 	      jmp	.KJump
-    120  f2c6
-    121  f300		       00 00 00 00*	      ALIGN	$100
-    122  f300				   .KJump
-    123  f300		       85 2a		      sta	HMOVE
-      0  f302					      SLEEP	3
-      1  f302				   .CYCLES    SET	3
-      2  f302
-      3  f302				  -	      IF	.CYCLES < 2
-      4  f302				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f302				  -	      ERR
-      6  f302					      ENDIF
-      7  f302
-      8  f302					      IF	.CYCLES & 1
-      9  f302					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f302		       04 00		      nop	0
-     11  f304				  -	      ELSE
-     12  f304				  -	      bit	VSYNC
-     13  f304					      ENDIF
-     14  f304				   .CYCLES    SET	.CYCLES - 3
-     15  f304					      ENDIF
-     16  f304
-     17  f304				  -	      REPEAT	.CYCLES / 2
-     18  f304				  -	      nop
-     19  f304					      REPEND
-    125  f304
-    126  f304							; If any part of the cat needs to be drawn in the top row,
-    127  f304							; skip straight to CatRows.
-    128  f304
-    129  f304
-    130  f304
-    131  f304							; Draw all the rows above the cat's two rows.
-    132  f304				   HiRows
-    133  f304
-    134  f304							; First, output a single-color line to draw the bottom of a "throb" line.
-    135  f304							; This will probably be a good time to prepare the pointers for the
-    136  f304							; food items' graphics, as well as loading the colors for the food items.
-    137  f304
-    138  f304		       a5 b4		      lda	ThrobColor+0	; 02
-    139  f306		       85 09		      sta	COLUBK	; 05
-    140  f308
-    141  f308		       a4 b9		      ldy	CurrentRow	; 08
-    142  f30a		       b9 9f 00 	      lda	FoodItemL,y	; 12
-    143  f30d		       29 f0		      and	#$F0	; 14
-    144  f30f		       85 ba		      sta	FoodGfxPtr1	; 17
-    145  f311		       aa		      tax		; 19
-    146  f312		       bd 0e f8 	      lda	FoodGfx+14,x	; 23
-    147  f315		       85 bc		      sta	FoodColor1	; 26
-    148  f317
-    149  f317		       b9 a6 00 	      lda	FoodItemR,y	; 30
-    150  f31a		       29 f0		      and	#$F0	; 32
-    151  f31c		       85 bd		      sta	FoodGfxPtr2	; 35
-    152  f31e		       aa		      tax		; 37
-    153  f31f		       bd 0e f8 	      lda	FoodGfx+14,x	; 41
-    154  f322		       85 bf		      sta	FoodColor2	; 44
-    155  f324
-    156  f324
-    157  f324		       85 02		      sta	WSYNC
-    158  f326
-    159  f326							; After that, output 14 lines to draw a single row with food items,
-    160  f326							; but without drawing the cat. The food graphics will be updated every line,
-    161  f326							; but there will probably not be enough time to also update the food colors
-    162  f326							; every line throughout the kernel.
-    163  f326
-    164  f326		       a9 00		      lda	#COL_BACKGROUND
-    165  f328		       85 09		      sta	COLUBK
-    166  f32a
-    167  f32a		       a4 0e		      ldy	14
-    168  f32c				   .Loop1
-    169  f32c		       85 02		      sta	WSYNC
-    170  f32e		       88		      dey
-    171  f32f		       d0 fb		      bne	.Loop1
-    172  f331
-    173  f331							; Lastly, output four single-color lines to draw most of a "throb" line,
-    174  f331							; while setting the position of player 1 to draw the next set of food items.
-    175  f331
-    176  f331		       a5 b4		      lda	ThrobColor+0
-    177  f333		       85 09		      sta	COLUBK
-    178  f335		       85 02		      sta	WSYNC
-    179  f337
-    180  f337		       a5 b5		      lda	ThrobColor+1
-    181  f339		       85 09		      sta	COLUBK
-    182  f33b		       85 02		      sta	WSYNC
-    183  f33d
-    184  f33d		       a5 b6		      lda	ThrobColor+2
-    185  f33f		       85 09		      sta	COLUBK
-    186  f341		       a2 00		      ldx	#0
-    187  f343		       86 1b		      stx	GRP0
-    188  f345		       a2 00		      ldx	#COL_BACKGROUND
-    189  f347		       85 02		      sta	WSYNC
-    190  f349
-    191  f349		       a5 b5		      lda	ThrobColor+1
-    192  f34b		       85 09		      sta	COLUBK
-    193  f34d
-    194  f34d		       c6 9d		      dec	PreCatRows
-    195  f34f		       85 02		      sta	WSYNC
-    196  f351		       d0 b1		      bne	HiRows
-    197  f353
-    198  f353							; If this is not the last row before drawing the cat's rows,
-    199  f353							; loop back to HiRows to draw the next row.
-    200  f353
-    201  f353
-    202  f353
-    203  f353							; Draw the two rows that contain the cat.
-    204  f353				   CatRows
-    205  f353
-    206  f353							; Output a line to finish the bottom of a "throb" line, like in HiRows.
-    207  f353							; If the cat is at the very top of the row, draw the top of the pop-tart.
-    208  f353
-    209  f353		       a5 b4		      lda	ThrobColor+0
-    210  f355		       85 09		      sta	COLUBK
-    211  f357		       a0 0d		      ldy	#13
-    212  f359
-      0  f359					      SLEEP	57
-      1  f359				   .CYCLES    SET	57
-      2  f359
-      3  f359				  -	      IF	.CYCLES < 2
-      4  f359				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f359				  -	      ERR
-      6  f359					      ENDIF
-      7  f359
-      8  f359					      IF	.CYCLES & 1
-      9  f359					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f359		       04 00		      nop	0
-     11  f35b				  -	      ELSE
-     12  f35b				  -	      bit	VSYNC
-     13  f35b					      ENDIF
-     14  f35b				   .CYCLES    SET	.CYCLES - 3
-     15  f35b					      ENDIF
-     16  f35b
-     17  f35b					      REPEAT	.CYCLES / 2
-     18  f35b		       ea		      nop
-     17  f35b					      REPEND
-     18  f35c		       ea		      nop
-     17  f35c					      REPEND
-     18  f35d		       ea		      nop
-     17  f35d					      REPEND
-     18  f35e		       ea		      nop
-     17  f35e					      REPEND
-     18  f35f		       ea		      nop
-     17  f35f					      REPEND
-     18  f360		       ea		      nop
-     17  f360					      REPEND
-     18  f361		       ea		      nop
-     17  f361					      REPEND
-     18  f362		       ea		      nop
-     17  f362					      REPEND
-     18  f363		       ea		      nop
-     17  f363					      REPEND
-     18  f364		       ea		      nop
-     17  f364					      REPEND
-     18  f365		       ea		      nop
-     17  f365					      REPEND
-     18  f366		       ea		      nop
-     17  f366					      REPEND
-     18  f367		       ea		      nop
-     17  f367					      REPEND
-     18  f368		       ea		      nop
-     17  f368					      REPEND
-     18  f369		       ea		      nop
-     17  f369					      REPEND
-     18  f36a		       ea		      nop
-     17  f36a					      REPEND
-     18  f36b		       ea		      nop
-     17  f36b					      REPEND
-     18  f36c		       ea		      nop
-     17  f36c					      REPEND
-     18  f36d		       ea		      nop
-     17  f36d					      REPEND
-     18  f36e		       ea		      nop
-     17  f36e					      REPEND
-     18  f36f		       ea		      nop
-     17  f36f					      REPEND
-     18  f370		       ea		      nop
-     17  f370					      REPEND
-     18  f371		       ea		      nop
-     17  f371					      REPEND
-     18  f372		       ea		      nop
-     17  f372					      REPEND
-     18  f373		       ea		      nop
-     17  f373					      REPEND
-     18  f374		       ea		      nop
-     17  f374					      REPEND
-     18  f375		       ea		      nop
-     19  f376					      REPEND
-    214  f376
-    215  f376							; Then output the 14 lines to draw a single row. This will include drawing
-    216  f376							; the rainbow, the pop-tart, the head and face or paws, and the food items.
-    217  f376							; All graphics will be updated every line.
-    218  f376
-    219  f376				   .KernelLoop
-    220  f376							; 16 cycles to prepare rainbow colors
-    221  f376		       b1 95		      lda	(RbowColPtr1),y	; 5
-    222  f378		       85 08		      sta	COLUPF	; 3
-    223  f37a		       b1 97		      lda	(RbowColPtr2),y	; 5
-    224  f37c		       85 09		      sta	COLUBK	; 3
-    225  f37e
-    226  f37e							; 8 cycles to prepare cat face graphics
-    227  f37e		       b1 9b		      lda	(CatGfxPtr),y	; 5
-    228  f380		       85 1b		      sta	GRP0	; 3
-    229  f382
-    230  f382							; 8 cycles to prepare tart graphics
-    231  f382		       b1 99		      lda	(TartGfxPtr),y	; 5
-    232  f384		       85 0e		      sta	PF1	; 3
-    233  f386
-    234  f386							; 5 cycles to set tart color
-    235  f386		       a9 4a		      lda	#COL_CAT_TART	; 2 (25)
-    236  f388		       85 08		      sta	COLUPF	; 3 (28) MUST end on cycle 28
-    237  f38a
-    238  f38a							; 6 cycles to clear PF/BK colors to black
-    239  f38a							; x is pre-loaded with 0, the color black
-    240  f38a		       86 09		      stx	COLUBK	; 3 (31) MUST end on cycle 31
-    241  f38c		       86 08		      stx	COLUPF	; 3 (34)
-    242  f38e
-    243  f38e							; 14 cycles to prepare 1st food item's graphics
-    244  f38e		       b1 ba		      lda	(FoodGfxPtr1),y	; 5
-    245  f390		       85 1c		      sta	GRP1	; 3
-    246  f392		       a5 bc		      lda	FoodColor1	; 3
-    247  f394		       85 07		      sta	COLUP1	; 3
-    248  f396
-    249  f396							; 14 cycles to prepare 2nd food item's graphics
-    250  f396		       b1 bd		      lda	(FoodGfxPtr2),y	; 5
-    251  f398		       85 1c		      sta	GRP1	; 3
-    252  f39a		       a5 bf		      lda	FoodColor2	; 3
-    253  f39c		       85 07		      sta	COLUP1	; 3
-    254  f39e
-    255  f39e							; 5 cycles to finish the loop mechanism
-    256  f39e		       88		      dey		; 2
-    257  f39f		       10 d5		      bpl	.KernelLoop	; 3
-    258  f3a1
-    259  f3a1							; exactly 76 cycles total
-    260  f3a1
-    261  f3a1
-    262  f3a1
-    263  f3a1							; Then output the 5 lines to draw a "throb" line, but also draw the entire
-    264  f3a1							; cat with the rainbow. In order to align player 1 for the next row's
-    265  f3a1							; food items, it will be neccesary to have three versions of this kernel,
-    266  f3a1							; one for each of the three 60-color-clock spaced positions to reset.
-    267  f3a1							; HMOVE will be written to on the first four scanlines. With a maximum
-    268  f3a1							; movement of 15 color-clocks per scanline, this will allow a movement of
-    269  f3a1							; up to 60 color clocks. With three versions of the kernel, it should be
-    270  f3a1							; possible to put player 1 anywhere on the screen.
-    271  f3a1
-    272  f3a1		       a5 b4		      lda	ThrobColor+0
-    273  f3a3		       85 09		      sta	COLUBK
-    274  f3a5		       86 1b		      stx	GRP0
-    275  f3a7		       86 1c		      stx	GRP1
-    276  f3a9		       85 02		      sta	WSYNC
-    277  f3ab
-    278  f3ab		       a5 b5		      lda	ThrobColor+1
-    279  f3ad		       85 09		      sta	COLUBK
-    280  f3af		       85 02		      sta	WSYNC
-    281  f3b1
-    282  f3b1		       a5 b6		      lda	ThrobColor+2
-    283  f3b3		       85 09		      sta	COLUBK
-    284  f3b5		       85 02		      sta	WSYNC
-    285  f3b7
-    286  f3b7		       a5 b5		      lda	ThrobColor+1
-    287  f3b9		       85 09		      sta	COLUBK
-    288  f3bb		       85 02		      sta	WSYNC
-    289  f3bd
-    290  f3bd		       a5 b4		      lda	ThrobColor+0
-    291  f3bf		       85 09		      sta	COLUBK
-    292  f3c1		       85 02		      sta	WSYNC
-    293  f3c3
-    294  f3c3							; Then output 14 lines to draw the next row, exactly the same way as the
-    295  f3c3							; previous one. It will be neccesary to have multiple versions of this, as well,
-    296  f3c3							; since GRP1 needs to be updated at the correct time depending on the position
-    297  f3c3							; of player 1.
-    298  f3c3
-    299  f3c3		       a9 00		      lda	#COL_BACKGROUND
-    300  f3c5		       85 09		      sta	COLUBK
-    301  f3c7
-    302  f3c7		       a4 0e		      ldy	14
-    303  f3c9				   .Loop3
-    304  f3c9		       85 02		      sta	WSYNC
-    305  f3cb		       88		      dey
-    306  f3cc		       d0 fb		      bne	.Loop3
-    307  f3ce
-    308  f3ce							; Lastly, output only one line (not four) to draw the top of a "throb" line.
-    309  f3ce							; Use this time to prepare the next row's food item pointers (unless this is
-    310  f3ce							; the last row). If this is the last row, skip over LoRows.
-    311  f3ce
-    312  f3ce		       a5 b4		      lda	ThrobColor+0
-    313  f3d0		       85 09		      sta	COLUBK
-    314  f3d2		       85 02		      sta	WSYNC
-    315  f3d4
-    316  f3d4							; If the cat is at the very bottom of the screen, don't disable the
-    317  f3d4							; missile/player graphics until after they are drawn, so they don't get
-    318  f3d4							; clipped at the bottom of the screen. An easy way to do this would be to
-    319  f3d4							; simply disable them after they would have been drawn, whether they are
-    320  f3d4							; already disabled or not.
-    321  f3d4
-    322  f3d4
-    323  f3d4
-    324  f3d4							; Draw all the rows below the cat's two rows.
-    325  f3d4				   LoRows
-    326  f3d4
-    327  f3d4							; Output 4 lines, drawing the rest of the "throb" line, while preparing
-    328  f3d4							; player 1 for the next row's food items.
-    329  f3d4
-    330  f3d4		       a5 b5		      lda	ThrobColor+1
-    331  f3d6		       85 09		      sta	COLUBK
-    332  f3d8		       85 02		      sta	WSYNC
-    333  f3da
-    334  f3da		       a5 b6		      lda	ThrobColor+2
-    335  f3dc		       85 09		      sta	COLUBK
-    336  f3de		       85 02		      sta	WSYNC
-    337  f3e0
-    338  f3e0		       a5 b5		      lda	ThrobColor+1
-    339  f3e2		       85 09		      sta	COLUBK
-    340  f3e4		       85 02		      sta	WSYNC
-    341  f3e6
-    342  f3e6		       a5 b4		      lda	ThrobColor+0
-    343  f3e8		       85 09		      sta	COLUBK
-    344  f3ea		       85 02		      sta	WSYNC
-    345  f3ec
-    346  f3ec							; Output 14 lines to draw a row, exactly the same as in HiRows.
-    347  f3ec							; It may be possible to code this as a subroutine to save ROM space.
-    348  f3ec
-    349  f3ec		       a9 00		      lda	#COL_BACKGROUND
-    350  f3ee		       85 09		      sta	COLUBK
-    351  f3f0
-    352  f3f0		       a4 0e		      ldy	14
-    353  f3f2				   .Loop4
-    354  f3f2		       85 02		      sta	WSYNC
-    355  f3f4		       88		      dey
-    356  f3f5		       d0 fb		      bne	.Loop4
-    357  f3f7
-    358  f3f7							; Lastly, output the a single line for the next "throb" line.
-    359  f3f7							; Use this time to prepare the next row's food item pointers (unless this is
-    360  f3f7							; the last row). If this is not the last row, loop to LoRows for the next row.
-    361  f3f7
-    362  f3f7		       a5 b4		      lda	ThrobColor+0
-    363  f3f9		       85 09		      sta	COLUBK
-    364  f3fb
-    365  f3fb		       c6 9e		      dec	PostCatRows
-    366  f3fd		       85 02		      sta	WSYNC
-    367  f3ff		       d0 d3		      bne	LoRows
-    368  f401
+     19  f2be					      REPEND
+     99  f2be
+    100  f2be		       85 2a		      sta	HMOVE
+    101  f2c0
+      0  f2c0					      SLEEP	3
+      1  f2c0				   .CYCLES    SET	3
+      2  f2c0
+      3  f2c0				  -	      IF	.CYCLES < 2
+      4  f2c0				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f2c0				  -	      ERR
+      6  f2c0					      ENDIF
+      7  f2c0
+      8  f2c0					      IF	.CYCLES & 1
+      9  f2c0					      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f2c0		       04 00		      nop	0
+     11  f2c2				  -	      ELSE
+     12  f2c2				  -	      bit	VSYNC
+     13  f2c2					      ENDIF
+     14  f2c2				   .CYCLES    SET	.CYCLES - 3
+     15  f2c2					      ENDIF
+     16  f2c2
+     17  f2c2				  -	      REPEAT	.CYCLES / 2
+     18  f2c2				  -	      nop
+     19  f2c2					      REPEND
+    103  f2c2
+    104  f2c2							; If any part of the cat needs to be drawn in the top row,
+    105  f2c2							; skip straight to CatRows.
+    106  f2c2
+    107  f2c2
+    108  f2c2
+    109  f2c2							; Draw all the rows above the cat's two rows.
+    110  f2c2				   HiRows
+    111  f2c2
+    112  f2c2							; First, output a single-color line to draw the bottom of a "throb" line.
+    113  f2c2							; This will probably be a good time to prepare the pointers for the
+    114  f2c2							; food items' graphics, as well as loading the colors for the food items.
+    115  f2c2
+    116  f2c2		       a5 b4		      lda	ThrobColor+0	; 02
+    117  f2c4		       85 09		      sta	COLUBK	; 05
+    118  f2c6
+    119  f2c6		       a4 b9		      ldy	CurrentRow	; 08
+    120  f2c8		       b9 9f 00 	      lda	FoodItemL,y	; 12
+    121  f2cb		       29 f0		      and	#$F0	; 14
+    122  f2cd		       85 ba		      sta	FoodGfxPtr1	; 17
+    123  f2cf		       aa		      tax		; 19
+    124  f2d0		       bd 0e f9 	      lda	FoodGfx+14,x	; 23
+    125  f2d3		       85 bc		      sta	FoodColor1	; 26
+    126  f2d5
+    127  f2d5		       b9 a6 00 	      lda	FoodItemR,y	; 30
+    128  f2d8		       29 f0		      and	#$F0	; 32
+    129  f2da		       85 bd		      sta	FoodGfxPtr2	; 35
+    130  f2dc		       aa		      tax		; 37
+    131  f2dd		       bd 0e f9 	      lda	FoodGfx+14,x	; 41
+    132  f2e0		       85 bf		      sta	FoodColor2	; 44
+    133  f2e2
+    134  f2e2
+    135  f2e2		       85 02		      sta	WSYNC
+    136  f2e4
+    137  f2e4							; After that, output 14 lines to draw a single row with food items,
+    138  f2e4							; but without drawing the cat. The food graphics will be updated every line,
+    139  f2e4							; but there will probably not be enough time to also update the food colors
+    140  f2e4							; every line throughout the kernel.
+    141  f2e4
+    142  f2e4		       a9 00		      lda	#COL_BACKGROUND
+    143  f2e6		       85 09		      sta	COLUBK
+    144  f2e8
+    145  f2e8		       a4 0e		      ldy	14
+    146  f2ea				   .Loop1
+    147  f2ea		       85 02		      sta	WSYNC
+    148  f2ec		       88		      dey
+    149  f2ed		       d0 fb		      bne	.Loop1
+    150  f2ef
+    151  f2ef							; Lastly, output four single-color lines to draw most of a "throb" line,
+    152  f2ef							; while setting the position of player 1 to draw the next set of food items.
+    153  f2ef
+    154  f2ef		       a5 b4		      lda	ThrobColor+0
+    155  f2f1		       85 09		      sta	COLUBK
+    156  f2f3		       85 02		      sta	WSYNC
+    157  f2f5
+    158  f2f5		       a5 b5		      lda	ThrobColor+1
+    159  f2f7		       85 09		      sta	COLUBK
+    160  f2f9		       85 02		      sta	WSYNC
+    161  f2fb
+    162  f2fb		       a5 b6		      lda	ThrobColor+2
+    163  f2fd		       85 09		      sta	COLUBK
+    164  f2ff		       a2 00		      ldx	#0
+    165  f301		       86 1b		      stx	GRP0
+    166  f303		       85 02		      sta	WSYNC
+    167  f305
+    168  f305		       a5 b5		      lda	ThrobColor+1
+    169  f307		       85 09		      sta	COLUBK
+    170  f309
+    171  f309		       c6 9d		      dec	PreCatRows
+    172  f30b		       85 02		      sta	WSYNC
+    173  f30d		       d0 b3		      bne	HiRows
+    174  f30f
+    175  f30f							; If this is not the last row before drawing the cat's rows,
+    176  f30f							; loop back to HiRows to draw the next row.
+    177  f30f
+    178  f30f
+    179  f30f
+------- FILE code/Gameplay Kernel/CatRowKernel.asm LEVEL 4 PASS 2
+      0  f30f					      include	code/Gameplay Kernel/CatRowKernel.asm
+      1  f30f							; Draw the two rows that contain the cat.
+      2  f30f				   CatRows
+      3  f30f
+      4  f30f							; Output a line to finish the bottom of a "throb" line, like in HiRows.
+      5  f30f							; If the cat is at the very top of the row, draw the top of the pop-tart.
+      6  f30f
+      7  f30f		       a5 b4		      lda	ThrobColor+0
+      8  f311		       85 09		      sta	COLUBK
+      9  f313
+     10  f313							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     11  f313							; Cat Row Kernel
+     12  f313							;
+     13  f313							; This is the subroutine that is used to draw the two gameplay kernel rows
+     14  f313							; containing the cat. It does not draw the throbbing line between the two rows,
+     15  f313							; it only draws a single, 14-scanline row with the cat and food items.
+     16  f313							; This subroutine is called twice in the kernel, once for each of the two rows
+     17  f313							; containing the cat.
+     18  f313							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     19  f313
+     20  f313				   DrawCatRow SUBROUTINE
+     21  f313
+     22  f313							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     23  f313
+     24  f313		       a6 bf		      ldx	FoodColor2
+     25  f315		       9a		      txs
+     26  f316
+     27  f316		       a2 00		      ldx	#COL_BACKGROUND
+     28  f318
+     29  f318							; Then output the 14 lines to draw a single row. This will include drawing
+     30  f318							; the rainbow, the pop-tart, the head and face or paws, and the food items.
+     31  f318							; All graphics will be updated every line.
+     32  f318
+     33  f318		       a0 0d		      ldy	#13
+     34  f31a
+     35  f31a							;17
+     36  f31a
+     37  f31a		       a9 e0		      lda	#%11100000
+     38  f31c		       85 0e		      sta	PF1
+     39  f31e
+      0  f31e					      SLEEP	30
+      1  f31e				   .CYCLES    SET	30
+      2  f31e
+      3  f31e				  -	      IF	.CYCLES < 2
+      4  f31e				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f31e				  -	      ERR
+      6  f31e					      ENDIF
+      7  f31e
+      8  f31e				  -	      IF	.CYCLES & 1
+      9  f31e				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f31e				  -	      nop	0
+     11  f31e				  -	      ELSE
+     12  f31e				  -	      bit	VSYNC
+     13  f31e				  -	      ENDIF
+     14  f31e				  -.CYCLES    SET	.CYCLES - 3
+     15  f31e					      ENDIF
+     16  f31e
+     17  f31e					      REPEAT	.CYCLES / 2
+     18  f31e		       ea		      nop
+     17  f31e					      REPEND
+     18  f31f		       ea		      nop
+     17  f31f					      REPEND
+     18  f320		       ea		      nop
+     17  f320					      REPEND
+     18  f321		       ea		      nop
+     17  f321					      REPEND
+     18  f322		       ea		      nop
+     17  f322					      REPEND
+     18  f323		       ea		      nop
+     17  f323					      REPEND
+     18  f324		       ea		      nop
+     17  f324					      REPEND
+     18  f325		       ea		      nop
+     17  f325					      REPEND
+     18  f326		       ea		      nop
+     17  f326					      REPEND
+     18  f327		       ea		      nop
+     17  f327					      REPEND
+     18  f328		       ea		      nop
+     17  f328					      REPEND
+     18  f329		       ea		      nop
+     17  f329					      REPEND
+     18  f32a		       ea		      nop
+     17  f32a					      REPEND
+     18  f32b		       ea		      nop
+     17  f32b					      REPEND
+     18  f32c		       ea		      nop
+     19  f32d					      REPEND
+     41  f32d							;jmp .KernelLoop2
+     42  f32d
+     43  f32d		       c6 99		      dec	TartGfxPtr
+     44  f32f		       c6 9b		      dec	CatGfxPtr
+      0  f331					      SLEEP	6
+      1  f331				   .CYCLES    SET	6
+      2  f331
+      3  f331				  -	      IF	.CYCLES < 2
+      4  f331				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f331				  -	      ERR
+      6  f331					      ENDIF
+      7  f331
+      8  f331				  -	      IF	.CYCLES & 1
+      9  f331				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f331				  -	      nop	0
+     11  f331				  -	      ELSE
+     12  f331				  -	      bit	VSYNC
+     13  f331				  -	      ENDIF
+     14  f331				  -.CYCLES    SET	.CYCLES - 3
+     15  f331					      ENDIF
+     16  f331
+     17  f331					      REPEAT	.CYCLES / 2
+     18  f331		       ea		      nop
+     17  f331					      REPEND
+     18  f332		       ea		      nop
+     17  f332					      REPEND
+     18  f333		       ea		      nop
+     19  f334					      REPEND
+     46  f334		       4c 00 f4 	      jmp	.KernelLoop1
+     47  f337
+     48  f400		       00 00 00 00*	      ALIGN	$100
+     49  f400
+     50  f400				   .KernelLoop1
+     51  f400
+     52  f400							; 7 cycles to prepare PF rainbow colors
+     53  f400		       b9 01 fa 	      lda	RamBowColors+1,y	; 75
+     54  f403		       85 08		      sta	COLUPF	; 02
+     55  f405
+     56  f405							; 7 cycles to prepare BK rainbow colors
+     57  f405		       b9 00 fa 	      lda	RamBowColors,y	; 06
+     58  f408		       85 09		      sta	COLUBK	; 09
+     59  f40a
+     60  f40a							; 14 cycles to prepare 1st food item's graphics
+     61  f40a		       b1 ba		      lda	(FoodGfxPtr1),y	; 14
+     62  f40c		       85 1c		      sta	GRP1	; 17
+     63  f40e		       a5 bc		      lda	FoodColor1	; 20
+     64  f410		       85 07		      sta	COLUP1	; 23
+     65  f412
+     66  f412							; 5 cycles to set tart color
+     67  f412		       a9 4a		      lda	#COL_CAT_TART	; 25
+     68  f414		       85 08		      sta	COLUPF	; 28
+     69  f416
+     70  f416							; 3 cycles to clear BK color to black
+     71  f416							; x is pre-loaded with 0, the color black
+     72  f416		       86 09		      stx	COLUBK	; 31
+     73  f418
+     74  f418							; 8 cycles to prepare cat face graphics
+     75  f418		       b1 9b		      lda	(CatGfxPtr),y	; 36
+     76  f41a		       85 1b		      sta	GRP0	; 39
+     77  f41c
+     78  f41c							; 8 cycles to prepare tart graphics
+     79  f41c		       b1 99		      lda	(TartGfxPtr),y	; 44
+     80  f41e		       85 0e		      sta	PF1	; 47
+     81  f420
+     82  f420							; 13 cycles to prepare 2nd food item's graphics
+     83  f420		       b1 bd		      lda	(FoodGfxPtr2),y	; 52
+     84  f422		       ba		      tsx		; 54
+     85  f423		       85 1c		      sta	GRP1	; 57
+     86  f425		       86 07		      stx	COLUP1	; 60
+     87  f427
+     88  f427							; 6 cycles to clear PF color to black
+     89  f427		       a2 00		      ldx	#COL_BACKGROUND	; 62
+     90  f429		       8e 08 00 	      stx.w	COLUPF	; 66
+     91  f42c
+     92  f42c							; 5 cycles to finish the loop mechanism
+     93  f42c		       88		      dey		; 68
+     94  f42d		       10 d1		      bpl	.KernelLoop1	; 71/70
+     95  f42f
+     96  f42f							; exactly 76 cycles total
+     97  f42f
+     98  f42f		       4c 61 f4 	      jmp	.Nanny
+     99  f432
+    100  f432
+    101  f432
+    102  f432
+    103  f432
+    104  f432				   .KernelLoop2
+    105  f432
+    106  f432							; 8 cycles to prepare cat face graphics
+    107  f432		       b1 9b		      lda	(CatGfxPtr),y	; 60
+    108  f434		       85 1b		      sta	GRP0	; 63
+    109  f436
+    110  f436							; 14 cycles to prepare 1st food item's graphics
+    111  f436		       b1 ba		      lda	(FoodGfxPtr1),y	; 68
+    112  f438		       85 1c		      sta	GRP1	; 71
+    113  f43a		       a5 bc		      lda	FoodColor1	; 74
+    114  f43c		       85 07		      sta	COLUP1	; 01
+    115  f43e
+    116  f43e							; 7 cycles to prepare PF rainbow colors
+    117  f43e		       b9 01 fa 	      lda	RamBowColors+1,y	; 05
+    118  f441		       85 08		      sta	COLUPF	; 08
+    119  f443
+    120  f443							; 7 cycles to prepare BK rainbow colors
+    121  f443		       b9 00 fa 	      lda	RamBowColors,y	; 12
+    122  f446		       85 09		      sta	COLUBK	; 15
+    123  f448
+    124  f448							; 8 cycles to prepare tart graphics
+    125  f448		       b1 99		      lda	(TartGfxPtr),y	; 20
+    126  f44a		       85 0e		      sta	PF1	; 23
+    127  f44c
+    128  f44c							; 5 cycles to set tart color
+    129  f44c		       a9 4a		      lda	#COL_CAT_TART	; 25
+    130  f44e		       85 08		      sta	COLUPF	; 28
+    131  f450
+    132  f450							; 3 cycles to clear BK color to black
+    133  f450							; x is pre-loaded with 0, the color black
+    134  f450		       86 09		      stx	COLUBK	; 31
+    135  f452
+    136  f452							; 13 cycles to prepare 2nd food item's graphics
+    137  f452		       b1 bd		      lda	(FoodGfxPtr2),y	; 36
+    138  f454		       ba		      tsx		; 38
+    139  f455		       85 1c		      sta	GRP1	; 41
+    140  f457		       86 07		      stx	COLUP1	; 44
+    141  f459
+    142  f459							; 6 cycles to clear PF color to black
+    143  f459		       a2 00		      ldx	#COL_BACKGROUND	; 46
+    144  f45b		       8e 08 00 	      stx.w	COLUPF	; 50
+    145  f45e
+    146  f45e							; 5 cycles to finish the loop mechanism
+    147  f45e		       88		      dey		; 52
+    148  f45f		       10 d1		      bpl	.KernelLoop2	; 55/54
+    149  f461
+    150  f461							; exactly 76 cycles total
+    151  f461
+    152  f461				   .Nanny
+    153  f461
+    154  f461		       85 02		      sta	WSYNC
+    155  f463
+    156  f463		       e6 b9		      inc	CurrentRow
+    157  f465
+    158  f465		       86 1c		      stx	GRP1
+    159  f467
+    160  f467
+    161  f467
+    162  f467
+    163  f467							; Then output the 5 lines to draw a "throb" line, but also draw the entire
+    164  f467							; cat with the rainbow. In order to align player 1 for the next row's
+    165  f467							; food items, it will be neccesary to have three versions of this kernel,
+    166  f467							; one for each of the three 60-color-clock spaced positions to reset.
+    167  f467							; HMOVE will be written to on the first four scanlines. With a maximum
+    168  f467							; movement of 15 color-clocks per scanline, this will allow a movement of
+    169  f467							; up to 60 color clocks. With three versions of the kernel, it should be
+    170  f467							; possible to put player 1 anywhere on the screen.
+    171  f467
+    172  f467		       a5 b4		      lda	ThrobColor+0
+    173  f469		       85 09		      sta	COLUBK
+    174  f46b		       a2 00		      ldx	#0
+    175  f46d		       86 1b		      stx	GRP0
+    176  f46f		       86 1c		      stx	GRP1
+    177  f471
+    178  f471		       a2 ff		      ldx	#$FF
+    179  f473		       9a		      txs
+    180  f474
+    181  f474		       85 02		      sta	WSYNC
+    182  f476
+    183  f476		       a5 b5		      lda	ThrobColor+1
+    184  f478		       85 09		      sta	COLUBK
+    185  f47a		       85 02		      sta	WSYNC
+    186  f47c
+    187  f47c		       a5 b6		      lda	ThrobColor+2
+    188  f47e		       85 09		      sta	COLUBK
+    189  f480		       85 02		      sta	WSYNC
+    190  f482
+    191  f482		       a5 b5		      lda	ThrobColor+1
+    192  f484		       85 09		      sta	COLUBK
+    193  f486		       85 02		      sta	WSYNC
+    194  f488
+    195  f488		       a5 b4		      lda	ThrobColor+0
+    196  f48a		       85 09		      sta	COLUBK
+    197  f48c		       85 02		      sta	WSYNC
+    198  f48e
+    199  f48e							; Then output 14 lines to draw the next row, exactly the same way as the
+    200  f48e							; previous one. It will be neccesary to have multiple versions of this, as well,
+    201  f48e							; since GRP1 needs to be updated at the correct time depending on the position
+    202  f48e							; of player 1.
+    203  f48e
+    204  f48e		       a9 00		      lda	#COL_BACKGROUND
+    205  f490		       85 09		      sta	COLUBK
+    206  f492
+    207  f492		       a0 0e		      ldy	#14
+    208  f494				   .Loop3
+    209  f494		       85 02		      sta	WSYNC
+    210  f496		       88		      dey
+    211  f497		       d0 fb		      bne	.Loop3
+    212  f499
+    213  f499							; Lastly, output only one line (not four) to draw the top of a "throb" line.
+    214  f499							; Use this time to prepare the next row's food item pointers (unless this is
+    215  f499							; the last row). If this is the last row, skip over LoRows.
+    216  f499
+    217  f499		       a5 b4		      lda	ThrobColor+0
+    218  f49b		       85 09		      sta	COLUBK
+    219  f49d		       85 02		      sta	WSYNC
+    220  f49f
+    221  f49f							; If the cat is at the very bottom of the screen, don't disable the
+    222  f49f							; missile/player graphics until after they are drawn, so they don't get
+    223  f49f							; clipped at the bottom of the screen. An easy way to do this would be to
+    224  f49f							; simply disable them after they would have been drawn, whether they are
+    225  f49f							; already disabled or not.
+    226  f49f
+    227  f49f
+    228  f49f
+------- FILE code/Gameplay Kernel/GameplayKernel.asm
+    181  f49f
+    182  f49f
+    183  f49f
+    184  f49f							; Draw all the rows below the cat's two rows.
+    185  f49f				   LoRows
+    186  f49f
+    187  f49f							; Output 4 lines, drawing the rest of the "throb" line, while preparing
+    188  f49f							; player 1 for the next row's food items.
+    189  f49f
+    190  f49f		       a5 b5		      lda	ThrobColor+1
+    191  f4a1		       85 09		      sta	COLUBK
+    192  f4a3		       85 02		      sta	WSYNC
+    193  f4a5
+    194  f4a5		       a5 b6		      lda	ThrobColor+2
+    195  f4a7		       85 09		      sta	COLUBK
+    196  f4a9		       85 02		      sta	WSYNC
+    197  f4ab
+    198  f4ab		       a5 b5		      lda	ThrobColor+1
+    199  f4ad		       85 09		      sta	COLUBK
+    200  f4af		       85 02		      sta	WSYNC
+    201  f4b1
+    202  f4b1		       a5 b4		      lda	ThrobColor+0
+    203  f4b3		       85 09		      sta	COLUBK
+    204  f4b5		       85 02		      sta	WSYNC
+    205  f4b7
+    206  f4b7							; Output 14 lines to draw a row, exactly the same as in HiRows.
+    207  f4b7							; It may be possible to code this as a subroutine to save ROM space.
+    208  f4b7
+    209  f4b7		       a9 00		      lda	#COL_BACKGROUND
+    210  f4b9		       85 09		      sta	COLUBK
+    211  f4bb
+    212  f4bb		       a4 0e		      ldy	14
+    213  f4bd				   .Loop4
+    214  f4bd		       85 02		      sta	WSYNC
+    215  f4bf		       88		      dey
+    216  f4c0		       d0 fb		      bne	.Loop4
+    217  f4c2
+    218  f4c2							; Lastly, output the a single line for the next "throb" line.
+    219  f4c2							; Use this time to prepare the next row's food item pointers (unless this is
+    220  f4c2							; the last row). If this is not the last row, loop to LoRows for the next row.
+    221  f4c2
+    222  f4c2		       a5 b4		      lda	ThrobColor+0
+    223  f4c4		       85 09		      sta	COLUBK
+    224  f4c6
+    225  f4c6		       c6 9e		      dec	PostCatRows
+    226  f4c8		       85 02		      sta	WSYNC
+    227  f4ca		       d0 d3		      bne	LoRows
+    228  f4cc
 ------- FILE code/Kernel.asm
 ------- FILE code/ProgressHealthKernel.asm LEVEL 3 PASS 2
-      0  f401					      include	code/ProgressHealthKernel.asm
-      1  f401		       a5 b5		      lda	ThrobColor+1
-      2  f403		       85 09		      sta	COLUBK
-      3  f405		       a9 06		      lda	#COL_CAT_FACE
-      4  f407		       85 08		      sta	COLUPF
-      5  f409		       a9 00		      lda	#0
-      6  f40b		       85 0a		      sta	CTRLPF
-      7  f40d
-      0  f40d					      SLEEP	35	; 53
-      1  f40d				   .CYCLES    SET	35
-      2  f40d
-      3  f40d				  -	      IF	.CYCLES < 2
-      4  f40d				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f40d				  -	      ERR
-      6  f40d					      ENDIF
-      7  f40d
-      8  f40d					      IF	.CYCLES & 1
-      9  f40d					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f40d		       04 00		      nop	0
-     11  f40f				  -	      ELSE
-     12  f40f				  -	      bit	VSYNC
-     13  f40f					      ENDIF
-     14  f40f				   .CYCLES    SET	.CYCLES - 3
-     15  f40f					      ENDIF
-     16  f40f
-     17  f40f					      REPEAT	.CYCLES / 2
-     18  f40f		       ea		      nop
-     17  f40f					      REPEND
-     18  f410		       ea		      nop
-     17  f410					      REPEND
-     18  f411		       ea		      nop
-     17  f411					      REPEND
-     18  f412		       ea		      nop
-     17  f412					      REPEND
-     18  f413		       ea		      nop
-     17  f413					      REPEND
-     18  f414		       ea		      nop
-     17  f414					      REPEND
-     18  f415		       ea		      nop
-     17  f415					      REPEND
-     18  f416		       ea		      nop
-     17  f416					      REPEND
-     18  f417		       ea		      nop
-     17  f417					      REPEND
-     18  f418		       ea		      nop
-     17  f418					      REPEND
-     18  f419		       ea		      nop
-     17  f419					      REPEND
-     18  f41a		       ea		      nop
-     17  f41a					      REPEND
-     18  f41b		       ea		      nop
-     17  f41b					      REPEND
-     18  f41c		       ea		      nop
-     17  f41c					      REPEND
-     18  f41d		       ea		      nop
-     17  f41d					      REPEND
-     18  f41e		       ea		      nop
-     19  f41f					      REPEND
-      9  f41f
-     10  f41f		       a9 20		      lda	#$20	; 55
-     11  f421		       85 20		      sta	HMP0	; 58
-     12  f423		       a9 b0		      lda	#$B0	; 60
-     13  f425		       85 21		      sta	HMP1	; 63
-     14  f427
-     15  f427		       85 10		      sta	RESP0	; 66
-     16  f429		       85 11		      sta	RESP1	; 69
-     17  f42b
-     18  f42b		       a9 00		      lda	#$00	; 71
-     19  f42d
-     20  f42d		       85 2a		      sta	HMOVE	; 74
-     21  f42f
-     22  f42f		       85 06		      sta	COLUP0
-     23  f431		       85 07		      sta	COLUP1
-     24  f433
-     25  f433		       a9 0e		      lda	#COL_SCOREBOARD
-     26  f435		       85 09		      sta	COLUBK
-     27  f437
-     28  f437		       a9 05		      lda	#DOUBLE_SIZE	; 08
-     29  f439		       85 04		      sta	NUSIZ0
-     30  f43b		       85 05		      sta	NUSIZ1
-     31  f43d
-     32  f43d		       a9 08		      lda	#REFP_TRUE
-     33  f43f		       85 0c		      sta	REFP1
-     34  f441
-     35  f441					      SUBROUTINE
-     36  f441
-     37  f441		       a0 04		      ldy	#4
-     38  f443		       85 02		      sta	WSYNC
-     39  f445
-     40  f445							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     41  f445				   .HealthTop		; draw top of health
-     42  f445
-     43  f445		       a2 03		      ldx	#3
-     44  f447
-     45  f447				   .Loop
-     46  f447		       85 02		      sta	WSYNC
-     47  f449
-     48  f449		       b9 b8 f6 	      lda	HealthTopGfx,y	; 04
-     49  f44c		       85 1b		      sta	GRP0	; 07
-     50  f44e		       85 1c		      sta	GRP1	; 10
-     51  f450		       a9 00		      lda	#$00	; 12
-     52  f452		       85 0f		      sta	PF2	; 15
-      0  f454					      SLEEP	26	; 37
-      1  f454				   .CYCLES    SET	26
-      2  f454
-      3  f454				  -	      IF	.CYCLES < 2
-      4  f454				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f454				  -	      ERR
-      6  f454					      ENDIF
-      7  f454
-      8  f454				  -	      IF	.CYCLES & 1
-      9  f454				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f454				  -	      nop	0
-     11  f454				  -	      ELSE
-     12  f454				  -	      bit	VSYNC
-     13  f454				  -	      ENDIF
-     14  f454				  -.CYCLES    SET	.CYCLES - 3
-     15  f454					      ENDIF
-     16  f454
-     17  f454					      REPEAT	.CYCLES / 2
-     18  f454		       ea		      nop
-     17  f454					      REPEND
-     18  f455		       ea		      nop
-     17  f455					      REPEND
-     18  f456		       ea		      nop
-     17  f456					      REPEND
-     18  f457		       ea		      nop
-     17  f457					      REPEND
-     18  f458		       ea		      nop
-     17  f458					      REPEND
-     18  f459		       ea		      nop
-     17  f459					      REPEND
-     18  f45a		       ea		      nop
-     17  f45a					      REPEND
-     18  f45b		       ea		      nop
-     17  f45b					      REPEND
-     18  f45c		       ea		      nop
-     17  f45c					      REPEND
-     18  f45d		       ea		      nop
-     17  f45d					      REPEND
-     18  f45e		       ea		      nop
-     17  f45e					      REPEND
-     18  f45f		       ea		      nop
-     17  f45f					      REPEND
-     18  f460		       ea		      nop
-     19  f461					      REPEND
-     54  f461		       b9 08 f7 	      lda	HealthBgGfx+8,y	; 41
-     55  f464		       85 0f		      sta	PF2	; 44
-     56  f466
-     57  f466		       ca		      dex
-     58  f467		       d0 de		      bne	.Loop
-     59  f469
-     60  f469		       88		      dey
-     61  f46a		       10 d9		      bpl	.HealthTop
-     62  f46c
-     63  f46c
-     64  f46c					      SUBROUTINE
-     65  f46c
-     66  f46c
-     67  f46c		       a0 03		      ldy	#3
-     68  f46e		       a2 03		      ldx	#3
-     69  f470		       86 b8		      stx	Temp
-     70  f472
-     71  f472		       4c 00 f5 	      jmp	.HealthMiddle
-     72  f475
-     73  f500		       00 00 00 00*	      ALIGN	$100	; align to page
-     74  f500
-     75  f500							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     76  f500				   .HealthMiddle		; draw middle of health, with progress bar
-     77  f500
-     78  f500		       85 02		      sta	WSYNC
-     79  f502				   .Loop
-     80  f502		       a5 89		      lda	ProgressBar+0	; 03 - get the 1st playfield register value
-     81  f504		       85 0d		      sta	PF0	; 06 - for the progress bar and set it
-     82  f506
-     83  f506		       a5 8a		      lda	ProgressBar+1	; 09 - get the 2nd playfield register value
-     84  f508		       85 0e		      sta	PF1	; 12 - for the progress bar and set it
-     85  f50a
-     86  f50a		       a5 8b		      lda	ProgressBar+2	; 15 - get the 3rd playfield register value
-     87  f50c		       85 0f		      sta	PF2	; 18 - for the progress bar and set it
-     88  f50e
-     89  f50e		       a5 8e		      lda	PgBarColor	; 21 - get the progress bar color
-     90  f510		       85 09		      sta	COLUBK	; 24 - and set it at cycle 24
-     91  f512
-     92  f512		       a5 8c		      lda	ProgressBar+3	; 27 - get the 4th playfield register value
-     93  f514		       85 0d		      sta	PF0	; 30 - for the progress bar and set it
-     94  f516
-     95  f516		       b1 90		      lda	(HthGfxLPtr),y	; 35 - get/set the graphics
-     96  f518		       85 1b		      sta	GRP0	; 38 - for the left half of health
-     97  f51a		       b1 92		      lda	(HthGfxRPtr),y	; 43 - get/set the graphics
-     98  f51c		       85 1c		      sta	GRP1	; 46 - for the right half of health
-     99  f51e
-    100  f51e		       a5 8d		      lda	ProgressBar+4	; 49 - get the 5th playfield register value
-    101  f520		       85 0e		      sta	PF1	; 52 - for the progress bar and set it
-    102  f522		       a9 7f		      lda	#%01111111	; 54 - get the 6th playfield register value
-    103  f524		       8d 0f 00 	      sta.w	PF2	; 58 - for the health background and set it
-    104  f527
-    105  f527		       a9 0e		      lda	#COL_SCOREBOARD	; 60 - get the color for the background
-    106  f529		       8d 09 00 	      sta.w	COLUBK	; 64 - and set it at cycle 64
-    107  f52c
-    108  f52c		       ca		      dex		; 66
-    109  f52d		       d0 d1		      bne	.HealthMiddle	; 68
-    110  f52f
-    111  f52f		       a6 b8		      ldx	Temp	; 71
-    112  f531
-    113  f531		       88		      dey		; 73
-    114  f532		       10 ce		      bpl	.Loop	; 76 / 00
-    115  f534
-    116  f534
-    117  f534
-    118  f534
-    119  f534
-    120  f534
-    121  f534
-    122  f534
-    123  f534
-    124  f534					      SUBROUTINE
-    125  f534
-    126  f534
-    127  f534		       a9 00		      lda	#0
-    128  f536		       85 0d		      sta	PF0
-    129  f538		       85 0e		      sta	PF1
-    130  f53a
-    131  f53a		       a0 07		      ldy	#7
-    132  f53c
-    133  f53c							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    134  f53c				   .HealthBottom		; draw bottom of health
-    135  f53c
-    136  f53c		       a2 03		      ldx	#3
-    137  f53e				   .Loop
-    138  f53e		       b1 90		      lda	(HthGfxLPtr),y
-    139  f540		       85 1b		      sta	GRP0
-    140  f542		       b1 92		      lda	(HthGfxRPtr),y
-    141  f544		       85 1c		      sta	GRP1
-    142  f546		       a9 00		      lda	#$00
-    143  f548		       85 0f		      sta	PF2
-    144  f54a
-      0  f54a					      SLEEP	14
-      1  f54a				   .CYCLES    SET	14
-      2  f54a
-      3  f54a				  -	      IF	.CYCLES < 2
-      4  f54a				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  f54a				  -	      ERR
-      6  f54a					      ENDIF
-      7  f54a
-      8  f54a				  -	      IF	.CYCLES & 1
-      9  f54a				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  f54a				  -	      nop	0
-     11  f54a				  -	      ELSE
-     12  f54a				  -	      bit	VSYNC
-     13  f54a				  -	      ENDIF
-     14  f54a				  -.CYCLES    SET	.CYCLES - 3
-     15  f54a					      ENDIF
-     16  f54a
-     17  f54a					      REPEAT	.CYCLES / 2
-     18  f54a		       ea		      nop
-     17  f54a					      REPEND
-     18  f54b		       ea		      nop
-     17  f54b					      REPEND
-     18  f54c		       ea		      nop
-     17  f54c					      REPEND
-     18  f54d		       ea		      nop
-     17  f54d					      REPEND
-     18  f54e		       ea		      nop
-     17  f54e					      REPEND
-     18  f54f		       ea		      nop
-     17  f54f					      REPEND
-     18  f550		       ea		      nop
-     19  f551					      REPEND
-    146  f551
-    147  f551		       b9 fc f6 	      lda	HealthBgGfx-4,y
-    148  f554		       85 0f		      sta	PF2
-    149  f556		       85 02		      sta	WSYNC
-    150  f558
-    151  f558		       ca		      dex
-    152  f559		       d0 e3		      bne	.Loop
-    153  f55b
-    154  f55b		       88		      dey
-    155  f55c		       c0 03		      cpy	#3
-    156  f55e		       d0 dc		      bne	.HealthBottom
-    157  f560
-    158  f560							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    159  f560
-    160  f560		       a9 00		      lda	#$00
-    161  f562		       85 1b		      sta	GRP0
-    162  f564		       85 1c		      sta	GRP1
-    163  f566		       85 0b		      sta	REFP0
-    164  f568		       85 0c		      sta	REFP1
-    165  f56a		       85 0f		      sta	PF2
-    166  f56c
-    167  f56c		       85 02		      sta	WSYNC
-    168  f56e
+      0  f4cc					      include	code/ProgressHealthKernel.asm
+      1  f4cc		       a5 b5		      lda	ThrobColor+1
+      2  f4ce		       85 09		      sta	COLUBK
+      3  f4d0		       a9 06		      lda	#COL_CAT_FACE
+      4  f4d2		       85 08		      sta	COLUPF
+      5  f4d4		       a9 00		      lda	#0
+      6  f4d6		       85 0a		      sta	CTRLPF
+      7  f4d8
+      0  f4d8					      SLEEP	35	; 53
+      1  f4d8				   .CYCLES    SET	35
+      2  f4d8
+      3  f4d8				  -	      IF	.CYCLES < 2
+      4  f4d8				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f4d8				  -	      ERR
+      6  f4d8					      ENDIF
+      7  f4d8
+      8  f4d8					      IF	.CYCLES & 1
+      9  f4d8					      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f4d8		       04 00		      nop	0
+     11  f4da				  -	      ELSE
+     12  f4da				  -	      bit	VSYNC
+     13  f4da					      ENDIF
+     14  f4da				   .CYCLES    SET	.CYCLES - 3
+     15  f4da					      ENDIF
+     16  f4da
+     17  f4da					      REPEAT	.CYCLES / 2
+     18  f4da		       ea		      nop
+     17  f4da					      REPEND
+     18  f4db		       ea		      nop
+     17  f4db					      REPEND
+     18  f4dc		       ea		      nop
+     17  f4dc					      REPEND
+     18  f4dd		       ea		      nop
+     17  f4dd					      REPEND
+     18  f4de		       ea		      nop
+     17  f4de					      REPEND
+     18  f4df		       ea		      nop
+     17  f4df					      REPEND
+     18  f4e0		       ea		      nop
+     17  f4e0					      REPEND
+     18  f4e1		       ea		      nop
+     17  f4e1					      REPEND
+     18  f4e2		       ea		      nop
+     17  f4e2					      REPEND
+     18  f4e3		       ea		      nop
+     17  f4e3					      REPEND
+     18  f4e4		       ea		      nop
+     17  f4e4					      REPEND
+     18  f4e5		       ea		      nop
+     17  f4e5					      REPEND
+     18  f4e6		       ea		      nop
+     17  f4e6					      REPEND
+     18  f4e7		       ea		      nop
+     17  f4e7					      REPEND
+     18  f4e8		       ea		      nop
+     17  f4e8					      REPEND
+     18  f4e9		       ea		      nop
+     19  f4ea					      REPEND
+      9  f4ea
+     10  f4ea		       a9 20		      lda	#$20	; 55
+     11  f4ec		       85 20		      sta	HMP0	; 58
+     12  f4ee		       a9 b0		      lda	#$B0	; 60
+     13  f4f0		       85 21		      sta	HMP1	; 63
+     14  f4f2
+     15  f4f2		       85 10		      sta	RESP0	; 66
+     16  f4f4		       85 11		      sta	RESP1	; 69
+     17  f4f6
+     18  f4f6		       a9 00		      lda	#$00	; 71
+     19  f4f8
+     20  f4f8		       85 2a		      sta	HMOVE	; 74
+     21  f4fa
+     22  f4fa		       85 06		      sta	COLUP0
+     23  f4fc		       85 07		      sta	COLUP1
+     24  f4fe
+     25  f4fe		       a9 0e		      lda	#COL_SCOREBOARD
+     26  f500		       85 09		      sta	COLUBK
+     27  f502
+     28  f502		       a9 05		      lda	#DOUBLE_SIZE	; 08
+     29  f504		       85 04		      sta	NUSIZ0
+     30  f506		       85 05		      sta	NUSIZ1
+     31  f508
+     32  f508		       a9 08		      lda	#REFP_TRUE
+     33  f50a		       85 0c		      sta	REFP1
+     34  f50c
+     35  f50c					      SUBROUTINE
+     36  f50c
+     37  f50c		       a0 04		      ldy	#4
+     38  f50e		       85 02		      sta	WSYNC
+     39  f510
+     40  f510							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     41  f510				   .HealthTop		; draw top of health
+     42  f510
+     43  f510		       a2 03		      ldx	#3
+     44  f512
+     45  f512				   .Loop
+     46  f512		       85 02		      sta	WSYNC
+     47  f514
+     48  f514		       b9 b8 f7 	      lda	HealthTopGfx,y	; 04
+     49  f517		       85 1b		      sta	GRP0	; 07
+     50  f519		       85 1c		      sta	GRP1	; 10
+     51  f51b		       a9 00		      lda	#$00	; 12
+     52  f51d		       85 0f		      sta	PF2	; 15
+      0  f51f					      SLEEP	26	; 37
+      1  f51f				   .CYCLES    SET	26
+      2  f51f
+      3  f51f				  -	      IF	.CYCLES < 2
+      4  f51f				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f51f				  -	      ERR
+      6  f51f					      ENDIF
+      7  f51f
+      8  f51f				  -	      IF	.CYCLES & 1
+      9  f51f				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f51f				  -	      nop	0
+     11  f51f				  -	      ELSE
+     12  f51f				  -	      bit	VSYNC
+     13  f51f				  -	      ENDIF
+     14  f51f				  -.CYCLES    SET	.CYCLES - 3
+     15  f51f					      ENDIF
+     16  f51f
+     17  f51f					      REPEAT	.CYCLES / 2
+     18  f51f		       ea		      nop
+     17  f51f					      REPEND
+     18  f520		       ea		      nop
+     17  f520					      REPEND
+     18  f521		       ea		      nop
+     17  f521					      REPEND
+     18  f522		       ea		      nop
+     17  f522					      REPEND
+     18  f523		       ea		      nop
+     17  f523					      REPEND
+     18  f524		       ea		      nop
+     17  f524					      REPEND
+     18  f525		       ea		      nop
+     17  f525					      REPEND
+     18  f526		       ea		      nop
+     17  f526					      REPEND
+     18  f527		       ea		      nop
+     17  f527					      REPEND
+     18  f528		       ea		      nop
+     17  f528					      REPEND
+     18  f529		       ea		      nop
+     17  f529					      REPEND
+     18  f52a		       ea		      nop
+     17  f52a					      REPEND
+     18  f52b		       ea		      nop
+     19  f52c					      REPEND
+     54  f52c		       b9 08 f8 	      lda	HealthBgGfx+8,y	; 41
+     55  f52f		       85 0f		      sta	PF2	; 44
+     56  f531
+     57  f531		       ca		      dex
+     58  f532		       d0 de		      bne	.Loop
+     59  f534
+     60  f534		       88		      dey
+     61  f535		       10 d9		      bpl	.HealthTop
+     62  f537
+     63  f537
+     64  f537					      SUBROUTINE
+     65  f537
+     66  f537
+     67  f537		       a0 03		      ldy	#3
+     68  f539		       a2 03		      ldx	#3
+     69  f53b		       86 b8		      stx	Temp
+     70  f53d
+     71  f53d		       4c 00 f6 	      jmp	.HealthMiddle
+     72  f540
+     73  f600		       00 00 00 00*	      ALIGN	$100	; align to page
+     74  f600
+     75  f600							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     76  f600				   .HealthMiddle		; draw middle of health, with progress bar
+     77  f600
+     78  f600		       85 02		      sta	WSYNC
+     79  f602				   .Loop
+     80  f602		       a5 89		      lda	ProgressBar+0	; 03 - get the 1st playfield register value
+     81  f604		       85 0d		      sta	PF0	; 06 - for the progress bar and set it
+     82  f606
+     83  f606		       a5 8a		      lda	ProgressBar+1	; 09 - get the 2nd playfield register value
+     84  f608		       85 0e		      sta	PF1	; 12 - for the progress bar and set it
+     85  f60a
+     86  f60a		       a5 8b		      lda	ProgressBar+2	; 15 - get the 3rd playfield register value
+     87  f60c		       85 0f		      sta	PF2	; 18 - for the progress bar and set it
+     88  f60e
+     89  f60e		       a5 8e		      lda	PgBarColor	; 21 - get the progress bar color
+     90  f610		       85 09		      sta	COLUBK	; 24 - and set it at cycle 24
+     91  f612
+     92  f612		       a5 8c		      lda	ProgressBar+3	; 27 - get the 4th playfield register value
+     93  f614		       85 0d		      sta	PF0	; 30 - for the progress bar and set it
+     94  f616
+     95  f616		       b1 90		      lda	(HthGfxLPtr),y	; 35 - get/set the graphics
+     96  f618		       85 1b		      sta	GRP0	; 38 - for the left half of health
+     97  f61a		       b1 92		      lda	(HthGfxRPtr),y	; 43 - get/set the graphics
+     98  f61c		       85 1c		      sta	GRP1	; 46 - for the right half of health
+     99  f61e
+    100  f61e		       a5 8d		      lda	ProgressBar+4	; 49 - get the 5th playfield register value
+    101  f620		       85 0e		      sta	PF1	; 52 - for the progress bar and set it
+    102  f622		       a9 7f		      lda	#%01111111	; 54 - get the 6th playfield register value
+    103  f624		       8d 0f 00 	      sta.w	PF2	; 58 - for the health background and set it
+    104  f627
+    105  f627		       a9 0e		      lda	#COL_SCOREBOARD	; 60 - get the color for the background
+    106  f629		       8d 09 00 	      sta.w	COLUBK	; 64 - and set it at cycle 64
+    107  f62c
+    108  f62c		       ca		      dex		; 66
+    109  f62d		       d0 d1		      bne	.HealthMiddle	; 68
+    110  f62f
+    111  f62f		       a6 b8		      ldx	Temp	; 71
+    112  f631
+    113  f631		       88		      dey		; 73
+    114  f632		       10 ce		      bpl	.Loop	; 76 / 00
+    115  f634
+    116  f634
+    117  f634
+    118  f634
+    119  f634
+    120  f634
+    121  f634
+    122  f634
+    123  f634
+    124  f634					      SUBROUTINE
+    125  f634
+    126  f634
+    127  f634		       a9 00		      lda	#0
+    128  f636		       85 0d		      sta	PF0
+    129  f638		       85 0e		      sta	PF1
+    130  f63a
+    131  f63a		       a0 07		      ldy	#7
+    132  f63c
+    133  f63c							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    134  f63c				   .HealthBottom		; draw bottom of health
+    135  f63c
+    136  f63c		       a2 03		      ldx	#3
+    137  f63e				   .Loop
+    138  f63e		       b1 90		      lda	(HthGfxLPtr),y
+    139  f640		       85 1b		      sta	GRP0
+    140  f642		       b1 92		      lda	(HthGfxRPtr),y
+    141  f644		       85 1c		      sta	GRP1
+    142  f646		       a9 00		      lda	#$00
+    143  f648		       85 0f		      sta	PF2
+    144  f64a
+      0  f64a					      SLEEP	14
+      1  f64a				   .CYCLES    SET	14
+      2  f64a
+      3  f64a				  -	      IF	.CYCLES < 2
+      4  f64a				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  f64a				  -	      ERR
+      6  f64a					      ENDIF
+      7  f64a
+      8  f64a				  -	      IF	.CYCLES & 1
+      9  f64a				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  f64a				  -	      nop	0
+     11  f64a				  -	      ELSE
+     12  f64a				  -	      bit	VSYNC
+     13  f64a				  -	      ENDIF
+     14  f64a				  -.CYCLES    SET	.CYCLES - 3
+     15  f64a					      ENDIF
+     16  f64a
+     17  f64a					      REPEAT	.CYCLES / 2
+     18  f64a		       ea		      nop
+     17  f64a					      REPEND
+     18  f64b		       ea		      nop
+     17  f64b					      REPEND
+     18  f64c		       ea		      nop
+     17  f64c					      REPEND
+     18  f64d		       ea		      nop
+     17  f64d					      REPEND
+     18  f64e		       ea		      nop
+     17  f64e					      REPEND
+     18  f64f		       ea		      nop
+     17  f64f					      REPEND
+     18  f650		       ea		      nop
+     19  f651					      REPEND
+    146  f651
+    147  f651		       b9 fc f7 	      lda	HealthBgGfx-4,y
+    148  f654		       85 0f		      sta	PF2
+    149  f656		       85 02		      sta	WSYNC
+    150  f658
+    151  f658		       ca		      dex
+    152  f659		       d0 e3		      bne	.Loop
+    153  f65b
+    154  f65b		       88		      dey
+    155  f65c		       c0 03		      cpy	#3
+    156  f65e		       d0 dc		      bne	.HealthBottom
+    157  f660
+    158  f660							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    159  f660
+    160  f660		       a9 00		      lda	#$00
+    161  f662		       85 1b		      sta	GRP0
+    162  f664		       85 1c		      sta	GRP1
+    163  f666		       85 0b		      sta	REFP0
+    164  f668		       85 0c		      sta	REFP1
+    165  f66a		       85 0f		      sta	PF2
+    166  f66c
+    167  f66c		       85 02		      sta	WSYNC
+    168  f66e
 ------- FILE code/Kernel.asm
-     13  f56e
-     14  f56e		       a9 02		      lda	#2
-     15  f570		       85 01		      sta	VBLANK	; disable display
-     16  f572
-     17  f572		       4c 0b f0 	      jmp	Overscan
+     13  f66e
+     14  f66e		       a9 02		      lda	#2
+     15  f670		       85 01		      sta	VBLANK	; disable display
+     16  f672
+     17  f672		       4c 0b f0 	      jmp	Overscan
 ------- FILE main.asm
-     69  f575
-     70  f575				   Z_EndOfCode		; label to show how much ROM is used for the code
-     71  f575
-     72  f575
-     73  f575							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     74  f575							; Data Tables
-     75  f575							;
-     76  f575							; Include data tables
-     77  f575							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     78  f575
-     79  f575							; Include graphics data tables
+     69  f675
+     70  f675				   Z_EndOfCode		; label to show how much ROM is used for the code
+     71  f675
+     72  f675
+     73  f675							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     74  f675							; Data Tables
+     75  f675							;
+     76  f675							; Include data tables
+     77  f675							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     78  f675
+     79  f675							; Include graphics data tables
 ------- FILE data/Graphics.asm LEVEL 2 PASS 2
-      0  f575					      include	data/Graphics.asm
-      1  f575							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  f575							; Graphics Tables
-      3  f575							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  f575
-      5  f600		       00 00 00 00*	      ALIGN	$100	; align to page
-      6  f600
-      7  f600							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      8  f600							; Digit graphics for the scoreboard
-      9  f600							;
-     10  f600							; This data is right-side up, NOT upside-down. Since the program reads the data
-     11  f600							; in bottom-to-top order and then pushes it to the stack, it gets flipped back
-     12  f600							; to normal when it is pulled from the stack.
-     13  f600							;
-     14  f600							; Table takes up $50 (80) bytes of ROM
-     15  f600							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     16  f600
-     17  f600				   ScoreGfx
-     18  f600
-     19  f600		       1c		      .byte.b	%00011100	; digit 0
-     20  f601		       26		      .byte.b	%00100110
-     21  f602		       63		      .byte.b	%01100011
-     22  f603		       63		      .byte.b	%01100011
-     23  f604		       63		      .byte.b	%01100011
-     24  f605		       32		      .byte.b	%00110010
-     25  f606		       1c		      .byte.b	%00011100
-     26  f607		       00		      .byte.b	%00000000
-     27  f608
-     28  f608							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     29  f608
-     30  f608		       18		      .byte.b	%00011000	; digit 1
-     31  f609		       38		      .byte.b	%00111000
-     32  f60a		       18		      .byte.b	%00011000
-     33  f60b		       18		      .byte.b	%00011000
-     34  f60c		       18		      .byte.b	%00011000
-     35  f60d		       18		      .byte.b	%00011000
-     36  f60e		       7e		      .byte.b	%01111110
-     37  f60f		       00		      .byte.b	%00000000
-     38  f610
-     39  f610							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     40  f610
-     41  f610		       3e		      .byte.b	%00111110	; digit 2
-     42  f611		       63		      .byte.b	%01100011
-     43  f612		       07		      .byte.b	%00000111
-     44  f613		       1e		      .byte.b	%00011110
-     45  f614		       3c		      .byte.b	%00111100
-     46  f615		       70		      .byte.b	%01110000
-     47  f616		       7f		      .byte.b	%01111111
-     48  f617		       00		      .byte.b	%00000000
-     49  f618
-     50  f618							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     51  f618
-     52  f618		       7f		      .byte.b	%01111111	; digit 3
-     53  f619		       06		      .byte.b	%00000110
-     54  f61a		       0c		      .byte.b	%00001100
-     55  f61b		       1e		      .byte.b	%00011110
-     56  f61c		       03		      .byte.b	%00000011
-     57  f61d		       63		      .byte.b	%01100011
-     58  f61e		       3e		      .byte.b	%00111110
-     59  f61f		       00		      .byte.b	%00000000
-     60  f620
-     61  f620							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     62  f620
-     63  f620		       0e		      .byte.b	%00001110	; digit 4
-     64  f621		       1e		      .byte.b	%00011110
-     65  f622		       36		      .byte.b	%00110110
-     66  f623		       66		      .byte.b	%01100110
-     67  f624		       7f		      .byte.b	%01111111
-     68  f625		       06		      .byte.b	%00000110
-     69  f626		       06		      .byte.b	%00000110
-     70  f627		       00		      .byte.b	%00000000
-     71  f628
-     72  f628							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     73  f628
-     74  f628		       7e		      .byte.b	%01111110	; digit 5
-     75  f629		       60		      .byte.b	%01100000
-     76  f62a		       7e		      .byte.b	%01111110
-     77  f62b		       03		      .byte.b	%00000011
-     78  f62c		       03		      .byte.b	%00000011
-     79  f62d		       63		      .byte.b	%01100011
-     80  f62e		       3e		      .byte.b	%00111110
-     81  f62f		       00		      .byte.b	%00000000
-     82  f630
-     83  f630							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     84  f630
-     85  f630		       1e		      .byte.b	%00011110	; digit 6
-     86  f631		       30		      .byte.b	%00110000
-     87  f632		       60		      .byte.b	%01100000
-     88  f633		       7e		      .byte.b	%01111110
-     89  f634		       63		      .byte.b	%01100011
-     90  f635		       63		      .byte.b	%01100011
-     91  f636		       3e		      .byte.b	%00111110
-     92  f637		       00		      .byte.b	%00000000
-     93  f638
-     94  f638							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     95  f638
-     96  f638		       7f		      .byte.b	%01111111	; digit 7
-     97  f639		       03		      .byte.b	%00000011
-     98  f63a		       06		      .byte.b	%00000110
-     99  f63b		       0c		      .byte.b	%00001100
-    100  f63c		       18		      .byte.b	%00011000
-    101  f63d		       18		      .byte.b	%00011000
-    102  f63e		       18		      .byte.b	%00011000
-    103  f63f		       00		      .byte.b	%00000000
-    104  f640
-    105  f640							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    106  f640
-    107  f640		       3c		      .byte.b	%00111100	; digit 8
-    108  f641		       62		      .byte.b	%01100010
-    109  f642		       72		      .byte.b	%01110010
-    110  f643		       3c		      .byte.b	%00111100
-    111  f644		       43		      .byte.b	%01000011
-    112  f645		       43		      .byte.b	%01000011
-    113  f646		       3e		      .byte.b	%00111110
-    114  f647		       00		      .byte.b	%00000000
-    115  f648
-    116  f648							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    117  f648
-    118  f648		       3e		      .byte.b	%00111110	; digit 9
-    119  f649		       63		      .byte.b	%01100011
-    120  f64a		       63		      .byte.b	%01100011
-    121  f64b		       3f		      .byte.b	%00111111
-    122  f64c		       03		      .byte.b	%00000011
-    123  f64d		       06		      .byte.b	%00000110
-    124  f64e		       3c		      .byte.b	%00111100
-    125  f64f		       00		      .byte.b	%00000000
-    126  f650
-    127  f650
-    128  f650
-    129  f650							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    130  f650							; NUSIZx and ENAMx data for level counter graphics
-    131  f650							;
-    132  f650							; This table enables or disables each missile and adjusts the left missile's
-    133  f650							; size in the scoreboard kernel line-by-line to draw the level counter's
-    134  f650							; left digit. (The right digit is drawn with the ball.)
-    135  f650							; Bit-1 is used to enable or disable the left missile,
-    136  f650							; and bit-0 is used to enable or disable the right missile.
-    137  f650							; The leftmost 6 bits are shifted right twice to get a value for NUSIZx.
-    138  f650							; Therefore, bits 6-7 are used to control the size of the left missile,
-    139  f650							; bit-5 is not used, and bits 4-2 are always "011" to keep the player copies
-    140  f650							; correct for the score display.
-    141  f650							;
-    142  f650							; This data is right-side up, NOT upside-down. Since the program reads the data
-    143  f650							; in bottom-to-top order and then pushes it to the stack, it gets flipped back
-    144  f650							; to normal when it is pulled from the stack.
-    145  f650							;
-    146  f650							; Table takes up $50 (80) bytes of ROM
-    147  f650							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    148  f650
-    149  f650				   LevelGfx
-    150  f650
-    151  f650							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    152  f650							; ^^^^^^^^^
-    153  f650		       8f		      .byte.b	%10001111	; digit 0
-    154  f651		       4f		      .byte.b	%01001111
-    155  f652		       4f		      .byte.b	%01001111
-    156  f653		       4f		      .byte.b	%01001111
-    157  f654		       4f		      .byte.b	%01001111
-    158  f655		       4f		      .byte.b	%01001111
-    159  f656		       8f		      .byte.b	%10001111
-    160  f657		       00		      .byte.b	%00000000
-    161  f658
-    162  f658							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    163  f658
-    164  f658							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    165  f658							; ^^^^^^^^^
-    166  f658		       8d		      .byte.b	%10001101	; digit 1
-    167  f659		       4d		      .byte.b	%01001101
-    168  f65a		       4d		      .byte.b	%01001101
-    169  f65b		       8d		      .byte.b	%10001101
-    170  f65c		       4d		      .byte.b	%01001101
-    171  f65d		       4d		      .byte.b	%01001101
-    172  f65e		       8d		      .byte.b	%10001101
-    173  f65f		       00		      .byte.b	%00000000
-    174  f660
-    175  f660							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    176  f660
-    177  f660							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    178  f660							; ^^^^^^^^^
-    179  f660		       8f		      .byte.b	%10001111	; digit 2
-    180  f661		       4d		      .byte.b	%01001101
-    181  f662		       4d		      .byte.b	%01001101
-    182  f663		       8f		      .byte.b	%10001111
-    183  f664		       4e		      .byte.b	%01001110
-    184  f665		       4e		      .byte.b	%01001110
-    185  f666		       8f		      .byte.b	%10001111
-    186  f667		       00		      .byte.b	%00000000
-    187  f668
-    188  f668							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    189  f668
-    190  f668							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    191  f668							; ^^^^^^^^^
-    192  f668		       8f		      .byte.b	%10001111	; digit 3
-    193  f669		       4d		      .byte.b	%01001101
-    194  f66a		       4d		      .byte.b	%01001101
-    195  f66b		       8f		      .byte.b	%10001111
-    196  f66c		       4d		      .byte.b	%01001101
-    197  f66d		       4d		      .byte.b	%01001101
-    198  f66e		       8f		      .byte.b	%10001111
-    199  f66f		       00		      .byte.b	%00000000
-    200  f670
-    201  f670							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    202  f670
-    203  f670							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    204  f670							; ^^^^^^^^^
-    205  f670		       4f		      .byte.b	%01001111	; digit 4
-    206  f671		       4f		      .byte.b	%01001111
-    207  f672		       4f		      .byte.b	%01001111
-    208  f673		       8f		      .byte.b	%10001111
-    209  f674		       4d		      .byte.b	%01001101
-    210  f675		       4d		      .byte.b	%01001101
-    211  f676		       4d		      .byte.b	%01001101
-    212  f677		       00		      .byte.b	%00000000
-    213  f678
-    214  f678							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    215  f678
-    216  f678							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    217  f678							; ^^^^^^^^^
-    218  f678		       8f		      .byte.b	%10001111	; digit 5
-    219  f679		       4e		      .byte.b	%01001110
-    220  f67a		       4e		      .byte.b	%01001110
-    221  f67b		       8f		      .byte.b	%10001111
-    222  f67c		       4d		      .byte.b	%01001101
-    223  f67d		       4d		      .byte.b	%01001101
-    224  f67e		       8f		      .byte.b	%10001111
-    225  f67f		       00		      .byte.b	%00000000
-    226  f680
-    227  f680							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    228  f680
-    229  f680							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    230  f680							; ^^^^^^^^^
-    231  f680		       8f		      .byte.b	%10001111	; digit 6
-    232  f681		       4e		      .byte.b	%01001110
-    233  f682		       4e		      .byte.b	%01001110
-    234  f683		       8f		      .byte.b	%10001111
-    235  f684		       4f		      .byte.b	%01001111
-    236  f685		       4f		      .byte.b	%01001111
-    237  f686		       8f		      .byte.b	%10001111
-    238  f687		       00		      .byte.b	%00000000
-    239  f688
-    240  f688							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    241  f688
-    242  f688							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    243  f688							; ^^^^^^^^^
-    244  f688		       8f		      .byte.b	%10001111	; digit 7
-    245  f689		       4d		      .byte.b	%01001101
-    246  f68a		       4d		      .byte.b	%01001101
-    247  f68b		       8d		      .byte.b	%10001101
-    248  f68c		       4d		      .byte.b	%01001101
-    249  f68d		       4d		      .byte.b	%01001101
-    250  f68e		       8d		      .byte.b	%10001101
-    251  f68f		       00		      .byte.b	%00000000
-    252  f690
-    253  f690							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    254  f690
-    255  f690							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    256  f690							; ^^^^^^^^^
-    257  f690		       8f		      .byte.b	%10001111	; digit 8
-    258  f691		       4f		      .byte.b	%01001111
-    259  f692		       4f		      .byte.b	%01001111
-    260  f693		       8f		      .byte.b	%10001111
-    261  f694		       4f		      .byte.b	%01001111
-    262  f695		       4f		      .byte.b	%01001111
-    263  f696		       8f		      .byte.b	%10001111
-    264  f697		       00		      .byte.b	%00000000
-    265  f698
-    266  f698							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    267  f698
-    268  f698							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
-    269  f698							; ^^^^^^^^^
-    270  f698		       8f		      .byte.b	%10001111	; digit 9
-    271  f699		       4f		      .byte.b	%01001111
-    272  f69a		       4f		      .byte.b	%01001111
-    273  f69b		       8f		      .byte.b	%10001111
-    274  f69c		       4d		      .byte.b	%01001101
-    275  f69d		       4d		      .byte.b	%01001101
-    276  f69e		       8f		      .byte.b	%10001111
-    277  f69f		       00		      .byte.b	%00000000
-    278  f6a0
-    279  f6a0
-    280  f6a0
-    281  f6a0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    282  f6a0							; Throbbing Line Graphics
-    283  f6a0							;
-    284  f6a0							; Graphics tables for the throbbing lines
-    285  f6a0							;
-    286  f6a0							; Table takes up $18 (24) bytes of ROM
-    287  f6a0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    288  f6a0
-    289  f6a0				   LineThrobGfx
-    290  f6a0
-    291  f6a0		       00		      .byte.b	COL_LINES + LUM_0	; frame 0
-    292  f6a1		       02		      .byte.b	COL_LINES + LUM_2
-    293  f6a2		       04		      .byte.b	COL_LINES + LUM_4
-    294  f6a3
-    295  f6a3							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    296  f6a3
-    297  f6a3		       00		      .byte.b	COL_LINES + LUM_0	; frame 1
-    298  f6a4		       04		      .byte.b	COL_LINES + LUM_4
-    299  f6a5		       06		      .byte.b	COL_LINES + LUM_6
-    300  f6a6
-    301  f6a6							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    302  f6a6
-    303  f6a6		       00		      .byte.b	COL_LINES + LUM_0	; frame 2
-    304  f6a7		       06		      .byte.b	COL_LINES + LUM_6
-    305  f6a8		       08		      .byte.b	COL_LINES + LUM_8
-    306  f6a9
-    307  f6a9							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    308  f6a9
-    309  f6a9		       02		      .byte.b	COL_LINES + LUM_2	; frame 3
-    310  f6aa		       08		      .byte.b	COL_LINES + LUM_8
-    311  f6ab		       0c		      .byte.b	COL_LINES + LUM_C
-    312  f6ac
-    313  f6ac							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    314  f6ac
-    315  f6ac		       04		      .byte.b	COL_LINES + LUM_4	; frame 4
-    316  f6ad		       0a		      .byte.b	COL_LINES + LUM_A
-    317  f6ae		       0e		      .byte.b	COL_LINES + LUM_E
-    318  f6af
-    319  f6af							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    320  f6af
-    321  f6af		       02		      .byte.b	COL_LINES + LUM_2	; frame 5
-    322  f6b0		       08		      .byte.b	COL_LINES + LUM_8
-    323  f6b1		       0c		      .byte.b	COL_LINES + LUM_C
-    324  f6b2
-    325  f6b2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    326  f6b2
-    327  f6b2		       00		      .byte.b	COL_LINES + LUM_0	; frame 6
-    328  f6b3		       06		      .byte.b	COL_LINES + LUM_6
-    329  f6b4		       0a		      .byte.b	COL_LINES + LUM_A
-    330  f6b5
-    331  f6b5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    332  f6b5
-    333  f6b5		       00		      .byte.b	COL_LINES + LUM_0	; frame 7
-    334  f6b6		       04		      .byte.b	COL_LINES + LUM_4
-    335  f6b7		       06		      .byte.b	COL_LINES + LUM_6
-    336  f6b8
-    337  f6b8
-    338  f6b8
-    339  f6b8							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    340  f6b8							; Health Graphics
-    341  f6b8							;
-    342  f6b8							; All of these tables are upside-down, and they are supposed to be used with the
-    343  f6b8							; left player not mirrored, and the right player mirrored. This makes it easier
-    344  f6b8							; to draw the top 5 lines since they are always mirrored. Because of this, all
-    345  f6b8							; the graphics for the lower right are flipped.
-    346  f6b8							; The graphics tables for the lower 8 lines (HealthLeftGfx and HealthRightGfx)
-    347  f6b8							; are set up in a confusing way. They are upside-down, but they are split
-    348  f6b8							; into 2 sections. The first 4 bytes correspond to the UPPER 4 lines
-    349  f6b8							; of graphics (upside-down), and the last 4 bytes correspond to the
-    350  f6b8							; LOWER 4 lines of graphics (also upside-down).
-    351  f6b8							; The last table (HealthBgGfx) is for the grey background of the
-    352  f6b8							; health graphics drawn with the playfield.
-    353  f6b8							;
-    354  f6b8							; Table takes up $45 (69) bytes of ROM
-    355  f6b8							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    356  f6b8
-    357  f6b8				   HealthTopGfx
-    358  f6b8
-    359  f6b8		       40		      .byte.b	%01000000	; graphics for left top of health
-    360  f6b9		       43		      .byte.b	%01000011
-    361  f6ba		       44		      .byte.b	%01000100
-    362  f6bb		       48		      .byte.b	%01001000
-    363  f6bc		       30		      .byte.b	%00110000
-    364  f6bd
-    365  f6bd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    366  f6bd				   HealthLeftGfx
-    367  f6bd
-    368  f6bd		       80		      .byte.b	%10000000	; left health full (upper)
-    369  f6be		       8c		      .byte.b	%10001100
-    370  f6bf		       84		      .byte.b	%10000100
-    371  f6c0		       80		      .byte.b	%10000000
-    372  f6c1		       1f		      .byte.b	%00011111	; left health full (lower)
-    373  f6c2		       20		      .byte.b	%00100000
-    374  f6c3		       47		      .byte.b	%01000111
-    375  f6c4		       84		      .byte.b	%10000100
-    376  f6c5
-    377  f6c5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    378  f6c5
-    379  f6c5		       80		      .byte.b	%10000000	; left health medium (upper)
-    380  f6c6		       8c		      .byte.b	%10001100
-    381  f6c7		       84		      .byte.b	%10000100
-    382  f6c8		       80		      .byte.b	%10000000
-    383  f6c9		       1f		      .byte.b	%00011111	; left health medium (lower)
-    384  f6ca		       20		      .byte.b	%00100000
-    385  f6cb		       47		      .byte.b	%01000111
-    386  f6cc		       80		      .byte.b	%10000000
-    387  f6cd
-    388  f6cd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    389  f6cd
-    390  f6cd		       80		      .byte.b	%10000000	; left health low (upper)
-    391  f6ce		       8c		      .byte.b	%10001100
-    392  f6cf		       84		      .byte.b	%10000100
-    393  f6d0		       80		      .byte.b	%10000000
-    394  f6d1		       1f		      .byte.b	%00011111	; left health low (lower)
-    395  f6d2		       20		      .byte.b	%00100000
-    396  f6d3		       44		      .byte.b	%01000100
-    397  f6d4		       87		      .byte.b	%10000111
-    398  f6d5
-    399  f6d5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    400  f6d5
-    401  f6d5		       80		      .byte.b	%10000000	; left health empty (upper)
-    402  f6d6		       9c		      .byte.b	%10011100
-    403  f6d7		       80		      .byte.b	%10000000
-    404  f6d8		       80		      .byte.b	%10000000
-    405  f6d9		       1f		      .byte.b	%00011111	; left health empty (lower)
-    406  f6da		       20		      .byte.b	%00100000
-    407  f6db		       46		      .byte.b	%01000110
-    408  f6dc		       81		      .byte.b	%10000001
-    409  f6dd
-    410  f6dd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    411  f6dd				   HealthRightGfx
-    412  f6dd
-    413  f6dd		       80		      .byte.b	%10000000	; right health full (upper)
-    414  f6de		       9a		      .byte.b	%10011010
-    415  f6df		       90		      .byte.b	%10010000
-    416  f6e0		       80		      .byte.b	%10000000
-    417  f6e1		       1f		      .byte.b	%00011111	; right health full (lower)
-    418  f6e2		       20		      .byte.b	%00100000
-    419  f6e3		       4f		      .byte.b	%01001111
-    420  f6e4		       89		      .byte.b	%10001001
-    421  f6e5
-    422  f6e5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    423  f6e5
-    424  f6e5		       80		      .byte.b	%10000000	; right health medium (upper)
-    425  f6e6		       9a		      .byte.b	%10011010
-    426  f6e7		       90		      .byte.b	%10010000
-    427  f6e8		       80		      .byte.b	%10000000
-    428  f6e9		       1f		      .byte.b	%00011111	; right health medium (lower)
-    429  f6ea		       20		      .byte.b	%00100000
-    430  f6eb		       4f		      .byte.b	%01001111
-    431  f6ec		       80		      .byte.b	%10000000
-    432  f6ed
-    433  f6ed							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    434  f6ed
-    435  f6ed		       80		      .byte.b	%10000000	; right health low (upper)
-    436  f6ee		       9a		      .byte.b	%10011010
-    437  f6ef		       88		      .byte.b	%10001000
-    438  f6f0		       80		      .byte.b	%10000000
-    439  f6f1		       1f		      .byte.b	%00011111	; right health low (lower)
-    440  f6f2		       20		      .byte.b	%00100000
-    441  f6f3		       48		      .byte.b	%01001000
-    442  f6f4		       8f		      .byte.b	%10001111
-    443  f6f5
-    444  f6f5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    445  f6f5
-    446  f6f5		       80		      .byte.b	%10000000	; right health empty (upper)
-    447  f6f6		       ba		      .byte.b	%10111010
-    448  f6f7		       80		      .byte.b	%10000000
-    449  f6f8		       80		      .byte.b	%10000000
-    450  f6f9		       1f		      .byte.b	%00011111	; right health empty (lower)
-    451  f6fa		       20		      .byte.b	%00100000
-    452  f6fb		       4c		      .byte.b	%01001100
-    453  f6fc		       83		      .byte.b	%10000011
-    454  f6fd
-    455  f6fd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    456  f6fd
-    457  f6fd							; 3 bytes left in this page
-    458  f6fd
-    459  f700		       00 00 00 	      ALIGN	$100	; align to page
-    460  f700
-    461  f700							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    462  f700				   HealthBgGfx
-    463  f700							; 13 bytes
-    464  f700
-    465  f700		       00		      .byte.b	%00000000
-    466  f701		       3e		      .byte.b	%00111110
-    467  f702		       7f		      .byte.b	%01111111
-    468  f703		       7f		      .byte.b	%01111111
-    469  f704		       7f		      .byte.b	%01111111
-    470  f705		       7f		      .byte.b	%01111111
-    471  f706		       7f		      .byte.b	%01111111
-    472  f707		       7f		      .byte.b	%01111111
-    473  f708		       7f		      .byte.b	%01111111
-    474  f709		       7f		      .byte.b	%01111111
-    475  f70a		       63		      .byte.b	%01100011
-    476  f70b		       63		      .byte.b	%01100011
-    477  f70c		       00		      .byte.b	%00000000
-    478  f70d
-    479  f70d
-    480  f70d
-    481  f70d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    482  f70d							; Progress Bar Graphics
-    483  f70d							;
-    484  f70d							;
-    485  f70d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    486  f70d
-    487  f70d				   PgBarGfx
-    488  f70d							; 9 bytes
-    489  f70d
-    490  f70d		       ff		      .byte.b	%11111111	; 1st PF1
-    491  f70e		       7f		      .byte.b	%01111111	; 2nd PF1 (then 1 shift left)
-    492  f70f		       3f		      .byte.b	%00111111
-    493  f710		       1f		      .byte.b	%00011111
-    494  f711		       0f		      .byte.b	%00001111
-    495  f712		       07		      .byte.b	%00000111
-    496  f713		       03		      .byte.b	%00000011
-    497  f714		       01		      .byte.b	%00000001
-    498  f715		       00		      .byte.b	%00000000
-    499  f716
-    500  f716							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    501  f716				   PgBarGfxR
-    502  f716							; 8 bytes
-    503  f716
-    504  f716		       ff		      .byte.b	%11111111	; PF2
-    505  f717		       fe		      .byte.b	%11111110
-    506  f718		       fc		      .byte.b	%11111100
-    507  f719		       f8		      .byte.b	%11111000
-    508  f71a		       f0		      .byte.b	%11110000	; 2nd PF0
-    509  f71b		       e0		      .byte.b	%11100000	; 1st PF0
-    510  f71c		       c0		      .byte.b	%11000000
-    511  f71d		       80		      .byte.b	%10000000
-    512  f71e
-    513  f71e
-    514  f71e
-    515  f71e				   FineHmove73
-    516  f71e
-    517  f71e		       70 60 50 40	      HEX	70 60 50 40
-    518  f722		       30 20 10 00	      HEX	30 20 10 00
-    519  f726		       f0 e0 d0 c0	      HEX	F0 E0 D0 C0
-    520  f72a		       b0 a0 90 80	      HEX	B0 A0 90 80
-    521  f72e
-    522  f72e
-    523  f72e
-    524  f72e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    525  f72e							; Cat Rainbow Graphics
-    526  f72e							;
-    527  f72e							;
-    528  f72e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    529  f72e
-    530  f72e				   RainbowGfx
-    531  f72e							; 4 bytes
-    532  f72e
-    533  f72e							;.byte %10100000	; rainbow PF0 gfx for moving straight, frame 0
-    534  f72e
-    535  f72e							;.byte %01010000	; rainbow PF0 gfx for moving straight, frame 1
-    536  f72e
-    537  f72e							;.byte %11000000	; rainbow PF0 gfx for moving up
-    538  f72e
-    539  f72e							;.byte %00110000	; rainbow PF0 gfx for moving down
-    540  f72e
-    541  f72e				   RainbowCol
-    542  f72e
-    543  f72e		       00 00 00 00*	      HEX	000000000000000000000000000000000000	; 18 bytes
-    544  f740
-    545  f740		       36		      .byte.b	$36
-    546  f741		       36		      .byte.b	$36
-    547  f742
-    548  f742		       28		      .byte.b	$28
-    549  f743		       28		      .byte.b	$28
-    550  f744
-    551  f744		       1e		      .byte.b	$1E
-    552  f745		       1e		      .byte.b	$1E
-    553  f746
-    554  f746		       cc		      .byte.b	$CC
-    555  f747		       cc		      .byte.b	$CC
-    556  f748
-    557  f748		       72		      .byte.b	$72
-    558  f749		       72		      .byte.b	$72
-    559  f74a
-    560  f74a		       54		      .byte.b	$54
-    561  f74b		       54		      .byte.b	$54
-    562  f74c
-    563  f74c		       00 00 00 00*	      HEX	000000000000000000000000000000000000	; 18 bytes
-    564  f75e
-    565  f75e				   CatFaceGfx
-    566  f75e
-    567  f75e		       36		      .byte.b	%00110110
-    568  f75f		       36		      .byte.b	%00110110
-    569  f760		       00		      .byte.b	%00000000
-    570  f761		       7e		      .byte.b	%01111110
-    571  f762		       c1		      .byte.b	%11000001
-    572  f763		       d5		      .byte.b	%11010101
-    573  f764		       ff		      .byte.b	%11111111
-    574  f765		       d5		      .byte.b	%11010101
-    575  f766		       dd		      .byte.b	%11011101
-    576  f767		       ff		      .byte.b	%11111111
-    577  f768		       66		      .byte.b	%01100110
-    578  f769		       66		      .byte.b	%01100110
-    579  f76a		       42		      .byte.b	%01000010
-    580  f76b
-    581  f76b		       00 00 00 00*	      HEX	000000000000000000000000000000000000000000	; 21 bytes
-    582  f780
-    583  f800		       00 00 00 00*	      ALIGN	$100
-    584  f800
-    585  f800				   FoodGfx
-    586  f800
-    587  f800							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    588  f800							; 0 - blank
-    589  f800
-    590  f800		       00		      .byte.b	%00000000
-    591  f801		       00		      .byte.b	%00000000
-    592  f802		       00		      .byte.b	%00000000
-    593  f803		       00		      .byte.b	%00000000
-    594  f804		       00		      .byte.b	%00000000
-    595  f805		       00		      .byte.b	%00000000
-    596  f806		       00		      .byte.b	%00000000
-    597  f807		       00		      .byte.b	%00000000
-    598  f808		       00		      .byte.b	%00000000
-    599  f809		       00		      .byte.b	%00000000
-    600  f80a		       00		      .byte.b	%00000000
-    601  f80b		       00		      .byte.b	%00000000
-    602  f80c		       00		      .byte.b	%00000000
-    603  f80d		       00		      .byte.b	%00000000
-    604  f80e
-    605  f80e		       0e		      .byte.b	$0E
-    606  f80f		       00		      .byte.b	0
-    607  f810
-    608  f810							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    609  f810							; 1 - apple
-    610  f810
-    611  f810		       34		      .byte.b	%00110100
-    612  f811		       7e		      .byte.b	%01111110
-    613  f812		       7e		      .byte.b	%01111110
-    614  f813		       ff		      .byte.b	%11111111
-    615  f814		       ff		      .byte.b	%11111111
-    616  f815		       ff		      .byte.b	%11111111
-    617  f816		       ff		      .byte.b	%11111111
-    618  f817		       ff		      .byte.b	%11111111
-    619  f818		       ff		      .byte.b	%11111111
-    620  f819		       7f		      .byte.b	%01111111
-    621  f81a		       6a		      .byte.b	%01101010
-    622  f81b		       08		      .byte.b	%00001000
-    623  f81c		       0c		      .byte.b	%00001100
-    624  f81d		       04		      .byte.b	%00000100
-    625  f81e
-    626  f81e		       46		      .byte.b	$46
-    627  f81f		       00		      .byte.b	0
-    628  f820
-    629  f820							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    630  f820							; 2 - peach
-    631  f820
-    632  f820		       3c		      .byte.b	%00111100
-    633  f821		       6e		      .byte.b	%01101110
-    634  f822		       6e		      .byte.b	%01101110
-    635  f823		       df		      .byte.b	%11011111
-    636  f824		       df		      .byte.b	%11011111
-    637  f825		       bf		      .byte.b	%10111111
-    638  f826		       bf		      .byte.b	%10111111
-    639  f827		       bf		      .byte.b	%10111111
-    640  f828		       de		      .byte.b	%11011110
-    641  f829		       5e		      .byte.b	%01011110
-    642  f82a		       6c		      .byte.b	%01101100
-    643  f82b		       18		      .byte.b	%00011000
-    644  f82c		       10		      .byte.b	%00010000
-    645  f82d		       30		      .byte.b	%00110000
-    646  f82e
-    647  f82e		       3a		      .byte.b	$3A
-    648  f82f		       00		      .byte.b	0
-    649  f830
-    650  f830							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    651  f830							; 3 - banana
-    652  f830
-    653  f830		       38		      .byte.b	%00111000
-    654  f831		       7c		      .byte.b	%01111100
-    655  f832		       fe		      .byte.b	%11111110
-    656  f833		       fe		      .byte.b	%11111110
-    657  f834		       ff		      .byte.b	%11111111
-    658  f835		       ff		      .byte.b	%11111111
-    659  f836		       8f		      .byte.b	%10001111
-    660  f837		       07		      .byte.b	%00000111
-    661  f838		       07		      .byte.b	%00000111
-    662  f839		       03		      .byte.b	%00000011
-    663  f83a		       03		      .byte.b	%00000011
-    664  f83b		       02		      .byte.b	%00000010
-    665  f83c		       06		      .byte.b	%00000110
-    666  f83d		       06		      .byte.b	%00000110
-    667  f83e
-    668  f83e		       1e		      .byte.b	$1E
-    669  f83f		       00		      .byte.b	0
-    670  f840
-    671  f840							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    672  f840							; 4 - pear
-    673  f840
-    674  f840		       38		      .byte.b	%00111000
-    675  f841		       7c		      .byte.b	%01111100
-    676  f842		       fe		      .byte.b	%11111110
-    677  f843		       fe		      .byte.b	%11111110
-    678  f844		       fe		      .byte.b	%11111110
-    679  f845		       fe		      .byte.b	%11111110
-    680  f846		       fe		      .byte.b	%11111110
-    681  f847		       fe		      .byte.b	%11111110
-    682  f848		       7c		      .byte.b	%01111100
-    683  f849		       38		      .byte.b	%00111000
-    684  f84a		       30		      .byte.b	%00110000
-    685  f84b		       10		      .byte.b	%00010000
-    686  f84c		       18		      .byte.b	%00011000
-    687  f84d		       08		      .byte.b	%00001000
-    688  f84e
-    689  f84e		       cc		      .byte.b	$CC
-    690  f84f		       00		      .byte.b	0
-    691  f850
-    692  f850							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    693  f850							; 5 - plum
-    694  f850
-    695  f850		       38		      .byte.b	%00111000
-    696  f851		       6c		      .byte.b	%01101100
-    697  f852		       6e		      .byte.b	%01101110
-    698  f853		       de		      .byte.b	%11011110
-    699  f854		       df		      .byte.b	%11011111
-    700  f855		       bf		      .byte.b	%10111111
-    701  f856		       bf		      .byte.b	%10111111
-    702  f857		       bf		      .byte.b	%10111111
-    703  f858		       de		      .byte.b	%11011110
-    704  f859		       de		      .byte.b	%11011110
-    705  f85a		       5e		      .byte.b	%01011110
-    706  f85b		       3c		      .byte.b	%00111100
-    707  f85c		       20		      .byte.b	%00100000
-    708  f85d		       60		      .byte.b	%01100000
-    709  f85e
-    710  f85e		       88		      .byte.b	$88
-    711  f85f		       00		      .byte.b	0
-    712  f860
-    713  f860							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    714  f860							; 6 - grapes
-    715  f860
-    716  f860		       18		      .byte.b	%00011000
-    717  f861		       08		      .byte.b	%00001000
-    718  f862		       36		      .byte.b	%00110110
-    719  f863		       12		      .byte.b	%00010010
-    720  f864		       6c		      .byte.b	%01101100
-    721  f865		       24		      .byte.b	%00100100
-    722  f866		       db		      .byte.b	%11011011
-    723  f867		       49		      .byte.b	%01001001
-    724  f868		       36		      .byte.b	%00110110
-    725  f869		       12		      .byte.b	%00010010
-    726  f86a		       6c		      .byte.b	%01101100
-    727  f86b		       34		      .byte.b	%00110100
-    728  f86c		       10		      .byte.b	%00010000
-    729  f86d		       18		      .byte.b	%00011000
-    730  f86e
-    731  f86e		       64		      .byte.b	$64
-    732  f86f		       00		      .byte.b	0
-    733  f870
-    734  f870							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    735  f870							; 7 - broccoli
-    736  f870
-    737  f870		       00		      .byte.b	%00000000
-    738  f871		       00		      .byte.b	%00000000
-    739  f872		       18		      .byte.b	%00011000
-    740  f873		       18		      .byte.b	%00011000
-    741  f874		       3e		      .byte.b	%00111110
-    742  f875		       2a		      .byte.b	%00101010
-    743  f876		       ea		      .byte.b	%11101010
-    744  f877		       df		      .byte.b	%11011111
-    745  f878		       ff		      .byte.b	%11111111
-    746  f879		       ff		      .byte.b	%11111111
-    747  f87a		       7e		      .byte.b	%01111110
-    748  f87b		       18		      .byte.b	%00011000
-    749  f87c		       00		      .byte.b	%00000000
-    750  f87d		       00		      .byte.b	%00000000
-    751  f87e
-    752  f87e		       c6		      .byte.b	$C6
-    753  f87f		       00		      .byte.b	0
-    754  f880
-    755  f880							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    756  f880							; 8 - cabbage
-    757  f880
-    758  f880		       18		      .byte.b	%00011000
-    759  f881		       76		      .byte.b	%01110110
-    760  f882		       76		      .byte.b	%01110110
-    761  f883		       7a		      .byte.b	%01111010
-    762  f884		       f9		      .byte.b	%11111001
-    763  f885		       fb		      .byte.b	%11111011
-    764  f886		       ed		      .byte.b	%11101101
-    765  f887		       db		      .byte.b	%11011011
-    766  f888		       fb		      .byte.b	%11111011
-    767  f889		       e9		      .byte.b	%11101001
-    768  f88a		       56		      .byte.b	%01010110
-    769  f88b		       76		      .byte.b	%01110110
-    770  f88c		       6e		      .byte.b	%01101110
-    771  f88d		       18		      .byte.b	%00011000
-    772  f88e
-    773  f88e		       da		      .byte.b	$DA
-    774  f88f		       00		      .byte.b	0
-    775  f890
-    776  f890							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    777  f890							; 9 - celery
-    778  f890
-    779  f890		       c0		      .byte.b	%11000000
-    780  f891		       e0		      .byte.b	%11100000
-    781  f892		       70		      .byte.b	%01110000
-    782  f893		       30		      .byte.b	%00110000
-    783  f894		       18		      .byte.b	%00011000
-    784  f895		       18		      .byte.b	%00011000
-    785  f896		       0c		      .byte.b	%00001100
-    786  f897		       0c		      .byte.b	%00001100
-    787  f898		       0e		      .byte.b	%00001110
-    788  f899		       06		      .byte.b	%00000110
-    789  f89a		       0d		      .byte.b	%00001101
-    790  f89b		       0b		      .byte.b	%00001011
-    791  f89c		       0d		      .byte.b	%00001101
-    792  f89d		       06		      .byte.b	%00000110
-    793  f89e
-    794  f89e		       d6		      .byte.b	$D6
-    795  f89f		       00		      .byte.b	0
-    796  f8a0
-    797  f8a0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    798  f8a0							; A - green pepper
-    799  f8a0
-    800  f8a0		       6c		      .byte.b	%01101100
-    801  f8a1		       6c		      .byte.b	%01101100
-    802  f8a2		       fe		      .byte.b	%11111110
-    803  f8a3		       fe		      .byte.b	%11111110
-    804  f8a4		       f6		      .byte.b	%11110110
-    805  f8a5		       f6		      .byte.b	%11110110
-    806  f8a6		       f6		      .byte.b	%11110110
-    807  f8a7		       f6		      .byte.b	%11110110
-    808  f8a8		       f6		      .byte.b	%11110110
-    809  f8a9		       ec		      .byte.b	%11101100
-    810  f8aa		       7c		      .byte.b	%01111100
-    811  f8ab		       10		      .byte.b	%00010000
-    812  f8ac		       18		      .byte.b	%00011000
-    813  f8ad		       08		      .byte.b	%00001000
-    814  f8ae
-    815  f8ae		       c8		      .byte.b	$C8
-    816  f8af		       00		      .byte.b	0
-    817  f8b0
-    818  f8b0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    819  f8b0							; B - potato
-    820  f8b0
-    821  f8b0		       00		      .byte.b	%00000000
-    822  f8b1		       00		      .byte.b	%00000000
-    823  f8b2		       00		      .byte.b	%00000000
-    824  f8b3		       1c		      .byte.b	%00011100
-    825  f8b4		       7e		      .byte.b	%01111110
-    826  f8b5		       ff		      .byte.b	%11111111
-    827  f8b6		       ff		      .byte.b	%11111111
-    828  f8b7		       ef		      .byte.b	%11101111
-    829  f8b8		       f6		      .byte.b	%11110110
-    830  f8b9		       78		      .byte.b	%01111000
-    831  f8ba		       30		      .byte.b	%00110000
-    832  f8bb		       00		      .byte.b	%00000000
-    833  f8bc		       00		      .byte.b	%00000000
-    834  f8bd		       00		      .byte.b	%00000000
-    835  f8be
-    836  f8be		       f6		      .byte.b	$F6
-    837  f8bf		       00		      .byte.b	0
-    838  f8c0
-    839  f8c0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    840  f8c0							; C - mushroom
-    841  f8c0
-    842  f8c0		       00		      .byte.b	%00000000
-    843  f8c1		       18		      .byte.b	%00011000
-    844  f8c2		       18		      .byte.b	%00011000
-    845  f8c3		       18		      .byte.b	%00011000
-    846  f8c4		       18		      .byte.b	%00011000
-    847  f8c5		       99		      .byte.b	%10011001
-    848  f8c6		       db		      .byte.b	%11011011
-    849  f8c7		       ff		      .byte.b	%11111111
-    850  f8c8		       ff		      .byte.b	%11111111
-    851  f8c9		       ff		      .byte.b	%11111111
-    852  f8ca		       7e		      .byte.b	%01111110
-    853  f8cb		       7e		      .byte.b	%01111110
-    854  f8cc		       18		      .byte.b	%00011000
-    855  f8cd		       00		      .byte.b	%00000000
-    856  f8ce
-    857  f8ce		       08		      .byte.b	$08
-    858  f8cf		       00		      .byte.b	0
-    859  f8d0
-    860  f8d0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    861  f8d0							; D - key
-    862  f8d0
-    863  f8d0		       10		      .byte.b	%00010000
-    864  f8d1		       1e		      .byte.b	%00011110
-    865  f8d2		       1e		      .byte.b	%00011110
-    866  f8d3		       18		      .byte.b	%00011000
-    867  f8d4		       1e		      .byte.b	%00011110
-    868  f8d5		       1e		      .byte.b	%00011110
-    869  f8d6		       10		      .byte.b	%00010000
-    870  f8d7		       10		      .byte.b	%00010000
-    871  f8d8		       10		      .byte.b	%00010000
-    872  f8d9		       10		      .byte.b	%00010000
-    873  f8da		       38		      .byte.b	%00111000
-    874  f8db		       6c		      .byte.b	%01101100
-    875  f8dc		       6c		      .byte.b	%01101100
-    876  f8dd		       38		      .byte.b	%00111000
-    877  f8de
-    878  f8de		       2c		      .byte.b	$2C
-    879  f8df		       00		      .byte.b	0
-    880  f8e0
-    881  f8e0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    882  f8e0							; E - ring
-    883  f8e0
-    884  f8e0		       00		      .byte.b	%00000000
-    885  f8e1		       18		      .byte.b	%00011000
-    886  f8e2		       3c		      .byte.b	%00111100
-    887  f8e3		       66		      .byte.b	%01100110
-    888  f8e4		       42		      .byte.b	%01000010
-    889  f8e5		       42		      .byte.b	%01000010
-    890  f8e6		       42		      .byte.b	%01000010
-    891  f8e7		       66		      .byte.b	%01100110
-    892  f8e8		       3c		      .byte.b	%00111100
-    893  f8e9		       18		      .byte.b	%00011000
-    894  f8ea		       18		      .byte.b	%00011000
-    895  f8eb		       2c		      .byte.b	%00101100
-    896  f8ec		       18		      .byte.b	%00011000
-    897  f8ed		       00		      .byte.b	%00000000
-    898  f8ee
-    899  f8ee		       2c		      .byte.b	$2C
-    900  f8ef		       00		      .byte.b	0
-    901  f8f0
-    902  f8f0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    903  f8f0							; F - heart
-    904  f8f0
-    905  f8f0		       00		      .byte.b	%00000000
-    906  f8f1		       18		      .byte.b	%00011000
-    907  f8f2		       18		      .byte.b	%00011000
-    908  f8f3		       3c		      .byte.b	%00111100
-    909  f8f4		       3c		      .byte.b	%00111100
-    910  f8f5		       7e		      .byte.b	%01111110
-    911  f8f6		       7e		      .byte.b	%01111110
-    912  f8f7		       ff		      .byte.b	%11111111
-    913  f8f8		       ff		      .byte.b	%11111111
-    914  f8f9		       ff		      .byte.b	%11111111
-    915  f8fa		       e7		      .byte.b	%11100111
-    916  f8fb		       e7		      .byte.b	%11100111
-    917  f8fc		       42		      .byte.b	%01000010
-    918  f8fd		       00		      .byte.b	%00000000
-    919  f8fe
-    920  f8fe		       4a		      .byte.b	$4A
-    921  f8ff		       00		      .byte.b	0
-    922  f900
-    923  f900				   CatTartGfx
-    924  f900
-    925  f900		       00		      .byte.b	%00000000
-    926  f901		       e0		      .byte.b	%11100000
-    927  f902		       e0		      .byte.b	%11100000
-    928  f903		       c0		      .byte.b	%11000000
-    929  f904		       c0		      .byte.b	%11000000
-    930  f905		       c0		      .byte.b	%11000000
-    931  f906		       c0		      .byte.b	%11000000
-    932  f907		       c0		      .byte.b	%11000000
-    933  f908		       c0		      .byte.b	%11000000
-    934  f909		       e0		      .byte.b	%11100000
-    935  f90a		       e0		      .byte.b	%11100000
-    936  f90b		       e0		      .byte.b	%11100000
-    937  f90c		       e0		      .byte.b	%11100000
-    938  f90d		       e0		      .byte.b	%11100000
-    939  f90e
-    940  f90e				   RainbowColors
-    941  f90e
-    942  f90e		       00		      .byte.b	COL_BACKGROUND
-    943  f90f		       00		      .byte.b	COL_BACKGROUND
-    944  f910
-    945  f910		       64		      .byte.b	$64
-    946  f911		       64		      .byte.b	$64
-    947  f912		       88		      .byte.b	$88
-    948  f913		       88		      .byte.b	$88
-    949  f914		       c8		      .byte.b	$C8
-    950  f915		       c8		      .byte.b	$C8
-    951  f916		       1e		      .byte.b	$1E
-    952  f917		       1e		      .byte.b	$1E
-    953  f918		       28		      .byte.b	$28
-    954  f919		       28		      .byte.b	$28
-    955  f91a		       44		      .byte.b	$44
-    956  f91b		       44		      .byte.b	$44
-    957  f91c
-    958  f91c		       00		      .byte.b	COL_BACKGROUND
-    959  f91d		       00		      .byte.b	COL_BACKGROUND
+      0  f675					      include	data/Graphics.asm
+      1  f675							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  f675							; Graphics Tables
+      3  f675							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  f675
+      5  f700		       00 00 00 00*	      ALIGN	$100	; align to page
+      6  f700
+      7  f700							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      8  f700							; Digit graphics for the scoreboard
+      9  f700							;
+     10  f700							; This data is right-side up, NOT upside-down. Since the program reads the data
+     11  f700							; in bottom-to-top order and then pushes it to the stack, it gets flipped back
+     12  f700							; to normal when it is pulled from the stack.
+     13  f700							;
+     14  f700							; Table takes up $50 (80) bytes of ROM
+     15  f700							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     16  f700
+     17  f700				   ScoreGfx
+     18  f700
+     19  f700		       1c		      .byte.b	%00011100	; digit 0
+     20  f701		       26		      .byte.b	%00100110
+     21  f702		       63		      .byte.b	%01100011
+     22  f703		       63		      .byte.b	%01100011
+     23  f704		       63		      .byte.b	%01100011
+     24  f705		       32		      .byte.b	%00110010
+     25  f706		       1c		      .byte.b	%00011100
+     26  f707		       00		      .byte.b	%00000000
+     27  f708
+     28  f708							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     29  f708
+     30  f708		       18		      .byte.b	%00011000	; digit 1
+     31  f709		       38		      .byte.b	%00111000
+     32  f70a		       18		      .byte.b	%00011000
+     33  f70b		       18		      .byte.b	%00011000
+     34  f70c		       18		      .byte.b	%00011000
+     35  f70d		       18		      .byte.b	%00011000
+     36  f70e		       7e		      .byte.b	%01111110
+     37  f70f		       00		      .byte.b	%00000000
+     38  f710
+     39  f710							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     40  f710
+     41  f710		       3e		      .byte.b	%00111110	; digit 2
+     42  f711		       63		      .byte.b	%01100011
+     43  f712		       07		      .byte.b	%00000111
+     44  f713		       1e		      .byte.b	%00011110
+     45  f714		       3c		      .byte.b	%00111100
+     46  f715		       70		      .byte.b	%01110000
+     47  f716		       7f		      .byte.b	%01111111
+     48  f717		       00		      .byte.b	%00000000
+     49  f718
+     50  f718							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     51  f718
+     52  f718		       7f		      .byte.b	%01111111	; digit 3
+     53  f719		       06		      .byte.b	%00000110
+     54  f71a		       0c		      .byte.b	%00001100
+     55  f71b		       1e		      .byte.b	%00011110
+     56  f71c		       03		      .byte.b	%00000011
+     57  f71d		       63		      .byte.b	%01100011
+     58  f71e		       3e		      .byte.b	%00111110
+     59  f71f		       00		      .byte.b	%00000000
+     60  f720
+     61  f720							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     62  f720
+     63  f720		       0e		      .byte.b	%00001110	; digit 4
+     64  f721		       1e		      .byte.b	%00011110
+     65  f722		       36		      .byte.b	%00110110
+     66  f723		       66		      .byte.b	%01100110
+     67  f724		       7f		      .byte.b	%01111111
+     68  f725		       06		      .byte.b	%00000110
+     69  f726		       06		      .byte.b	%00000110
+     70  f727		       00		      .byte.b	%00000000
+     71  f728
+     72  f728							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     73  f728
+     74  f728		       7e		      .byte.b	%01111110	; digit 5
+     75  f729		       60		      .byte.b	%01100000
+     76  f72a		       7e		      .byte.b	%01111110
+     77  f72b		       03		      .byte.b	%00000011
+     78  f72c		       03		      .byte.b	%00000011
+     79  f72d		       63		      .byte.b	%01100011
+     80  f72e		       3e		      .byte.b	%00111110
+     81  f72f		       00		      .byte.b	%00000000
+     82  f730
+     83  f730							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     84  f730
+     85  f730		       1e		      .byte.b	%00011110	; digit 6
+     86  f731		       30		      .byte.b	%00110000
+     87  f732		       60		      .byte.b	%01100000
+     88  f733		       7e		      .byte.b	%01111110
+     89  f734		       63		      .byte.b	%01100011
+     90  f735		       63		      .byte.b	%01100011
+     91  f736		       3e		      .byte.b	%00111110
+     92  f737		       00		      .byte.b	%00000000
+     93  f738
+     94  f738							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     95  f738
+     96  f738		       7f		      .byte.b	%01111111	; digit 7
+     97  f739		       03		      .byte.b	%00000011
+     98  f73a		       06		      .byte.b	%00000110
+     99  f73b		       0c		      .byte.b	%00001100
+    100  f73c		       18		      .byte.b	%00011000
+    101  f73d		       18		      .byte.b	%00011000
+    102  f73e		       18		      .byte.b	%00011000
+    103  f73f		       00		      .byte.b	%00000000
+    104  f740
+    105  f740							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    106  f740
+    107  f740		       3c		      .byte.b	%00111100	; digit 8
+    108  f741		       62		      .byte.b	%01100010
+    109  f742		       72		      .byte.b	%01110010
+    110  f743		       3c		      .byte.b	%00111100
+    111  f744		       43		      .byte.b	%01000011
+    112  f745		       43		      .byte.b	%01000011
+    113  f746		       3e		      .byte.b	%00111110
+    114  f747		       00		      .byte.b	%00000000
+    115  f748
+    116  f748							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    117  f748
+    118  f748		       3e		      .byte.b	%00111110	; digit 9
+    119  f749		       63		      .byte.b	%01100011
+    120  f74a		       63		      .byte.b	%01100011
+    121  f74b		       3f		      .byte.b	%00111111
+    122  f74c		       03		      .byte.b	%00000011
+    123  f74d		       06		      .byte.b	%00000110
+    124  f74e		       3c		      .byte.b	%00111100
+    125  f74f		       00		      .byte.b	%00000000
+    126  f750
+    127  f750
+    128  f750
+    129  f750							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    130  f750							; NUSIZx and ENAMx data for level counter graphics
+    131  f750							;
+    132  f750							; This table enables or disables each missile and adjusts the left missile's
+    133  f750							; size in the scoreboard kernel line-by-line to draw the level counter's
+    134  f750							; left digit. (The right digit is drawn with the ball.)
+    135  f750							; Bit-1 is used to enable or disable the left missile,
+    136  f750							; and bit-0 is used to enable or disable the right missile.
+    137  f750							; The leftmost 6 bits are shifted right twice to get a value for NUSIZx.
+    138  f750							; Therefore, bits 6-7 are used to control the size of the left missile,
+    139  f750							; bit-5 is not used, and bits 4-2 are always "011" to keep the player copies
+    140  f750							; correct for the score display.
+    141  f750							;
+    142  f750							; This data is right-side up, NOT upside-down. Since the program reads the data
+    143  f750							; in bottom-to-top order and then pushes it to the stack, it gets flipped back
+    144  f750							; to normal when it is pulled from the stack.
+    145  f750							;
+    146  f750							; Table takes up $50 (80) bytes of ROM
+    147  f750							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    148  f750
+    149  f750				   LevelGfx
+    150  f750
+    151  f750							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    152  f750							; ^^^^^^^^^
+    153  f750		       8f		      .byte.b	%10001111	; digit 0
+    154  f751		       4f		      .byte.b	%01001111
+    155  f752		       4f		      .byte.b	%01001111
+    156  f753		       4f		      .byte.b	%01001111
+    157  f754		       4f		      .byte.b	%01001111
+    158  f755		       4f		      .byte.b	%01001111
+    159  f756		       8f		      .byte.b	%10001111
+    160  f757		       00		      .byte.b	%00000000
+    161  f758
+    162  f758							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    163  f758
+    164  f758							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    165  f758							; ^^^^^^^^^
+    166  f758		       8d		      .byte.b	%10001101	; digit 1
+    167  f759		       4d		      .byte.b	%01001101
+    168  f75a		       4d		      .byte.b	%01001101
+    169  f75b		       8d		      .byte.b	%10001101
+    170  f75c		       4d		      .byte.b	%01001101
+    171  f75d		       4d		      .byte.b	%01001101
+    172  f75e		       8d		      .byte.b	%10001101
+    173  f75f		       00		      .byte.b	%00000000
+    174  f760
+    175  f760							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    176  f760
+    177  f760							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    178  f760							; ^^^^^^^^^
+    179  f760		       8f		      .byte.b	%10001111	; digit 2
+    180  f761		       4d		      .byte.b	%01001101
+    181  f762		       4d		      .byte.b	%01001101
+    182  f763		       8f		      .byte.b	%10001111
+    183  f764		       4e		      .byte.b	%01001110
+    184  f765		       4e		      .byte.b	%01001110
+    185  f766		       8f		      .byte.b	%10001111
+    186  f767		       00		      .byte.b	%00000000
+    187  f768
+    188  f768							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    189  f768
+    190  f768							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    191  f768							; ^^^^^^^^^
+    192  f768		       8f		      .byte.b	%10001111	; digit 3
+    193  f769		       4d		      .byte.b	%01001101
+    194  f76a		       4d		      .byte.b	%01001101
+    195  f76b		       8f		      .byte.b	%10001111
+    196  f76c		       4d		      .byte.b	%01001101
+    197  f76d		       4d		      .byte.b	%01001101
+    198  f76e		       8f		      .byte.b	%10001111
+    199  f76f		       00		      .byte.b	%00000000
+    200  f770
+    201  f770							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    202  f770
+    203  f770							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    204  f770							; ^^^^^^^^^
+    205  f770		       4f		      .byte.b	%01001111	; digit 4
+    206  f771		       4f		      .byte.b	%01001111
+    207  f772		       4f		      .byte.b	%01001111
+    208  f773		       8f		      .byte.b	%10001111
+    209  f774		       4d		      .byte.b	%01001101
+    210  f775		       4d		      .byte.b	%01001101
+    211  f776		       4d		      .byte.b	%01001101
+    212  f777		       00		      .byte.b	%00000000
+    213  f778
+    214  f778							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    215  f778
+    216  f778							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    217  f778							; ^^^^^^^^^
+    218  f778		       8f		      .byte.b	%10001111	; digit 5
+    219  f779		       4e		      .byte.b	%01001110
+    220  f77a		       4e		      .byte.b	%01001110
+    221  f77b		       8f		      .byte.b	%10001111
+    222  f77c		       4d		      .byte.b	%01001101
+    223  f77d		       4d		      .byte.b	%01001101
+    224  f77e		       8f		      .byte.b	%10001111
+    225  f77f		       00		      .byte.b	%00000000
+    226  f780
+    227  f780							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    228  f780
+    229  f780							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    230  f780							; ^^^^^^^^^
+    231  f780		       8f		      .byte.b	%10001111	; digit 6
+    232  f781		       4e		      .byte.b	%01001110
+    233  f782		       4e		      .byte.b	%01001110
+    234  f783		       8f		      .byte.b	%10001111
+    235  f784		       4f		      .byte.b	%01001111
+    236  f785		       4f		      .byte.b	%01001111
+    237  f786		       8f		      .byte.b	%10001111
+    238  f787		       00		      .byte.b	%00000000
+    239  f788
+    240  f788							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    241  f788
+    242  f788							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    243  f788							; ^^^^^^^^^
+    244  f788		       8f		      .byte.b	%10001111	; digit 7
+    245  f789		       4d		      .byte.b	%01001101
+    246  f78a		       4d		      .byte.b	%01001101
+    247  f78b		       8d		      .byte.b	%10001101
+    248  f78c		       4d		      .byte.b	%01001101
+    249  f78d		       4d		      .byte.b	%01001101
+    250  f78e		       8d		      .byte.b	%10001101
+    251  f78f		       00		      .byte.b	%00000000
+    252  f790
+    253  f790							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    254  f790
+    255  f790							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    256  f790							; ^^^^^^^^^
+    257  f790		       8f		      .byte.b	%10001111	; digit 8
+    258  f791		       4f		      .byte.b	%01001111
+    259  f792		       4f		      .byte.b	%01001111
+    260  f793		       8f		      .byte.b	%10001111
+    261  f794		       4f		      .byte.b	%01001111
+    262  f795		       4f		      .byte.b	%01001111
+    263  f796		       8f		      .byte.b	%10001111
+    264  f797		       00		      .byte.b	%00000000
+    265  f798
+    266  f798							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    267  f798
+    268  f798							; %nnnnnnEe	n=NUSIZ0 E=ENAM0 e=ENAM1
+    269  f798							; ^^^^^^^^^
+    270  f798		       8f		      .byte.b	%10001111	; digit 9
+    271  f799		       4f		      .byte.b	%01001111
+    272  f79a		       4f		      .byte.b	%01001111
+    273  f79b		       8f		      .byte.b	%10001111
+    274  f79c		       4d		      .byte.b	%01001101
+    275  f79d		       4d		      .byte.b	%01001101
+    276  f79e		       8f		      .byte.b	%10001111
+    277  f79f		       00		      .byte.b	%00000000
+    278  f7a0
+    279  f7a0
+    280  f7a0
+    281  f7a0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    282  f7a0							; Throbbing Line Graphics
+    283  f7a0							;
+    284  f7a0							; Graphics tables for the throbbing lines
+    285  f7a0							;
+    286  f7a0							; Table takes up $18 (24) bytes of ROM
+    287  f7a0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    288  f7a0
+    289  f7a0				   LineThrobGfx
+    290  f7a0
+    291  f7a0		       00		      .byte.b	COL_LINES + LUM_0	; frame 0
+    292  f7a1		       02		      .byte.b	COL_LINES + LUM_2
+    293  f7a2		       04		      .byte.b	COL_LINES + LUM_4
+    294  f7a3
+    295  f7a3							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    296  f7a3
+    297  f7a3		       00		      .byte.b	COL_LINES + LUM_0	; frame 1
+    298  f7a4		       04		      .byte.b	COL_LINES + LUM_4
+    299  f7a5		       06		      .byte.b	COL_LINES + LUM_6
+    300  f7a6
+    301  f7a6							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    302  f7a6
+    303  f7a6		       00		      .byte.b	COL_LINES + LUM_0	; frame 2
+    304  f7a7		       06		      .byte.b	COL_LINES + LUM_6
+    305  f7a8		       08		      .byte.b	COL_LINES + LUM_8
+    306  f7a9
+    307  f7a9							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    308  f7a9
+    309  f7a9		       02		      .byte.b	COL_LINES + LUM_2	; frame 3
+    310  f7aa		       08		      .byte.b	COL_LINES + LUM_8
+    311  f7ab		       0c		      .byte.b	COL_LINES + LUM_C
+    312  f7ac
+    313  f7ac							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    314  f7ac
+    315  f7ac		       04		      .byte.b	COL_LINES + LUM_4	; frame 4
+    316  f7ad		       0a		      .byte.b	COL_LINES + LUM_A
+    317  f7ae		       0e		      .byte.b	COL_LINES + LUM_E
+    318  f7af
+    319  f7af							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    320  f7af
+    321  f7af		       02		      .byte.b	COL_LINES + LUM_2	; frame 5
+    322  f7b0		       08		      .byte.b	COL_LINES + LUM_8
+    323  f7b1		       0c		      .byte.b	COL_LINES + LUM_C
+    324  f7b2
+    325  f7b2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    326  f7b2
+    327  f7b2		       00		      .byte.b	COL_LINES + LUM_0	; frame 6
+    328  f7b3		       06		      .byte.b	COL_LINES + LUM_6
+    329  f7b4		       0a		      .byte.b	COL_LINES + LUM_A
+    330  f7b5
+    331  f7b5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    332  f7b5
+    333  f7b5		       00		      .byte.b	COL_LINES + LUM_0	; frame 7
+    334  f7b6		       04		      .byte.b	COL_LINES + LUM_4
+    335  f7b7		       06		      .byte.b	COL_LINES + LUM_6
+    336  f7b8
+    337  f7b8
+    338  f7b8
+    339  f7b8							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    340  f7b8							; Health Graphics
+    341  f7b8							;
+    342  f7b8							; All of these tables are upside-down, and they are supposed to be used with the
+    343  f7b8							; left player not mirrored, and the right player mirrored. This makes it easier
+    344  f7b8							; to draw the top 5 lines since they are always mirrored. Because of this, all
+    345  f7b8							; the graphics for the lower right are flipped.
+    346  f7b8							; The graphics tables for the lower 8 lines (HealthLeftGfx and HealthRightGfx)
+    347  f7b8							; are set up in a confusing way. They are upside-down, but they are split
+    348  f7b8							; into 2 sections. The first 4 bytes correspond to the UPPER 4 lines
+    349  f7b8							; of graphics (upside-down), and the last 4 bytes correspond to the
+    350  f7b8							; LOWER 4 lines of graphics (also upside-down).
+    351  f7b8							; The last table (HealthBgGfx) is for the grey background of the
+    352  f7b8							; health graphics drawn with the playfield.
+    353  f7b8							;
+    354  f7b8							; Table takes up $45 (69) bytes of ROM
+    355  f7b8							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    356  f7b8
+    357  f7b8				   HealthTopGfx
+    358  f7b8
+    359  f7b8		       40		      .byte.b	%01000000	; graphics for left top of health
+    360  f7b9		       43		      .byte.b	%01000011
+    361  f7ba		       44		      .byte.b	%01000100
+    362  f7bb		       48		      .byte.b	%01001000
+    363  f7bc		       30		      .byte.b	%00110000
+    364  f7bd
+    365  f7bd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    366  f7bd				   HealthLeftGfx
+    367  f7bd
+    368  f7bd		       80		      .byte.b	%10000000	; left health full (upper)
+    369  f7be		       8c		      .byte.b	%10001100
+    370  f7bf		       84		      .byte.b	%10000100
+    371  f7c0		       80		      .byte.b	%10000000
+    372  f7c1		       1f		      .byte.b	%00011111	; left health full (lower)
+    373  f7c2		       20		      .byte.b	%00100000
+    374  f7c3		       47		      .byte.b	%01000111
+    375  f7c4		       84		      .byte.b	%10000100
+    376  f7c5
+    377  f7c5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    378  f7c5
+    379  f7c5		       80		      .byte.b	%10000000	; left health medium (upper)
+    380  f7c6		       8c		      .byte.b	%10001100
+    381  f7c7		       84		      .byte.b	%10000100
+    382  f7c8		       80		      .byte.b	%10000000
+    383  f7c9		       1f		      .byte.b	%00011111	; left health medium (lower)
+    384  f7ca		       20		      .byte.b	%00100000
+    385  f7cb		       47		      .byte.b	%01000111
+    386  f7cc		       80		      .byte.b	%10000000
+    387  f7cd
+    388  f7cd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    389  f7cd
+    390  f7cd		       80		      .byte.b	%10000000	; left health low (upper)
+    391  f7ce		       8c		      .byte.b	%10001100
+    392  f7cf		       84		      .byte.b	%10000100
+    393  f7d0		       80		      .byte.b	%10000000
+    394  f7d1		       1f		      .byte.b	%00011111	; left health low (lower)
+    395  f7d2		       20		      .byte.b	%00100000
+    396  f7d3		       44		      .byte.b	%01000100
+    397  f7d4		       87		      .byte.b	%10000111
+    398  f7d5
+    399  f7d5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    400  f7d5
+    401  f7d5		       80		      .byte.b	%10000000	; left health empty (upper)
+    402  f7d6		       9c		      .byte.b	%10011100
+    403  f7d7		       80		      .byte.b	%10000000
+    404  f7d8		       80		      .byte.b	%10000000
+    405  f7d9		       1f		      .byte.b	%00011111	; left health empty (lower)
+    406  f7da		       20		      .byte.b	%00100000
+    407  f7db		       46		      .byte.b	%01000110
+    408  f7dc		       81		      .byte.b	%10000001
+    409  f7dd
+    410  f7dd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    411  f7dd				   HealthRightGfx
+    412  f7dd
+    413  f7dd		       80		      .byte.b	%10000000	; right health full (upper)
+    414  f7de		       9a		      .byte.b	%10011010
+    415  f7df		       90		      .byte.b	%10010000
+    416  f7e0		       80		      .byte.b	%10000000
+    417  f7e1		       1f		      .byte.b	%00011111	; right health full (lower)
+    418  f7e2		       20		      .byte.b	%00100000
+    419  f7e3		       4f		      .byte.b	%01001111
+    420  f7e4		       89		      .byte.b	%10001001
+    421  f7e5
+    422  f7e5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    423  f7e5
+    424  f7e5		       80		      .byte.b	%10000000	; right health medium (upper)
+    425  f7e6		       9a		      .byte.b	%10011010
+    426  f7e7		       90		      .byte.b	%10010000
+    427  f7e8		       80		      .byte.b	%10000000
+    428  f7e9		       1f		      .byte.b	%00011111	; right health medium (lower)
+    429  f7ea		       20		      .byte.b	%00100000
+    430  f7eb		       4f		      .byte.b	%01001111
+    431  f7ec		       80		      .byte.b	%10000000
+    432  f7ed
+    433  f7ed							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    434  f7ed
+    435  f7ed		       80		      .byte.b	%10000000	; right health low (upper)
+    436  f7ee		       9a		      .byte.b	%10011010
+    437  f7ef		       88		      .byte.b	%10001000
+    438  f7f0		       80		      .byte.b	%10000000
+    439  f7f1		       1f		      .byte.b	%00011111	; right health low (lower)
+    440  f7f2		       20		      .byte.b	%00100000
+    441  f7f3		       48		      .byte.b	%01001000
+    442  f7f4		       8f		      .byte.b	%10001111
+    443  f7f5
+    444  f7f5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    445  f7f5
+    446  f7f5		       80		      .byte.b	%10000000	; right health empty (upper)
+    447  f7f6		       ba		      .byte.b	%10111010
+    448  f7f7		       80		      .byte.b	%10000000
+    449  f7f8		       80		      .byte.b	%10000000
+    450  f7f9		       1f		      .byte.b	%00011111	; right health empty (lower)
+    451  f7fa		       20		      .byte.b	%00100000
+    452  f7fb		       4c		      .byte.b	%01001100
+    453  f7fc		       83		      .byte.b	%10000011
+    454  f7fd
+    455  f7fd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    456  f7fd
+    457  f7fd							; 3 bytes left in this page
+    458  f7fd
+    459  f800		       00 00 00 	      ALIGN	$100	; align to page
+    460  f800
+    461  f800							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    462  f800				   HealthBgGfx
+    463  f800							; 13 bytes
+    464  f800
+    465  f800		       00		      .byte.b	%00000000
+    466  f801		       3e		      .byte.b	%00111110
+    467  f802		       7f		      .byte.b	%01111111
+    468  f803		       7f		      .byte.b	%01111111
+    469  f804		       7f		      .byte.b	%01111111
+    470  f805		       7f		      .byte.b	%01111111
+    471  f806		       7f		      .byte.b	%01111111
+    472  f807		       7f		      .byte.b	%01111111
+    473  f808		       7f		      .byte.b	%01111111
+    474  f809		       7f		      .byte.b	%01111111
+    475  f80a		       63		      .byte.b	%01100011
+    476  f80b		       63		      .byte.b	%01100011
+    477  f80c		       00		      .byte.b	%00000000
+    478  f80d
+    479  f80d
+    480  f80d
+    481  f80d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    482  f80d							; Progress Bar Graphics
+    483  f80d							;
+    484  f80d							;
+    485  f80d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    486  f80d
+    487  f80d				   PgBarGfx
+    488  f80d							; 9 bytes
+    489  f80d
+    490  f80d		       ff		      .byte.b	%11111111	; 1st PF1
+    491  f80e		       7f		      .byte.b	%01111111	; 2nd PF1 (then 1 shift left)
+    492  f80f		       3f		      .byte.b	%00111111
+    493  f810		       1f		      .byte.b	%00011111
+    494  f811		       0f		      .byte.b	%00001111
+    495  f812		       07		      .byte.b	%00000111
+    496  f813		       03		      .byte.b	%00000011
+    497  f814		       01		      .byte.b	%00000001
+    498  f815		       00		      .byte.b	%00000000
+    499  f816
+    500  f816							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    501  f816				   PgBarGfxR
+    502  f816							; 8 bytes
+    503  f816
+    504  f816		       ff		      .byte.b	%11111111	; PF2
+    505  f817		       fe		      .byte.b	%11111110
+    506  f818		       fc		      .byte.b	%11111100
+    507  f819		       f8		      .byte.b	%11111000
+    508  f81a		       f0		      .byte.b	%11110000	; 2nd PF0
+    509  f81b		       e0		      .byte.b	%11100000	; 1st PF0
+    510  f81c		       c0		      .byte.b	%11000000
+    511  f81d		       80		      .byte.b	%10000000
+    512  f81e
+    513  f81e
+    514  f81e
+    515  f81e				   FineHmove73
+    516  f81e
+    517  f81e		       70 60 50 40	      HEX	70 60 50 40
+    518  f822		       30 20 10 00	      HEX	30 20 10 00
+    519  f826		       f0 e0 d0 c0	      HEX	F0 E0 D0 C0
+    520  f82a		       b0 a0 90 80	      HEX	B0 A0 90 80
+    521  f82e
+    522  f82e
+    523  f82e
+    524  f82e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    525  f82e							; Cat Rainbow Graphics
+    526  f82e							;
+    527  f82e							;
+    528  f82e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    529  f82e
+    530  f82e				   RainbowGfx
+    531  f82e							; 4 bytes
+    532  f82e
+    533  f82e							;.byte %10100000	; rainbow PF0 gfx for moving straight, frame 0
+    534  f82e
+    535  f82e							;.byte %01010000	; rainbow PF0 gfx for moving straight, frame 1
+    536  f82e
+    537  f82e							;.byte %11000000	; rainbow PF0 gfx for moving up
+    538  f82e
+    539  f82e							;.byte %00110000	; rainbow PF0 gfx for moving down
+    540  f82e
+    541  f82e				   RainbowCol
+    542  f82e
+    543  f82e		       00 00 00 00*	      HEX	00000000000000000000000000000000000000000000	; 22 bytes
+    544  f844
+    545  f844		       36		      .byte.b	$36
+    546  f845		       36		      .byte.b	$36
+    547  f846
+    548  f846		       28		      .byte.b	$28
+    549  f847		       28		      .byte.b	$28
+    550  f848
+    551  f848		       1e		      .byte.b	$1E
+    552  f849		       1e		      .byte.b	$1E
+    553  f84a
+    554  f84a		       cc		      .byte.b	$CC
+    555  f84b		       cc		      .byte.b	$CC
+    556  f84c
+    557  f84c		       72		      .byte.b	$72
+    558  f84d		       72		      .byte.b	$72
+    559  f84e
+    560  f84e		       54		      .byte.b	$54
+    561  f84f		       54		      .byte.b	$54
+    562  f850
+    563  f850		       00 00 00 00*	      HEX	00000000000000000000000000000000000000000000	; 22 bytes
+    564  f866
+    565  f866				   CatFaceGfx
+    566  f866
+    567  f866		       36		      .byte.b	%00110110
+    568  f867		       36		      .byte.b	%00110110
+    569  f868		       00		      .byte.b	%00000000
+    570  f869		       7e		      .byte.b	%01111110
+    571  f86a		       c1		      .byte.b	%11000001
+    572  f86b		       d5		      .byte.b	%11010101
+    573  f86c		       ff		      .byte.b	%11111111
+    574  f86d		       d5		      .byte.b	%11010101
+    575  f86e		       dd		      .byte.b	%11011101
+    576  f86f		       ff		      .byte.b	%11111111
+    577  f870		       66		      .byte.b	%01100110
+    578  f871		       66		      .byte.b	%01100110
+    579  f872		       42		      .byte.b	%01000010
+    580  f873
+    581  f873		       00 00 00 00*	      HEX	000000000000000000000000000000000000000000	; 21 bytes
+    582  f888							;140 bytes used in page
+    583  f888
+    584  f900		       00 00 00 00*	      ALIGN	$100
+    585  f900
+    586  f900				   FoodGfx
+    587  f900
+    588  f900							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    589  f900							; 0 - blank
+    590  f900
+    591  f900		       00		      .byte.b	%00000000
+    592  f901		       00		      .byte.b	%00000000
+    593  f902		       00		      .byte.b	%00000000
+    594  f903		       00		      .byte.b	%00000000
+    595  f904		       00		      .byte.b	%00000000
+    596  f905		       00		      .byte.b	%00000000
+    597  f906		       00		      .byte.b	%00000000
+    598  f907		       00		      .byte.b	%00000000
+    599  f908		       00		      .byte.b	%00000000
+    600  f909		       00		      .byte.b	%00000000
+    601  f90a		       00		      .byte.b	%00000000
+    602  f90b		       00		      .byte.b	%00000000
+    603  f90c		       00		      .byte.b	%00000000
+    604  f90d		       00		      .byte.b	%00000000
+    605  f90e
+    606  f90e		       0e		      .byte.b	$0E
+    607  f90f		       00		      .byte.b	0
+    608  f910
+    609  f910							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    610  f910							; 1 - apple
+    611  f910
+    612  f910		       34		      .byte.b	%00110100
+    613  f911		       7e		      .byte.b	%01111110
+    614  f912		       7e		      .byte.b	%01111110
+    615  f913		       ff		      .byte.b	%11111111
+    616  f914		       ff		      .byte.b	%11111111
+    617  f915		       ff		      .byte.b	%11111111
+    618  f916		       ff		      .byte.b	%11111111
+    619  f917		       ff		      .byte.b	%11111111
+    620  f918		       ff		      .byte.b	%11111111
+    621  f919		       7f		      .byte.b	%01111111
+    622  f91a		       6a		      .byte.b	%01101010
+    623  f91b		       08		      .byte.b	%00001000
+    624  f91c		       0c		      .byte.b	%00001100
+    625  f91d		       04		      .byte.b	%00000100
+    626  f91e
+    627  f91e		       46		      .byte.b	$46
+    628  f91f		       00		      .byte.b	0
+    629  f920
+    630  f920							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    631  f920							; 2 - peach
+    632  f920
+    633  f920		       3c		      .byte.b	%00111100
+    634  f921		       6e		      .byte.b	%01101110
+    635  f922		       6e		      .byte.b	%01101110
+    636  f923		       df		      .byte.b	%11011111
+    637  f924		       df		      .byte.b	%11011111
+    638  f925		       bf		      .byte.b	%10111111
+    639  f926		       bf		      .byte.b	%10111111
+    640  f927		       bf		      .byte.b	%10111111
+    641  f928		       de		      .byte.b	%11011110
+    642  f929		       5e		      .byte.b	%01011110
+    643  f92a		       6c		      .byte.b	%01101100
+    644  f92b		       18		      .byte.b	%00011000
+    645  f92c		       10		      .byte.b	%00010000
+    646  f92d		       30		      .byte.b	%00110000
+    647  f92e
+    648  f92e		       3a		      .byte.b	$3A
+    649  f92f		       00		      .byte.b	0
+    650  f930
+    651  f930							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    652  f930							; 3 - banana
+    653  f930
+    654  f930		       38		      .byte.b	%00111000
+    655  f931		       7c		      .byte.b	%01111100
+    656  f932		       fe		      .byte.b	%11111110
+    657  f933		       fe		      .byte.b	%11111110
+    658  f934		       ff		      .byte.b	%11111111
+    659  f935		       ff		      .byte.b	%11111111
+    660  f936		       8f		      .byte.b	%10001111
+    661  f937		       07		      .byte.b	%00000111
+    662  f938		       07		      .byte.b	%00000111
+    663  f939		       03		      .byte.b	%00000011
+    664  f93a		       03		      .byte.b	%00000011
+    665  f93b		       02		      .byte.b	%00000010
+    666  f93c		       06		      .byte.b	%00000110
+    667  f93d		       06		      .byte.b	%00000110
+    668  f93e
+    669  f93e		       1e		      .byte.b	$1E
+    670  f93f		       00		      .byte.b	0
+    671  f940
+    672  f940							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    673  f940							; 4 - pear
+    674  f940
+    675  f940		       38		      .byte.b	%00111000
+    676  f941		       7c		      .byte.b	%01111100
+    677  f942		       fe		      .byte.b	%11111110
+    678  f943		       fe		      .byte.b	%11111110
+    679  f944		       fe		      .byte.b	%11111110
+    680  f945		       fe		      .byte.b	%11111110
+    681  f946		       fe		      .byte.b	%11111110
+    682  f947		       fe		      .byte.b	%11111110
+    683  f948		       7c		      .byte.b	%01111100
+    684  f949		       38		      .byte.b	%00111000
+    685  f94a		       30		      .byte.b	%00110000
+    686  f94b		       10		      .byte.b	%00010000
+    687  f94c		       18		      .byte.b	%00011000
+    688  f94d		       08		      .byte.b	%00001000
+    689  f94e
+    690  f94e		       cc		      .byte.b	$CC
+    691  f94f		       00		      .byte.b	0
+    692  f950
+    693  f950							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    694  f950							; 5 - plum
+    695  f950
+    696  f950		       38		      .byte.b	%00111000
+    697  f951		       6c		      .byte.b	%01101100
+    698  f952		       6e		      .byte.b	%01101110
+    699  f953		       de		      .byte.b	%11011110
+    700  f954		       df		      .byte.b	%11011111
+    701  f955		       bf		      .byte.b	%10111111
+    702  f956		       bf		      .byte.b	%10111111
+    703  f957		       bf		      .byte.b	%10111111
+    704  f958		       de		      .byte.b	%11011110
+    705  f959		       de		      .byte.b	%11011110
+    706  f95a		       5e		      .byte.b	%01011110
+    707  f95b		       3c		      .byte.b	%00111100
+    708  f95c		       20		      .byte.b	%00100000
+    709  f95d		       60		      .byte.b	%01100000
+    710  f95e
+    711  f95e		       88		      .byte.b	$88
+    712  f95f		       00		      .byte.b	0
+    713  f960
+    714  f960							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    715  f960							; 6 - grapes
+    716  f960
+    717  f960		       18		      .byte.b	%00011000
+    718  f961		       08		      .byte.b	%00001000
+    719  f962		       36		      .byte.b	%00110110
+    720  f963		       12		      .byte.b	%00010010
+    721  f964		       6c		      .byte.b	%01101100
+    722  f965		       24		      .byte.b	%00100100
+    723  f966		       db		      .byte.b	%11011011
+    724  f967		       49		      .byte.b	%01001001
+    725  f968		       36		      .byte.b	%00110110
+    726  f969		       12		      .byte.b	%00010010
+    727  f96a		       6c		      .byte.b	%01101100
+    728  f96b		       34		      .byte.b	%00110100
+    729  f96c		       10		      .byte.b	%00010000
+    730  f96d		       18		      .byte.b	%00011000
+    731  f96e
+    732  f96e		       64		      .byte.b	$64
+    733  f96f		       00		      .byte.b	0
+    734  f970
+    735  f970							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    736  f970							; 7 - broccoli
+    737  f970
+    738  f970		       00		      .byte.b	%00000000
+    739  f971		       00		      .byte.b	%00000000
+    740  f972		       18		      .byte.b	%00011000
+    741  f973		       18		      .byte.b	%00011000
+    742  f974		       3e		      .byte.b	%00111110
+    743  f975		       2a		      .byte.b	%00101010
+    744  f976		       ea		      .byte.b	%11101010
+    745  f977		       df		      .byte.b	%11011111
+    746  f978		       ff		      .byte.b	%11111111
+    747  f979		       ff		      .byte.b	%11111111
+    748  f97a		       7e		      .byte.b	%01111110
+    749  f97b		       18		      .byte.b	%00011000
+    750  f97c		       00		      .byte.b	%00000000
+    751  f97d		       00		      .byte.b	%00000000
+    752  f97e
+    753  f97e		       c6		      .byte.b	$C6
+    754  f97f		       00		      .byte.b	0
+    755  f980
+    756  f980							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    757  f980							; 8 - cabbage
+    758  f980
+    759  f980		       18		      .byte.b	%00011000
+    760  f981		       76		      .byte.b	%01110110
+    761  f982		       76		      .byte.b	%01110110
+    762  f983		       7a		      .byte.b	%01111010
+    763  f984		       f9		      .byte.b	%11111001
+    764  f985		       fb		      .byte.b	%11111011
+    765  f986		       ed		      .byte.b	%11101101
+    766  f987		       db		      .byte.b	%11011011
+    767  f988		       fb		      .byte.b	%11111011
+    768  f989		       e9		      .byte.b	%11101001
+    769  f98a		       56		      .byte.b	%01010110
+    770  f98b		       76		      .byte.b	%01110110
+    771  f98c		       6e		      .byte.b	%01101110
+    772  f98d		       18		      .byte.b	%00011000
+    773  f98e
+    774  f98e		       da		      .byte.b	$DA
+    775  f98f		       00		      .byte.b	0
+    776  f990
+    777  f990							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    778  f990							; 9 - celery
+    779  f990
+    780  f990		       c0		      .byte.b	%11000000
+    781  f991		       e0		      .byte.b	%11100000
+    782  f992		       70		      .byte.b	%01110000
+    783  f993		       30		      .byte.b	%00110000
+    784  f994		       18		      .byte.b	%00011000
+    785  f995		       18		      .byte.b	%00011000
+    786  f996		       0c		      .byte.b	%00001100
+    787  f997		       0c		      .byte.b	%00001100
+    788  f998		       0e		      .byte.b	%00001110
+    789  f999		       06		      .byte.b	%00000110
+    790  f99a		       0d		      .byte.b	%00001101
+    791  f99b		       0b		      .byte.b	%00001011
+    792  f99c		       0d		      .byte.b	%00001101
+    793  f99d		       06		      .byte.b	%00000110
+    794  f99e
+    795  f99e		       d6		      .byte.b	$D6
+    796  f99f		       00		      .byte.b	0
+    797  f9a0
+    798  f9a0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    799  f9a0							; A - green pepper
+    800  f9a0
+    801  f9a0		       6c		      .byte.b	%01101100
+    802  f9a1		       6c		      .byte.b	%01101100
+    803  f9a2		       fe		      .byte.b	%11111110
+    804  f9a3		       fe		      .byte.b	%11111110
+    805  f9a4		       f6		      .byte.b	%11110110
+    806  f9a5		       f6		      .byte.b	%11110110
+    807  f9a6		       f6		      .byte.b	%11110110
+    808  f9a7		       f6		      .byte.b	%11110110
+    809  f9a8		       f6		      .byte.b	%11110110
+    810  f9a9		       ec		      .byte.b	%11101100
+    811  f9aa		       7c		      .byte.b	%01111100
+    812  f9ab		       10		      .byte.b	%00010000
+    813  f9ac		       18		      .byte.b	%00011000
+    814  f9ad		       08		      .byte.b	%00001000
+    815  f9ae
+    816  f9ae		       c8		      .byte.b	$C8
+    817  f9af		       00		      .byte.b	0
+    818  f9b0
+    819  f9b0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    820  f9b0							; B - potato
+    821  f9b0
+    822  f9b0		       00		      .byte.b	%00000000
+    823  f9b1		       00		      .byte.b	%00000000
+    824  f9b2		       00		      .byte.b	%00000000
+    825  f9b3		       1c		      .byte.b	%00011100
+    826  f9b4		       7e		      .byte.b	%01111110
+    827  f9b5		       ff		      .byte.b	%11111111
+    828  f9b6		       ff		      .byte.b	%11111111
+    829  f9b7		       ef		      .byte.b	%11101111
+    830  f9b8		       f6		      .byte.b	%11110110
+    831  f9b9		       78		      .byte.b	%01111000
+    832  f9ba		       30		      .byte.b	%00110000
+    833  f9bb		       00		      .byte.b	%00000000
+    834  f9bc		       00		      .byte.b	%00000000
+    835  f9bd		       00		      .byte.b	%00000000
+    836  f9be
+    837  f9be		       f6		      .byte.b	$F6
+    838  f9bf		       00		      .byte.b	0
+    839  f9c0
+    840  f9c0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    841  f9c0							; C - mushroom
+    842  f9c0
+    843  f9c0		       00		      .byte.b	%00000000
+    844  f9c1		       18		      .byte.b	%00011000
+    845  f9c2		       18		      .byte.b	%00011000
+    846  f9c3		       18		      .byte.b	%00011000
+    847  f9c4		       18		      .byte.b	%00011000
+    848  f9c5		       99		      .byte.b	%10011001
+    849  f9c6		       db		      .byte.b	%11011011
+    850  f9c7		       ff		      .byte.b	%11111111
+    851  f9c8		       ff		      .byte.b	%11111111
+    852  f9c9		       ff		      .byte.b	%11111111
+    853  f9ca		       7e		      .byte.b	%01111110
+    854  f9cb		       7e		      .byte.b	%01111110
+    855  f9cc		       18		      .byte.b	%00011000
+    856  f9cd		       00		      .byte.b	%00000000
+    857  f9ce
+    858  f9ce		       08		      .byte.b	$08
+    859  f9cf		       00		      .byte.b	0
+    860  f9d0
+    861  f9d0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    862  f9d0							; D - key
+    863  f9d0
+    864  f9d0		       10		      .byte.b	%00010000
+    865  f9d1		       1e		      .byte.b	%00011110
+    866  f9d2		       1e		      .byte.b	%00011110
+    867  f9d3		       18		      .byte.b	%00011000
+    868  f9d4		       1e		      .byte.b	%00011110
+    869  f9d5		       1e		      .byte.b	%00011110
+    870  f9d6		       10		      .byte.b	%00010000
+    871  f9d7		       10		      .byte.b	%00010000
+    872  f9d8		       10		      .byte.b	%00010000
+    873  f9d9		       10		      .byte.b	%00010000
+    874  f9da		       38		      .byte.b	%00111000
+    875  f9db		       6c		      .byte.b	%01101100
+    876  f9dc		       6c		      .byte.b	%01101100
+    877  f9dd		       38		      .byte.b	%00111000
+    878  f9de
+    879  f9de		       2c		      .byte.b	$2C
+    880  f9df		       00		      .byte.b	0
+    881  f9e0
+    882  f9e0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    883  f9e0							; E - ring
+    884  f9e0
+    885  f9e0		       00		      .byte.b	%00000000
+    886  f9e1		       18		      .byte.b	%00011000
+    887  f9e2		       3c		      .byte.b	%00111100
+    888  f9e3		       66		      .byte.b	%01100110
+    889  f9e4		       42		      .byte.b	%01000010
+    890  f9e5		       42		      .byte.b	%01000010
+    891  f9e6		       42		      .byte.b	%01000010
+    892  f9e7		       66		      .byte.b	%01100110
+    893  f9e8		       3c		      .byte.b	%00111100
+    894  f9e9		       18		      .byte.b	%00011000
+    895  f9ea		       18		      .byte.b	%00011000
+    896  f9eb		       2c		      .byte.b	%00101100
+    897  f9ec		       18		      .byte.b	%00011000
+    898  f9ed		       00		      .byte.b	%00000000
+    899  f9ee
+    900  f9ee		       2c		      .byte.b	$2C
+    901  f9ef		       00		      .byte.b	0
+    902  f9f0
+    903  f9f0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    904  f9f0							; F - heart
+    905  f9f0
+    906  f9f0		       00		      .byte.b	%00000000
+    907  f9f1		       18		      .byte.b	%00011000
+    908  f9f2		       18		      .byte.b	%00011000
+    909  f9f3		       3c		      .byte.b	%00111100
+    910  f9f4		       3c		      .byte.b	%00111100
+    911  f9f5		       7e		      .byte.b	%01111110
+    912  f9f6		       7e		      .byte.b	%01111110
+    913  f9f7		       ff		      .byte.b	%11111111
+    914  f9f8		       ff		      .byte.b	%11111111
+    915  f9f9		       ff		      .byte.b	%11111111
+    916  f9fa		       e7		      .byte.b	%11100111
+    917  f9fb		       e7		      .byte.b	%11100111
+    918  f9fc		       42		      .byte.b	%01000010
+    919  f9fd		       00		      .byte.b	%00000000
+    920  f9fe
+    921  f9fe		       4a		      .byte.b	$4A
+    922  f9ff		       00		      .byte.b	0
+    923  fa00
+    924  fa00				   RainbowColors
+    925  fa00				   RamBowColors
+    926  fa00
+    927  fa00		       00		      .byte.b	COL_BACKGROUND
+    928  fa01		       00		      .byte.b	COL_BACKGROUND
+    929  fa02
+    930  fa02		       64		      .byte.b	$64
+    931  fa03		       64		      .byte.b	$64
+    932  fa04		       88		      .byte.b	$88
+    933  fa05		       88		      .byte.b	$88
+    934  fa06		       c8		      .byte.b	$C8
+    935  fa07		       c8		      .byte.b	$C8
+    936  fa08		       1e		      .byte.b	$1E
+    937  fa09		       1e		      .byte.b	$1E
+    938  fa0a		       28		      .byte.b	$28
+    939  fa0b		       28		      .byte.b	$28
+    940  fa0c		       44		      .byte.b	$44
+    941  fa0d		       44		      .byte.b	$44
+    942  fa0e
+    943  fa0e		       00		      .byte.b	COL_BACKGROUND
+    944  fa0f		       00		      .byte.b	COL_BACKGROUND
+    945  fa10
+    946  fa10				   CatTartGfx
+    947  fa10
+    948  fa10		       00		      .byte.b	%00000000
+    949  fa11		       00		      .byte.b	%00000000
+    950  fa12		       e0		      .byte.b	%11100000
+    951  fa13		       c0		      .byte.b	%11000000
+    952  fa14		       c0		      .byte.b	%11000000
+    953  fa15		       c0		      .byte.b	%11000000
+    954  fa16		       c0		      .byte.b	%11000000
+    955  fa17		       c0		      .byte.b	%11000000
+    956  fa18		       c0		      .byte.b	%11000000
+    957  fa19		       e0		      .byte.b	%11100000
+    958  fa1a		       e0		      .byte.b	%11100000
+    959  fa1b		       e0		      .byte.b	%11100000
+    960  fa1c		       e0		      .byte.b	%11100000
+    961  fa1d		       e0		      .byte.b	%11100000
 ------- FILE main.asm
-     81  f91e
-     82  f91e
-     83  f91e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     84  f91e							; End of ROM
-     85  f91e							;
-     86  f91e							; Define the end of the cartridge
-     87  f91e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     88  f91e
+     81  fa1e
+     82  fa1e
+     83  fa1e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     84  fa1e							; End of ROM
+     85  fa1e							;
+     86  fa1e							; Define the end of the cartridge
+     87  fa1e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     88  fa1e
      89  fffa					      ORG	$FFFA	; set address to 6507 Interrupt Vectors
      90  fffa		       00 f0		      .WORD.w	SystemClear	; NMI
      91  fffc		       00 f0		      .WORD.w	SystemClear	; RESET

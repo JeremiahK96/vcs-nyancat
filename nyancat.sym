@@ -6,32 +6,32 @@
 0.Underflow3             f0be              (R )
 0.Underflow4             f0c9              (R )
 1.CLEAR_STACK            f006              (R )
-10.HealthTop             f445              (R )
-10.Loop                  f447              (R )
-11.CYCLES                001a              (R )
-12.HealthMiddle          f500              (R )
-12.Loop                  f502              (R )
-13.HealthBottom          f53c              (R )
-13.Loop                  f53e              (R )
-14.CYCLES                000e              (R )
+10.CYCLES                0006              (R )
+11.CYCLES                0020              (R )
+12.HealthTop             f510              (R )
+12.Loop                  f512              (R )
+13.CYCLES                001a              (R )
+14.HealthMiddle          f600              (R )
+14.Loop                  f602              (R )
+15.HealthBottom          f63c              (R )
+15.Loop                  f63e              (R )
+16.CYCLES                000e              (R )
 2.CYCLES                 0000              (R )
 3.DigitLoop              f14d              (R )
 3.Loop                   f13d              (R )
-4.DivideLoop             f28d              (R )
-4.Do1                    f261              (R )
-4.Do2                    f264              (R )
+4.DivideLoop             f285              (R )
 4.EntrancePoint          f21a              (R )
-4.KernelLoop             f376              (R )
-4.KJump                  f300              (R )
-4.Loop1                  f32c              (R )
-4.Loop3                  f3c9              (R )
-4.Loop4                  f3f2              (R )
+4.Loop1                  f2ea              (R )
 4.ScoreDigitLoop         f200              (R )
 5.CYCLES                 0030              (R )
-6.CYCLES                 0030              (R )
+6.CYCLES                 0036              (R )
 7.CYCLES                 0000              (R )
-8.CYCLES                 0036              (R )
-9.CYCLES                 0020              (R )
+8.KernelLoop1            f400              (R )
+8.KernelLoop2            f432              (R )
+8.Loop3                  f494              (R )
+8.Loop4                  f4bd              (R )
+8.Nanny                  f461              (R )
+9.CYCLES                 001e              (R )
 AUDC0                    0015                  
 AUDC1                    0016                  
 AUDF0                    0017                  
@@ -45,11 +45,11 @@ BALL_SIZE_8              0030
 BCDLevel                 0087              (R )
 BCDScore                 0081              (R )
 BCDScoreAdd              0084              (R )
-CatFaceGfx               f75e              (R )
+CatFaceGfx               f866              (R )
 CatGfxPtr                009b              (R )
 CatPosY                  0094                  
-CatRows                  f353                  
-CatTartGfx               f900              (R )
+CatRows                  f30f                  
+CatTartGfx               fa10              (R )
 COL_BACKGROUND           0000              (R )
 COL_CAT_FACE             0006              (R )
 COL_CAT_TART             004a              (R )
@@ -72,13 +72,14 @@ CXP0FB                   0002
 CXP1FB                   0003                  
 CXPPMM                   0007                  
 DOUBLE_SIZE              0005              (R )
+DrawCatRow               f313                  
 ENABL                    001f              (R )
 ENAM0                    001d              (R )
 ENAM1                    001e              (R )
-FineHmove73              f71e                  
+FineHmove73              f81e                  
 FoodColor1               00bc              (R )
 FoodColor2               00bf              (R )
-FoodGfx                  f800              (R )
+FoodGfx                  f900              (R )
 FoodGfxPtr1              00ba              (R )
 FoodGfxPtr2              00bd              (R )
 FoodItemL                009f              (R )
@@ -88,11 +89,11 @@ Frame                    0080              (R )
 GRP0                     001b              (R )
 GRP1                     001c              (R )
 Health                   008f              (R )
-HealthBgGfx              f700              (R )
-HealthLeftGfx            f6bd              (R )
-HealthRightGfx           f6dd              (R )
-HealthTopGfx             f6b8              (R )
-HiRows                   f304              (R )
+HealthBgGfx              f800              (R )
+HealthLeftGfx            f7bd              (R )
+HealthRightGfx           f7dd              (R )
+HealthTopGfx             f7b8              (R )
+HiRows                   f2c2              (R )
 HMBL                     0024              (R )
 HMCLR                    002b              (R )
 HMM0                     0022              (R )
@@ -109,9 +110,9 @@ INPT3                    000b
 INPT4                    000c                  
 INPT5                    000d                  
 INTIM                    0284              (R )
-LevelGfx                 f650              (R )
-LineThrobGfx             f6a0              (R )
-LoRows                   f3d4              (R )
+LevelGfx                 f750              (R )
+LineThrobGfx             f7a0              (R )
+LoRows                   f49f              (R )
 LUM_0                    0000              (R )
 LUM_2                    0002              (R )
 LUM_4                    0004              (R )
@@ -139,17 +140,18 @@ PF_PRIORITY              0004              (R )
 PF_REFLECT               0001              (R )
 PF_SCORE_MODE            0002                  
 PgBarColor               008e              (R )
-PgBarGfx                 f70d              (R )
-PgBarGfxR                f716              (R )
+PgBarGfx                 f80d              (R )
+PgBarGfxR                f816              (R )
 PostCatRows              009e              (R )
 PreCatRows               009d              (R )
-PreKernel                f23a                  
+PreKernel                f238                  
 Progress                 0088              (R )
 ProgressBar              0089              (R )
 QUAD_SIZE                0007                  
-RainbowCol               f72e                  
-RainbowColors            f90e              (R )
-RainbowGfx               f72e                  
+RainbowCol               f82e                  
+RainbowColors            fa00              (R )
+RainbowGfx               f82e                  
+RamBowColors             fa00              (R )
 RamStart                 0080                  
 RbowColPtr1              0095              (R )
 RbowColPtr2              0097              (R )
@@ -166,7 +168,7 @@ RESP0                    0010              (R )
 RESP1                    0011              (R )
 RSYNC                    0003                  
 ScoreColor               0086              (R )
-ScoreGfx                 f600              (R )
+ScoreGfx                 f700              (R )
 ScoreTop                 f189              (R )
 SWACNT                   0281                  
 SWBCNT                   0283                  
@@ -203,5 +205,5 @@ VERSION_MACRO            006a
 VERSION_VCS              0069                  
 VSYNC                    0000              (R )
 WSYNC                    0002              (R )
-Z_EndOfCode              f575                  
+Z_EndOfCode              f675                  
 --- End of Symbol List.

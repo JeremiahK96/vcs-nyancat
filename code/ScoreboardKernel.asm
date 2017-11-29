@@ -112,7 +112,6 @@ ScoreTop	; draw border above scoreboard
     sta VDELP0	; 27 - disable player vertical delays
     sta VDELP1	; 30
     sta ENABL	; 33 - disable ball
-    sta CTRLPF	; 36 - disable playfield mirroring
     
-    ldx #$FF	; 38
-    txs		; 40 - reset the stack pointer
+    ldx #$FF	; 35
+    txs		; 37 - reset the stack pointer

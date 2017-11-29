@@ -540,7 +540,7 @@ RainbowGfx
 
 RainbowCol
 
-    HEX 000000000000000000000000000000000000	; 18 bytes
+    HEX 00000000000000000000000000000000000000000000	; 22 bytes
     
     .byte $36
     .byte $36
@@ -560,7 +560,7 @@ RainbowCol
     .byte $54
     .byte $54
     
-    HEX 000000000000000000000000000000000000	; 18 bytes
+    HEX 00000000000000000000000000000000000000000000	; 22 bytes
 
 CatFaceGfx
 
@@ -579,6 +579,7 @@ CatFaceGfx
     .byte %01000010
     
     HEX 000000000000000000000000000000000000000000	; 21 bytes
+    ;140 bytes used in page
 
     ALIGN $100
 
@@ -920,10 +921,32 @@ FoodGfx
     .byte $4A
     .byte 0
 
+RainbowColors
+RamBowColors
+
+    .byte COL_BACKGROUND
+    .byte COL_BACKGROUND
+    
+    .byte $64
+    .byte $64
+    .byte $88
+    .byte $88
+    .byte $C8
+    .byte $C8
+    .byte $1E
+    .byte $1E
+    .byte $28
+    .byte $28
+    .byte $44
+    .byte $44
+    
+    .byte COL_BACKGROUND
+    .byte COL_BACKGROUND
+
 CatTartGfx
 
     .byte %00000000
-    .byte %11100000
+    .byte %00000000
     .byte %11100000
     .byte %11000000
     .byte %11000000
@@ -936,24 +959,3 @@ CatTartGfx
     .byte %11100000
     .byte %11100000
     .byte %11100000
-
-RainbowColors
-
-    .byte COL_BACKGROUND
-    .byte COL_BACKGROUND
-    
-    .byte $64
-    .byte $64
-    .byte $88
-    .byte $88
-    .byte $C8
-    .byte $C8
-    .byte $1E
-    .byte $1E
-    .byte $28
-    .byte $28
-    .byte $44
-    .byte $44
-    
-    .byte COL_BACKGROUND
-    .byte COL_BACKGROUND

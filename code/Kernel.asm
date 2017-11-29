@@ -8,7 +8,7 @@
 
 ; Include kernel routines
     include code/ScoreboardKernel.asm
-    include code/GameplayKernel.asm
+    include code/Gameplay Kernel/GameplayKernel.asm
     include code/ProgressHealthKernel.asm
     
     lda #2

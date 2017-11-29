@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 11-26-2017 Version 2.1
+; 11-28-2017 Version 2.2
 ;
-; Add cat with rainbow and food items
+; Optimize cycle timings in the cat row kernel loop
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
