@@ -41,7 +41,17 @@ PreKernel:
     lda #>CatFaceGfx
     sta CatGfxPtr+1
     
+    lda Frame
+    and #%00001000
+    beq .Rainbow1
+    
+    lda #%01010000
+    bne .Rainbow2
+    
+.Rainbow1
     lda #%10100000
+
+.Rainbow2
     sta PF0
     
     lda #COL_CAT_FACE
@@ -50,8 +60,11 @@ PreKernel:
     lda Frame
     and #%00111111
     
+    dec FoodPosX
+    bpl .NoReset
     lda #88
     sta FoodPosX
+.NoReset
     
     lda #$80
     sta HMP0

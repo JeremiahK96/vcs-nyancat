@@ -34,16 +34,24 @@ DrawCatRow:	SUBROUTINE
     
     ;17
     
-    lda #%11100000
-    sta PF1
+    SLEEP 22
     
-    SLEEP 30
-    ;jmp .KernelLoop2
+    lda #%11100000	; 41
+    sta PF1		; 44
     
-    dec TartGfxPtr
-    dec CatGfxPtr
-    SLEEP 6
-    jmp .KernelLoop1
+    lda FoodPosX	; 47
+    cmp #49		; 49
+    bmi .FoodRight	; 52/51
+    
+    dec TartGfxPtr	; 56
+    dec CatGfxPtr	; 61
+    
+    SLEEP 7		; 68
+    
+    jmp .KernelLoop1	; 71
+    
+.FoodRight
+    jmp .KernelLoop2	; 55
 
     ALIGN $100
     
