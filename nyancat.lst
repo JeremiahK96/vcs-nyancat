@@ -9,7 +9,7 @@
       8  10000 ????						;
       9  10000 ????						;
      10  10000 ????						;
-     11  10000 ????						; 12-02-2017 Version 2.2
+     11  10000 ????						; 12-11-2017 Version 2.2
      12  10000 ????						;
      13  10000 ????						; Optimize cycle timings in the cat row kernel loop
      14  10000 ????						; Add 2nd version of kernel for different food positions
@@ -1463,80 +1463,79 @@
     118  f2d0							; skip straight to CatRows.
     119  f2d0
     120  f2d0
-    121  f2d0
-    122  f2d0							; Draw all the rows above the cat's two rows.
-    123  f2d0				   HiRows
-    124  f2d0
-    125  f2d0							; First, output a single-color line to draw the bottom of a "throb" line.
-    126  f2d0							; This will probably be a good time to prepare the pointers for the
-    127  f2d0							; food items' graphics, as well as loading the colors for the food items.
-    128  f2d0
-    129  f2d0		       a5 b4		      lda	ThrobColor+0	; 02
-    130  f2d2		       85 09		      sta	COLUBK	; 05
-    131  f2d4
-    132  f2d4		       a4 b9		      ldy	CurrentRow	; 08
-    133  f2d6		       b9 9f 00 	      lda	FoodItemL,y	; 12
-    134  f2d9		       29 f0		      and	#$F0	; 14
-    135  f2db		       85 ba		      sta	FoodGfxPtr1	; 17
-    136  f2dd		       aa		      tax		; 19
-    137  f2de		       bd 0e f9 	      lda	FoodGfx+14,x	; 23
-    138  f2e1		       85 bc		      sta	FoodColor1	; 26
-    139  f2e3
-    140  f2e3		       b9 a6 00 	      lda	FoodItemR,y	; 30
-    141  f2e6		       29 f0		      and	#$F0	; 32
-    142  f2e8		       85 bd		      sta	FoodGfxPtr2	; 35
-    143  f2ea		       aa		      tax		; 37
-    144  f2eb		       bd 0e f9 	      lda	FoodGfx+14,x	; 41
-    145  f2ee		       85 bf		      sta	FoodColor2	; 44
-    146  f2f0
-    147  f2f0
-    148  f2f0		       85 02		      sta	WSYNC
-    149  f2f2
-    150  f2f2							; After that, output 14 lines to draw a single row with food items,
-    151  f2f2							; but without drawing the cat. The food graphics will be updated every line,
-    152  f2f2							; but there will probably not be enough time to also update the food colors
-    153  f2f2							; every line throughout the kernel.
-    154  f2f2
-    155  f2f2		       a9 00		      lda	#COL_BACKGROUND
-    156  f2f4		       85 09		      sta	COLUBK
-    157  f2f6
-    158  f2f6		       a4 0e		      ldy	14
-    159  f2f8				   .Loop1
-    160  f2f8		       85 02		      sta	WSYNC
-    161  f2fa		       88		      dey
-    162  f2fb		       d0 fb		      bne	.Loop1
-    163  f2fd
-    164  f2fd							; Lastly, output four single-color lines to draw most of a "throb" line,
-    165  f2fd							; while setting the position of player 1 to draw the next set of food items.
-    166  f2fd
-    167  f2fd		       a5 b4		      lda	ThrobColor+0
-    168  f2ff		       85 09		      sta	COLUBK
-    169  f301		       85 02		      sta	WSYNC
-    170  f303
-    171  f303		       a5 b5		      lda	ThrobColor+1
-    172  f305		       85 09		      sta	COLUBK
-    173  f307		       85 02		      sta	WSYNC
-    174  f309
-    175  f309		       a5 b6		      lda	ThrobColor+2
-    176  f30b		       85 09		      sta	COLUBK
-    177  f30d		       a2 00		      ldx	#0
-    178  f30f		       86 1b		      stx	GRP0
-    179  f311		       85 02		      sta	WSYNC
-    180  f313
-    181  f313		       a5 b5		      lda	ThrobColor+1
-    182  f315		       85 09		      sta	COLUBK
-    183  f317
-    184  f317		       c6 9d		      dec	PreCatRows
-    185  f319		       85 02		      sta	WSYNC
-    186  f31b		       d0 b3		      bne	HiRows
-    187  f31d
-    188  f31d							; If this is not the last row before drawing the cat's rows,
-    189  f31d							; loop back to HiRows to draw the next row.
-    190  f31d
-    191  f31d
-    192  f31d
-------- FILE code/Gameplay Kernel/CatRowKernel.asm LEVEL 4 PASS 2
-      0  f31d					      include	code/Gameplay Kernel/CatRowKernel.asm
+------- FILE code/Gameplay Kernel/HiRows.asm LEVEL 4 PASS 2
+      0  f2d0					      include	code/Gameplay Kernel/HiRows.asm
+      1  f2d0							; Draw all the rows above the cat's two rows
+      2  f2d0				   HiRows
+      3  f2d0
+      4  f2d0							; First, output a single-color line to draw the bottom of a "throb" line.
+      5  f2d0							; This will probably be a good time to prepare the pointers for the
+      6  f2d0							; food items' graphics, as well as loading the colors for the food items.
+      7  f2d0
+      8  f2d0		       a5 b4		      lda	ThrobColor+0	; 02
+      9  f2d2		       85 09		      sta	COLUBK	; 05
+     10  f2d4
+     11  f2d4		       a4 b9		      ldy	CurrentRow	; 08
+     12  f2d6		       b9 9f 00 	      lda	FoodItemL,y	; 12
+     13  f2d9		       29 f0		      and	#$F0	; 14
+     14  f2db		       85 ba		      sta	FoodGfxPtr1	; 17
+     15  f2dd		       aa		      tax		; 19
+     16  f2de		       bd 0e f9 	      lda	FoodGfx+14,x	; 23
+     17  f2e1		       85 bc		      sta	FoodColor1	; 26
+     18  f2e3
+     19  f2e3		       b9 a6 00 	      lda	FoodItemR,y	; 30
+     20  f2e6		       29 f0		      and	#$F0	; 32
+     21  f2e8		       85 bd		      sta	FoodGfxPtr2	; 35
+     22  f2ea		       aa		      tax		; 37
+     23  f2eb		       bd 0e f9 	      lda	FoodGfx+14,x	; 41
+     24  f2ee		       85 bf		      sta	FoodColor2	; 44
+     25  f2f0
+     26  f2f0
+     27  f2f0		       85 02		      sta	WSYNC
+     28  f2f2
+     29  f2f2							; After that, output 14 lines to draw a single row with food items,
+     30  f2f2							; but without drawing the cat. The food graphics will be updated every line,
+     31  f2f2							; but there will probably not be enough time to also update the food colors
+     32  f2f2							; every line throughout the kernel.
+     33  f2f2
+     34  f2f2		       a9 00		      lda	#COL_BACKGROUND
+     35  f2f4		       85 09		      sta	COLUBK
+     36  f2f6
+     37  f2f6		       a4 0e		      ldy	14
+     38  f2f8				   .Loop1
+     39  f2f8		       85 02		      sta	WSYNC
+     40  f2fa		       88		      dey
+     41  f2fb		       d0 fb		      bne	.Loop1
+     42  f2fd
+     43  f2fd							; Lastly, output four single-color lines to draw most of a "throb" line,
+     44  f2fd							; while setting the position of player 1 to draw the next set of food items.
+     45  f2fd
+     46  f2fd		       a5 b4		      lda	ThrobColor+0
+     47  f2ff		       85 09		      sta	COLUBK
+     48  f301		       85 02		      sta	WSYNC
+     49  f303
+     50  f303		       a5 b5		      lda	ThrobColor+1
+     51  f305		       85 09		      sta	COLUBK
+     52  f307		       85 02		      sta	WSYNC
+     53  f309
+     54  f309		       a5 b6		      lda	ThrobColor+2
+     55  f30b		       85 09		      sta	COLUBK
+     56  f30d		       a2 00		      ldx	#0
+     57  f30f		       86 1b		      stx	GRP0
+     58  f311		       85 02		      sta	WSYNC
+     59  f313
+     60  f313		       a5 b5		      lda	ThrobColor+1
+     61  f315		       85 09		      sta	COLUBK
+     62  f317
+     63  f317		       c6 9d		      dec	PreCatRows
+     64  f319		       85 02		      sta	WSYNC
+     65  f31b		       d0 b3		      bne	HiRows
+     66  f31d
+     67  f31d							; If this is not the last row before drawing the cat's rows,
+     68  f31d							; loop back to HiRows to draw the next row.
+------- FILE code/Gameplay Kernel/GameplayKernel.asm
+------- FILE code/Gameplay Kernel/CatRows.asm LEVEL 4 PASS 2
+      0  f31d					      include	code/Gameplay Kernel/CatRows.asm
       1  f31d							; Draw the two rows that contain the cat.
       2  f31d				   CatRows
       3  f31d
@@ -1834,54 +1833,53 @@
     235  f49f
     236  f49f
 ------- FILE code/Gameplay Kernel/GameplayKernel.asm
-    194  f49f
-    195  f49f
-    196  f49f
-    197  f49f							; Draw all the rows below the cat's two rows.
-    198  f49f				   LoRows
-    199  f49f
-    200  f49f							; Output 4 lines, drawing the rest of the "throb" line, while preparing
-    201  f49f							; player 1 for the next row's food items.
-    202  f49f
-    203  f49f		       a5 b5		      lda	ThrobColor+1
-    204  f4a1		       85 09		      sta	COLUBK
-    205  f4a3		       85 02		      sta	WSYNC
-    206  f4a5
-    207  f4a5		       a5 b6		      lda	ThrobColor+2
-    208  f4a7		       85 09		      sta	COLUBK
-    209  f4a9		       85 02		      sta	WSYNC
-    210  f4ab
-    211  f4ab		       a5 b5		      lda	ThrobColor+1
-    212  f4ad		       85 09		      sta	COLUBK
-    213  f4af		       85 02		      sta	WSYNC
-    214  f4b1
-    215  f4b1		       a5 b4		      lda	ThrobColor+0
-    216  f4b3		       85 09		      sta	COLUBK
-    217  f4b5		       85 02		      sta	WSYNC
-    218  f4b7
-    219  f4b7							; Output 14 lines to draw a row, exactly the same as in HiRows.
-    220  f4b7							; It may be possible to code this as a subroutine to save ROM space.
-    221  f4b7
-    222  f4b7		       a9 00		      lda	#COL_BACKGROUND
-    223  f4b9		       85 09		      sta	COLUBK
-    224  f4bb
-    225  f4bb		       a4 0e		      ldy	14
-    226  f4bd				   .Loop4
-    227  f4bd		       85 02		      sta	WSYNC
-    228  f4bf		       88		      dey
-    229  f4c0		       d0 fb		      bne	.Loop4
-    230  f4c2
-    231  f4c2							; Lastly, output the a single line for the next "throb" line.
-    232  f4c2							; Use this time to prepare the next row's food item pointers (unless this is
-    233  f4c2							; the last row). If this is not the last row, loop to LoRows for the next row.
-    234  f4c2
-    235  f4c2		       a5 b4		      lda	ThrobColor+0
-    236  f4c4		       85 09		      sta	COLUBK
-    237  f4c6
-    238  f4c6		       c6 9e		      dec	PostCatRows
-    239  f4c8		       85 02		      sta	WSYNC
-    240  f4ca		       d0 d3		      bne	LoRows
-    241  f4cc
+------- FILE code/Gameplay Kernel/LoRows.asm LEVEL 4 PASS 2
+      0  f49f					      include	code/Gameplay Kernel/LoRows.asm
+      1  f49f							; Draw all the rows below the cat's two rows.
+      2  f49f				   LoRows
+      3  f49f
+      4  f49f							; Output 4 lines, drawing the rest of the "throb" line, while preparing
+      5  f49f							; player 1 for the next row's food items.
+      6  f49f
+      7  f49f		       a5 b5		      lda	ThrobColor+1
+      8  f4a1		       85 09		      sta	COLUBK
+      9  f4a3		       85 02		      sta	WSYNC
+     10  f4a5
+     11  f4a5		       a5 b6		      lda	ThrobColor+2
+     12  f4a7		       85 09		      sta	COLUBK
+     13  f4a9		       85 02		      sta	WSYNC
+     14  f4ab
+     15  f4ab		       a5 b5		      lda	ThrobColor+1
+     16  f4ad		       85 09		      sta	COLUBK
+     17  f4af		       85 02		      sta	WSYNC
+     18  f4b1
+     19  f4b1		       a5 b4		      lda	ThrobColor+0
+     20  f4b3		       85 09		      sta	COLUBK
+     21  f4b5		       85 02		      sta	WSYNC
+     22  f4b7
+     23  f4b7							; Output 14 lines to draw a row, exactly the same as in HiRows.
+     24  f4b7							; It may be possible to code this as a subroutine to save ROM space.
+     25  f4b7
+     26  f4b7		       a9 00		      lda	#COL_BACKGROUND
+     27  f4b9		       85 09		      sta	COLUBK
+     28  f4bb
+     29  f4bb		       a4 0e		      ldy	14
+     30  f4bd				   .Loop4
+     31  f4bd		       85 02		      sta	WSYNC
+     32  f4bf		       88		      dey
+     33  f4c0		       d0 fb		      bne	.Loop4
+     34  f4c2
+     35  f4c2							; Lastly, output the a single line for the next "throb" line.
+     36  f4c2							; Use this time to prepare the next row's food item pointers (unless this is
+     37  f4c2							; the last row). If this is not the last row, loop to LoRows for the next row.
+     38  f4c2
+     39  f4c2		       a5 b4		      lda	ThrobColor+0
+     40  f4c4		       85 09		      sta	COLUBK
+     41  f4c6
+     42  f4c6		       c6 9e		      dec	PostCatRows
+     43  f4c8		       85 02		      sta	WSYNC
+     44  f4ca		       d0 d3		      bne	LoRows
+------- FILE code/Gameplay Kernel/GameplayKernel.asm
 ------- FILE code/Kernel.asm
 ------- FILE code/ProgressHealthKernel.asm LEVEL 3 PASS 2
       0  f4cc					      include	code/ProgressHealthKernel.asm

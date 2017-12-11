@@ -8,7 +8,7 @@
 ;
 ;
 ;
-; 12-02-2017 Version 2.2
+; 12-11-2017 Version 2.2
 ;
 ; Optimize cycle timings in the cat row kernel loop
 ; Add 2nd version of kernel for different food positions
