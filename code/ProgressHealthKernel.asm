@@ -1,11 +1,12 @@
     lda ThrobColor+1
     sta COLUBK
+    lda #0
+    sta PF0
+    sta CTRLPF
     lda #COL_CAT_FACE
     sta COLUPF
-    lda #0
-    sta CTRLPF
     
-    SLEEP 35	; 53
+    SLEEP 32	; 53
     
     lda #$20	; 55
     sta HMP0	; 58

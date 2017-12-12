@@ -1,43 +1,45 @@
 --- Symbol List (sorted by symbol)
 0.Finish                 f0d1              (R )
 0.FREE_BYTES             0000                  
-0.NoReset                f157              (R )
+0.NoReset                f185              (R )
 0.Underflow1             f0a8              (R )
 0.Underflow2             f0b3              (R )
 0.Underflow3             f0be              (R )
 0.Underflow4             f0c9              (R )
 1.CLEAR_STACK            f006              (R )
-10.CYCLES                0016              (R )
-11.CYCLES                0004              (R )
-12.CYCLES                0020              (R )
-13.HealthTop             f510              (R )
-13.Loop                  f512              (R )
-14.CYCLES                001a              (R )
-15.HealthMiddle          f600              (R )
-15.Loop                  f602              (R )
-16.HealthBottom          f63c              (R )
-16.Loop                  f63e              (R )
-17.CYCLES                000e              (R )
+10.FoodRight             f487              (R )
+10.KernelLoop1           f500              (R )
+10.KernelLoop2           f532              (R )
+10.Loop3                 f5a0              (R )
+10.Nanny                 f561              (R )
+11.CYCLES                0018              (R )
+12.CYCLES                0004              (R )
+13.FrootLoop             f5f4              (R )
+13.WaitLoop              f607              (R )
+14.CYCLES                0020              (R )
+15.HealthTop             f66a              (R )
+15.Loop                  f66c              (R )
+16.CYCLES                001a              (R )
+17.HealthMiddle          f700              (R )
+17.Loop                  f702              (R )
+18.HealthBottom          f73c              (R )
+18.Loop                  f73e              (R )
+19.CYCLES                000e              (R )
 2.CYCLES                 0000              (R )
-3.DigitLoop              f173              (R )
-3.Loop                   f163              (R )
-4.ClearRainbow           f23d              (R )
-4.DivideLoop             f271              (R )
-4.EntrancePoint          f21a              (R )
-4.Loop1                  f301              (R )
-4.Rainbow1               f29f              (R )
-4.Rainbow2               f2a2              (R )
-4.ScoreDigitLoop         f200              (R )
+3.DigitLoop              f1af              (R )
+3.Loop                   f19f              (R )
+4.ClearRainbow           f33d              (R )
+4.DivideLoop             f371              (R )
+4.EntrancePoint          f31a              (R )
+4.Rainbow1               f39f              (R )
+4.Rainbow2               f3a2              (R )
+4.ScoreDigitLoop         f300              (R )
 5.CYCLES                 0030              (R )
 6.CYCLES                 0002              (R )
 7.CYCLES                 001e              (R )
 8.CYCLES                 0000              (R )
-9.FoodRight              f351              (R )
-9.KernelLoop1            f400              (R )
-9.KernelLoop2            f432              (R )
-9.Loop3                  f494              (R )
-9.Loop4                  f4bd              (R )
-9.Nanny                  f461              (R )
+9.FrootLoop              f3e8              (R )
+9.WaitLoop               f3fb              (R )
 AUDC0                    0015                  
 AUDC1                    0016                  
 AUDF0                    0017                  
@@ -51,11 +53,11 @@ BALL_SIZE_8              0030
 BCDLevel                 0087              (R )
 BCDScore                 0081              (R )
 BCDScoreAdd              0084              (R )
-CatFaceGfx               f866              (R )
+CatFaceGfx               f966              (R )
 CatGfxPtr                0098              (R )
 CatPosY                  0094                  
-CatRows                  f326                  
-CatTartGfx               fa07              (R )
+CatRows                  f45d                  
+CatTartGfx               fb07              (R )
 COL_BACKGROUND           0000              (R )
 COL_CAT_FACE             0006              (R )
 COL_CAT_TART             004a              (R )
@@ -78,14 +80,14 @@ CXP0FB                   0002
 CXP1FB                   0003                  
 CXPPMM                   0007                  
 DOUBLE_SIZE              0005              (R )
-DrawCatRow               f32a                  
+DrawCatRow               f463                  
 ENABL                    001f              (R )
 ENAM0                    001d              (R )
 ENAM1                    001e              (R )
-FineHmove73              f81e                  
+FineHmove73              f91e                  
 FoodColor1               00b9              (R )
 FoodColor2               00bc              (R )
-FoodGfx                  f900              (R )
+FoodGfx                  fa00              (R )
 FoodGfxPtr1              00b7              (R )
 FoodGfxPtr2              00ba              (R )
 FoodItemL                009c              (R )
@@ -95,11 +97,11 @@ Frame                    0080              (R )
 GRP0                     001b              (R )
 GRP1                     001c              (R )
 Health                   008f              (R )
-HealthBgGfx              f800              (R )
-HealthLeftGfx            f7bd              (R )
-HealthRightGfx           f7dd              (R )
-HealthTopGfx             f7b8              (R )
-HiRows                   f2bf              (R )
+HealthBgGfx              f900              (R )
+HealthLeftGfx            f8bd              (R )
+HealthRightGfx           f8dd              (R )
+HealthTopGfx             f8b8              (R )
+HiRows                   f3e6              (R )
 HMBL                     0024              (R )
 HMCLR                    002b              (R )
 HMM0                     0022              (R )
@@ -116,9 +118,9 @@ INPT3                    000b
 INPT4                    000c                  
 INPT5                    000d                  
 INTIM                    0284              (R )
-LevelGfx                 f750              (R )
-LineThrobGfx             f7a0              (R )
-LoRows                   f49f              (R )
+LevelGfx                 f850              (R )
+LineThrobGfx             f8a0              (R )
+LoRows                   f5ad              (R )
 LUM_0                    0000              (R )
 LUM_2                    0002              (R )
 LUM_4                    0004              (R )
@@ -146,17 +148,17 @@ PF_PRIORITY              0004              (R )
 PF_REFLECT               0001              (R )
 PF_SCORE_MODE            0002                  
 PgBarColor               008e              (R )
-PgBarGfx                 f80d              (R )
-PgBarGfxR                f816              (R )
+PgBarGfx                 f90d              (R )
+PgBarGfxR                f916              (R )
 PostCatRows              009b              (R )
 PreCatRows               009a              (R )
-PreKernel                f238                  
+PreKernel                f338                  
 Progress                 0088              (R )
 ProgressBar              0089              (R )
 QUAD_SIZE                0007                  
-RainbowCol               f82e                  
-RainbowColors            fa00              (R )
-RainbowGfx               f82e                  
+RainbowCol               f92e                  
+RainbowColors            fb00              (R )
+RainbowGfx               f92e                  
 RainbowStack             0095                  
 RamBowColors             00de              (R )
 RamStart                 0080                  
@@ -173,8 +175,8 @@ RESP0                    0010              (R )
 RESP1                    0011              (R )
 RSYNC                    0003                  
 ScoreColor               0086              (R )
-ScoreGfx                 f700              (R )
-ScoreTop                 f1af              (R )
+ScoreGfx                 f800              (R )
+ScoreTop                 f1eb              (R )
 SWACNT                   0281                  
 SWBCNT                   0283                  
 SWCHA                    0280                  
@@ -200,7 +202,7 @@ TWO_WIDE                 0004              (R )
 VBLANK                   0001              (R )
 VBLANK_SCANLINES         0025              (R )
 VBLANK_TIMER             002d              (R )
-VblankTimerLoop          f194              (R )
+VblankTimerLoop          f1d0              (R )
 VDEL_FALSE               0000                  
 VDEL_TRUE                0001              (R )
 VDELBL                   0027                  
@@ -210,5 +212,5 @@ VERSION_MACRO            006a
 VERSION_VCS              0069                  
 VSYNC                    0000              (R )
 WSYNC                    0002              (R )
-Z_EndOfCode              f675                  
+Z_EndOfCode              f775                  
 --- End of Symbol List.

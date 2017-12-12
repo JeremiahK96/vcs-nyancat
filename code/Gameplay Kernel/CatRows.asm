@@ -1,11 +1,12 @@
 ; Draw the two rows that contain the cat.
-CatRows:
+CatRows:	SUBROUTINE
 
     ; Output a line to finish the bottom of a "throb" line, like in HiRows.
     ; If the cat is at the very top of the row, draw the top of the pop-tart.
     
     lda ThrobColor+0
     sta COLUBK
+    sta COLUPF
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Cat Row Kernel
@@ -17,7 +18,7 @@ CatRows:
 ; containing the cat.
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-DrawCatRow:	SUBROUTINE
+DrawCatRow:
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -26,18 +27,15 @@ DrawCatRow:	SUBROUTINE
     
     ldx #COL_BACKGROUND
     
+    ;18
+    
     ; Then output the 14 lines to draw a single row. This will include drawing
     ; the rainbow, the pop-tart, the head and face or paws, and the food items.
     ; All graphics will be updated every line.
     
     ldy #13
     
-    ;17
-    
-    SLEEP 22
-    
-    lda #%11100000	; 41
-    sta PF1		; 44
+    SLEEP 24
     
     lda FoodPosX	; 47
     cmp #49		; 49
@@ -179,6 +177,7 @@ DrawCatRow:	SUBROUTINE
     
     lda ThrobColor+0
     sta COLUBK
+    sta COLUPF
     ldx #0
     stx GRP0
     stx GRP1
@@ -190,18 +189,22 @@ DrawCatRow:	SUBROUTINE
     
     lda ThrobColor+1
     sta COLUBK
+    sta COLUPF
     sta WSYNC
     
     lda ThrobColor+2
     sta COLUBK
+    sta COLUPF
     sta WSYNC
     
     lda ThrobColor+1
     sta COLUBK
+    sta COLUPF
     sta WSYNC
     
     lda ThrobColor+0
     sta COLUBK
+    sta COLUPF
     sta WSYNC
     
     ; Then output 14 lines to draw the next row, exactly the same way as the
@@ -211,6 +214,7 @@ DrawCatRow:	SUBROUTINE
     
     lda #COL_BACKGROUND
     sta COLUBK
+    sta COLUPF
     
     ldy #14
 .Loop3
@@ -224,6 +228,7 @@ DrawCatRow:	SUBROUTINE
     
     lda ThrobColor+0
     sta COLUBK
+    sta COLUPF
     sta WSYNC
     
     ; If the cat is at the very bottom of the screen, don't disable the

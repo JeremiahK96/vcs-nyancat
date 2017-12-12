@@ -8,7 +8,7 @@ Overscan:
 
     lda #OVERSCAN_TIMER
     sta WSYNC
-    sta TIM64T	; 03
+    sta TIM64T	; 3
 
 
 
@@ -20,23 +20,23 @@ Overscan:
 ; Takes 45 cycles to complete
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda BCDScoreAdd+1	; 2
-    ldx BCDScoreAdd	; 2
+    lda BCDScoreAdd+1	; 3
+    ldx BCDScoreAdd	; 3
     
     sed			; 2 - enable BCD mode
     
     clc			; 2
     sta Temp		; 3
-    lda BCDScore+2	; 2
+    lda BCDScore+2	; 3
     adc Temp		; 3
     sta BCDScore+2	; 3
     stx Temp		; 3
-    lda BCDScore+1	; 2
+    lda BCDScore+1	; 3
     adc Temp		; 3
     sta BCDScore+1	; 3
     lda #$00		; 2
     sta Temp		; 3
-    lda BCDScore+0	; 2
+    lda BCDScore+0	; 3
     adc Temp		; 3
     sta BCDScore+0	; 3
     
@@ -217,6 +217,7 @@ OverscanTimerLoop
     sta HMCLR	; 56
     lda #$B0	; 58 - another HMOVE is neccesary for the ball
     sta HMBL	; 61
+    
     inc Frame	; 66 increment the frame number
     
     sta WSYNC
@@ -245,9 +246,8 @@ OverscanTimerLoop
 
 
 
-    lda #$00
+    lda #0
     sta BCDScoreAdd
-    lda #$00
     sta BCDScoreAdd+1
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -312,10 +312,34 @@ OverscanTimerLoop
     lda #>CatTartGfx
     sta TartGfxPtr+1
     
-    lda #$50
-    sta FoodItemL
+    lda #$10
+    sta FoodItemL+0
+    lda #$70
+    sta FoodItemR+0
+    lda #$20
+    sta FoodItemL+1
+    lda #$80
+    sta FoodItemR+1
+    lda #$30
+    sta FoodItemL+2
     lda #$90
-    sta FoodItemR
+    sta FoodItemR+2
+    lda #$40
+    sta FoodItemL+3
+    lda #$A0
+    sta FoodItemR+3
+    lda #$50
+    sta FoodItemL+4
+    lda #$B0
+    sta FoodItemR+4
+    lda #$60
+    sta FoodItemL+5
+    lda #$C0
+    sta FoodItemR+5
+    lda #$D0
+    sta FoodItemL+6
+    lda #$E0
+    sta FoodItemR+6
     
     lda #<CatFaceGfx
     sta CatGfxPtr
@@ -327,6 +351,13 @@ OverscanTimerLoop
     lda #88
     sta FoodPosX
 .NoReset
+    lda FoodPosX
+    sta FoodPosX+1
+    sta FoodPosX+2
+    sta FoodPosX+3
+    sta FoodPosX+4
+    sta FoodPosX+5
+    sta FoodPosX+6
 
 
 
@@ -335,8 +366,6 @@ OverscanTimerLoop
 ;
 ; Figure out how many rows to draw before and after the two cat rows
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    ;lda CatPosY
     
     lda #3
     sta PreCatRows

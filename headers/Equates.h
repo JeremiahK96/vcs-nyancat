@@ -44,8 +44,8 @@ BALL_SIZE_8		equ	$30
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; VDELxx values
 
-VDEL_FALSE		equ	#0
-VDEL_TRUE		equ	#1
+VDEL_FALSE		equ	0
+VDEL_TRUE		equ	1
 
 
 
@@ -57,8 +57,8 @@ VDEL_TRUE		equ	#1
 
 ; number of scanlines in vertical blank and overscan
 
-VBLANK_SCANLINES	equ	#37
-OVERSCAN_SCANLINES	equ	#29
+VBLANK_SCANLINES	equ	37
+OVERSCAN_SCANLINES	equ	29
 
 ; converted values to store to TIM64T
 
@@ -69,7 +69,6 @@ OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
 ; colors
 
 COL_SCORE		equ $02
-;COL_SCOREBOARD		equ $4C
 COL_SCOREBOARD		equ $0E
 COL_BACKGROUND		equ $00
 COL_LINES		equ COL_BACKGROUND

@@ -87,8 +87,8 @@ ThrobColor	ds 3	; 3-byte array for the colors used to draw the
 
 TempLoop	ds 1
 
-; 57 of 79 non-temporary RAM bytes used (22 left)
-; last 49 bytes of RAM are used for stack space
+; 53 of 79 non-temporary RAM bytes used (22 left)
+; last 49 bytes of RAM are used for stack space in the scoreboard display
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Temporary variables which can be shared with stack space
@@ -101,12 +101,13 @@ Temp		ds 1
 CurrentRow	ds 1	; the current row being drawn in the gameplay kernel
 
 FoodGfxPtr1	ds 2	; pointer for the 1st food item's graphics
-FoodColor1	ds 1	; color if the 1st food item
+FoodColor1	ds 1	; color of the 1st food item
 
 FoodGfxPtr2	ds 2	; pointer for the 2nd food item's graphics
-FoodColor2	ds 1	; color if the 2nd food item
+FoodColor2	ds 1	; color of the 2nd food item
 
-; 8 of 49 temporary RAM bytes used (42 left)
+; 7 of 15 available temporary RAM bytes used (8 left)
+; last 34 bytes of RAM are used to hold the rainbow color graphics
 
     ORG $100 - 34
     

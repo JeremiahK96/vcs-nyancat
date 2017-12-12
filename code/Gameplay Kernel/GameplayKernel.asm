@@ -100,7 +100,7 @@ PreKernel:
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; 31 cycles
 
-    lda PF_REFLECT
+    lda #PF_REFLECT
     sta CTRLPF
     
     lda Frame
