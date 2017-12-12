@@ -296,6 +296,37 @@ OverscanTimerLoop
     sta ThrobColor+1
     lda LineThrobGfx+2,y
     sta ThrobColor+2
+    
+    
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda #>FoodGfx
+    sta FoodGfxPtr1+1
+    sta FoodGfxPtr2+1
+    
+    lda #<CatTartGfx
+    sta TartGfxPtr
+    lda #>CatTartGfx
+    sta TartGfxPtr+1
+    
+    lda #$50
+    sta FoodItemL
+    lda #$90
+    sta FoodItemR
+    
+    lda #<CatFaceGfx
+    sta CatGfxPtr
+    lda #>CatFaceGfx
+    sta CatGfxPtr+1
+    
+    dec FoodPosX
+    bpl .NoReset
+    lda #88
+    sta FoodPosX
+.NoReset
 
 
 

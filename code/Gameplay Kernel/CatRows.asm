@@ -54,7 +54,7 @@ DrawCatRow:	SUBROUTINE
     jmp .KernelLoop2	; 55
 
     ALIGN $100
-    
+
 .KernelLoop1
     
     ; 7 cycles to prepare PF rainbow colors

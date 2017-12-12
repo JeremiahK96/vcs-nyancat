@@ -16,7 +16,7 @@
     sta GRP1	; in CXP0FB, which will be used to end the scoreboard
     sta PF1	; display kernel loop.
     
-    ldy #5
+    ldy #4
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ScoreTop	; draw border above scoreboard

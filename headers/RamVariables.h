@@ -54,8 +54,8 @@ HthGfxRPtr	ds 2	; pointer for the right half of the health graphics
 
 CatPosY		ds 1	; number of scanlines to skip before drawing cat
 
-RbowColPtr1	ds 2	; pointer for the playfield rainbow color
-RbowColPtr2	ds 2	; pointer for the background rainbow color
+RainbowStack	ds 1	; value to set the stack pointer to when
+			; loading the rainbow colors into RAM
 
 TartGfxPtr	ds 2	; pointer for the tart graphics
 CatGfxPtr	ds 2	; pointer for the cat face/paws graphics
@@ -107,3 +107,7 @@ FoodGfxPtr2	ds 2	; pointer for the 2nd food item's graphics
 FoodColor2	ds 1	; color if the 2nd food item
 
 ; 8 of 49 temporary RAM bytes used (42 left)
+
+    ORG $100 - 34
+    
+RamBowColors	ds 34

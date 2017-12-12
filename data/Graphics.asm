@@ -922,26 +922,15 @@ FoodGfx
     .byte 0
 
 RainbowColors
-RamBowColors
 
-    .byte COL_BACKGROUND
-    .byte COL_BACKGROUND
-    
-    .byte $64
     .byte $64
     .byte $88
-    .byte $88
-    .byte $C8
     .byte $C8
     .byte $1E
-    .byte $1E
     .byte $28
-    .byte $28
-    .byte $44
     .byte $44
     
-    .byte COL_BACKGROUND
-    .byte COL_BACKGROUND
+    .byte 0
 
 CatTartGfx
 
