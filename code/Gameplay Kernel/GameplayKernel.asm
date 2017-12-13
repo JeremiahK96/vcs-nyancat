@@ -84,46 +84,46 @@ PreKernel:
     
     sta HMP1		; 32
     
+    sta WSYNC
+    
+    lda ThrobColor+1	; 03
+    sta COLUBK		; 06
+    sta COLUPF		; 09
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; 30 cycles
+
+    lda #PF_REFLECT	; 11
+    sta CTRLPF		; 14
+    
+    lda Frame		; 17
+    and #%00001000	; 19
+    beq .Rainbow1	; 21/22
+    
+    lda #%01010000	; 23
+    bne .Rainbow2	; 26
+    
+.Rainbow1
+    SLEEP 2		; 24
+    lda #%10100000	; 26
+
+.Rainbow2
+    sta PF0		; 29
+    
+    lda #COL_CAT_FACE	; 31
+    sta COLUP0		; 34
+    
+    lda #$80		; 36
+    sta HMP0		; 39
+    
     lda #ONE_COPY
     sta NUSIZ0
     lda #TWO_WIDE
     sta NUSIZ1
     
-    sta WSYNC
-    
-    lda ThrobColor+1
-    sta COLUBK
-    sta COLUPF
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; 31 cycles
-
-    lda #PF_REFLECT
-    sta CTRLPF
-    
-    lda Frame
-    and #%00001000
-    beq .Rainbow1
-    
-    lda #%01010000
-    bne .Rainbow2
-    
-.Rainbow1
-    SLEEP 2
-    lda #%10100000
-
-.Rainbow2
-    sta PF0
-    
-    lda #COL_CAT_FACE
-    sta COLUP0
-    
-    lda #$80
-    sta HMP0
-    
-    SLEEP 30
+    SLEEP 21
     
     sta HMOVE
     

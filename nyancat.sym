@@ -7,7 +7,7 @@
 0.Underflow3             f0be              (R )
 0.Underflow4             f0c9              (R )
 1.CLEAR_STACK            f006              (R )
-10.FoodRight             f487              (R )
+10.FoodRight             f483              (R )
 10.KernelLoop1           f500              (R )
 10.KernelLoop2           f532              (R )
 10.Loop3                 f5a0              (R )
@@ -31,15 +31,15 @@
 4.ClearRainbow           f33d              (R )
 4.DivideLoop             f371              (R )
 4.EntrancePoint          f31a              (R )
-4.Rainbow1               f39f              (R )
-4.Rainbow2               f3a2              (R )
+4.Rainbow1               f397              (R )
+4.Rainbow2               f39a              (R )
 4.ScoreDigitLoop         f300              (R )
 5.CYCLES                 0030              (R )
 6.CYCLES                 0002              (R )
-7.CYCLES                 001e              (R )
+7.CYCLES                 0012              (R )
 8.CYCLES                 0000              (R )
-9.FrootLoop              f3e8              (R )
-9.WaitLoop               f3fb              (R )
+9.FrootLoop              f3e4              (R )
+9.WaitLoop               f3f7              (R )
 AUDC0                    0015                  
 AUDC1                    0016                  
 AUDF0                    0017                  
@@ -56,7 +56,7 @@ BCDScoreAdd              0084              (R )
 CatFaceGfx               f966              (R )
 CatGfxPtr                0098              (R )
 CatPosY                  0094                  
-CatRows                  f45d                  
+CatRows                  f459                  
 CatTartGfx               fb07              (R )
 COL_BACKGROUND           0000              (R )
 COL_CAT_FACE             0006              (R )
@@ -80,7 +80,7 @@ CXP0FB                   0002
 CXP1FB                   0003                  
 CXPPMM                   0007                  
 DOUBLE_SIZE              0005              (R )
-DrawCatRow               f463                  
+DrawCatRow               f45f                  
 ENABL                    001f              (R )
 ENAM0                    001d              (R )
 ENAM1                    001e              (R )
@@ -101,7 +101,7 @@ HealthBgGfx              f900              (R )
 HealthLeftGfx            f8bd              (R )
 HealthRightGfx           f8dd              (R )
 HealthTopGfx             f8b8              (R )
-HiRows                   f3e6              (R )
+HiRows                   f3e2              (R )
 HMBL                     0024              (R )
 HMCLR                    002b              (R )
 HMM0                     0022              (R )
