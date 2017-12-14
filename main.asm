@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 12-12-2017 Version 2.3
+; 12-13-2017 Version 2.4
 ;
-; Fill every row with moving food items
+; Make each row's food items seperately moveable
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 

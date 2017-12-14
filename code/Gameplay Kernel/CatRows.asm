@@ -25,21 +25,25 @@ DrawCatRow:
     ldx FoodColor2
     txs
     
-    ldx #COL_BACKGROUND
-    
-    ;18
-    
     ; Then output the 14 lines to draw a single row. This will include drawing
     ; the rainbow, the pop-tart, the head and face or paws, and the food items.
     ; All graphics will be updated every line.
     
+    SLEEP 10
+    
+    ldy #13
+    lda (TartGfxPtr),y
+    sta PF1
+    
     ldy #13
     
-    SLEEP 24
+    ldx CurrentRow
+    lda FoodPosX,x	; 47
     
-    lda FoodPosX	; 47
     cmp #49		; 49
     bmi .FoodRight	; 52/51
+    
+    ldx #COL_BACKGROUND
     
     dec TartGfxPtr	; 56
     dec CatGfxPtr	; 61
@@ -49,7 +53,55 @@ DrawCatRow:
     jmp .KernelLoop1	; 71
     
 .FoodRight
+    ldx #COL_BACKGROUND
+    
     jmp .KernelLoop2	; 55
+    
+    
+    
+    
+    
+    
+DrawFoodRow:
+
+    ldy #13		; 02
+    
+.FoodLoop
+    lda #COL_BACKGROUND	; 04
+    sta WSYNC		; 07/00
+    
+.EnterHere
+    sta COLUBK		; 03
+    sta COLUPF		; 06
+    
+    lda (FoodGfxPtr1),y	; 11
+    sta GRP1		; 14
+    lda FoodColor1	; 17
+    sta COLUP1		; 20
+    
+    lda Temp		; 23
+    
+    sec			; 25
+.WaitLoop
+    sbc #23		; 27
+    bcs .WaitLoop	; 29
+    
+    lda (FoodGfxPtr2),y ; 49
+    ldx FoodColor2	; 52
+    sta GRP1		; 55
+    stx COLUP1		; 58
+    
+    dey			; 60
+    bpl .FoodLoop	; 62
+    
+    inc CurrentRow	; 65
+Sleep12
+    rts			; 71
+    
+    
+    
+    
+    
 
     ALIGN $100
 
@@ -229,13 +281,14 @@ DrawCatRow:
     lda ThrobColor+0
     sta COLUBK
     sta COLUPF
-    sta WSYNC
     
     ; If the cat is at the very bottom of the screen, don't disable the
     ; missile/player graphics until after they are drawn, so they don't get
     ; clipped at the bottom of the screen. An easy way to do this would be to
     ; simply disable them after they would have been drawn, whether they are
     ; already disabled or not.
+    
+    jmp LoRows
 
 
 

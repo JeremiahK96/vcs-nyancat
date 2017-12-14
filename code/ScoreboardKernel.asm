@@ -103,15 +103,3 @@ ScoreTop	; draw border above scoreboard
     bpl .ScoreDigitLoop	; 10/11	check negative flag to see if the loop is over
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    
-    lda #0	; 12
-    sta ENAM0	; 15 - disable missiles
-    sta ENAM1	; 18
-    sta GRP0	; 21 - disable player graphics
-    sta GRP1	; 24
-    sta VDELP0	; 27 - disable player vertical delays
-    sta VDELP1	; 30
-    sta ENABL	; 33 - disable ball
-    
-    ldx #$FF	; 35
-    txs		; 37 - reset the stack pointer

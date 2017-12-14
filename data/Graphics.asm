@@ -530,35 +530,14 @@ FineHmove73
 RainbowGfx
 ; 4 bytes
 
-    ;.byte %10100000	; rainbow PF0 gfx for moving straight, frame 0
+    .byte %10100000	; rainbow PF0 gfx for moving straight, frame 0
     
-    ;.byte %01010000	; rainbow PF0 gfx for moving straight, frame 1
+    .byte %01010000	; rainbow PF0 gfx for moving straight, frame 1
     
-    ;.byte %11000000	; rainbow PF0 gfx for moving up
+    .byte %11000000	; rainbow PF0 gfx for moving up
     
-    ;.byte %00110000	; rainbow PF0 gfx for moving down
+    .byte %00110000	; rainbow PF0 gfx for moving down
 
-RainbowCol
-
-    HEX 00000000000000000000000000000000000000000000	; 22 bytes
-    
-    .byte $36
-    .byte $36
-    
-    .byte $28
-    .byte $28
-    
-    .byte $1E
-    .byte $1E
-    
-    .byte $CC
-    .byte $CC
-    
-    .byte $72
-    .byte $72
-    
-    .byte $54
-    .byte $54
     
     HEX 00000000000000000000000000000000000000000000	; 22 bytes
 

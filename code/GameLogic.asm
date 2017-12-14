@@ -351,13 +351,48 @@ OverscanTimerLoop
     lda #88
     sta FoodPosX
 .NoReset
+    
     lda FoodPosX
+    sec
+    
+    sbc #41
+    bcs .Rock1
+    adc #89
+.Rock1
     sta FoodPosX+1
+    
+    sbc #17
+    bcs .Rock2
+    adc #89
+.Rock2
     sta FoodPosX+2
+    
+    lsr
     sta FoodPosX+3
+    
+    sbc #29
+    bcs .Rock4
+    adc #89
+.Rock4
     sta FoodPosX+4
+    
+    lsr
     sta FoodPosX+5
+    
+    sbc #57
+    bcs .Rock6
+    adc #89
+.Rock6
     sta FoodPosX+6
+    
+    lda Frame
+    and #%00001000
+    lsr
+    lsr
+    lsr
+    tay
+    lda RainbowGfx,y
+    sta Rainbow
 
 
 

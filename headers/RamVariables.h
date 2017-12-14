@@ -54,6 +54,7 @@ HthGfxRPtr	ds 2	; pointer for the right half of the health graphics
 
 CatPosY		ds 1	; number of scanlines to skip before drawing cat
 
+Rainbow		ds 1	; PF0 value for the rainbow graphics
 RainbowStack	ds 1	; value to set the stack pointer to when
 			; loading the rainbow colors into RAM
 
@@ -109,6 +110,6 @@ FoodColor2	ds 1	; color of the 2nd food item
 ; 7 of 15 available temporary RAM bytes used (8 left)
 ; last 34 bytes of RAM are used to hold the rainbow color graphics
 
-    ORG $100 - 34
+    ORG $100 - 36
     
 RamBowColors	ds 34
