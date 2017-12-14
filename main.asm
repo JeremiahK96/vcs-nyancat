@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 12-13-2017 Version 2.4
+; 12-13-2017 Version 2.5
 ;
-; Make each row's food items seperately moveable
+; Optimize and improve code
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -52,11 +52,13 @@ SystemClear:
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Game Logic
 ;
-; Do the overscan, vertycal sync, and vertical blanking,
+; Do the overscan, vertical sync, and vertical blanking,
 ; along with any game logic
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    include code/GameLogic.asm
+    include code/Game Logic/Overscan.asm
+    include code/Game Logic/VerticalSync.asm
+    include code/Game Logic/VerticalBlank.asm
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

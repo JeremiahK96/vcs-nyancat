@@ -1,84 +1,4 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Overscan
-;
-; Start the overscan timer and do game logic
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-Overscan:
-
-    lda #OVERSCAN_TIMER
-    sta WSYNC
-    sta TIM64T	; 3
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Update Score
-;
-; Add to the score
-;
-; Takes 45 cycles to complete
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    lda BCDScoreAdd+1	; 3
-    ldx BCDScoreAdd	; 3
-    
-    sed			; 2 - enable BCD mode
-    
-    clc			; 2
-    sta Temp		; 3
-    lda BCDScore+2	; 3
-    adc Temp		; 3
-    sta BCDScore+2	; 3
-    stx Temp		; 3
-    lda BCDScore+1	; 3
-    adc Temp		; 3
-    sta BCDScore+1	; 3
-    lda #$00		; 2
-    sta Temp		; 3
-    lda BCDScore+0	; 3
-    adc Temp		; 3
-    sta BCDScore+0	; 3
-    
-    cld			; 2 - disable BCD mode
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Finish Overscan
-;
-; Loop until the end of overscan
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-OverscanTimerLoop
-    lda INTIM
-    bne OverscanTimerLoop
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Vertical Sync
-;
-; Do the vertical sync and start the vertical blanking timer
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    lda #2
-    sta WSYNC
-    sta VSYNC	; enable VSYNC
-    
-    sta WSYNC
-    lda #VBLANK_TIMER
-    sta WSYNC
-    sta TIM64T	; start VBLANK timer
-    
-    sta HMCLR	; clear any HMOVE offsets
-    
-    lda #0
-    sta WSYNC
-    sta VSYNC	; disable VSYNC
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Vertical Blank
 ;
 ; Do the vertical blanking and game logic
@@ -87,52 +7,49 @@ OverscanTimerLoop
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare Scoreboard and Level Progress Displays
-;
-; Set object positions for scoreboard kernel.
-; Also load the values for the playfield registers in RAM
-; for drawing the level progress bar.
+; Prepare for Scoreboard and Level Progress Displays
 ;
 ; Takes 193 cycles (2 full scanlines + 41 cycles)
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda #$B0	; 05 - set HMOVE offsets for both player objects
+    lda #$E0	; 05 - set HMOVE offsets for the scoreboard kernel
     sta HMP0	; 08
-    lda #$C0	; 10
-    sta HMP1	; 13
-    lda #$80	; 15 - set HMOVE offsets for ball and missile0
-    sta HMBL	; 18
-    sta HMM0	; 21
+    sta HMM0	; 14
+    lda #$F0	; 16
+    sta HMP1	; 19
+    sta HMBL
     
-    SLEEP 3	; 24
+    SLEEP 6	; 26
     
-    sta RESP0	; 27 - set player positions
-    sta RESP1	; 30
+    sta RESP0	; 29 - set player positions
+    sta RESP1	; 32
     
-    lda #$D0	; 32 - set HMOVE offset for missile1
-    sta HMM1	; 35
+    SLEEP 7	; 38
 
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; reset all progress bar playfield graphics RAM (and use 21 cycles)
-
-    lda #%11100000	; 37
-    sta ProgressBar+0	; 40
-    lda #%11111111	; 42
-    sta ProgressBar+1	; 45
-    sta ProgressBar+2	; 48
-    sta ProgressBar+3	; 51
-    lda #%11111110	; 53
-    sta ProgressBar+4	; 56
+    lda #%11100000	; 38 - reset byte 0 for the progress bar
+    sta ProgressBar+0	; 41
+    lda #%11111111	; 21 - reset byte 1 for the progress bar
+    sta ProgressBar+1	; 24
+    sta ProgressBar+2	; 33 - reset bytes 2-3 for the progress bar
+    sta ProgressBar+3	; 36
+    lda #%11111110	; 43 - reset byte 4 for the progress bar
+    sta ProgressBar+4	; 46
     
-    sta RESBL	; 59 - set ball and missile positions
-    sta RESM0	; 62
-    sta RESM1	; 65
+    SLEEP 2	; 62
+    
+    sta RESM0	; 65
+    
+    sta WSYNC
+    
+    SLEEP 60
+    sta RESBL
+    sta RESM1
     
     sta WSYNC
     sta HMOVE
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>    
-; Load RAM for progress bar display (takes 28-53 cycles)
+; Load RAM for progress bar display (28-53 cycles)
 
     lda Progress	; 3 - get amount of progress
     
@@ -214,18 +131,17 @@ OverscanTimerLoop
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Finish
     
-    sta HMCLR	; 56
-    lda #$B0	; 58 - another HMOVE is neccesary for the ball
-    sta HMBL	; 61
-    
     inc Frame	; 66 increment the frame number
     
     sta WSYNC
-    sta HMOVE
+    sta HMCLR
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda #$10
+    sta BCDLevel
 
     lda #THREE_CLOSE | MSL_SIZE_2	; 2
     sta NUSIZ0		; 3
@@ -249,6 +165,8 @@ OverscanTimerLoop
     lda #0
     sta BCDScoreAdd
     sta BCDScoreAdd+1
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Prepare Health Display
