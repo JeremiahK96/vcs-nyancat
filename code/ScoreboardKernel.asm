@@ -39,13 +39,27 @@ ScoreTop	; draw border above scoreboard
     sta WSYNC
     sta WSYNC
 
-    SLEEP 48
+    SLEEP 37
     
-    lda BCDLevel
-    lsr
-    lsr
-    lsr
-    sta ENABL	; draw ball if bit-4 is set (if level > 9)
+    lda #$01
+    sta BCDScoreAdd+1
+
+    lda #10
+    sta Level
+    
+; draw ball if level > 9
+
+    ldx ENA_TRUE
+    lda Level
+    cmp #10
+    
+    pla		; 67 - pull gfx for digit0
+    
+    bcs .DrawBall
+    HEX 0C	; NOP abs (triple nop) uses 4 cycles and
+    		; skips the next 2 bytes (skipping the next instruction)
+.DrawBall
+    stx ENABL
     
     jmp .EntrancePoint
     
@@ -55,40 +69,39 @@ ScoreTop	; draw border above scoreboard
 .ScoreDigitLoop
 
     ; A contains gfx for digit3
-    sta GRP0		; 14	digit3 -> [GRP0]	digit2 -> GRP1
+    sta GRP0		; 14	digit2 -> [GRP0]	digit1 -> GRP1
     
     ; gfx for the first 3 digits are now pre-loaded into the GRPx registers
     
-    pla			; 18	pull gfx for digit4...
-    tay			; 20	...and store in Y
-    pla			; 24	pull gfx data for digit5...
-    tax			; 26	...and store in X
-    pla			; 30	pull gfx data for digit6 to A
+    pla			; 18 - pull gfx for digit3...
+    tay			; 20 - ...and store in Y
+    pla			; 24 - pull gfx data for digit4...
+    tax			; 26 - ...and store in X
+    pla			; 30 - pull gfx data for digit5 to A
     
-    sty GRP1		; 33	digit4 -> [GRP1]	digit3 -> GRP0
-    stx GRP0		; 36	digit5 -> [GRP0]	digit4 -> GRP1
-    sta GRP1		; 39	digit6 -> [GRP1]	digit5 -> GRP0
-    sta GRP0		; 42	digit6 -> [GRP0]	digit6 -> GRP1
+    sty GRP1		; 33 - digit3 -> [GRP1]	digit2 -> GRP0
+    stx GRP0		; 36 - digit4 -> [GRP0]	digit3 -> GRP1
+    sta GRP1		; 39 - digit5 -> [GRP1]	digit4 -> GRP0
+    sta GRP0		; 42 - digit5 -> [GRP0]	digit5 -> GRP1
     
-    pla			; 46	pull gfx data for level counter
-    sta ENAM0		; 49	use bit 1 of data for ENAM0
+    pla			; 46 - pull gfx data for level counter
+    sta ENAM0		; 49 - use bit 1 of data for ENAM0
     rol			; 51	
-    sta ENAM1		; 54	use bit 0 of data for ENAM1
+    sta ENAM1		; 54 - use bit 0 of data for ENAM1
     ror			; 56	
     ror			; 58	
     ror			; 60	
-    sta NUSIZ0		; 63	use bits 2-7 of data (re-aligned) for NUSIZ0
-    
-.EntrancePoint
+    sta NUSIZ0		; 63 - use bits 2-7 of data (re-aligned) for NUSIZ0
 
-    pla			; 67	pull gfx for digit1
-    sta GRP0		; 70	digit1 -> [GRP0]
+    pla			; 67 - pull gfx for digit0
+.EntrancePoint
+    sta GRP0		; 70 - digit0 -> [GRP0]
     
-    pla			; 74	pull gfx for digit2
-    sta.w GRP1		; 02	digit2 -> [GRP1]	digit1 -> GRP0
-    			;	(use an extra cycle for timing reasons)
+    pla			; 74 - pull gfx for digit1
+    sta.w GRP1		; 02 - digit1 -> [GRP1]	digit0 -> GRP0
+    			;      (use an extra cycle for timing reasons)
     
-    pla			; 06	pull gfx for digit3
+    pla			; 06 - pull gfx for digit2
     			
 	; On the final iteration of the loop, the stack will have wrapped
 	; and pulled from location $02 at this point.
@@ -98,8 +111,8 @@ ScoreTop	; draw border above scoreboard
 	; so checking bit-7 of the data pulled is all that you need
 	; to determine when to terminate the loop.
     			
-    tax			; 08	set flags according to pulled data
+    tax			; 08 - set flags according to pulled data
     
-    bpl .ScoreDigitLoop	; 10/11	check negative flag to see if the loop is over
+    bpl .ScoreDigitLoop	; 10/11 - check negative flag to see if the loop is over
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

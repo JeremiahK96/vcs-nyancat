@@ -7,46 +7,161 @@
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare for Scoreboard and Level Progress Displays
-;
-; Takes 193 cycles (2 full scanlines + 41 cycles)
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare HMOVE offsets for all scoreboard objects, and
+; reset the progress bar's RAM values to empty. (39 cycles)
 
-    lda #$E0	; 05 - set HMOVE offsets for the scoreboard kernel
-    sta HMP0	; 08
-    sta HMM0	; 14
-    lda #$F0	; 16
-    sta HMP1	; 19
-    sta HMBL
+    lda #$E0	; 05
+    sta HMP0	; 08 - set HMOVE offset for score's left digit
+    sta HMM0	; 11 - set HMOVE offset for left side of level counter digit
     
-    SLEEP 6	; 26
+    sta ProgressBar+0	; 14 - reset RAM byte 0 to %11100000 for progress bar
     
-    sta RESP0	; 29 - set player positions
-    sta RESP1	; 32
+    lda #$FF	; 16
+    sta HMP1	; 19 - set HMOVE offset for score's right digit
+    sta HMBL	; 22 - set HMOVE offset for leading 1 in level counter
+    		; right side of level counter digit doesn't need an HMOVE offset
     
-    SLEEP 7	; 38
+    sta ProgressBar+1	; 25 - reset RAM byte 1 to %11111111 for progress bar
+    
+    sta RESP0	; 28 - set position of score's left digit
+    sta RESP1	; 31 - set position of score's right digit
 
-    lda #%11100000	; 38 - reset byte 0 for the progress bar
-    sta ProgressBar+0	; 41
-    lda #%11111111	; 21 - reset byte 1 for the progress bar
-    sta ProgressBar+1	; 24
-    sta ProgressBar+2	; 33 - reset bytes 2-3 for the progress bar
-    sta ProgressBar+3	; 36
-    lda #%11111110	; 43 - reset byte 4 for the progress bar
-    sta ProgressBar+4	; 46
+    sta ProgressBar+2	; 34
+    sta ProgressBar+3	; 37
+    lda #%11111110	; 39 - reset byte 4 for the progress bar
+    sta ProgressBar+4	; 42
     
-    SLEEP 2	; 62
+    SLEEP 19
     
-    sta RESM0	; 65
+    sta RESM0	; 64 - set position for left side of level counter digit
+
+    SLEEP 72	; 60
     
-    sta WSYNC
-    
-    SLEEP 60
-    sta RESBL
-    sta RESM1
+    sta RESBL	; 63
+    sta RESM1	; 66
     
     sta WSYNC
     sta HMOVE
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Load Scoreboard
+;
+; Get graphics data for the scoreboard and push it onto the stack
+;
+; Takes 685 cycles to complete (9 full scanlines + 1 cycle)
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    SUBROUTINE
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare pointer for level digit graphics
+    
+    lda #>LevelGfx	; 2
+    sta LevelLoadPtr+1	; 3 - set MSB of level digit graphics pointer
+    
+    lda Level		; 3
+    
+    sec			; 2 - perform a mod 10 to isolate left digit
+    sbc #10		; 2
+    
+    bcc .Negative	; 3/2
+    bcs .Positive	; 3 - done this way to use the same number of cycles
+			;     either way, may or may not be neccesary
+.Negative
+    adc #10		; 2
+.Positive
+    
+    asl			; 2
+    asl			; 2
+    asl			; 2
+    adc #<LevelGfx	; 2 - add graphics table offset
+    sta LevelLoadPtr	; 3 - set LSB of level digit graphics pointer
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare one pointer MSB and multiple LSB's for score digit graphics
+    
+    lda #>ScoreGfx	; 2
+    sta ScoreLoadPtr+1	; 3 - set MSB of score digit graphics pointer
+    
+    lax BCDScore+0	; 3
+    and #$F0		; 2
+    lsr			; 2
+    sta ScoreDigit0	; 3 - set LSB for digit 0
+    txa			; 2
+    and #$0F		; 2
+    asl			; 2
+    asl			; 2
+    asl			; 2
+    sta ScoreDigit1	; 3 - set LSB for digit 1
+    
+    lax BCDScore+1	; 3
+    and #$F0		; 2
+    lsr			; 2
+    sta ScoreDigit2	; 3 - set LSB for digit 2
+    txa			; 2
+    and #$0F		; 2
+    asl			; 2
+    asl			; 2
+    asl			; 2
+    sta ScoreDigit3	; 2 - set LSB for digit 3
+    
+    lax BCDScore+2	; 3
+    and #$F0		; 2
+    lsr			; 2
+    sta ScoreDigit4	; 3 - set LSB for digit 4
+    txa			; 2
+    and #$0F		; 2
+    asl			; 2
+    asl			; 2
+    asl			; 2
+    sta ScoreDigit5	; 3 - set LSB for digit 5
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Load the stack with the graphics for the scoreboard
+    
+    ldy #6		; 2
+
+.LoadScoreboard
+
+    lda (LevelLoadPtr),y; 5
+    pha			; 3
+    
+    lda ScoreDigit5	; 3
+    sta ScoreLoadPtr	; 3
+    lda (ScoreLoadPtr),y; 5
+    pha			; 3
+    
+    lda ScoreDigit4	; 3
+    sta ScoreLoadPtr	; 3
+    lda (ScoreLoadPtr),y; 5
+    pha			; 3
+    
+    lda ScoreDigit3	; 3
+    sta ScoreLoadPtr	; 3
+    lda (ScoreLoadPtr),y; 5
+    pha			; 3
+    
+    lda ScoreDigit2	; 3
+    sta ScoreLoadPtr	; 3
+    lda (ScoreLoadPtr),y; 5
+    pha			; 3
+    
+    lda ScoreDigit1	; 3
+    sta ScoreLoadPtr	; 3
+    lda (ScoreLoadPtr),y; 5
+    pha			; 3
+    
+    lda ScoreDigit0	; 3
+    sta ScoreLoadPtr	; 3
+    lda (ScoreLoadPtr),y; 5
+    pha			; 3
+    
+    dey			; 2
+    bpl .LoadScoreboard	; 2/3
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>    
 ; Load RAM for progress bar display (28-53 cycles)
@@ -131,42 +246,8 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Finish
     
-    inc Frame	; 66 increment the frame number
-    
     sta WSYNC
     sta HMCLR
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    lda #$10
-    sta BCDLevel
-
-    lda #THREE_CLOSE | MSL_SIZE_2	; 2
-    sta NUSIZ0		; 3
-    sta NUSIZ1		; 3
-    
-    lda #VDEL_TRUE	; 2
-    sta VDELP0		; 3
-    sta VDELP1		; 3
-    
-    lda #COL_SCORE	; 2
-    sta COLUP0		; 3
-    sta COLUP1		; 3
-    sta COLUPF		; 3
-    sta COLUBK		; 3
-    sta ScoreColor	; 3
-    lda #$56		; 2
-    sta PgBarColor	; 3
-
-
-
-    lda #0
-    sta BCDScoreAdd
-    sta BCDScoreAdd+1
-
-
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Prepare Health Display
@@ -214,6 +295,28 @@
     sta ThrobColor+1
     lda LineThrobGfx+2,y
     sta ThrobColor+2
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
+    
+    lda #THREE_CLOSE | MSL_SIZE_2
+    
+    sta NUSIZ0
+    sta NUSIZ1
+    
+    sta VDELP0
+    sta VDELP1
+
+    lda #COL_SCORE
+    sta ScoreColor
+
+    lda ScoreColor
+    sta COLUP0		; set color registers
+    sta COLUP1
+    sta COLUPF
+    sta COLUBK
     
     
     
@@ -303,6 +406,9 @@
 .Rock6
     sta FoodPosX+6
     
+    lda #$56
+    sta PgBarColor
+    
     lda Frame
     and #%00001000
     lsr
@@ -324,68 +430,6 @@
     sta PreCatRows
     lda #2
     sta PostCatRows
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Load Scoreboard
-;
-; Get graphics data for the scoreboard and push it onto the stack
-;
-; Takes 1245 cycles to complete (16 full scanlines + 29 cycles)
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    SUBROUTINE
-
-    lda #6		; 2 - start with bottom of digit graphics data
-    sta TempLoop	; 3
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-.Loop
-
-; push level counter graphics data
-    lda BCDLevel	; 3 - get level counter
-    and #$0F		; 2 - isolate left nybble/digit
-    asl			; 2
-    asl			; 2
-    asl			; 2 - digit value * 8
-    			; no need to clc, carry will always be clear
-    adc TempLoop	; 3 - add offset for current loop iteration
-    tay			; 2
-    lda LevelGfx,y	; 4
-    pha			; 3
-    
-    ldx #2		; 2 - start with rightmost BCD score value
-    			; (we must push to stack in reverse of drawing order)
-.DigitLoop
-
-; right nybble
-    lda BCDScore,x	; 4 - get current BCD value (contains 2 digits)
-    and #$0F		; 2 - isolate right nybble/digit
-    asl			; 2
-    asl			; 2
-    asl			; 2 - digit value * 8
-    			; no need to clc, carry will always be clear
-    adc TempLoop	; 3 - add offset for current loop iteration
-    tay			; 2
-    lda ScoreGfx,y	; 4
-    pha			; 3
-    
-; left nybble
-    lda BCDScore,x	; 4 - get current BCD value (contains 2 digits)
-    and #$F0		; 2 - isolate left nybble/digit
-    lsr			; 2 - digit value * 8
-    			; no need to clc, carry will always be clear
-    adc TempLoop	; 3 - add offset for current loop iteration
-    tay			; 2
-    lda ScoreGfx,y	; 4
-    pha			; 3
-
-    dex			; 2
-    bpl .DigitLoop	; 2/3
-    
-    dec TempLoop	; 5
-    bpl .Loop		; 2/3
 
 
 

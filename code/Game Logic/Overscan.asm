@@ -5,6 +5,8 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 Overscan:
+    
+    inc Frame	; increment the frame number
 
     lda #OVERSCAN_TIMER
     sta WSYNC
