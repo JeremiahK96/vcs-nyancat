@@ -8,7 +8,7 @@
 ;
 ;
 ;
-; 12-14-2017 Version 2.5
+; 12-15-2017 Version 2.5
 ;
 ; Optimize and improve code
 ;
@@ -35,7 +35,7 @@
 ; Ensure that the code is placed in the proper place in the binary
 
     SEG CODE
-    ORG $F000	; 4K ROM
+    ORG $1000	; 4K ROM
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -88,7 +88,7 @@ Z_EndOfCode	; label to show how much ROM is used for the code
 ; Define the end of the cartridge
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    ORG $FFFA		; set address to 6507 Interrupt Vectors 
-    .WORD SystemClear	; NMI
-    .WORD SystemClear	; RESET
-    .WORD SystemClear	; IRQ
+    ORG SystemClear+$0FFA	; set address to 6507 Interrupt Vectors 
+    .WORD SystemClear		; NMI
+    .WORD SystemClear		; RESET
+    .WORD SystemClear		; IRQ

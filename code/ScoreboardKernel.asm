@@ -44,21 +44,18 @@ ScoreTop	; draw border above scoreboard
     lda #$01
     sta BCDScoreAdd+1
 
-    lda #10
-    sta Level
+    lda #$14
+    sta BCDLevel
     
 ; draw ball if level > 9
 
-    ldx ENA_TRUE
-    lda Level
-    cmp #10
+    lda BCDLevel
+    lsr
+    lsr
+    lsr
+    tax
     
-    pla		; 67 - pull gfx for digit0
-    
-    bcs .DrawBall
-    HEX 0C	; NOP abs (triple nop) uses 4 cycles and
-    		; skips the next 2 bytes (skipping the next instruction)
-.DrawBall
+    pla			; pull gfx for digit0
     stx ENABL
     
     jmp .EntrancePoint

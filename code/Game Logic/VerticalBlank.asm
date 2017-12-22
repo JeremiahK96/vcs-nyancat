@@ -31,11 +31,17 @@
     lda #%11111110	; 39 - reset byte 4 for the progress bar
     sta ProgressBar+4	; 42
     
-    SLEEP 19
+    jsr Sleep12
+    SLEEP 7
     
     sta RESM0	; 64 - set position for left side of level counter digit
 
-    SLEEP 72	; 60
+    jsr Sleep12
+    jsr Sleep12
+    jsr Sleep12
+    jsr Sleep12
+    jsr Sleep12
+    jsr Sleep12	; 60
     
     sta RESBL	; 63
     sta RESM1	; 66
@@ -50,112 +56,97 @@
 ;
 ; Get graphics data for the scoreboard and push it onto the stack
 ;
-; Takes 685 cycles to complete (9 full scanlines + 1 cycle)
+; Takes 535 cycles to complete (7 full scanlines + 3 cycles)
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     SUBROUTINE
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare pointer for level digit graphics
+; Prepare pointer for level digit graphics - 21 cycles
     
-    lda #>LevelGfx	; 2
-    sta LevelLoadPtr+1	; 3 - set MSB of level digit graphics pointer
+    ldx #>LevelGfx	; 2
+    stx LvlLoadPtr+1	; 3 - set MSB of level digit graphics pointer
     
-    lda Level		; 3
+    lda BCDLevel	; 3
     
-    sec			; 2 - perform a mod 10 to isolate left digit
-    sbc #10		; 2
-    
-    bcc .Negative	; 3/2
-    bcs .Positive	; 3 - done this way to use the same number of cycles
-			;     either way, may or may not be neccesary
-.Negative
-    adc #10		; 2
-.Positive
+    and #$0F		; 2
     
     asl			; 2
     asl			; 2
     asl			; 2
+    
     adc #<LevelGfx	; 2 - add graphics table offset
-    sta LevelLoadPtr	; 3 - set LSB of level digit graphics pointer
+    sta LvlLoadPtr	; 3 - set LSB of level digit graphics pointer
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare one pointer MSB and multiple LSB's for score digit graphics
+; Prepare one pointer MSB and multiple LSBs for score digit graphics - 86 cycles
     
-    lda #>ScoreGfx	; 2
-    sta ScoreLoadPtr+1	; 3 - set MSB of score digit graphics pointer
+    stx ScrLoadPtr0+1	; 3 - set MSB of score digit graphics pointer2
+    stx ScrLoadPtr1+1	; 3
+    stx ScrLoadPtr2+1	; 3
+    stx ScrLoadPtr3+1	; 3
+    stx ScrLoadPtr4+1	; 3
+    stx ScrLoadPtr5+1	; 3
     
     lax BCDScore+0	; 3
     and #$F0		; 2
     lsr			; 2
-    sta ScoreDigit0	; 3 - set LSB for digit 0
+    sta ScrLoadPtr0	; 3 - set LSB for digit 0
     txa			; 2
     and #$0F		; 2
     asl			; 2
     asl			; 2
     asl			; 2
-    sta ScoreDigit1	; 3 - set LSB for digit 1
+    sta ScrLoadPtr1	; 3 - set LSB for digit 1
     
     lax BCDScore+1	; 3
     and #$F0		; 2
     lsr			; 2
-    sta ScoreDigit2	; 3 - set LSB for digit 2
+    sta ScrLoadPtr2	; 3 - set LSB for digit 2
     txa			; 2
     and #$0F		; 2
     asl			; 2
     asl			; 2
     asl			; 2
-    sta ScoreDigit3	; 2 - set LSB for digit 3
+    sta ScrLoadPtr3	; 2 - set LSB for digit 3
     
     lax BCDScore+2	; 3
     and #$F0		; 2
     lsr			; 2
-    sta ScoreDigit4	; 3 - set LSB for digit 4
+    sta ScrLoadPtr4	; 3 - set LSB for digit 4
     txa			; 2
     and #$0F		; 2
     asl			; 2
     asl			; 2
     asl			; 2
-    sta ScoreDigit5	; 3 - set LSB for digit 5
+    sta ScrLoadPtr5	; 3 - set LSB for digit 5
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Load the stack with the graphics for the scoreboard
+; Load the stack with the graphics for the scoreboard - 428 cycles
     
     ldy #6		; 2
 
 .LoadScoreboard
 
-    lda (LevelLoadPtr),y; 5
+    lda (LvlLoadPtr),y	; 5
     pha			; 3
     
-    lda ScoreDigit5	; 3
-    sta ScoreLoadPtr	; 3
-    lda (ScoreLoadPtr),y; 5
+    lda (ScrLoadPtr5),y	; 5
     pha			; 3
     
-    lda ScoreDigit4	; 3
-    sta ScoreLoadPtr	; 3
-    lda (ScoreLoadPtr),y; 5
+    lda (ScrLoadPtr4),y	; 5
     pha			; 3
     
-    lda ScoreDigit3	; 3
-    sta ScoreLoadPtr	; 3
-    lda (ScoreLoadPtr),y; 5
+    lda (ScrLoadPtr3),y	; 5
     pha			; 3
     
-    lda ScoreDigit2	; 3
-    sta ScoreLoadPtr	; 3
-    lda (ScoreLoadPtr),y; 5
+    lda (ScrLoadPtr2),y	; 5
     pha			; 3
     
-    lda ScoreDigit1	; 3
-    sta ScoreLoadPtr	; 3
-    lda (ScoreLoadPtr),y; 5
+    lda (ScrLoadPtr1),y	; 5
     pha			; 3
     
-    lda ScoreDigit0	; 3
-    sta ScoreLoadPtr	; 3
-    lda (ScoreLoadPtr),y; 5
+    lda (ScrLoadPtr0),y	; 5
     pha			; 3
     
     dey			; 2

@@ -25,7 +25,7 @@ ScoreColor	ds 1	; color of the score text and scoreboard
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-Level		ds 1	; value for the current level which will be stored as a
+BCDLevel		ds 1	; value for the current level which will be stored as a
 			; BCD encoded 2-digit number and used to control the
 			; level counter display
 
@@ -47,30 +47,38 @@ Health		ds 1	; amount of health
 ; Pointers
 
 FoodGfxPtr1	; pointer for 1st food item's graphics
-ScoreLoadPtr	; pointer for score digit graphics in scoreboard loading routine
+LvlLoadPtr	; pointer for level digit graphics in scoreboard loading routine
 
 		ds 2
 
 FoodGfxPtr2	; pointer for 2nd food item's graphics
-LevelLoadPtr	; pointer for level digit graphics in scoreboard loading routine
+ScrLoadPtr0	; pointer for digit 0 in scoreboard loading routine
 
 		ds 2
 
 TartGfxPtr		; pointer for the tart graphics
-ScoreDigit0	; temporary variable for digit 0 in scoreboard loading routine
-	ds 2
+ScrLoadPtr1	; pointer for digit 1 in scoreboard loading routine
+
+		ds 2
 
 CatGfxPtr	; pointer for the cat face/paws graphics
-ScoreDigit1	; temporary variable for digit 1 in scoreboard loading routine
-	ds 2
+ScrLoadPtr2	; pointer for digit 2 in scoreboard loading routine
+
+		ds 2
 
 HthGfxLPtr	; pointer for left half of the health graphics
-ScoreDigit2	; temporary variable for digit 2 in scoreboard loading routine
-	ds 2
+ScrLoadPtr3	; pointer for digit 3 in scoreboard loading routine
+
+		ds 2
 
 HthGfxRPtr	; pointer for right half of the health graphics
-ScoreDigit3	; temporary variable for digit 3 in scoreboard loading routine
-	ds 2
+ScrLoadPtr4	; pointer for digit 4 in scoreboard loading routine
+
+		ds 2
+
+ScrLoadPtr5	; pointer for digit 5 in scoreboard loading routine
+
+		ds 2
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables used when drawing the cat
