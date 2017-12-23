@@ -39,7 +39,7 @@ ScoreTop	; draw border above scoreboard
     sta WSYNC
     sta WSYNC
 
-    SLEEP 37
+    SLEEP 36
     
     lda #$01
     sta BCDScoreAdd+1
