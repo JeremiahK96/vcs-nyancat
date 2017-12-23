@@ -31,20 +31,54 @@
     lda #%11111110	; 39 - reset byte 4 for the progress bar
     sta ProgressBar+4	; 42
     
-    jsr Sleep12
-    SLEEP 7
-    
-    sta RESM0	; 64 - set position for left side of level counter digit
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare for throbbing lines - 43 cycles
 
-    jsr Sleep12
-    jsr Sleep12
-    jsr Sleep12
-    jsr Sleep12
-    jsr Sleep12
-    jsr Sleep12	; 60
+    lda Frame		; 45 - get the current frame number
+    and #%00011100	; 47 - change animation frame every 4 game frames
+    lsr			; 49
+    lsr			; 51 - shift to get a value from 0-7
+    sta Temp		; 54
+    asl			; 56 - carry flag will always be clear after this
+    adc Temp		; 59 - multiply by 3
+    tay			; 61
     
-    sta RESBL	; 63
-    sta RESM1	; 66
+    sta RESM0	; 64 - set position of left side of level counter digit
+    
+    lda ScoreColor	; 67
+    and #$F0		; 69
+    sta Temp		; 72
+    
+    lda ThrobGfx+0,y	; 00
+    asl			; 02
+    bcc .Color0
+    HEX 0C		; 08
+.Color0
+    adc Temp		; 08
+    sta ThrobColor+0	; 11
+    
+    lda ThrobGfx+1,y	; 15
+    asl			; 17
+    bcc .Color1
+    HEX 0C		; 23
+.Color1
+    adc Temp		; 23
+    sta ThrobColor+1	; 26
+    
+    lda ThrobGfx+2,y	; 30
+    asl			; 32
+    bcc .Color2
+    HEX 0C		; 38
+.Color2
+    adc Temp		; 38
+    sta ThrobColor+2	; 41
+
+    ; sleep19
+    jsr Sleep12
+    SLEEP 7	; 60
+    
+    sta RESBL	; 63 - set position of leading "1" in level counter
+    sta RESM1	; 66 - set position of right side of level counter digit
     
     sta WSYNC
     sta HMOVE
@@ -237,8 +271,9 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .Finish
     
-    sta WSYNC
     sta HMCLR
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Prepare Health Display
@@ -265,49 +300,24 @@
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare for Throbbing Lines
-;
-; Set the offset value for the throbbing line graphics
-;
-; Takes 20 cycles to complete
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    lda Frame		; 3 - get the current frame number
-    and #%00011100	; 2 - change animation frame every 4 game frames
-    lsr			; 2
-    lsr			; 2 - shift to get a value from 0-7
-    sta Temp		; 3
-    asl			; 2 - carry flag will always be clear after this
-    adc Temp		; 3 - multiply by 3
-    tay
-    lda LineThrobGfx+0,y
-    sta ThrobColor+0
-    lda LineThrobGfx+1,y
-    sta ThrobColor+1
-    lda LineThrobGfx+2,y
-    sta ThrobColor+2
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare the NUSIZx, VDELPx and COLUPx values for the 6-digit score
+; Prepare NUSIZx, VDELPx and COLUPx registers for 6-digit score - 34 cycles
     
-    lda #THREE_CLOSE | MSL_SIZE_2
+    lda #THREE_CLOSE | MSL_SIZE_2	; 2
     
-    sta NUSIZ0
-    sta NUSIZ1
+    sta NUSIZ0		; 3
+    sta NUSIZ1		; 3
     
-    sta VDELP0
-    sta VDELP1
+    sta VDELP0		; 3
+    sta VDELP1		; 3
 
-    lda #COL_SCORE
-    sta ScoreColor
+    lda #COL_SCORE	; 2
+    sta ScoreColor	; 3
 
-    lda ScoreColor
-    sta COLUP0		; set color registers
-    sta COLUP1
-    sta COLUPF
-    sta COLUBK
+    lda ScoreColor	; 3
+    sta COLUP0		; 3 - set color registers
+    sta COLUP1		; 3
+    sta COLUPF		; 3
+    sta COLUBK		; 3
     
     
     

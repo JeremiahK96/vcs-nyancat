@@ -286,53 +286,53 @@ LevelGfx
 ; Table takes up $18 (24) bytes of ROM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-LineThrobGfx
+ThrobGfx
 
-    .byte COL_LINES + LUM_0	; frame 0
-    .byte COL_LINES + LUM_2
-    .byte COL_LINES + LUM_4
+    .byte LUM_0 + MODE_GREY	; frame 0
+    .byte LUM_2 + MODE_GREY
+    .byte LUM_4 + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_0	; frame 1
-    .byte COL_LINES + LUM_4
-    .byte COL_LINES + LUM_6
+    .byte LUM_0 + MODE_GREY	; frame 1
+    .byte LUM_4 + MODE_COLOR
+    .byte LUM_6 + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_0	; frame 2
-    .byte COL_LINES + LUM_6
-    .byte COL_LINES + LUM_8
+    .byte LUM_0 + MODE_GREY	; frame 2
+    .byte LUM_6 + MODE_COLOR
+    .byte LUM_8 + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_2	; frame 3
-    .byte COL_LINES + LUM_8
-    .byte COL_LINES + LUM_C
+    .byte LUM_2 + MODE_GREY	; frame 3
+    .byte LUM_8 + MODE_COLOR
+    .byte LUM_C + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_4	; frame 4
-    .byte COL_LINES + LUM_A
-    .byte COL_LINES + LUM_E
+    .byte LUM_4 + MODE_COLOR	; frame 4
+    .byte LUM_A + MODE_COLOR
+    .byte LUM_E + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_2	; frame 5
-    .byte COL_LINES + LUM_8
-    .byte COL_LINES + LUM_C
+    .byte LUM_2 + MODE_GREY	; frame 5
+    .byte LUM_8 + MODE_COLOR
+    .byte LUM_C + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_0	; frame 6
-    .byte COL_LINES + LUM_6
-    .byte COL_LINES + LUM_A
+    .byte LUM_0 + MODE_GREY	; frame 6
+    .byte LUM_6 + MODE_COLOR
+    .byte LUM_A + MODE_COLOR
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    .byte COL_LINES + LUM_0	; frame 7
-    .byte COL_LINES + LUM_4
-    .byte COL_LINES + LUM_6
+    .byte LUM_0 + MODE_GREY	; frame 7
+    .byte LUM_4 + MODE_COLOR
+    .byte LUM_6 + MODE_COLOR
 
 
 

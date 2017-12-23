@@ -74,21 +74,26 @@ OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; colors
 
-COL_SCORE		equ $02
-COL_SCOREBOARD		equ $0E
+COL_SCORE		equ $7A
+COL_SCOREBOARD		equ $70
 COL_BACKGROUND		equ $00
-COL_LINES		equ COL_BACKGROUND
-COL_CAT_FACE		equ $06
+COL_CAT_FACE		equ $09
 COL_CAT_TART		equ $4A
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; luminosity masks, which can be added to any dark color to set the luminosity
+; luminosity values for throb line data
 
-LUM_0			equ $00
-LUM_2			equ $02
-LUM_4			equ $04
-LUM_6			equ $06
-LUM_8			equ $08
-LUM_A			equ $0A
-LUM_C			equ $0C
-LUM_E			equ $0E
+LUM_0			equ $00>>1
+LUM_2			equ $02>>1
+LUM_4			equ $04>>1
+LUM_6			equ $06>>1
+LUM_8			equ $08>>1
+LUM_A			equ $0A>>1
+LUM_C			equ $0C>>1
+LUM_E			equ $0E>>1
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; color modes for throb line data
+
+MODE_GREY		equ $80	; for greyscale lines
+MODE_COLOR		equ $00	; for colored lines

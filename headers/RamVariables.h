@@ -76,6 +76,7 @@ ScrLoadPtr4	; pointer for digit 4 in scoreboard loading routine
 
 		ds 2
 
+ThrobPtr	; pointer for loading the throb colors
 ScrLoadPtr5	; pointer for digit 5 in scoreboard loading routine
 
 		ds 2

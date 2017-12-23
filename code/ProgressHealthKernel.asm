@@ -23,7 +23,7 @@
     sta COLUP0
     sta COLUP1
     
-    lda #COL_SCOREBOARD
+    lda #COL_SCORE
     sta COLUBK
     
     lda #DOUBLE_SIZE	; 08
@@ -103,7 +103,7 @@
     lda #%01111111	; 54 - get the 6th playfield register value
     sta.w PF2		; 58 - for the health background and set it
     
-    lda #COL_SCOREBOARD	; 60 - get the color for the background
+    lda #COL_SCORE	; 60 - get the color for the background
     sta.w COLUBK	; 64 - and set it at cycle 64
     
     dex			; 66
