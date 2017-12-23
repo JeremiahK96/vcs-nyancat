@@ -3,7 +3,6 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     lda #0
-    ldy ScoreColor
     sta WSYNC
     sta VBLANK	; enable display
 

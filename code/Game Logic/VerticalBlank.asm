@@ -301,7 +301,7 @@
     
     
 
-    lda #COL_SCORE	; 2
+    lda Frame		; 2
     sta ScoreColor	; 3
 
     lda ScoreColor	; 3

@@ -13,8 +13,8 @@
 15.CYCLES                001a              (R )
 16.HealthMiddle          1700              (R )
 16.Loop                  1702              (R )
-17.HealthBottom          173c              (R )
-17.Loop                  173e              (R )
+17.HealthBottom          173b              (R )
+17.Loop                  173d              (R )
 18.CYCLES                000e              (R )
 2.CYCLES                 0004              (R )
 3.Finish                 1165              (R )
@@ -67,7 +67,7 @@ CatTartGfx               1b07              (R )
 COL_BACKGROUND           0000              (R )
 COL_CAT_FACE             0009              (R )
 COL_CAT_TART             004a              (R )
-COL_SCORE                007a              (R )
+COL_SCORE                007a                  
 COL_SCOREBOARD           0070                  
 COLUBK                   0009              (R )
 COLUP0                   0006              (R )
@@ -234,5 +234,5 @@ VERSION_MACRO            006a
 VERSION_VCS              0069                  
 VSYNC                    0000              (R )
 WSYNC                    0002              (R )
-Z_EndOfCode              1775                  
+Z_EndOfCode              1774                  
 --- End of Symbol List.

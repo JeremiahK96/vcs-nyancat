@@ -23,7 +23,7 @@
     sta COLUP0
     sta COLUP1
     
-    lda #COL_SCORE
+    lda ScoreColor
     sta COLUBK
     
     lda #DOUBLE_SIZE	; 08
@@ -101,9 +101,9 @@
     lda ProgressBar+4	; 49 - get the 5th playfield register value
     sta PF1		; 52 - for the progress bar and set it
     lda #%01111111	; 54 - get the 6th playfield register value
-    sta.w PF2		; 58 - for the health background and set it
+    sta PF2		; 57 - for the health background and set it
     
-    lda #COL_SCORE	; 60 - get the color for the background
+    lda ScoreColor	; 60 - get the color for the background
     sta.w COLUBK	; 64 - and set it at cycle 64
     
     dex			; 66

@@ -1095,7 +1095,7 @@
     301  117c
     302  117c
     303  117c
-    304  117c		       a9 7a		      lda	#COL_SCORE	; 2
+    304  117c		       a5 80		      lda	Frame	; 2
     305  117e		       85 86		      sta	ScoreColor	; 3
     306  1180
     307  1180		       a5 86		      lda	ScoreColor	; 3
@@ -1258,57 +1258,56 @@
       3  1239							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
       4  1239
       5  1239		       a9 00		      lda	#0
-      6  123b		       a4 86		      ldy	ScoreColor
-      7  123d		       85 02		      sta	WSYNC
-      8  123f		       85 01		      sta	VBLANK	; enable display
-      9  1241
-     10  1241							; Include kernel routines
+      6  123b		       85 02		      sta	WSYNC
+      7  123d		       85 01		      sta	VBLANK	; enable display
+      8  123f
+      9  123f							; Include kernel routines
 ------- FILE code/ScoreboardKernel.asm LEVEL 3 PASS 2
-      0  1241					      include	code/ScoreboardKernel.asm
-      1  1241							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  1241							; Scoreboard Display
-      3  1241							;
-      4  1241							; Draw the 6-digit score and level counter.
-      5  1241							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      6  1241
-      7  1241					      SUBROUTINE
-      8  1241
-      9  1241		       85 09		      sta	COLUBK	; 06 - A contains 0
-     10  1243		       85 06		      sta	COLUP0	; 09
-     11  1245
-     12  1245		       a9 ff		      lda	#$FF	; 11
-     13  1247		       85 0d		      sta	PF0	; 14
-     14  1249		       85 1b		      sta	GRP0	; 17
-     15  124b
-     16  124b		       a9 a0		      lda	#$A0	; 19
-     17  124d		       85 0e		      sta	PF1	; 22
-     18  124f
-     19  124f		       a4 86		      ldy	ScoreColor
-     20  1251		       a2 13		      ldx	#%00010011	; 24
-     21  1253		       86 05		      stx	NUSIZ1	; 34
-     22  1255
-     23  1255		       a9 80		      lda	#$80	; 28
-     24  1257		       85 0e		      sta	PF1	; 31
-     25  1259
-     26  1259		       86 0a		      stx	CTRLPF	; 37
-     27  125b		       86 04		      stx	NUSIZ0	; 40
-     28  125d		       86 25		      stx	VDELP0	; 43
-     29  125f		       86 26		      stx	VDELP1	; 46
-     30  1261		       84 06		      sty	COLUP0	; 49
-     31  1263
-     32  1263		       68		      pla		; 53 - pull gfx for digit0
-     33  1264		       85 1b		      sta	GRP0	; digit0 -> [GRP0]
-     34  1266
-     35  1266							; draw ball if level > 9
-     36  1266
-     37  1266		       a5 87		      lda	BCDLevel
-     38  1268		       4a		      lsr
-     39  1269		       4a		      lsr
-     40  126a		       4a		      lsr
-     41  126b		       85 1f		      sta	ENABL
-     42  126d
-     43  126d		       4c 1e 13 	      jmp	.EntrancePoint
-     44  1270
+      0  123f					      include	code/ScoreboardKernel.asm
+      1  123f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  123f							; Scoreboard Display
+      3  123f							;
+      4  123f							; Draw the 6-digit score and level counter.
+      5  123f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      6  123f
+      7  123f					      SUBROUTINE
+      8  123f
+      9  123f		       85 09		      sta	COLUBK	; 06 - A contains 0
+     10  1241		       85 06		      sta	COLUP0	; 09
+     11  1243
+     12  1243		       a9 ff		      lda	#$FF	; 11
+     13  1245		       85 0d		      sta	PF0	; 14
+     14  1247		       85 1b		      sta	GRP0	; 17
+     15  1249
+     16  1249		       a9 a0		      lda	#$A0	; 19
+     17  124b		       85 0e		      sta	PF1	; 22
+     18  124d
+     19  124d		       a4 86		      ldy	ScoreColor
+     20  124f		       a2 13		      ldx	#%00010011	; 24
+     21  1251		       86 05		      stx	NUSIZ1	; 34
+     22  1253
+     23  1253		       a9 80		      lda	#$80	; 28
+     24  1255		       85 0e		      sta	PF1	; 31
+     25  1257
+     26  1257		       86 0a		      stx	CTRLPF	; 37
+     27  1259		       86 04		      stx	NUSIZ0	; 40
+     28  125b		       86 25		      stx	VDELP0	; 43
+     29  125d		       86 26		      stx	VDELP1	; 46
+     30  125f		       84 06		      sty	COLUP0	; 49
+     31  1261
+     32  1261		       68		      pla		; 53 - pull gfx for digit0
+     33  1262		       85 1b		      sta	GRP0	; digit0 -> [GRP0]
+     34  1264
+     35  1264							; draw ball if level > 9
+     36  1264
+     37  1264		       a5 87		      lda	BCDLevel
+     38  1266		       4a		      lsr
+     39  1267		       4a		      lsr
+     40  1268		       4a		      lsr
+     41  1269		       85 1f		      sta	ENABL
+     42  126b
+     43  126b		       4c 1e 13 	      jmp	.EntrancePoint
+     44  126e
      45  1300		       00 00 00 00*	      ALIGN	$100
      46  1300
      47  1300							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2233,7 +2232,7 @@
      23  16aa		       85 06		      sta	COLUP0
      24  16ac		       85 07		      sta	COLUP1
      25  16ae
-     26  16ae		       a9 7a		      lda	#COL_SCORE
+     26  16ae		       a5 86		      lda	ScoreColor
      27  16b0		       85 09		      sta	COLUBK
      28  16b2
      29  16b2		       a9 05		      lda	#DOUBLE_SIZE	; 08
@@ -2354,66 +2353,68 @@
     101  171e		       a5 8d		      lda	ProgressBar+4	; 49 - get the 5th playfield register value
     102  1720		       85 0e		      sta	PF1	; 52 - for the progress bar and set it
     103  1722		       a9 7f		      lda	#%01111111	; 54 - get the 6th playfield register value
-    104  1724		       8d 0f 00 	      sta.w	PF2	; 58 - for the health background and set it
-    105  1727
-    106  1727		       a9 7a		      lda	#COL_SCORE	; 60 - get the color for the background
-    107  1729		       8d 09 00 	      sta.w	COLUBK	; 64 - and set it at cycle 64
-    108  172c
-    109  172c		       ca		      dex		; 66
-    110  172d		       d0 d1		      bne	.HealthMiddle	; 68
-    111  172f
-    112  172f		       a6 be		      ldx	Temp	; 71
-    113  1731
-    114  1731		       88		      dey		; 73
-    115  1732		       10 ce		      bpl	.Loop	; 76 / 00
-    116  1734
-    117  1734
-    118  1734
-    119  1734
-    120  1734
-    121  1734
-    122  1734
-    123  1734
-    124  1734
-    125  1734					      SUBROUTINE
-    126  1734
-    127  1734
-    128  1734		       a9 00		      lda	#0
-    129  1736		       85 0d		      sta	PF0
-    130  1738		       85 0e		      sta	PF1
-    131  173a
-    132  173a		       a0 07		      ldy	#7
-    133  173c
-    134  173c							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    135  173c				   .HealthBottom		; draw bottom of health
-    136  173c
-    137  173c		       a2 03		      ldx	#3
-    138  173e				   .Loop
-    139  173e		       b1 98		      lda	(HthGfxLPtr),y
-    140  1740		       85 1b		      sta	GRP0
-    141  1742		       b1 9a		      lda	(HthGfxRPtr),y
-    142  1744		       85 1c		      sta	GRP1
-    143  1746		       a9 00		      lda	#$00
-    144  1748		       85 0f		      sta	PF2
-    145  174a
-      0  174a					      SLEEP	14
-      1  174a				   .CYCLES    SET	14
-      2  174a
-      3  174a				  -	      IF	.CYCLES < 2
-      4  174a				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  174a				  -	      ERR
-      6  174a					      ENDIF
-      7  174a
-      8  174a				  -	      IF	.CYCLES & 1
-      9  174a				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  174a				  -	      nop	0
-     11  174a				  -	      ELSE
-     12  174a				  -	      bit	VSYNC
-     13  174a				  -	      ENDIF
-     14  174a				  -.CYCLES    SET	.CYCLES - 3
-     15  174a					      ENDIF
-     16  174a
-     17  174a					      REPEAT	.CYCLES / 2
+    104  1724		       85 0f		      sta	PF2	; 57 - for the health background and set it
+    105  1726
+    106  1726		       a5 86		      lda	ScoreColor	; 60 - get the color for the background
+    107  1728		       8d 09 00 	      sta.w	COLUBK	; 64 - and set it at cycle 64
+    108  172b
+    109  172b		       ca		      dex		; 66
+    110  172c		       d0 d2		      bne	.HealthMiddle	; 68
+    111  172e
+    112  172e		       a6 be		      ldx	Temp	; 71
+    113  1730
+    114  1730		       88		      dey		; 73
+    115  1731		       10 cf		      bpl	.Loop	; 76 / 00
+    116  1733
+    117  1733
+    118  1733
+    119  1733
+    120  1733
+    121  1733
+    122  1733
+    123  1733
+    124  1733
+    125  1733					      SUBROUTINE
+    126  1733
+    127  1733
+    128  1733		       a9 00		      lda	#0
+    129  1735		       85 0d		      sta	PF0
+    130  1737		       85 0e		      sta	PF1
+    131  1739
+    132  1739		       a0 07		      ldy	#7
+    133  173b
+    134  173b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    135  173b				   .HealthBottom		; draw bottom of health
+    136  173b
+    137  173b		       a2 03		      ldx	#3
+    138  173d				   .Loop
+    139  173d		       b1 98		      lda	(HthGfxLPtr),y
+    140  173f		       85 1b		      sta	GRP0
+    141  1741		       b1 9a		      lda	(HthGfxRPtr),y
+    142  1743		       85 1c		      sta	GRP1
+    143  1745		       a9 00		      lda	#$00
+    144  1747		       85 0f		      sta	PF2
+    145  1749
+      0  1749					      SLEEP	14
+      1  1749				   .CYCLES    SET	14
+      2  1749
+      3  1749				  -	      IF	.CYCLES < 2
+      4  1749				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  1749				  -	      ERR
+      6  1749					      ENDIF
+      7  1749
+      8  1749				  -	      IF	.CYCLES & 1
+      9  1749				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  1749				  -	      nop	0
+     11  1749				  -	      ELSE
+     12  1749				  -	      bit	VSYNC
+     13  1749				  -	      ENDIF
+     14  1749				  -.CYCLES    SET	.CYCLES - 3
+     15  1749					      ENDIF
+     16  1749
+     17  1749					      REPEAT	.CYCLES / 2
+     18  1749		       ea		      nop
+     17  1749					      REPEND
      18  174a		       ea		      nop
      17  174a					      REPEND
      18  174b		       ea		      nop
@@ -2425,56 +2426,54 @@
      18  174e		       ea		      nop
      17  174e					      REPEND
      18  174f		       ea		      nop
-     17  174f					      REPEND
-     18  1750		       ea		      nop
-     19  1751					      REPEND
-    147  1751
-    148  1751		       b9 fc 18 	      lda	HealthBgGfx-4,y
-    149  1754		       85 0f		      sta	PF2
-    150  1756		       85 02		      sta	WSYNC
-    151  1758
-    152  1758		       ca		      dex
-    153  1759		       d0 e3		      bne	.Loop
-    154  175b
-    155  175b		       88		      dey
-    156  175c		       c0 03		      cpy	#3
-    157  175e		       d0 dc		      bne	.HealthBottom
-    158  1760
-    159  1760							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    160  1760
-    161  1760		       a9 00		      lda	#$00
-    162  1762		       85 1b		      sta	GRP0
-    163  1764		       85 1c		      sta	GRP1
-    164  1766		       85 0b		      sta	REFP0
-    165  1768		       85 0c		      sta	REFP1
-    166  176a		       85 0f		      sta	PF2
-    167  176c
-    168  176c		       85 02		      sta	WSYNC
-    169  176e
+     19  1750					      REPEND
+    147  1750
+    148  1750		       b9 fc 18 	      lda	HealthBgGfx-4,y
+    149  1753		       85 0f		      sta	PF2
+    150  1755		       85 02		      sta	WSYNC
+    151  1757
+    152  1757		       ca		      dex
+    153  1758		       d0 e3		      bne	.Loop
+    154  175a
+    155  175a		       88		      dey
+    156  175b		       c0 03		      cpy	#3
+    157  175d		       d0 dc		      bne	.HealthBottom
+    158  175f
+    159  175f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    160  175f
+    161  175f		       a9 00		      lda	#$00
+    162  1761		       85 1b		      sta	GRP0
+    163  1763		       85 1c		      sta	GRP1
+    164  1765		       85 0b		      sta	REFP0
+    165  1767		       85 0c		      sta	REFP1
+    166  1769		       85 0f		      sta	PF2
+    167  176b
+    168  176b		       85 02		      sta	WSYNC
+    169  176d
 ------- FILE code/Kernel.asm
-     14  176e
-     15  176e		       a9 02		      lda	#2
-     16  1770		       85 01		      sta	VBLANK	; disable display
-     17  1772
-     18  1772		       4c 0b 10 	      jmp	Overscan
+     13  176d
+     14  176d		       a9 02		      lda	#2
+     15  176f		       85 01		      sta	VBLANK	; disable display
+     16  1771
+     17  1771		       4c 0b 10 	      jmp	Overscan
 ------- FILE main.asm
-     71  1775
-     72  1775				   Z_EndOfCode		; label to show how much ROM is used for the code
-     73  1775
-     74  1775
-     75  1775							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     76  1775							; Data Tables
-     77  1775							;
-     78  1775							; Include data tables
-     79  1775							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     80  1775
-     81  1775							; Include graphics data tables
+     71  1774
+     72  1774				   Z_EndOfCode		; label to show how much ROM is used for the code
+     73  1774
+     74  1774
+     75  1774							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     76  1774							; Data Tables
+     77  1774							;
+     78  1774							; Include data tables
+     79  1774							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     80  1774
+     81  1774							; Include graphics data tables
 ------- FILE data/Graphics.asm LEVEL 2 PASS 2
-      0  1775					      include	data/Graphics.asm
-      1  1775							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  1775							; Graphics Tables
-      3  1775							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  1775
+      0  1774					      include	data/Graphics.asm
+      1  1774							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  1774							; Graphics Tables
+      3  1774							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  1774
       5  1800		       00 00 00 00*	      ALIGN	$100	; align to page
       6  1800
       7  1800							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
