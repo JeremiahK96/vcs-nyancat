@@ -6,52 +6,30 @@
 
     SUBROUTINE
     
-    lda #PF_REFLECT | PF_PRIORITY | BALL_SIZE_2
-    sta CTRLPF
+    sta COLUBK		; 06 - A contains 0
+    sta COLUP0		; 09
     
-    lda #$FF
-    sta PF0
+    lda #$FF		; 11
+    sta PF0		; 14
+    sta GRP0		; 17
     
-    sta GRP0	; This forces a collision between P0 and PF, setting bit-7
-    sta GRP1	; in CXP0FB, which will be used to end the scoreboard
-    sta PF1	; display kernel loop.
+    lda #$A0		; 19
+    sta PF1		; 22
     
-    ldy #4
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-ScoreTop	; draw border above scoreboard
-
-    sta WSYNC
+    ldy ScoreColor
+    ldx #%00010011	; 24
+    stx NUSIZ1		; 34
     
-    lda #0
-    sta GRP0
-    sta GRP1
+    lda #$80		; 28
+    sta PF1		; 31
     
-    dey
-    bne ScoreTop
+    stx CTRLPF		; 37
+    stx NUSIZ0		; 40
+    stx VDELP0		; 43
+    stx VDELP1		; 46
+    sty COLUP0		; 49
     
-    lda #$80
-    sta PF1
-    
-    lda #COL_SCOREBOARD
-    sta COLUBK
-    
-    sta WSYNC
-    sta WSYNC
-
-    ;sleep38
-    jsr Sleep12
-    jsr Sleep12
-    jsr Sleep12
-    SLEEP 2
-    
-    lda #$01
-    sta BCDScoreAdd+1
-
-    lda #$14
-    sta BCDLevel
-    
-    pla			; pull gfx for digit0
+    pla			; 53 - pull gfx for digit0
     sta GRP0		; digit0 -> [GRP0]
     
 ; draw ball if level > 9
@@ -95,10 +73,10 @@ ScoreTop	; draw border above scoreboard
     sta NUSIZ0		; 63 - use bits 2-7 of data (re-aligned) for NUSIZ0
 
     pla			; 67 - pull gfx for digit0
-    sta GRP0		; 70 - digit0 -> [GRP0]
+    sta.w GRP0		; 71 - digit0 -> [GRP0]
 .EntrancePoint
     pla			; 74 - pull gfx for digit1
-    sta.w GRP1		; 02 - digit1 -> [GRP1]	digit0 -> GRP0
+    sta GRP1		; 02 - digit1 -> [GRP1]	digit0 -> GRP0
     			;      (use an extra cycle for timing reasons)
     
     pla			; 06 - pull gfx for digit2
@@ -116,3 +94,25 @@ ScoreTop	; draw border above scoreboard
     bpl .ScoreDigitLoop	; 10/11 - check negative flag to see if the loop is over
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda #0
+    sta GRP0
+    sta GRP1
+    sta VDELP1
+    sta VDELP0
+    sta ENABL
+    sta ENAM0
+    sta ENAM1
+
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    sta WSYNC
+    
+    lda ScoreColor
+    sta COLUBK
+    
+    sta WSYNC
+    sta WSYNC
+    
+    SLEEP 10

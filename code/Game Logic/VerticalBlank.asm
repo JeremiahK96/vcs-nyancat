@@ -296,19 +296,10 @@
     sta HthGfxRPtr	; 3
     lda #>HealthRightGfx; 2
     sta HthGfxRPtr+1	; 3
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare NUSIZx, VDELPx and COLUPx registers for 6-digit score - 34 cycles
     
-    lda #THREE_CLOSE | MSL_SIZE_2	; 2
     
-    sta NUSIZ0		; 3
-    sta NUSIZ1		; 3
     
-    sta VDELP0		; 3
-    sta VDELP1		; 3
+    
 
     lda #COL_SCORE	; 2
     sta ScoreColor	; 3
@@ -318,6 +309,20 @@
     sta COLUP1		; 3
     sta COLUPF		; 3
     sta COLUBK		; 3
+    
+    lda Frame
+    and #%00001111
+    beq .IncScore
+    lda #0
+    beq .IncSkip
+.IncScore
+    lda #$89
+.IncSkip
+    sta BCDScoreAdd+1
+
+    lda #$14
+    sta BCDLevel
+    
     
     
     
