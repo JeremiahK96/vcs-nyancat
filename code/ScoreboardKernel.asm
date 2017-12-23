@@ -39,7 +39,11 @@ ScoreTop	; draw border above scoreboard
     sta WSYNC
     sta WSYNC
 
-    SLEEP 36
+    ;sleep38
+    jsr Sleep12
+    jsr Sleep12
+    jsr Sleep12
+    SLEEP 2
     
     lda #$01
     sta BCDScoreAdd+1
@@ -47,16 +51,16 @@ ScoreTop	; draw border above scoreboard
     lda #$14
     sta BCDLevel
     
+    pla			; pull gfx for digit0
+    sta GRP0		; digit0 -> [GRP0]
+    
 ; draw ball if level > 9
 
     lda BCDLevel
     lsr
     lsr
     lsr
-    tax
-    
-    pla			; pull gfx for digit0
-    stx ENABL
+    sta ENABL
     
     jmp .EntrancePoint
     
@@ -91,9 +95,8 @@ ScoreTop	; draw border above scoreboard
     sta NUSIZ0		; 63 - use bits 2-7 of data (re-aligned) for NUSIZ0
 
     pla			; 67 - pull gfx for digit0
-.EntrancePoint
     sta GRP0		; 70 - digit0 -> [GRP0]
-    
+.EntrancePoint
     pla			; 74 - pull gfx for digit1
     sta.w GRP1		; 02 - digit1 -> [GRP1]	digit0 -> GRP0
     			;      (use an extra cycle for timing reasons)

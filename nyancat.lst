@@ -1300,133 +1300,102 @@
      39  125a		       85 02		      sta	WSYNC
      40  125c		       85 02		      sta	WSYNC
      41  125e
-      0  125e					      SLEEP	36
-      1  125e				   .CYCLES    SET	36
-      2  125e
-      3  125e				  -	      IF	.CYCLES < 2
-      4  125e				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  125e				  -	      ERR
-      6  125e					      ENDIF
-      7  125e
-      8  125e				  -	      IF	.CYCLES & 1
-      9  125e				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  125e				  -	      nop	0
-     11  125e				  -	      ELSE
-     12  125e				  -	      bit	VSYNC
-     13  125e				  -	      ENDIF
-     14  125e				  -.CYCLES    SET	.CYCLES - 3
-     15  125e					      ENDIF
-     16  125e
-     17  125e					      REPEAT	.CYCLES / 2
-     18  125e		       ea		      nop
-     17  125e					      REPEND
-     18  125f		       ea		      nop
-     17  125f					      REPEND
-     18  1260		       ea		      nop
-     17  1260					      REPEND
-     18  1261		       ea		      nop
-     17  1261					      REPEND
-     18  1262		       ea		      nop
-     17  1262					      REPEND
-     18  1263		       ea		      nop
-     17  1263					      REPEND
-     18  1264		       ea		      nop
-     17  1264					      REPEND
-     18  1265		       ea		      nop
-     17  1265					      REPEND
-     18  1266		       ea		      nop
-     17  1266					      REPEND
+     42  125e							;sleep38
+     43  125e		       20 9b 14 	      jsr	Sleep12
+     44  1261		       20 9b 14 	      jsr	Sleep12
+     45  1264		       20 9b 14 	      jsr	Sleep12
+      0  1267					      SLEEP	2
+      1  1267				   .CYCLES    SET	2
+      2  1267
+      3  1267				  -	      IF	.CYCLES < 2
+      4  1267				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  1267				  -	      ERR
+      6  1267					      ENDIF
+      7  1267
+      8  1267				  -	      IF	.CYCLES & 1
+      9  1267				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  1267				  -	      nop	0
+     11  1267				  -	      ELSE
+     12  1267				  -	      bit	VSYNC
+     13  1267				  -	      ENDIF
+     14  1267				  -.CYCLES    SET	.CYCLES - 3
+     15  1267					      ENDIF
+     16  1267
+     17  1267					      REPEAT	.CYCLES / 2
      18  1267		       ea		      nop
-     17  1267					      REPEND
-     18  1268		       ea		      nop
-     17  1268					      REPEND
-     18  1269		       ea		      nop
-     17  1269					      REPEND
-     18  126a		       ea		      nop
-     17  126a					      REPEND
-     18  126b		       ea		      nop
-     17  126b					      REPEND
-     18  126c		       ea		      nop
-     17  126c					      REPEND
-     18  126d		       ea		      nop
-     17  126d					      REPEND
-     18  126e		       ea		      nop
-     17  126e					      REPEND
-     18  126f		       ea		      nop
-     19  1270					      REPEND
-     43  1270
-     44  1270		       a9 01		      lda	#$01
-     45  1272		       85 85		      sta	BCDScoreAdd+1
-     46  1274
-     47  1274		       a9 14		      lda	#$14
-     48  1276		       85 87		      sta	BCDLevel
-     49  1278
-     50  1278							; draw ball if level > 9
-     51  1278
-     52  1278		       a5 87		      lda	BCDLevel
-     53  127a		       4a		      lsr
-     54  127b		       4a		      lsr
-     55  127c		       4a		      lsr
-     56  127d		       aa		      tax
-     57  127e
-     58  127e		       68		      pla		; pull gfx for digit0
-     59  127f		       86 1f		      stx	ENABL
-     60  1281
-     61  1281		       4c 1b 13 	      jmp	.EntrancePoint
-     62  1284
-     63  1300		       00 00 00 00*	      ALIGN	$100
-     64  1300
-     65  1300							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     66  1300				   .ScoreDigitLoop
-     67  1300
-     68  1300							; A contains gfx for digit3
-     69  1300		       85 1b		      sta	GRP0	; 14	digit2 -> [GRP0]	digit1 -> GRP1
-     70  1302
-     71  1302							; gfx for the first 3 digits are now pre-loaded into the GRPx registers
-     72  1302
-     73  1302		       68		      pla		; 18 - pull gfx for digit3...
-     74  1303		       a8		      tay		; 20 - ...and store in Y
-     75  1304		       68		      pla		; 24 - pull gfx data for digit4...
-     76  1305		       aa		      tax		; 26 - ...and store in X
-     77  1306		       68		      pla		; 30 - pull gfx data for digit5 to A
-     78  1307
-     79  1307		       84 1c		      sty	GRP1	; 33 - digit3 -> [GRP1]	digit2 -> GRP0
-     80  1309		       86 1b		      stx	GRP0	; 36 - digit4 -> [GRP0]	digit3 -> GRP1
-     81  130b		       85 1c		      sta	GRP1	; 39 - digit5 -> [GRP1]	digit4 -> GRP0
-     82  130d		       85 1b		      sta	GRP0	; 42 - digit5 -> [GRP0]	digit5 -> GRP1
-     83  130f
-     84  130f		       68		      pla		; 46 - pull gfx data for level counter
-     85  1310		       85 1d		      sta	ENAM0	; 49 - use bit 1 of data for ENAM0
-     86  1312		       2a		      rol		; 51
-     87  1313		       85 1e		      sta	ENAM1	; 54 - use bit 0 of data for ENAM1
-     88  1315		       6a		      ror		; 56
-     89  1316		       6a		      ror		; 58
-     90  1317		       6a		      ror		; 60
-     91  1318		       85 04		      sta	NUSIZ0	; 63 - use bits 2-7 of data (re-aligned) for NUSIZ0
-     92  131a
-     93  131a		       68		      pla		; 67 - pull gfx for digit0
-     94  131b				   .EntrancePoint
-     95  131b		       85 1b		      sta	GRP0	; 70 - digit0 -> [GRP0]
-     96  131d
-     97  131d		       68		      pla		; 74 - pull gfx for digit1
-     98  131e		       8d 1c 00 	      sta.w	GRP1	; 02 - digit1 -> [GRP1]	digit0 -> GRP0
-     99  1321							;	(use an extra cycle for timing reasons)
-    100  1321
-    101  1321		       68		      pla		; 06 - pull gfx for digit2
-    102  1322
-    103  1322							; On the final iteration of the loop, the stack will have wrapped
-    104  1322							; and pulled from location $02 at this point.
-    105  1322							; This happens to be the collision register CXP0FB.
-    106  1322							; Bit-7 will always be set in this register,
-    107  1322							; and bit-7 is always clear in the score graphics,
-    108  1322							; so checking bit-7 of the data pulled is all that you need
-    109  1322							; to determine when to terminate the loop.
-    110  1322
-    111  1322		       aa		      tax		; 08 - set flags according to pulled data
-    112  1323
-    113  1323		       10 db		      bpl	.ScoreDigitLoop	; 10/11 - check negative flag to see if the loop is over
-    114  1325
-    115  1325							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     19  1268					      REPEND
+     47  1268
+     48  1268		       a9 01		      lda	#$01
+     49  126a		       85 85		      sta	BCDScoreAdd+1
+     50  126c
+     51  126c		       a9 14		      lda	#$14
+     52  126e		       85 87		      sta	BCDLevel
+     53  1270
+     54  1270		       68		      pla		; pull gfx for digit0
+     55  1271		       85 1b		      sta	GRP0	; digit0 -> [GRP0]
+     56  1273
+     57  1273							; draw ball if level > 9
+     58  1273
+     59  1273		       a5 87		      lda	BCDLevel
+     60  1275		       4a		      lsr
+     61  1276		       4a		      lsr
+     62  1277		       4a		      lsr
+     63  1278		       85 1f		      sta	ENABL
+     64  127a
+     65  127a		       4c 1d 13 	      jmp	.EntrancePoint
+     66  127d
+     67  1300		       00 00 00 00*	      ALIGN	$100
+     68  1300
+     69  1300							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     70  1300				   .ScoreDigitLoop
+     71  1300
+     72  1300							; A contains gfx for digit3
+     73  1300		       85 1b		      sta	GRP0	; 14	digit2 -> [GRP0]	digit1 -> GRP1
+     74  1302
+     75  1302							; gfx for the first 3 digits are now pre-loaded into the GRPx registers
+     76  1302
+     77  1302		       68		      pla		; 18 - pull gfx for digit3...
+     78  1303		       a8		      tay		; 20 - ...and store in Y
+     79  1304		       68		      pla		; 24 - pull gfx data for digit4...
+     80  1305		       aa		      tax		; 26 - ...and store in X
+     81  1306		       68		      pla		; 30 - pull gfx data for digit5 to A
+     82  1307
+     83  1307		       84 1c		      sty	GRP1	; 33 - digit3 -> [GRP1]	digit2 -> GRP0
+     84  1309		       86 1b		      stx	GRP0	; 36 - digit4 -> [GRP0]	digit3 -> GRP1
+     85  130b		       85 1c		      sta	GRP1	; 39 - digit5 -> [GRP1]	digit4 -> GRP0
+     86  130d		       85 1b		      sta	GRP0	; 42 - digit5 -> [GRP0]	digit5 -> GRP1
+     87  130f
+     88  130f		       68		      pla		; 46 - pull gfx data for level counter
+     89  1310		       85 1d		      sta	ENAM0	; 49 - use bit 1 of data for ENAM0
+     90  1312		       2a		      rol		; 51
+     91  1313		       85 1e		      sta	ENAM1	; 54 - use bit 0 of data for ENAM1
+     92  1315		       6a		      ror		; 56
+     93  1316		       6a		      ror		; 58
+     94  1317		       6a		      ror		; 60
+     95  1318		       85 04		      sta	NUSIZ0	; 63 - use bits 2-7 of data (re-aligned) for NUSIZ0
+     96  131a
+     97  131a		       68		      pla		; 67 - pull gfx for digit0
+     98  131b		       85 1b		      sta	GRP0	; 70 - digit0 -> [GRP0]
+     99  131d				   .EntrancePoint
+    100  131d		       68		      pla		; 74 - pull gfx for digit1
+    101  131e		       8d 1c 00 	      sta.w	GRP1	; 02 - digit1 -> [GRP1]	digit0 -> GRP0
+    102  1321							;	(use an extra cycle for timing reasons)
+    103  1321
+    104  1321		       68		      pla		; 06 - pull gfx for digit2
+    105  1322
+    106  1322							; On the final iteration of the loop, the stack will have wrapped
+    107  1322							; and pulled from location $02 at this point.
+    108  1322							; This happens to be the collision register CXP0FB.
+    109  1322							; Bit-7 will always be set in this register,
+    110  1322							; and bit-7 is always clear in the score graphics,
+    111  1322							; so checking bit-7 of the data pulled is all that you need
+    112  1322							; to determine when to terminate the loop.
+    113  1322
+    114  1322		       aa		      tax		; 08 - set flags according to pulled data
+    115  1323
+    116  1323		       10 db		      bpl	.ScoreDigitLoop	; 10/11 - check negative flag to see if the loop is over
+    117  1325
+    118  1325							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ------- FILE code/Kernel.asm
 ------- FILE code/Gameplay Kernel/GameplayKernel.asm LEVEL 3 PASS 2
       0  1325					      include	code/Gameplay Kernel/GameplayKernel.asm
