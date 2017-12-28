@@ -301,7 +301,7 @@
     
     
 
-    lda Frame		; 2
+    lda #COL_SCORE	; 2
     sta ScoreColor	; 3
 
     lda ScoreColor	; 3
@@ -320,7 +320,7 @@
 .IncSkip
     sta BCDScoreAdd+1
 
-    lda #$14
+    lda #$19
     sta BCDLevel
     
     
@@ -414,6 +414,9 @@
     
     lda #$56
     sta PgBarColor
+    
+    lda #COL_CAT_TART
+    sta CatTartColor
     
     lda Frame
     and #%00001000

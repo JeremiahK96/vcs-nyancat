@@ -97,3 +97,5 @@ LUM_E			equ $0E>>1
 
 MODE_GREY		equ $80	; for greyscale lines
 MODE_COLOR		equ $00	; for colored lines
+
+END_FOOD		equ #%00000001	; any value not present in food graphics

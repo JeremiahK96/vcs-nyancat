@@ -128,14 +128,14 @@ PreKernel:
     and #$F0		; 30
     sta FoodGfxPtr1	; 33
     tax			; 35
-    lda FoodGfx+14,x	; 39
+    lda FoodGfx+15,x	; 39
     sta FoodColor1	; 42
     
     lda FoodItemR	; 45
     and #$F0		; 47
     sta FoodGfxPtr2	; 50
     tax			; 52
-    lda FoodGfx+14,x	; 56
+    lda FoodGfx+15,x	; 56
     sta FoodColor2	; 59
     
     lda FoodPosX	; 62

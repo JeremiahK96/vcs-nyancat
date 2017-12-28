@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 12-23-2017 Version 2.5
+; 12-28-2017 Version 2.6
 ;
-; Optimize and improve code
+; Draw food items on both cat rows
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -69,7 +69,7 @@ SystemClear:
 
     include code/Kernel.asm
     
-Z_EndOfCode	; label to show how much ROM is used for the code
+Z_EndOfCode	.byte 0	; label to show how much ROM is used for the code
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -80,6 +80,8 @@ Z_EndOfCode	; label to show how much ROM is used for the code
 
 ; Include graphics data tables
     include data/Graphics.asm
+    
+Z_EndOfGfx	.byte 0	; label to show how much ROM is used for the graphics
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

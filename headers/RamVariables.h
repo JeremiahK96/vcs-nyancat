@@ -97,6 +97,8 @@ ScoreDigit5	; temporary variable for digit 5 in scoreboard loading routine
 PreCatRows	ds 1	; number of rows to draw before the two "cat" rows
 PostCatRows	ds 1	; number of rows to draw after the two "cat" rows
 
+CatTartColor	ds 1	; color of the cat's tart body
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables used for the food items
 
@@ -143,5 +145,4 @@ FoodColor2	ds 1	; color of the 2nd food item
 ; last 34 bytes of RAM are used to hold the rainbow color graphics
 
     ORG $100 - 36
-    
 RamBowColors	ds 34

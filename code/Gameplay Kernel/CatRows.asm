@@ -1,13 +1,3 @@
-; Draw the two rows that contain the cat.
-CatRows:	SUBROUTINE
-
-    ; Output a line to finish the bottom of a "throb" line, like in HiRows.
-    ; If the cat is at the very top of the row, draw the top of the pop-tart.
-    
-    lda ThrobColor+0
-    sta COLUBK
-    sta COLUPF
-    
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Cat Row Kernel
 ;
@@ -18,203 +8,177 @@ CatRows:	SUBROUTINE
 ; containing the cat.
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-DrawCatRow:
+CatRows:	SUBROUTINE
     
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    sta WSYNC
 
-    ldx FoodColor2
-    txs
+    ; Output a line to finish the bottom of a "throb" line, like in HiRows.
+    ; If the cat is at the very top of the row, draw the top of the pop-tart.
+    
+    lda ThrobColor+0	; 03
+    sta COLUBK		; 06
+    sta COLUPF		; 09
+
+    ldx FoodColor2	; 12
+    txs			; 14
+    
+    SLEEP 27		; 41
+    
+    jmp .OnTheBed	; 44
+    
+    ALIGN $100
+    
+.OnTheBed
+    ldy CurrentRow	; 47
+    lda FoodPosX,y	; 51
+    cmp #48		; 53
+    
+    ldx #0		; 55
+    ldy #13		; 57
     
     ; Then output the 14 lines to draw a single row. This will include drawing
     ; the rainbow, the pop-tart, the head and face or paws, and the food items.
     ; All graphics will be updated every line.
     
-    SLEEP 10
-    
-    ldy #13
-    lda (TartGfxPtr),y
-    sta PF1
-    
-    ldy #13
-    
-    ldx CurrentRow
-    lda FoodPosX,x	; 47
-    
-    cmp #49		; 49
-    bmi .FoodRight	; 52/51
-    
-    ldx #COL_BACKGROUND
-    
-    dec TartGfxPtr	; 56
-    dec CatGfxPtr	; 61
-    
-    SLEEP 7		; 68
-    
-    jmp .KernelLoop1	; 71
-    
-.FoodRight
-    ldx #COL_BACKGROUND
-    
-    jmp .KernelLoop2	; 55
-    
-    
-    
-    
-    
-    
-DrawFoodRow:
+    bcs .RightEntrance	; 60/59
+    bcc .LeftEntrance	; 62
 
-    ldy #13		; 02
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Kernel used when food items are closer to the right edge of the screen
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     
-.FoodLoop
-    lda #COL_BACKGROUND	; 04
-    sta WSYNC		; 07/00
+.RightLoop
     
-.EnterHere
-    sta COLUBK		; 03
-    sta COLUPF		; 06
+    ; 8 cycles
+    lda (CatGfxPtr),y	; 49 - set cat's head gfx
+    sta GRP0		; 52
     
-    lda (FoodGfxPtr1),y	; 11
-    sta GRP1		; 14
-    lda FoodColor1	; 17
-    sta COLUP1		; 20
+    ; 9 cycles
+    stx GRP1		; 55 - set 2nd food item's gfx no sooner than cycle 55
+    tsx			; 57 - load 2nd food item's color
+    stx COLUP1		; 60 - set 2nd food item's color no later than cycle 60
     
-    lda Temp		; 23
+.RightEntrance		; enter loop here
     
-    sec			; 25
-.WaitLoop
-    sbc #23		; 27
-    bcs .WaitLoop	; 29
+    ; 2 cycles
+    ldx #0		; 62 - X register must be set to 0 (black)
     
-    lda (FoodGfxPtr2),y ; 49
-    ldx FoodColor2	; 52
-    sta GRP1		; 55
-    stx COLUP1		; 58
+    ; 8 cycles
+    lda (TartGfxPtr),y	; 67 - load cat's tart gfx
+    sta PF1		; 70 - set cat's tart gfx
     
-    dey			; 60
-    bpl .FoodLoop	; 62
+    ; 8 cycles
+    lda (FoodGfxPtr1),y	; 75 - set 1st food item's gfx
+    sta GRP1		; 02
     
-    inc CurrentRow	; 65
-Sleep12
-    rts			; 71
-    
-    
-    
-    
-    
-
-    ALIGN $100
-
-.KernelLoop1
-    
-    ; 7 cycles to prepare PF rainbow colors
-    lda RamBowColors+1,y; 75
-    sta COLUPF		; 02
-    
-    ; 7 cycles to prepare BK rainbow colors
-    lda RamBowColors,y	; 06
+    ; 7 cycles
+    lda RamBowColors,y	; 06 - set playfield's rainbow color
     sta COLUBK		; 09
     
-    ; 14 cycles to prepare 1st food item's graphics
-    lda (FoodGfxPtr1),y	; 14
-    sta GRP1		; 17
-    lda FoodColor1	; 20
-    sta COLUP1		; 23
+    ; 7 cycles
+    lda RamBowColors+1,y; 13 - set background's rainbow color
+    sta COLUPF		; 16
+    
+    ; 6 cycles
+    lda FoodColor1	; 19 - set 1st food item's color
+    sta COLUP1		; 22
+    
+    ; 8 cycles
+    lda CatTartColor	; 25
+    sta COLUPF		; 28 - MUST set tart color at cycle 28
+    stx COLUBK		; 31 - MUST set face/bg color to black at cycle 31
+    stx COLUPF		; 34 - don't draw rainbow/tart on right side
+    
+    ; 5 cycles
+    lax (FoodGfxPtr2),y	; 39 - load 2nd food item's gfx before dey
+    
+    ; 2 cycles
+    dey			; 41
+    bpl .RightLoop	; 44/43
+    
+    SLEEP 9		; 52
+    
+    stx GRP1		; 55 - set 2nd food item's gfx no sooner than cycle 55
+    tsx			; 57 - load 2nd food item's color
+    stx COLUP1		; 60 - set 2nd food item's color no later than cycle 60
+    
+    ldx #0		; 62
+    beq .End		; 65
 
-    ; 5 cycles to set tart color
-    lda #COL_CAT_TART	; 25
-    sta COLUPF		; 28
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Kernel used when food items are closer to the left edge of the screen
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     
-    ; 3 cycles to clear BK color to black
-    ; x is pre-loaded with 0, the color black
-    stx COLUBK		; 31
+.LeftLoop
     
-    ; 8 cycles to prepare cat face graphics
-    lda (CatGfxPtr),y	; 36
-    sta GRP0		; 39
+    ; 8 cycles
+    lda (CatGfxPtr),y	; 54 - set cat's head gfx
+    sta GRP0		; 57
     
-    ; 8 cycles to prepare tart graphics
-    lda (TartGfxPtr),y	; 44
-    sta PF1		; 47
-    
-    ; 13 cycles to prepare 2nd food item's graphics
-    lda (FoodGfxPtr2),y	; 52
-    tsx			; 54
-    sta GRP1		; 57
-    stx COLUP1		; 60
-    
-    ; 6 cycles to clear PF color to black
-    ldx #COL_BACKGROUND	; 62
-    stx.w COLUPF	; 66
-    
-    ; 5 cycles to finish the loop mechanism
-    dey			; 68
-    bpl .KernelLoop1	; 71/70
-    
-    ; exactly 76 cycles total
-    
-    jmp .Nanny
-    
-    
+    ; 5 cycles
+    ldx #0		; 59 - X must be set to 0 (black)
+    stx COLUPF		; 62 - don't draw rainbow/tart on right side
 
+.LeftEntrance		; enter loop here
+    
+    ; 8 cycles
+    lda (TartGfxPtr),y	; 67 - load cat's tart gfx
+    sta PF1		; 70 - set cat's tart gfx
+    
+    ; 8 cycles
+    lda (FoodGfxPtr1),y	; 75 - load 1st food item's gfx
+    sta GRP1		; 02 - set 1st food item's gfx
+    
+    ; 7 cycles
+    lda RamBowColors,y	; 06 - set rainbow colors
+    sta COLUBK		; 09
+    
+    ; 7 cycles
+    lda RamBowColors+1,y; 13
+    sta COLUPF		; 16
+    
+    ; 6 cycles
+    lda FoodColor1	; 19 - set 1st food item's color
+    sta COLUP1		; 22
+    
+    ; 8 cycles
+    lda CatTartColor	; 25
+    sta COLUPF		; 28 - MUST set tart color at cycle 28
+    stx COLUBK		; 31 - MUST set face/bg color to black at cycle 31
+    
+    ; 13 cycles
+    lda (FoodGfxPtr2),y	; 35 - load 2nd food item's gfx
+    tsx			; 38 - load 2nd food item's color
+    sta GRP1		; 41 - MUST set 2nd food item's gfx at cycle 41
+    stx COLUP1		; 44 - MUST set 2nd food item's color at cycle 44
+    
+    ; 5 cycles
+    dey			; 46
+    bpl .LeftLoop	; 49/48
+    
+    ldx #0		; 50
+    stx COLUPF		; 53
 
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-.KernelLoop2
+.End
+
+    jmp .CatThrob
     
-    ; 8 cycles to prepare cat face graphics
-    lda (CatGfxPtr),y	; 60
-    sta GRP0		; 63
     
-    ; 14 cycles to prepare 1st food item's graphics
-    lda (FoodGfxPtr1),y	; 68
-    sta GRP1		; 71
-    lda FoodColor1	; 74
-    sta COLUP1		; 01
     
-    ; 7 cycles to prepare PF rainbow colors
-    lda RamBowColors+1,y; 05
-    sta COLUPF		; 08
     
-    ; 7 cycles to prepare BK rainbow colors
-    lda RamBowColors,y	; 12
-    sta COLUBK		; 15
     
-    ; 8 cycles to prepare tart graphics
-    lda (TartGfxPtr),y	; 20
-    sta PF1		; 23
     
-    ; 5 cycles to set tart color
-    lda #COL_CAT_TART	; 25
-    sta COLUPF		; 28
+    include subroutines/DrawFoodRow.asm
     
-    ; 3 cycles to clear BK color to black
-    ; x is pre-loaded with 0, the color black
-    stx COLUBK		; 31
-    
-    ; 13 cycles to prepare 2nd food item's graphics
-    lda (FoodGfxPtr2),y	; 36
-    tsx			; 38
-    sta GRP1		; 41
-    stx COLUP1		; 44
-    
-    ; 6 cycles to clear PF color to black
-    ldx #COL_BACKGROUND	; 46
-    stx.w COLUPF	; 50
-    
-    ; 5 cycles to finish the loop mechanism
-    dey			; 52
-    bpl .KernelLoop2	; 55/54
-    
-    ; exactly 76 cycles total
-    
-.Nanny
+.CatThrob
 
     sta WSYNC
     
     inc CurrentRow
     
     stx GRP1
-
     
 
 
@@ -266,13 +230,15 @@ Sleep12
     
     lda #COL_BACKGROUND
     sta COLUBK
-    sta COLUPF
+    sta.w COLUPF
     
     ldy #14
-.Loop3
-    sta WSYNC
+.LoopdyLoop
     dey
-    bne .Loop3
+    sta WSYNC
+    bne .LoopdyLoop
+    
+    
     
     ; Lastly, output only one line (not four) to draw the top of a "throb" line.
     ; Use this time to prepare the next row's food item pointers (unless this is
@@ -289,6 +255,3 @@ Sleep12
     ; already disabled or not.
     
     jmp LoRows
-
-
-

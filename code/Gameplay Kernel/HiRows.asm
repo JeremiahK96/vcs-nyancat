@@ -1,4 +1,5 @@
 ; Draw all the rows above the cat's two rows
+    
 HiRows:		SUBROUTINE
 
     sta WSYNC
@@ -6,6 +7,7 @@ HiRows:		SUBROUTINE
     lda ThrobColor+0
     sta COLUBK
     sta COLUPF
+    
 
     ; First, output a single-color line to draw the bottom of a "throb" line.
     ; This will probably be a good time to prepare the pointers for the
@@ -81,14 +83,14 @@ HiRows:		SUBROUTINE
     and #$F0		; 17
     sta FoodGfxPtr1	; 20
     tax			; 22
-    lda FoodGfx+14,x	; 26
+    lda FoodGfx+15,x	; 26
     sta FoodColor1	; 29
     
     lda FoodItemR,y	; 33
     and #$F0		; 36
     sta FoodGfxPtr2	; 38
     tax			; 40
-    lda FoodGfx+14,x	; 44
+    lda FoodGfx+15,x	; 44
     sta FoodColor2	; 47
     
     lda FoodPosX,y	; 51
@@ -96,10 +98,6 @@ HiRows:		SUBROUTINE
     
     dec PreCatRows
     bne HiRows
-    
-    sta WSYNC
-    
-    SLEEP 2
     
     ; If this is not the last row before drawing the cat's rows,
     ; loop back to HiRows to draw the next row.

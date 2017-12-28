@@ -6,43 +6,46 @@
 
     SUBROUTINE
     
-    sta COLUBK		; 06 - A contains 0
-    sta COLUP0		; 09
+    sta COLUBK		; 06 - A = 0
+    sta COLUP0		; 09 - set both colors to black
     
     lda #$FF		; 11
     sta PF0		; 14
-    sta GRP0		; 17
-    
-    lda #$A0		; 19
-    sta PF1		; 22
-    
-    ldy ScoreColor
-    ldx #%00010011	; 24
-    stx NUSIZ1		; 34
-    
-    lda #$80		; 28
-    sta PF1		; 31
-    
-    stx CTRLPF		; 37
-    stx NUSIZ0		; 40
-    stx VDELP0		; 43
-    stx VDELP1		; 46
-    sty COLUP0		; 49
-    
-    pla			; 53 - pull gfx for digit0
-    sta GRP0		; digit0 -> [GRP0]
-    
-; draw ball if level > 9
+    sta GRP0		; 17 - player 0 (black) will cover up...
 
-    lda BCDLevel
-    lsr
-    lsr
-    lsr
-    sta ENABL
+    lda #$A0		; 19 - ...part of PF1, causing bit 7 of CXP0FB to be set
+    sta PF1		; 22 - (player 0 is drawn over PF1 to hide it)
     
-    jmp .EntrancePoint
+    ldy ScoreColor	; 25 - pre-load value to store to GRP0,
+    ldx #%00010011	; 27 - and value to store to NUSIZx, CTRLPF, and VDELxx
     
-    ALIGN $100
+    lda #$80		; 29
+    sta PF1		; 33 - fix PF1 register only AFTER collision
+    
+    stx NUSIZ0		; 35 - X = THREE_CLOSE | BALL_SIZE_2
+    stx NUSIZ1		; 38
+    stx VDELP0		; 41 - enable vertical delay for player 0...
+    stx VDELP1		; 44 - ...and player 1
+    stx CTRLPF		; 47 - X = PF_REFLECT | PF_SCORE_MODE | MSL_SIZE_2
+    			;      PF_SCORE_MODE isn't needed, but it saves a read
+    sty COLUP0		; 50 - fix COLUP0 register
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Pre-load some graphics before the scoreboard kernel loop
+
+    pla			; 54 - pull gfx for digit0
+    sta GRP0		; 57 - digit0 -> [GRP0]
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Only draw leading 1 in level counter if the level is 10 or more
+
+    lda BCDLevel	; 60 - the value of bit 4...
+    lsr			; 62
+    lsr			; 64
+    lsr			; 66 - ...gets shifted three times...
+    sta ENABL		; 69 - ...to be used to enable or disable the ball
+    
+    bpl .ScoreEntrance	; 72
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 .ScoreDigitLoop
@@ -68,13 +71,13 @@
     rol			; 51	
     sta ENAM1		; 54 - use bit 0 of data for ENAM1
     ror			; 56	
-    ror			; 58	
-    ror			; 60	
+    lsr			; 58	
+    lsr			; 60	
     sta NUSIZ0		; 63 - use bits 2-7 of data (re-aligned) for NUSIZ0
 
     pla			; 67 - pull gfx for digit0
     sta.w GRP0		; 71 - digit0 -> [GRP0]
-.EntrancePoint
+.ScoreEntrance
     pla			; 74 - pull gfx for digit1
     sta GRP1		; 02 - digit1 -> [GRP1]	digit0 -> GRP0
     			;      (use an extra cycle for timing reasons)
@@ -113,6 +116,11 @@
     sta COLUBK
     
     sta WSYNC
+    jmp .Trampoline
+    
+    ALIGN $100
+    
+.Trampoline
     sta WSYNC
     
     SLEEP 10
