@@ -95,7 +95,7 @@ LUM_E			equ $0E>>1
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; color modes for throb line data
 
-MODE_GREY		equ $80	; for greyscale lines
-MODE_COLOR		equ $00	; for colored lines
+MODE_GREY		equ $80	; for greyscale throb lines
+MODE_COLOR		equ $00	; for colored throb lines
 
-END_FOOD		equ #%00000001	; any value not present in food graphics
+GAMEPLAY_STACK		equ $DF	; stack location during gameplay kernel

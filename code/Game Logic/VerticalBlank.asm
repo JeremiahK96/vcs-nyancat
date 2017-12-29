@@ -272,30 +272,6 @@
 .Finish
     
     sta HMCLR
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare Health Display
-;
-; Set the pointers for the health graphics
-;
-; Takes 28 cycles to complete
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    
-    clc			; 2
-
-    lda #<HealthLeftGfx	; 2
-    adc Health		; 3
-    sta HthGfxLPtr	; 3
-    lda #>HealthLeftGfx	; 2
-    sta HthGfxLPtr+1	; 3
-    
-    lda #<HealthRightGfx; 2
-    adc Health		; 3
-    sta HthGfxRPtr	; 3
-    lda #>HealthRightGfx; 2
-    sta HthGfxRPtr+1	; 3
     
     
     
@@ -335,9 +311,18 @@
     sta FoodGfxPtr2+1
     
     lda #<CatTartGfx
-    sta TartGfxPtr
+    sta TartGfxPtr1
+    sta TartGfxPtr2
     lda #>CatTartGfx
-    sta TartGfxPtr+1
+    sta TartGfxPtr1+1
+    sta TartGfxPtr2+1
+    
+    lda #>CatFaceGfx
+    sta CatGfxPtr1+1
+    sta CatGfxPtr2+1
+    lda #<CatFaceGfx
+    sta CatGfxPtr1
+    sta CatGfxPtr2
     
     lda #$10
     sta FoodItemL+0
@@ -368,16 +353,13 @@
     lda #$E0
     sta FoodItemR+6
     
-    lda #<CatFaceGfx
-    sta CatGfxPtr
-    lda #>CatFaceGfx
-    sta CatGfxPtr+1
-    
     dec FoodPosX
     bpl .NoReset
     lda #88
     sta FoodPosX
 .NoReset
+    lda FoodPosX
+    sta FoodPosX+3
     
     lda FoodPosX
     sec
@@ -393,9 +375,6 @@
     adc #89
 .Rock2
     sta FoodPosX+2
-    
-    lsr
-    sta FoodPosX+3
     
     sbc #29
     bcs .Rock4

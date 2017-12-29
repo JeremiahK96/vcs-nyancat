@@ -16,14 +16,14 @@ PreKernel:
     sta VDELP0	; 27 - disable player vertical delays
     sta VDELP1	; 30
     sta ENABL	; 33 - disable ball
-    sta.w CurrentRow	; 37
+    sta CurrentRow	; 36
 
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Clear the RAM for the rainbow colors - 127 cycles
+; Clear 32 bytes of RAM for the rainbow colors - 120 cycles
 
     
-    ldx #$FD
+    ldx #$FF
     txs
     
     ldy #4
@@ -40,13 +40,10 @@ PreKernel:
     dey
     bne .ClearRainbow
     
-    pha
-    pha		; 12
-    
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load the rainbow colors into RAM - 65 cycles
 
-    ldx #$FD - 20
+    ldx #RamBowColors+13
     txs
     
     lda RainbowColors+5
@@ -66,7 +63,9 @@ PreKernel:
     pha
     lda RainbowColors+0
     pha
-    pha		; 00
+    pha
+    
+    sta WSYNC
 
 
 
@@ -139,12 +138,12 @@ PreKernel:
     sta FoodColor2	; 59
     
     lda FoodPosX	; 62
-    sta.w Temp		; 66
+    sta Temp		; 65
     
-    ldx #$FF		; 68
-    txs			; 70
+    ldx #GAMEPLAY_STACK	; 67
+    txs			; 69
     
-    sta HMOVE		; 73
+    sta.w HMOVE		; 73
     
     ; If any part of the cat needs to be drawn in the top row,
     ; skip straight to CatRows.

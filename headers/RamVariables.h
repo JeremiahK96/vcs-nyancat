@@ -38,6 +38,7 @@ Progress	ds 1	; value for level progress, which can be
 ProgressBar	ds 5	; array of 5 values to be written to the playfield
 			; registers when drawing progress bar
 
+CatThrobPF
 PgBarColor	ds 1	; color for full part of progress bar
 
 Health		ds 1	; amount of health
@@ -56,21 +57,23 @@ ScrLoadPtr0	; pointer for digit 0 in scoreboard loading routine
 
 		ds 2
 
-TartGfxPtr		; pointer for the tart graphics
+TartGfxPtr1	; pointer for the tart graphics
 ScrLoadPtr1	; pointer for digit 1 in scoreboard loading routine
 
 		ds 2
 
-CatGfxPtr	; pointer for the cat face/paws graphics
+CatGfxPtr1	; pointer for the cat face/paws graphics
 ScrLoadPtr2	; pointer for digit 2 in scoreboard loading routine
 
 		ds 2
 
+TartGfxPtr2	; pointer for the tart graphics
 HthGfxLPtr	; pointer for left half of the health graphics
 ScrLoadPtr3	; pointer for digit 3 in scoreboard loading routine
 
 		ds 2
 
+CatGfxPtr2	; pointer for the cat face/paws graphics
 HthGfxRPtr	; pointer for right half of the health graphics
 ScrLoadPtr4	; pointer for digit 4 in scoreboard loading routine
 
@@ -144,5 +147,5 @@ FoodColor2	ds 1	; color of the 2nd food item
 ; 7 of 15 available temporary RAM bytes used (8 left)
 ; last 34 bytes of RAM are used to hold the rainbow color graphics
 
-    ORG $100 - 36
-RamBowColors	ds 34
+    ORG $100 - 32
+RamBowColors	ds 32

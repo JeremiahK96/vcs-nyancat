@@ -42,6 +42,8 @@ CatRows:	SUBROUTINE
     
     bcs .RightEntrance	; 60/59
     bcc .LeftEntrance	; 62
+    
+    ; 14 bytes into the page
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Kernel used when food items are closer to the right edge of the screen
@@ -50,7 +52,7 @@ CatRows:	SUBROUTINE
 .RightLoop
     
     ; 8 cycles
-    lda (CatGfxPtr),y	; 49 - set cat's head gfx
+    lda (CatGfxPtr1),y	; 49 - set cat's head gfx
     sta GRP0		; 52
     
     ; 9 cycles
@@ -64,7 +66,7 @@ CatRows:	SUBROUTINE
     ldx #0		; 62 - X register must be set to 0 (black)
     
     ; 8 cycles
-    lda (TartGfxPtr),y	; 67 - load cat's tart gfx
+    lda (TartGfxPtr1),y	; 67 - load cat's tart gfx
     sta PF1		; 70 - set cat's tart gfx
     
     ; 8 cycles
@@ -96,14 +98,16 @@ CatRows:	SUBROUTINE
     dey			; 41
     bpl .RightLoop	; 44/43
     
-    SLEEP 9		; 52
+    ldy #18		; 45
+    lda (TartGfxPtr2),y	; 50
+    
+    SLEEP 2		; 52
     
     stx GRP1		; 55 - set 2nd food item's gfx no sooner than cycle 55
     tsx			; 57 - load 2nd food item's color
     stx COLUP1		; 60 - set 2nd food item's color no later than cycle 60
     
-    ldx #0		; 62
-    beq .End		; 65
+    bcs .End		; 63
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Kernel used when food items are closer to the left edge of the screen
@@ -112,7 +116,7 @@ CatRows:	SUBROUTINE
 .LeftLoop
     
     ; 8 cycles
-    lda (CatGfxPtr),y	; 54 - set cat's head gfx
+    lda (CatGfxPtr1),y	; 54 - set cat's head gfx
     sta GRP0		; 57
     
     ; 5 cycles
@@ -122,7 +126,7 @@ CatRows:	SUBROUTINE
 .LeftEntrance		; enter loop here
     
     ; 8 cycles
-    lda (TartGfxPtr),y	; 67 - load cat's tart gfx
+    lda (TartGfxPtr1),y	; 67 - load cat's tart gfx
     sta PF1		; 70 - set cat's tart gfx
     
     ; 8 cycles
@@ -158,28 +162,21 @@ CatRows:	SUBROUTINE
     
     ldx #0		; 50
     stx COLUPF		; 53
+    
+    ldy #18		; 55
+    lda (TartGfxPtr2),y	; 60
+    
+    stx GRP1		; 63
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 .End
 
-    jmp .CatThrob
+    sta PF1		; 66
     
-    
-    
-    
-    
-    
-    include subroutines/DrawFoodRow.asm
-    
-.CatThrob
+    lda (CatGfxPtr2),y	; 71
+    sta GRP0		; 74
 
-    sta WSYNC
-    
-    inc CurrentRow
-    
-    stx GRP1
-    
 
 
     ; Then output the 5 lines to draw a "throb" line, but also draw the entire
@@ -191,15 +188,34 @@ CatRows:	SUBROUTINE
     ; up to 60 color clocks. With three versions of the kernel, it should be
     ; possible to put player 1 anywhere on the screen.
     
-    lda ThrobColor+0
-    sta COLUBK
-    sta COLUPF
+    ldx ThrobColor+0	; 01
+    
+    lda RamBowColors+0	; 04
+    bne .DrawRainbowBK	; 06/07
+    stx COLUBK		; 09
+    beq .AfterBK	; 12
+.DrawRainbowBK
+    sta COLUBK		; 10
+    SLEEP 2		; 12
+.AfterBK
+    
+    lda CatThrobPF	; 15
+    sta COLUPF		; 18
+    
+    SLEEP 4		; 22
+    
+    lda CatTartColor	; 25
+    sta COLUPF		; 28
+    stx COLUBK		; 31
+    stx COLUPF		; 34
+    
     ldx #0
-    stx GRP0
     stx GRP1
     
-    ldx #$FF
+    ldx #GAMEPLAY_STACK
     txs
+    
+    inc CurrentRow
     
     sta WSYNC
     
@@ -255,3 +271,9 @@ CatRows:	SUBROUTINE
     ; already disabled or not.
     
     jmp LoRows
+    
+    
+    ALIGN $100
+    
+    include subroutines/DrawFoodRow.asm
+    

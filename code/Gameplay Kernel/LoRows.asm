@@ -89,9 +89,15 @@ LoRows:		SUBROUTINE
     lda ThrobColor+0
     sta COLUBK
     sta COLUPF
+    lda #0
+    sta GRP0
+    sta GRP1
     
     dec PostCatRows
     bne LoRows
+    
+    ldx #$FF
+    txs
     
     sta WSYNC
     SLEEP 2

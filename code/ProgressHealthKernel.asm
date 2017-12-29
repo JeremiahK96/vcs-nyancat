@@ -51,25 +51,44 @@
     sta GRP1		; 10
     lda #$00		; 12
     sta PF2		; 15
-    SLEEP 26		; 37
-    lda HealthBgGfx+8,y ; 41
-    sta PF2		; 44	
     
-    dex
-    bne .Loop
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Set the pointers for health graphics - 26 cycles
     
-    dey
-    bpl .HealthTop
+    clc			; 17
+    
+    lda #>HealthLeftGfx	; 19
+    sta HthGfxLPtr+1	; 22
+    sta HthGfxRPtr+1	; 25
+
+    lda #<HealthLeftGfx	; 27
+    adc Health		; 30
+    sta HthGfxLPtr	; 33
+    
+    lda #<HealthRightGfx; 35
+    adc Health		; 38
+    sta HthGfxRPtr	; 41
+    
+    
+    
+    lda HealthBgGfx+8,y ; 45
+    sta PF2		; 48	
+    
+    dex			; 50
+    bne .Loop		; 52
+    
+    dey			; 54
+    bpl .HealthTop	; 56
     
     
     SUBROUTINE
     
     
-    ldy #3
-    ldx #3
-    stx Temp
+    ldy #3		; 58
+    ldx #3		; 60
+    stx Temp		; 63
     
-    jmp .HealthMiddle
+    jmp .HealthMiddle	; 66
     
     ALIGN $100	; align to page
     

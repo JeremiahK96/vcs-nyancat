@@ -4,51 +4,53 @@
 0.Color2                 10a0              (R )
 0.FREE_BYTES             0000                  
 1.CLEAR_STACK            1006              (R )
-10.DivideLoop            160e              (R )
-11.CYCLES                0002              (R )
-12.CYCLES                0020              (R )
-13.HealthTop             16c0              (R )
-13.Loop                  16c2              (R )
-14.CYCLES                001a              (R )
-15.HealthMiddle          1700              (R )
-15.Loop                  1702              (R )
-16.HealthBottom          173b              (R )
-16.Loop                  173d              (R )
-17.CYCLES                000e              (R )
+10.CYCLES                0002              (R )
+11.CYCLES                0004              (R )
+12.DivideLoop            170e              (R )
+13.CYCLES                0002              (R )
+14.CYCLES                0020              (R )
+15.HealthTop             17c9              (R )
+15.Loop                  17cb              (R )
+16.HealthMiddle          1800              (R )
+16.Loop                  1802              (R )
+17.HealthBottom          183b              (R )
+17.Loop                  183d              (R )
+18.CYCLES                000e              (R )
 2.CYCLES                 0004              (R )
 3.Finish                 1165              (R )
-3.IncScore               1194              (R )
-3.IncSkip                1196              (R )
+3.IncScore               117f              (R )
+3.IncSkip                1181              (R )
 3.LoadScoreboard         10fd              (R )
-3.NoReset                11f2              (R )
-3.Rock1                  11fb              (R )
-3.Rock2                  1203              (R )
-3.Rock4                  120e              (R )
-3.Rock6                  1219              (R )
+3.NoReset                11e5              (R )
+3.Rock1                  11f2              (R )
+3.Rock2                  11fa              (R )
+3.Rock4                  1202              (R )
+3.Rock6                  120d              (R )
 3.Underflow1             113c              (R )
 3.Underflow2             1147              (R )
 3.Underflow3             1152              (R )
 3.Underflow4             115d              (R )
-4.ClearRainbow           131f              (R )
-4.DivideLoop             1353              (R )
-4.ScoreDigitLoop         1271              (R )
-4.ScoreEntrance          128f              (R )
+4.ClearRainbow           131e              (R )
+4.DivideLoop             1352              (R )
+4.ScoreDigitLoop         1265              (R )
+4.ScoreEntrance          1283              (R )
 4.Trampoline             1300              (R )
 5.CYCLES                 000a              (R )
-6.DivideLoop             13cc              (R )
-7.CatThrob               15a7              (R )
-7.End                    157d              (R )
-7.EnterHere              1586                  
-7.FoodLoop               1582              (R )
-7.LeftEntrance           1553              (R )
-7.LeftLoop               154b              (R )
-7.LoopdyLoop             15e7              (R )
+6.DivideLoop             13cb              (R )
+7.AfterBK                1594              (R )
+7.DrawRainbowBK          1591              (R )
+7.End                    1581              (R )
+7.EnterHere              1606                  
+7.FoodLoop               1602              (R )
+7.LeftEntrance           1551              (R )
+7.LeftLoop               1549              (R )
+7.LoopdyLoop             15d6              (R )
 7.OnTheBed               1500              (R )
 7.RightEntrance          1518              (R )
 7.RightLoop              150f              (R )
-7.WaitLoop               1595              (R )
+7.WaitLoop               1615              (R )
 8.CYCLES                 0018              (R )
-9.CYCLES                 0006              (R )
+9.CYCLES                 0002              (R )
 AUDC0                    0015                  
 AUDC1                    0016                  
 AUDF0                    0017                  
@@ -62,12 +64,14 @@ BALL_SIZE_8              0030
 BCDLevel                 0087              (R )
 BCDScore                 0081              (R )
 BCDScoreAdd              0084              (R )
-CatFaceGfx               1948              (R )
-CatGfxPtr                0096              (R )
+CatFaceGfx               1a48              (R )
+CatGfxPtr1               0096              (R )
+CatGfxPtr2               009a              (R )
 CatPosY                  009e                  
-CatRows                  1424                  
+CatRows                  1423                  
 CatTartColor             00a3              (R )
-CatTartGfx               1b07              (R )
+CatTartGfx               1c07              (R )
+CatThrobPF               008e              (R )
 COL_BACKGROUND           0000              (R )
 COL_CAT_FACE             0009              (R )
 COL_CAT_TART             004a              (R )
@@ -89,31 +93,31 @@ CXP0FB                   0002
 CXP1FB                   0003                  
 CXPPMM                   0007                  
 DOUBLE_SIZE              0005              (R )
-DrawFoodRow              1580              (R )
+DrawFoodRow              1600              (R )
 ENA_FALSE                0000                  
 ENA_TRUE                 0002                  
 ENABL                    001f              (R )
 ENAM0                    001d              (R )
 ENAM1                    001e              (R )
-END_FOOD                 0001                  
-FineHmove73              191e                  
+FineHmove73              1a1e                  
 FoodColor1               00c1              (R )
 FoodColor2               00c2              (R )
-FoodGfx                  1a00              (R )
+FoodGfx                  1b00              (R )
 FoodGfxPtr1              0090              (R )
 FoodGfxPtr2              0092              (R )
 FoodItemL                00a4              (R )
 FoodItemR                00ab              (R )
 FoodPosX                 00b2              (R )
 Frame                    0080              (R )
+GAMEPLAY_STACK           00df              (R )
 GRP0                     001b              (R )
 GRP1                     001c              (R )
 Health                   008f              (R )
-HealthBgGfx              1900              (R )
-HealthLeftGfx            18bd              (R )
-HealthRightGfx           18dd              (R )
-HealthTopGfx             18b8              (R )
-HiRows                   13a5              (R )
+HealthBgGfx              1a00              (R )
+HealthLeftGfx            19bd              (R )
+HealthRightGfx           19dd              (R )
+HealthTopGfx             19b8              (R )
+HiRows                   13a4              (R )
 HMBL                     0024              (R )
 HMCLR                    002b              (R )
 HMM0                     0022              (R )
@@ -130,8 +134,8 @@ INPT3                    000b
 INPT4                    000c                  
 INPT5                    000d                  
 INTIM                    0284              (R )
-LevelGfx                 1850              (R )
-LoRows                   1600              (R )
+LevelGfx                 1950              (R )
+LoRows                   1700              (R )
 LUM_0                    0000              (R )
 LUM_2                    0001              (R )
 LUM_4                    0002              (R )
@@ -162,8 +166,8 @@ PF_PRIORITY              0004
 PF_REFLECT               0001              (R )
 PF_SCORE_MODE            0002                  
 PgBarColor               008e              (R )
-PgBarGfx                 190d              (R )
-PgBarGfxR                1916              (R )
+PgBarGfx                 1a0d              (R )
+PgBarGfxR                1a16              (R )
 PostCatRows              00a2              (R )
 PreCatRows               00a1              (R )
 PreKernel                1307                  
@@ -171,10 +175,10 @@ Progress                 0088              (R )
 ProgressBar              0089              (R )
 QUAD_SIZE                0007                  
 Rainbow                  009f              (R )
-RainbowColors            1b00              (R )
-RainbowGfx               192e              (R )
+RainbowColors            1c00              (R )
+RainbowGfx               1a2e              (R )
 RainbowStack             00a0                  
-RamBowColors             00dc              (R )
+RamBowColors             00e0              (R )
 RamStart                 0080                  
 REFP0                    000b              (R )
 REFP1                    000c              (R )
@@ -191,21 +195,22 @@ RSYNC                    0003
 ScoreColor               0086              (R )
 ScoreDigit4              009f                  
 ScoreDigit5              00a0                  
-ScoreGfx                 1800                  
+ScoreGfx                 1900                  
 ScrLoadPtr0              0092              (R )
 ScrLoadPtr1              0094              (R )
 ScrLoadPtr2              0096              (R )
 ScrLoadPtr3              0098              (R )
 ScrLoadPtr4              009a              (R )
 ScrLoadPtr5              009c              (R )
-Sleep12                  15a6              (R )
+Sleep12                  1626              (R )
 SWACNT                   0281                  
 SWBCNT                   0283                  
 SWCHA                    0280                  
 SWCHB                    0282                  
 SystemClear              1000              (R )
 T1024T                   0297                  
-TartGfxPtr               0094              (R )
+TartGfxPtr1              0094              (R )
+TartGfxPtr2              0098              (R )
 Temp                     00bf              (R )
 Temp1                    00bd                  
 Temp2                    00be                  
@@ -213,7 +218,7 @@ TempLoop                 00bc
 THREE_CLOSE              0003                  
 THREE_MED                0006                  
 ThrobColor               00b9              (R )
-ThrobGfx                 18a0              (R )
+ThrobGfx                 19a0              (R )
 ThrobPtr                 009c                  
 TIA_BASE_ADDRESS         0000              (R )
 TIA_BASE_READ_ADDRESS    0000              (R )
@@ -228,7 +233,7 @@ TWO_WIDE                 0004              (R )
 VBLANK                   0001              (R )
 VBLANK_SCANLINES         0025              (R )
 VBLANK_TIMER             002d              (R )
-VblankTimerLoop          1238              (R )
+VblankTimerLoop          122c              (R )
 VDEL_FALSE               0000                  
 VDEL_TRUE                0001                  
 VDELBL                   0027                  
@@ -238,6 +243,6 @@ VERSION_MACRO            006a
 VERSION_VCS              0069                  
 VSYNC                    0000              (R )
 WSYNC                    0002              (R )
-Z_EndOfCode              1774                  
-Z_EndOfGfx               1b15                  
+Z_EndOfCode              1874                  
+Z_EndOfGfx               1c15                  
 --- End of Symbol List.
