@@ -113,14 +113,9 @@
     sta WSYNC
     
     lda ScoreColor
-    sta COLUBK
-    
-    sta WSYNC
+    sta.w COLUBK
     jmp .Trampoline
     
     ALIGN $100
     
 .Trampoline
-    sta WSYNC
-    
-    SLEEP 10

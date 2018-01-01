@@ -1,9 +1,4 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; We are currently at cycle 37 in the current scanline.
-
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Output 4 blank scanlines, while setting up the graphics objects.
 
 PreKernel:
@@ -20,7 +15,7 @@ PreKernel:
 
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Clear 32 bytes of RAM for the rainbow colors - 120 cycles
+; Clear 32 bytes of RAM for the rainbow colors - 126 cycles
 
     
     ldx #$FF
@@ -40,10 +35,18 @@ PreKernel:
     dey
     bne .ClearRainbow
     
+    pha
+    pha
+    
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load the rainbow colors into RAM - 65 cycles
 
-    ldx #RamBowColors+13
+    lda #18
+    sbc CatPosition	; carry is assumed to be set
+    and #%00011111
+    clc
+    adc #RamBowColors+14
+    tax
     txs
     
     lda RainbowColors+5
@@ -66,6 +69,15 @@ PreKernel:
     pha
     
     sta WSYNC
+    
+    lda RamBowColors+19
+    bne .SetCatThrobPF
+    lda ThrobColor+0
+.SetCatThrobPF
+    sta CatThrobPF
+    
+    sta WSYNC
+    SLEEP 4
 
 
 
@@ -76,8 +88,7 @@ PreKernel:
     ; food item can be placed anywhere from 0-88
     ; RESP1 can be strobed on cycle 27/32/37/42/47/52
     
-    ldy CurrentRow	; 03 - get the row we are drawing
-    lda FoodPosX,y	; 07 - get the food's position for this row
+    lda FoodPosX	; 07 - get the food's position for the top row
     
     sec			; 09
 .DivideLoop
@@ -143,7 +154,7 @@ PreKernel:
     ldx #GAMEPLAY_STACK	; 67
     txs			; 69
     
-    sta.w HMOVE		; 73
+    sta HMOVE		; 72
     
     ; If any part of the cat needs to be drawn in the top row,
     ; skip straight to CatRows.

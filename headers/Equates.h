@@ -98,4 +98,4 @@ LUM_E			equ $0E>>1
 MODE_GREY		equ $80	; for greyscale throb lines
 MODE_COLOR		equ $00	; for colored throb lines
 
-GAMEPLAY_STACK		equ $DF	; stack location during gameplay kernel
+GAMEPLAY_STACK		equ $DD	; stack location during gameplay kernel

@@ -275,6 +275,53 @@
     
     
     
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Caclulate cat's position data
+    
+    lda Frame
+    lsr
+    and #63
+    clc
+    adc #19
+    
+    ;lda #19*3+9
+    sta CatPosY
+
+    SUBROUTINE
+
+    lda CatPosY
+    
+    ldx #0
+    sec
+.DivideLoop
+    inx
+    sbc #19
+    bcs .DivideLoop
+    
+    adc #19
+    sta CatPosition
+    
+    txa
+    asl
+    asl
+    asl
+    asl
+    asl
+    adc CatPosition
+    sta CatPosition
+    
+    dex
+    stx PreCatRows
+    lda #5
+    sec
+    sbc PreCatRows
+    sta PostCatRows
+    
+    SUBROUTINE
+    
+    
+    
+    
     
 
     lda #COL_SCORE	; 2
@@ -310,9 +357,6 @@
     sta FoodGfxPtr1+1
     sta FoodGfxPtr2+1
     
-    lda #<CatTartGfx
-    sta TartGfxPtr1
-    sta TartGfxPtr2
     lda #>CatTartGfx
     sta TartGfxPtr1+1
     sta TartGfxPtr2+1
@@ -320,9 +364,23 @@
     lda #>CatFaceGfx
     sta CatGfxPtr1+1
     sta CatGfxPtr2+1
-    lda #<CatFaceGfx
-    sta CatGfxPtr1
+    
+    lda CatPosition
+    and #%00011111
+    tax
+    
+    clc
+    
+    adc #<CatTartGfx
+    sta TartGfxPtr2
+    adc #19
+    sta TartGfxPtr1
+    
+    txa
+    adc #<CatFaceGfx
     sta CatGfxPtr2
+    adc #19
+    sta CatGfxPtr1
     
     lda #$10
     sta FoodItemL+0
@@ -413,11 +471,6 @@
 ;
 ; Figure out how many rows to draw before and after the two cat rows
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    
-    lda #3
-    sta PreCatRows
-    lda #2
-    sta PostCatRows
 
 
 

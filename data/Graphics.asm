@@ -512,15 +512,6 @@ PgBarGfxR
 
 
 
-FineHmove73
-
-    HEX 70 60 50 40
-    HEX 30 20 10 00
-    HEX F0 E0 D0 C0
-    HEX B0 A0 90 80
-
-
-
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Cat Rainbow Graphics
 ;
@@ -537,28 +528,6 @@ RainbowGfx
     .byte %11000000	; rainbow PF0 gfx for moving up
     
     .byte %00110000	; rainbow PF0 gfx for moving down
-
-    
-    HEX 00000000000000000000000000000000000000000000	; 22 bytes
-
-CatFaceGfx
-
-    .byte %00110110
-    .byte %00110110
-    .byte %00000000
-    .byte %01111110
-    .byte %11000001
-    .byte %11010101
-    .byte %11111111
-    .byte %11010101
-    .byte %11011101
-    .byte %11111111
-    .byte %01100110
-    .byte %01100110
-    .byte %01000010
-    
-    HEX 000000000000000000000000000000000000000000	; 21 bytes
-    ;140 bytes used in page
 
     ALIGN $100
 
@@ -908,11 +877,11 @@ RainbowColors
     .byte $1E
     .byte $28
     .byte $44
-    
-    .byte 0
 
 CatTartGfx
 
+    ds 19, $00
+    
     .byte %00000000
     .byte %00000000
     .byte %11100000
@@ -927,3 +896,24 @@ CatTartGfx
     .byte %11100000
     .byte %11100000
     .byte %11100000
+
+CatFaceGfx
+    
+    ds 19, $00
+
+    .byte %00110110
+    .byte %00110110
+    .byte %00000000
+    .byte %01111110
+    .byte %11000001
+    .byte %11010101
+    .byte %11111111
+    .byte %11010101
+    .byte %11011101
+    .byte %11111111
+    .byte %01100110
+    .byte %01100110
+    .byte %01000010
+    .byte %00000000
+    
+    ds 19, $00

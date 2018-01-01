@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 12-29-2017 Version 2.6
+; 12-31-2017 Version 2.6
 ;
-; Draw food items on both cat rows
+; Draw cat and food items on both cat rows
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -27,10 +27,11 @@
     include headers/vcs.h
     include headers/macro.h
 
-; Include TIA/program equates and RAM labels
+; Include TIA/program equates, RAM labels, and macros
 
     include headers/Equates.h
     include headers/RamVariables.h
+    include headers/Macros.h
 
 ; Ensure that the code is placed in the proper place in the binary
 

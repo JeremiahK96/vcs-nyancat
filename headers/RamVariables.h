@@ -38,7 +38,6 @@ Progress	ds 1	; value for level progress, which can be
 ProgressBar	ds 5	; array of 5 values to be written to the playfield
 			; registers when drawing progress bar
 
-CatThrobPF
 PgBarColor	ds 1	; color for full part of progress bar
 
 Health		ds 1	; amount of health
@@ -88,6 +87,10 @@ ScrLoadPtr5	; pointer for digit 5 in scoreboard loading routine
 ; Variables used when drawing the cat
 
 CatPosY		ds 1	; number of scanlines to skip before drawing cat
+CatPosition	ds 1	; data describing the cat's position
+			; bits 7-5 store the cat's row, from 1-7
+			; bits 4-0 store the number of scanlines to skip after
+			; top of the cat's row before drawing the cat, from 0-18
 
 Rainbow		; PF0 value for the rainbow graphics
 ScoreDigit4	; temporary variable for digit 4 in scoreboard loading routine
@@ -121,6 +124,8 @@ ThrobColor	ds 3	; 3-byte array for the colors used to draw the
 			; throbbing lines. The first color is darkest,
 			; the last is brightest.
 
+CatThrobPF	ds 1
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Temporary variables which cannot be shared with stack space
 
@@ -147,5 +152,5 @@ FoodColor2	ds 1	; color of the 2nd food item
 ; 7 of 15 available temporary RAM bytes used (8 left)
 ; last 34 bytes of RAM are used to hold the rainbow color graphics
 
-    ORG $100 - 32
-RamBowColors	ds 32
+    ORG $100 - 34
+RamBowColors
