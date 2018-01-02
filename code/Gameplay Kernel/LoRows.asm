@@ -1,6 +1,5 @@
-    ALIGN $100
-
 ; Draw all the rows below the cat's two rows.
+
 LoRows:		SUBROUTINE
     
     sta WSYNC
@@ -75,6 +74,8 @@ LoRows:		SUBROUTINE
     lda FoodPosX,y	; 51
     sta Temp		; 54
     
+    
+    
     ; Output 14 lines to draw a row, exactly the same as in HiRows.
     ; It may be possible to code this as a subroutine to save ROM space.
     
@@ -93,8 +94,8 @@ LoRows:		SUBROUTINE
     sta GRP0
     sta GRP1
     
-    dec PostCatRows
-    bne LoRows
+    dec CurrentRow
+    bpl LoRows
     
     ldx #$FF
     txs

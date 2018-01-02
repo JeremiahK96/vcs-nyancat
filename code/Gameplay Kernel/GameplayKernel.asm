@@ -11,11 +11,12 @@ PreKernel:
     sta VDELP0	; 27 - disable player vertical delays
     sta VDELP1	; 30
     sta ENABL	; 33 - disable ball
-    sta CurrentRow	; 36
+    ldx #6	; 35
+    stx CurrentRow	; 38
 
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Clear 32 bytes of RAM for the rainbow colors - 126 cycles
+; Clear last 34 bytes of RAM for rainbow colors - 126 cycles
 
     
     ldx #$FF
@@ -39,7 +40,7 @@ PreKernel:
     pha
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Load the rainbow colors into RAM - 65 cycles
+; Load rainbow colors into RAM - 65 cycles
 
     lda #18
     sbc CatPosition	; carry is assumed to be set
@@ -88,7 +89,7 @@ PreKernel:
     ; food item can be placed anywhere from 0-88
     ; RESP1 can be strobed on cycle 27/32/37/42/47/52
     
-    lda FoodPosX	; 07 - get the food's position for the top row
+    lda FoodPosX+6	; 07 - get the food's position for the top row
     
     sec			; 09
 .DivideLoop
@@ -134,27 +135,27 @@ PreKernel:
     lda #COL_CAT_FACE	; 22
     sta COLUP0		; 25
     
-    lda FoodItemL	; 28
+    lda FoodItemL+6	; 28
     and #$F0		; 30
     sta FoodGfxPtr1	; 33
     tax			; 35
     lda FoodGfx+15,x	; 39
     sta FoodColor1	; 42
     
-    lda FoodItemR	; 45
+    lda FoodItemR+6	; 45
     and #$F0		; 47
     sta FoodGfxPtr2	; 50
     tax			; 52
     lda FoodGfx+15,x	; 56
     sta FoodColor2	; 59
     
-    lda FoodPosX	; 62
+    lda FoodPosX+6	; 62
     sta Temp		; 65
     
     ldx #GAMEPLAY_STACK	; 67
     txs			; 69
     
-    sta HMOVE		; 72
+    sta.w HMOVE		; 73
     
     ; If any part of the cat needs to be drawn in the top row,
     ; skip straight to CatRows.

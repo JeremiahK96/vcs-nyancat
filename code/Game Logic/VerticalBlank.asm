@@ -275,113 +275,6 @@
     
     
     
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Caclulate cat's position data
-    
-    lda Frame
-    lsr
-    and #63
-    clc
-    adc #19
-    
-    ;lda #19*3+9
-    sta CatPosY
-
-    SUBROUTINE
-
-    lda CatPosY
-    
-    ldx #0
-    sec
-.DivideLoop
-    inx
-    sbc #19
-    bcs .DivideLoop
-    
-    adc #19
-    sta CatPosition
-    
-    txa
-    asl
-    asl
-    asl
-    asl
-    asl
-    adc CatPosition
-    sta CatPosition
-    
-    dex
-    stx PreCatRows
-    lda #5
-    sec
-    sbc PreCatRows
-    sta PostCatRows
-    
-    SUBROUTINE
-    
-    
-    
-    
-    
-
-    lda #COL_SCORE	; 2
-    sta ScoreColor	; 3
-
-    lda ScoreColor	; 3
-    sta COLUP0		; 3 - set color registers
-    sta COLUP1		; 3
-    sta COLUPF		; 3
-    sta COLUBK		; 3
-    
-    lda Frame
-    and #%00001111
-    beq .IncScore
-    lda #0
-    beq .IncSkip
-.IncScore
-    lda #$89
-.IncSkip
-    sta BCDScoreAdd+1
-
-    lda #$19
-    sta BCDLevel
-    
-    
-    
-    
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-    lda #>FoodGfx
-    sta FoodGfxPtr1+1
-    sta FoodGfxPtr2+1
-    
-    lda #>CatTartGfx
-    sta TartGfxPtr1+1
-    sta TartGfxPtr2+1
-    
-    lda #>CatFaceGfx
-    sta CatGfxPtr1+1
-    sta CatGfxPtr2+1
-    
-    lda CatPosition
-    and #%00011111
-    tax
-    
-    clc
-    
-    adc #<CatTartGfx
-    sta TartGfxPtr2
-    adc #19
-    sta TartGfxPtr1
-    
-    txa
-    adc #<CatFaceGfx
-    sta CatGfxPtr2
-    adc #19
-    sta CatGfxPtr1
-    
     lda #$10
     sta FoodItemL+0
     lda #$70
@@ -449,6 +342,172 @@
 .Rock6
     sta FoodPosX+6
     
+    
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Caclulate cat's position data
+    
+    lda Frame
+    lsr
+    and #63
+    clc
+    adc #19
+    sta CatPosY
+
+    SUBROUTINE
+
+    lda CatPosY
+    
+    ldx #0
+    sec
+.DivideLoop
+    inx
+    sbc #19
+    bcs .DivideLoop
+    
+    adc #19
+    sta CatPosition
+    
+    txa
+    asl
+    asl
+    asl
+    asl
+    asl
+    adc CatPosition
+    sta CatPosition
+    
+    dex
+    stx PreCatRows
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Calculate Hmove offsets for 2nd cat row's food items
+    
+    lda #5
+    sec
+    sbc PreCatRows
+    tay
+    
+    lda FoodItemL,y
+    and #$F0
+    sta CatRow2FoodL
+    tax
+    lda FoodGfx+15,x
+    sta CatRow2Color1
+    
+    lda FoodItemR,y
+    and #$F0
+    sta CatRow2FoodR
+    tax
+    lda FoodGfx+15,x
+    sta CatRow2Color2
+    
+    lda FoodPosX,y
+    sbc #44
+    beq .Prepare
+    bcc .Prepare
+    sbc #45
+    
+.Prepare
+    sec
+    sbc #1
+    
+    ldx #$70
+    ldy #2
+    
+.OffsetLoop
+    clc
+    adc #15
+    beq .CalcOffset
+    bmi .MaxOffset
+    
+.CalcOffset
+    eor #7
+    asl
+    asl
+    asl
+    asl
+    
+    sta CatRowHmove,y
+    lda #0
+    beq .NextOffset
+    
+.MaxOffset
+    stx CatRowHmove,y
+
+.NextOffset
+    dey
+    bpl .OffsetLoop
+    
+    
+    
+    
+    
+    SUBROUTINE
+    
+    
+    
+    
+    
+
+    lda #COL_SCORE	; 2
+    sta ScoreColor	; 3
+
+    lda ScoreColor	; 3
+    sta COLUP0		; 3 - set color registers
+    sta COLUP1		; 3
+    sta COLUPF		; 3
+    sta COLUBK		; 3
+    
+    lda Frame
+    and #%00001111
+    beq .IncScore
+    lda #0
+    beq .IncSkip
+.IncScore
+    lda #$89
+.IncSkip
+    sta BCDScoreAdd+1
+
+    lda #$19
+    sta BCDLevel
+    
+    
+    
+    
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    lda #>FoodGfx
+    sta FoodGfxPtr1+1
+    sta FoodGfxPtr2+1
+    
+    lda #>CatTartGfx
+    sta TartGfxPtr1+1
+    sta TartGfxPtr2+1
+    
+    lda #>CatFaceGfx
+    sta CatGfxPtr1+1
+    sta CatGfxPtr2+1
+    
+    lda CatPosition
+    and #%00011111
+    tax
+    
+    clc
+    
+    adc #<CatTartGfx
+    sta TartGfxPtr2
+    adc #19
+    sta TartGfxPtr1
+    
+    txa
+    adc #<CatFaceGfx
+    sta CatGfxPtr2
+    adc #19
+    sta CatGfxPtr1
+    
     lda #$56
     sta PgBarColor
     
@@ -479,6 +538,10 @@
 ;
 ; Loop until the end of vertical blanking
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+    jmp VblankTimerLoop
+    
+    ALIGN $100
 
 VblankTimerLoop
     lda INTIM

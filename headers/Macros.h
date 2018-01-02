@@ -18,6 +18,8 @@
 
     ENDM
 
+
+
     MAC THROB_RAINBOW_PF
     
     SUBROUTINE
@@ -36,4 +38,12 @@
     
 .End
 
+    ENDM
+
+
+
+    MAC SKIP_WORD
+    
+    HEX 0C
+    
     ENDM

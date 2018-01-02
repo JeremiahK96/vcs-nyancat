@@ -26,11 +26,11 @@ CatRows:	SUBROUTINE
     
     SUBROUTINE
     
-    jmp .OnTheBed	; 44
+    jmp .Align2	; 44
     
     ALIGN $100
     
-.OnTheBed
+.Align2
     ldy CurrentRow	; 47
     lda FoodPosX,y	; 51
     cmp #48		; 53
@@ -153,7 +153,7 @@ CatRows:	SUBROUTINE
     stx COLUBK		; 31 - MUST set face/bg color to black at cycle 31
     
     ; 13 cycles
-    lda (FoodGfxPtr2),y	; 35 - load 2nd food item's gfx
+    lda (FoodGfxPtr2),y	; 36 - load 2nd food item's gfx
     tsx			; 38 - load 2nd food item's color
     sta GRP1		; 41 - MUST set 2nd food item's gfx at cycle 41
     stx COLUP1		; 44 - MUST set 2nd food item's color at cycle 44
@@ -170,25 +170,30 @@ CatRows:	SUBROUTINE
     
     stx GRP1		; 63
 
+.End
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Then output the 5 lines to draw a "throb" line, but also draw the entire
+; cat with the rainbow. In order to align player 1 for the next row's
+; food items, it will be neccesary to have three versions of this kernel,
+; one for each of the three 60-color-clock spaced positions to reset.
+; HMOVE will be written to on the first four scanlines. With a maximum
+; movement of 15 color-clocks per scanline, this will allow a movement of
+; up to 60 color clocks. With three versions of the kernel, it should be
+; possible to put player 1 anywhere on the screen.
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-.End
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw throb line #1
 
     sta PF1		; 66
     
     lda (CatGfxPtr2),y	; 71
     sta GRP0		; 74
-
-
-
-    ; Then output the 5 lines to draw a "throb" line, but also draw the entire
-    ; cat with the rainbow. In order to align player 1 for the next row's
-    ; food items, it will be neccesary to have three versions of this kernel,
-    ; one for each of the three 60-color-clock spaced positions to reset.
-    ; HMOVE will be written to on the first four scanlines. With a maximum
-    ; movement of 15 color-clocks per scanline, this will allow a movement of
-    ; up to 60 color clocks. With three versions of the kernel, it should be
-    ; possible to put player 1 anywhere on the screen.
     
     ldx ThrobColor+0	; 01
     
@@ -201,24 +206,29 @@ CatRows:	SUBROUTINE
     lda CatTartColor	; 25
     sta COLUPF		; 28
     stx COLUBK		; 31
-    stx COLUPF		; 34
     
-    sta RESP1		; 37
+    dey			; 33
+    sta RESP1		; 36
+    stx COLUPF		; 39
     
-    dey			; 41
+    lda (CatGfxPtr2),y	; 44
+    sta GRP0		; 47
     
-    lda (CatGfxPtr2),y	; 46
-    sta GRP0		; 49
+    lda (TartGfxPtr2),y	; 52
+    sta PF1		; 55
     
-    lda (TartGfxPtr2),y	; 54
-    sta PF1		; 57
+    dec CurrentRow	; 60
+    ldx #0		; 62
+    stx GRP1		; 65
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw throb line #2
     
-    inc CurrentRow	; 62
-    ldx #0		; 64
-    stx GRP1		; 67
+    lda CatRowHmove+2	; 68
+    sta HMP1		; 71
+    SLEEP 2		; 73
     
-    ldx ThrobColor+1	; 70
-    sta WSYNC
+    ldx ThrobColor+1	; 00
     THROB_RAINBOW_BK 17	; 11
     THROB_RAINBOW_PF 18	; 22
     
@@ -229,14 +239,26 @@ CatRows:	SUBROUTINE
     
     dey			; 36
     
-    lda (CatGfxPtr2),y	; 41
-    sta GRP0		; 44
+    ldx CurrentRow	; 39
+    lda FoodPosX,x	; 43
+    cmp #45		; 45
+    bpl .RightSide	; 48/47
+    SKIP_WORD		; 51
+.RightSide
+    sta RESP1		; 51
     
-    lda (TartGfxPtr2),y	; 49
-    sta PF1		; 52
+    lda (CatGfxPtr2),y	; 56
+    sta GRP0		; 59
     
-    ldx ThrobColor+2	; 55
-    sta WSYNC
+    lda (TartGfxPtr2),y	; 64
+    sta PF1		; 67
+    SLEEP 3		; 70
+    sta HMOVE		; 73
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw throb line #3
+    
+    ldx ThrobColor+2	; 00
     THROB_RAINBOW_BK 16	; 11
     THROB_RAINBOW_PF 17	; 22
     
@@ -253,8 +275,20 @@ CatRows:	SUBROUTINE
     lda (TartGfxPtr2),y	; 49
     sta PF1		; 52
     
-    ldx ThrobColor+1	; 55
-    sta WSYNC
+    lda CatRow2FoodL	; 55
+    sta FoodGfxPtr1	; 58
+    lda CatRow2FoodR	; 61
+    sta FoodGfxPtr2	; 64
+    
+    lda CatRowHmove+1	; 67
+    sta HMP1		; 70
+    
+    sta HMOVE		; 73
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw throb line #4
+    
+    ldx ThrobColor+1	; 00
     THROB_RAINBOW_BK 15	; 11
     THROB_RAINBOW_PF 16	; 22
     
@@ -271,17 +305,22 @@ CatRows:	SUBROUTINE
     lda (TartGfxPtr2),y	; 49
     sta PF1		; 52
     
-    ldx ThrobColor+0	; 55
+    lda CatRow2Color1	; 55
+    sta FoodColor1	; 58
+    ldx.w CatRow2Color2	; 55
+    txs			; 58
+    
+    lda CatRowHmove+0	; 67
+    sta HMP1		; 70
+    
+    sta HMOVE		; 73
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw throb line #5
     
     SUBROUTINE
     
-    jmp .OnTheBed
-    
-    ALIGN $100
-    
-.OnTheBed
-    
-    sta WSYNC
+    ldx ThrobColor+0	; 00
     THROB_RAINBOW_BK 14	; 11
     THROB_RAINBOW_PF 15	; 22
     
@@ -295,12 +334,12 @@ CatRows:	SUBROUTINE
     lda (CatGfxPtr2),y	; 41
     sta GRP0		; 44
     
-    ldy CurrentRow	; 47
-    lda FoodPosX,y	; 51
+    ldx CurrentRow	; 47
+    lda FoodPosX,x	; 51
     cmp #48		; 53
     
     ldx #0		; 55
-    ldy #13		; 57
+    nop			; 57
     
     ; Then output the 14 lines to draw a single row. This will include drawing
     ; the rainbow, the pop-tart, the head and face or paws, and the food items.
@@ -433,24 +472,28 @@ CatRows:	SUBROUTINE
     lda (TartGfxPtr2),y	; 60
     
     stx GRP1		; 63
-    
-    ldx #GAMEPLAY_STACK
-    txs
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 .End
-
     
+    ldx #GAMEPLAY_STACK	; 65
+    txs			; 67
     
+    ldx #0
     
     ; Lastly, output only one line (not four) to draw the top of a "throb" line.
     ; Use this time to prepare the next row's food item pointers (unless this is
     ; the last row). If this is the last row, skip over LoRows.
     
+    sta WSYNC
     lda ThrobColor+0
     sta COLUBK
     sta COLUPF
+    stx GRP1
+    
+    dec CurrentRow
+    stx GRP0
     
     ; If the cat is at the very bottom of the screen, don't disable the
     ; missile/player graphics until after they are drawn, so they don't get

@@ -8,7 +8,7 @@
 ;
 ;
 ;
-; 12-31-2017 Version 2.6
+; 01-01-2018 Version 2.6
 ;
 ; Draw cat and food items on both cat rows
 ;

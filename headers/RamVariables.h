@@ -4,8 +4,12 @@
 ; Define labels for RAM locations to be used as variables
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
+
+
     SEG.U VARS
     ORG $80
+
+
     
 RamStart
 
@@ -101,7 +105,6 @@ ScoreDigit5	; temporary variable for digit 5 in scoreboard loading routine
 	ds 1
 
 PreCatRows	ds 1	; number of rows to draw before the two "cat" rows
-PostCatRows	ds 1	; number of rows to draw after the two "cat" rows
 
 CatTartColor	ds 1	; color of the cat's tart body
 
@@ -116,6 +119,13 @@ FoodItemR	ds 7	; will be drawn on each frame. The first 7 bytes are for
 			; All nybbles are swapped at the start of each frame.
 
 FoodPosX	ds 7	; (range 0-88)
+
+CatRowHmove	ds 3	; array of 3 values to store to HMP1 before strobing
+			; HMOVE to position food items in 2nd cat row
+CatRow2FoodL	ds 1
+CatRow2FoodR	ds 1
+CatRow2Color1	ds 1
+CatRow2Color2	ds 1
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables for the throbbing lines' colors

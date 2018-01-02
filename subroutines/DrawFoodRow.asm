@@ -1,10 +1,10 @@
 DrawFoodRow:
-
-    ldy #13		; 02
+			; 69
+    ldy #13		; 71
     
 .FoodLoop
-    lda #COL_BACKGROUND	; 04
-    sta WSYNC		; 07/00
+    lda #COL_BACKGROUND	; 73
+    sta WSYNC		; 00
     
 .EnterHere
     sta COLUBK		; 03
@@ -30,6 +30,5 @@ DrawFoodRow:
     dey			; 60
     bpl .FoodLoop	; 62
     
-    inc CurrentRow	; 65
 Sleep12
-    rts			; 71
+    rts			; 68

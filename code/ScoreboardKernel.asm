@@ -114,8 +114,8 @@
     
     lda ScoreColor
     sta.w COLUBK
-    jmp .Trampoline
+    jmp .Align1
     
     ALIGN $100
     
-.Trampoline
+.Align1
