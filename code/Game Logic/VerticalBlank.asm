@@ -304,68 +304,84 @@
     lda #$E0
     sta FoodItemR+6
     
-    dec FoodPosX
-    bpl .NoReset
-    lda #88
-    sta FoodPosX
-.NoReset
-    lda FoodPosX
-    sta FoodPosX+3
+    ldx FoodPosX
+    dex
+    bpl .NoReset0
+    ldx #88
+.NoReset0
+    stx FoodPosX+0
     
-    lda FoodPosX
+    txa
     sec
     
-    sbc #41
-    bcs .Rock1
-    adc #89
-.Rock1
+    sbc #18
+    bcs .NoReset1
+    adc #88
+.NoReset1
     sta FoodPosX+1
     
-    sbc #17
-    bcs .Rock2
-    adc #89
-.Rock2
+    sbc #52
+    bcs .NoReset2
+    adc #88
+.NoReset2
     sta FoodPosX+2
     
-    sbc #29
-    bcs .Rock4
-    adc #89
-.Rock4
+    sbc #27
+    bcs .NoReset3
+    adc #88
+.NoReset3
+    sta FoodPosX+3
+    
+    sbc #63
+    bcs .NoReset4
+    adc #88
+.NoReset4
     sta FoodPosX+4
     
-    lsr
+    sbc #41
+    bcs .NoReset5
+    adc #88
+.NoReset5
     sta FoodPosX+5
     
-    sbc #57
-    bcs .Rock6
-    adc #89
-.Rock6
+    sbc #17
+    bcs .NoReset6
+    adc #88
+.NoReset6
     sta FoodPosX+6
-    
     
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Caclulate cat's position data
     
-    lda Frame
-    lsr
-    and #63
-    clc
-    adc #19
-    sta CatPosY
-
     SUBROUTINE
+    
+    ldx CatPosY
+    inx
+    cpx #115
+    bne .CatY
+    ldx #0
+.CatY
+    stx CatPosY
 
-    lda CatPosY
+    txa
     
     ldx #0
-    sec
 .DivideLoop
+    sec
     inx
     sbc #19
-    bcs .DivideLoop
+    bcc .AddBack
     
+    cpx #5
+    bne .DivideLoop
+    inx
+    bne .SetCatPos
+    
+.AddBack
     adc #19
+    
+.SetCatPos
     sta CatPosition
     
     txa

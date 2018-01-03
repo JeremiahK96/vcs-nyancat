@@ -98,24 +98,11 @@
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda #0
-    sta GRP0
-    sta GRP1
-    sta VDELP1
-    sta VDELP0
-    sta ENABL
-    sta ENAM0
-    sta ENAM1
-
-    sta WSYNC
-    sta WSYNC
-    sta WSYNC
-    sta WSYNC
-    
-    lda ScoreColor
-    sta.w COLUBK
-    jmp .Align1
-    
-    ALIGN $100
-    
-.Align1
+    lda #0		; 12
+    sta GRP0		; 15
+    sta GRP1		; 18
+    sta VDELP1		; 21
+    sta VDELP0		; 24
+    sta ENABL		; 27
+    sta ENAM0		; 30
+    sta ENAM1		; 33

@@ -51,35 +51,35 @@ LoRows:		SUBROUTINE
     sta COLUPF
     sta WSYNC
     
-    lda ThrobColor+0
-    sta COLUBK
-    sta COLUPF
+    lda ThrobColor+0	; 3
+    sta COLUBK		; 6
+    sta COLUPF		; 9
     
-    ldy CurrentRow	; 11
+    ldy CurrentRow	; 12
     
-    lda FoodItemL,y	; 15
-    and #$F0		; 17
-    sta FoodGfxPtr1	; 20
-    tax			; 22
-    lda FoodGfx+15,x	; 26
-    sta FoodColor1	; 29
+    lda FoodItemL,y	; 16
+    and #$F0		; 18
+    sta FoodGfxPtr1	; 21
+    tax			; 23
+    lda FoodGfx+15,x	; 27
+    sta FoodColor1	; 30
     
-    lda FoodItemR,y	; 33
-    and #$F0		; 36
-    sta FoodGfxPtr2	; 38
-    tax			; 40
-    lda FoodGfx+15,x	; 44
-    sta FoodColor2	; 47
+    lda FoodItemR,y	; 34
+    and #$F0		; 37
+    sta FoodGfxPtr2	; 39
+    tax			; 41
+    lda FoodGfx+15,x	; 45
+    sta FoodColor2	; 48
     
-    lda FoodPosX,y	; 51
-    sta Temp		; 54
+    lda FoodPosX,y	; 52
+    sta Temp		; 55
     
     
     
     ; Output 14 lines to draw a row, exactly the same as in HiRows.
     ; It may be possible to code this as a subroutine to save ROM space.
     
-    jsr DrawFoodRow
+    jsr DrawFoodRow	; 61
     
     sta WSYNC
     
@@ -100,5 +100,6 @@ LoRows:		SUBROUTINE
     ldx #$FF
     txs
     
+GameplayEnd
     sta WSYNC
     SLEEP 2

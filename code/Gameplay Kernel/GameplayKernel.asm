@@ -1,19 +1,6 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Output 4 blank scanlines, while setting up the graphics objects.
-
-PreKernel:
-    
-    lda #0	; 12
-    sta ENAM0	; 15 - disable missiles
-    sta ENAM1	; 18
-    sta GRP0	; 21 - disable player graphics
-    sta GRP1	; 24
-    sta VDELP0	; 27 - disable player vertical delays
-    sta VDELP1	; 30
-    sta ENABL	; 33 - disable ball
-    ldx #6	; 35
-    stx CurrentRow	; 38
-
+; CPU is at cycle 33
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Clear last 34 bytes of RAM for rainbow colors - 126 cycles
@@ -22,66 +9,45 @@ PreKernel:
     ldx #$FF
     txs
     
-    ldy #4
+    ldy #17
 .ClearRainbow
-    pha
-    pha
-    pha
-    pha
-    pha
-    pha
     pha
     pha
     
     dey
     bne .ClearRainbow
     
-    pha
-    pha
-    
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load rainbow colors into RAM - 65 cycles
 
-    lda #18
+    lda #19
     sbc CatPosition	; carry is assumed to be set
     and #%00011111
     clc
-    adc #RamBowColors+14
+    adc #RamBowColors+13
     tax
     txs
     
-    lda RainbowColors+5
+    ldy #5
+    
+.LoadRainbow
+    lda RainbowColors,y
     pha
     pha
-    lda RainbowColors+4
-    pha
-    pha
-    lda RainbowColors+3
-    pha
-    pha
-    lda RainbowColors+2
-    pha
-    pha
-    lda RainbowColors+1
-    pha
-    pha
-    lda RainbowColors+0
-    pha
-    pha
+    
+    dey
+    bpl .LoadRainbow
+
+
+    sta WSYNC
+    
+    lda ScoreColor
+    sta.w COLUBK
     
     sta WSYNC
     
-    lda RamBowColors+19
-    bne .SetCatThrobPF
-    lda ThrobColor+0
-.SetCatThrobPF
-    sta CatThrobPF
-    
-    sta WSYNC
     SLEEP 4
-
-
-
+    
     ; Player 0 is already aligned for drawing the cat's face.
     
     ; Align player 1 to draw the current frame's food items for the top row.
@@ -104,8 +70,6 @@ PreKernel:
     
     sta RESP1		; 26
     
-    
-    
     asl			; 53
     sta HMP1		; 56
     
@@ -119,12 +83,27 @@ PreKernel:
     
     sta WSYNC
     
-    lda ThrobColor+1	; 03
-    sta COLUBK		; 06
-    sta COLUPF		; 09
+    jmp .Align1
+    
+    ALIGN $100
+    
+.Align1
 
-
-
+PreKernel:
+    ldx #6
+    stx CurrentRow
+        
+    sta WSYNC
+    
+    lda RamBowColors+19
+    bne .SetCatThrobPF
+    lda ThrobColor+0
+.SetCatThrobPF
+    sta CatThrobPF
+    
+    sta WSYNC
+    
+    SLEEP 9
 
     lda #PF_REFLECT	; 11
     sta CTRLPF		; 14
@@ -156,6 +135,16 @@ PreKernel:
     txs			; 69
     
     sta.w HMOVE		; 73
+    
+    sta WSYNC
+    
+    lda ThrobColor+1	; 03
+    sta COLUBK		; 06
+    sta COLUPF		; 09
+    
+    lda PreCatRows
+    bne HiRows
+    jmp CatRows
     
     ; If any part of the cat needs to be drawn in the top row,
     ; skip straight to CatRows.

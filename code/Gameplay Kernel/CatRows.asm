@@ -477,7 +477,7 @@ CatRows:	SUBROUTINE
 
 .End
     
-    ldx #GAMEPLAY_STACK	; 65
+    ldx #$FF		; 65
     txs			; 67
     
     ldx #0
@@ -491,9 +491,10 @@ CatRows:	SUBROUTINE
     sta COLUBK
     sta COLUPF
     stx GRP1
+    stx GRP0
     
     dec CurrentRow
-    stx GRP0
+    bmi .GpEnd
     
     ; If the cat is at the very bottom of the screen, don't disable the
     ; missile/player graphics until after they are drawn, so they don't get
@@ -503,6 +504,8 @@ CatRows:	SUBROUTINE
     
     jmp LoRows
     
+.GpEnd
+    jmp GameplayEnd
     
     ALIGN $100
     
