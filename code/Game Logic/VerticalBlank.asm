@@ -316,37 +316,37 @@
     
     sbc #18
     bcs .NoReset1
-    adc #88
+    adc #89
 .NoReset1
     sta FoodPosX+1
     
     sbc #52
     bcs .NoReset2
-    adc #88
+    adc #89
 .NoReset2
     sta FoodPosX+2
     
     sbc #27
     bcs .NoReset3
-    adc #88
+    adc #89
 .NoReset3
     sta FoodPosX+3
     
     sbc #63
     bcs .NoReset4
-    adc #88
+    adc #89
 .NoReset4
     sta FoodPosX+4
     
     sbc #41
     bcs .NoReset5
-    adc #88
+    adc #89
 .NoReset5
     sta FoodPosX+5
     
     sbc #17
     bcs .NoReset6
-    adc #88
+    adc #89
 .NoReset6
     sta FoodPosX+6
     

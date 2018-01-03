@@ -1183,37 +1183,37 @@
     316  11aa
     317  11aa		       e9 12		      sbc	#18
     318  11ac		       b0 02		      bcs	.NoReset1
-    319  11ae		       69 58		      adc	#88
+    319  11ae		       69 59		      adc	#89
     320  11b0				   .NoReset1
     321  11b0		       85 b3		      sta	FoodPosX+1
     322  11b2
     323  11b2		       e9 34		      sbc	#52
     324  11b4		       b0 02		      bcs	.NoReset2
-    325  11b6		       69 58		      adc	#88
+    325  11b6		       69 59		      adc	#89
     326  11b8				   .NoReset2
     327  11b8		       85 b4		      sta	FoodPosX+2
     328  11ba
     329  11ba		       e9 1b		      sbc	#27
     330  11bc		       b0 02		      bcs	.NoReset3
-    331  11be		       69 58		      adc	#88
+    331  11be		       69 59		      adc	#89
     332  11c0				   .NoReset3
     333  11c0		       85 b5		      sta	FoodPosX+3
     334  11c2
     335  11c2		       e9 3f		      sbc	#63
     336  11c4		       b0 02		      bcs	.NoReset4
-    337  11c6		       69 58		      adc	#88
+    337  11c6		       69 59		      adc	#89
     338  11c8				   .NoReset4
     339  11c8		       85 b6		      sta	FoodPosX+4
     340  11ca
     341  11ca		       e9 29		      sbc	#41
     342  11cc		       b0 02		      bcs	.NoReset5
-    343  11ce		       69 58		      adc	#88
+    343  11ce		       69 59		      adc	#89
     344  11d0				   .NoReset5
     345  11d0		       85 b7		      sta	FoodPosX+5
     346  11d2
     347  11d2		       e9 11		      sbc	#17
     348  11d4		       b0 02		      bcs	.NoReset6
-    349  11d6		       69 58		      adc	#88
+    349  11d6		       69 59		      adc	#89
     350  11d8				   .NoReset6
     351  11d8		       85 b8		      sta	FoodPosX+6
     352  11da
