@@ -740,7 +740,7 @@ RainbowColors
 
 CatTartGfx
 
-    ds 19, $00
+    ds 18, $00
     
     .byte %00000000
     .byte %00000000
@@ -751,6 +751,8 @@ CatTartGfx
     .byte %11000000
     .byte %11000000
     .byte %11000000
+    .byte %11100000
+    .byte %11100000
     .byte %11100000
     .byte %11100000
     .byte %11100000
@@ -759,7 +761,7 @@ CatTartGfx
 
 CatFaceGfx
     
-    ds 19, $00
+    ds 18, $00
 
     .byte %00110110
     .byte %00110110

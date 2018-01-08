@@ -22,21 +22,24 @@ CatRows:	SUBROUTINE
     ldx FoodColor2	; 12
     txs			; 14
     
-    SLEEP 27		; 41
+    SLEEP 19		; 41
     
     SUBROUTINE
     
-    jmp .Align2	; 44
-    
-    ALIGN $100
-    
-.Align2
     ldy CurrentRow	; 47
     lda FoodPosX,y	; 51
-    cmp #48		; 53
     
+    jmp .Align2	; 44
+    ALIGN $100
+.Align2
+
+    cmp #48		; 53
+
     ldx #0		; 55
     ldy #13		; 57
+    
+    lda (TartGfxPtr1),y	; 
+    sta PF1		; 
     
     ; Then output the 14 lines to draw a single row. This will include drawing
     ; the rainbow, the pop-tart, the head and face or paws, and the food items.
@@ -470,8 +473,6 @@ CatRows:	SUBROUTINE
     
     ldy #18		; 55
     lda (TartGfxPtr2),y	; 60
-    
-    stx GRP1		; 63
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
@@ -491,6 +492,7 @@ CatRows:	SUBROUTINE
     sta COLUBK
     sta COLUPF
     stx GRP1
+    SLEEP 25
     stx GRP0
     
     dec CurrentRow
