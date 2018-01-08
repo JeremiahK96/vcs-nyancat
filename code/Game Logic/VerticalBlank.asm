@@ -90,101 +90,96 @@
 ;
 ; Get graphics data for the scoreboard and push it onto the stack
 ;
-; Takes 535 cycles to complete (7 full scanlines + 3 cycles)
+; Takes 534 cycles to complete (7 full scanlines + 2 cycles)
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     SUBROUTINE
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare pointer for level digit graphics - 21 cycles
+; Prepare MSBs for all the scoreboard loading pointers - 23 cycles
     
-    ldx #>LevelGfx	; 2
-    stx LvlLoadPtr+1	; 3 - set MSB of level digit graphics pointer
+    lda #>ScoreGfx
+    sta LvlLoadPtr+1
+    sta ScrLoadPtr0+1
+    sta ScrLoadPtr1+1
+    sta ScrLoadPtr2+1
+    sta ScrLoadPtr3+1
+    sta ScrLoadPtr4+1
+    sta ScrLoadPtr5+1
     
-    lda BCDLevel	; 3
-    
-    and #$0F		; 2
-    
-    asl			; 2
-    asl			; 2
-    asl			; 2
-    
-    adc #<LevelGfx	; 2 - add graphics table offset
-    sta LvlLoadPtr	; 3 - set LSB of level digit graphics pointer
-
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare one pointer MSB and multiple LSBs for score digit graphics - 86 cycles
+; Prepare pointer for level digit graphics - 14 cycles
     
-    stx ScrLoadPtr0+1	; 3 - set MSB of score digit graphics pointer2
-    stx ScrLoadPtr1+1	; 3
-    stx ScrLoadPtr2+1	; 3
-    stx ScrLoadPtr3+1	; 3
-    stx ScrLoadPtr4+1	; 3
-    stx ScrLoadPtr5+1	; 3
+    lda BCDLevel
+    and #$0F
+    asl
+    asl
+    asl
+    sta LvlLoadPtr	; set LSB of level digit graphics pointer
     
-    lax BCDScore+0	; 3
-    and #$F0		; 2
-    lsr			; 2
-    sta ScrLoadPtr0	; 3 - set LSB for digit 0
-    txa			; 2
-    and #$0F		; 2
-    asl			; 2
-    asl			; 2
-    asl			; 2
-    sta ScrLoadPtr1	; 3 - set LSB for digit 1
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Prepare pointers for score digit graphics - 69 cycles
     
-    lax BCDScore+1	; 3
-    and #$F0		; 2
-    lsr			; 2
-    sta ScrLoadPtr2	; 3 - set LSB for digit 2
-    txa			; 2
-    and #$0F		; 2
-    asl			; 2
-    asl			; 2
-    asl			; 2
-    sta ScrLoadPtr3	; 2 - set LSB for digit 3
+    lax BCDScore+0
+    and #$F0
+    lsr
+    sta ScrLoadPtr0	; set LSB for score digit pointer 0
     
-    lax BCDScore+2	; 3
-    and #$F0		; 2
-    lsr			; 2
-    sta ScrLoadPtr4	; 3 - set LSB for digit 4
-    txa			; 2
-    and #$0F		; 2
-    asl			; 2
-    asl			; 2
-    asl			; 2
-    sta ScrLoadPtr5	; 3 - set LSB for digit 5
+    txa
+    and #$0F
+    asl
+    asl
+    asl
+    sta ScrLoadPtr1	; set LSB for score digit pointer 1
+    
+    lax BCDScore+1
+    and #$F0
+    lsr
+    sta ScrLoadPtr2	; set LSB for score digit pointer 2
+    
+    txa
+    and #$0F
+    asl
+    asl
+    asl
+    sta ScrLoadPtr3	; set LSB for score digit pointer 3
+    
+    lax BCDScore+2
+    and #$F0
+    lsr
+    sta ScrLoadPtr4	; set LSB for score digit pointer 4
+    
+    txa
+    and #$0F
+    asl
+    asl
+    asl
+    sta ScrLoadPtr5	; set LSB for score digit pointer 5
     
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load the stack with the graphics for the scoreboard - 428 cycles
     
-    ldy #6		; 2
-
+    ldy #6
+    
 .LoadScoreboard
-
-    lda (LvlLoadPtr),y	; 5
-    pha			; 3
     
-    lda (ScrLoadPtr5),y	; 5
-    pha			; 3
+    lda (ScrLoadPtr5),y
+    pha
+    lda (ScrLoadPtr4),y
+    pha
+    lda (ScrLoadPtr3),y
+    pha
+    lda (ScrLoadPtr2),y
+    pha
+    lda (ScrLoadPtr1),y
+    pha
+    lda (ScrLoadPtr0),y
+    pha
+    lda (LvlLoadPtr),y
+    pha
     
-    lda (ScrLoadPtr4),y	; 5
-    pha			; 3
-    
-    lda (ScrLoadPtr3),y	; 5
-    pha			; 3
-    
-    lda (ScrLoadPtr2),y	; 5
-    pha			; 3
-    
-    lda (ScrLoadPtr1),y	; 5
-    pha			; 3
-    
-    lda (ScrLoadPtr0),y	; 5
-    pha			; 3
-    
-    dey			; 2
-    bpl .LoadScoreboard	; 2/3
+    dey
+    bpl .LoadScoreboard
 
 
 
@@ -538,6 +533,39 @@
     tay
     lda RainbowGfx,y
     sta Rainbow
+    
+    sta HMCLR
+    sta WSYNC
+    
+    lda #$40
+    sta HMP1
+    
+    lda #$80
+    sta HMM0
+    
+    lda #$30
+    sta HMP0
+    
+    lda #$F0
+    sta HMM1
+    
+    sta RESM1
+    
+    SLEEP 4	; 27
+    
+    sta RESBL
+    
+    SLEEP 23	; 53
+    
+    sta RESP0
+    sta RESP1
+    
+    SLEEP 8	; 64
+    
+    sta RESM0
+    
+    sta WSYNC
+    sta HMOVE
 
 
 

@@ -20,7 +20,7 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Load rainbow colors into RAM - 65 cycles
 
-    lda #19
+    lda #20
     sbc CatPosition	; carry is assumed to be set
     and #%00011111
     clc
@@ -78,9 +78,6 @@
     lda #TWO_WIDE	; 63
     sta NUSIZ1		; 66
     
-    lda #$80		; 68
-    sta HMP0		; 71
-    
     sta WSYNC
     
     jmp .Align1
@@ -103,44 +100,48 @@ PreKernel:
     
     sta WSYNC
     
-    SLEEP 9
+    SLEEP 2
+    lda #$90
+    sta HMP0
 
-    lda #PF_REFLECT	; 11
-    sta CTRLPF		; 14
+    lda #PF_REFLECT	; 09
+    sta CTRLPF		; 12
     
-    lda Rainbow		; 17
-    sta PF0		; 20
+    lda Rainbow		; 15
+    sta PF0		; 18
     
-    lda #COL_CAT_FACE	; 22
-    sta COLUP0		; 25
+    lda #COL_CAT_FACE	; 20
+    sta COLUP0		; 23
     
-    lda FoodItemL+6	; 28
-    and #$F0		; 30
-    sta FoodGfxPtr1	; 33
-    tax			; 35
-    lda FoodGfx+15,x	; 39
-    sta FoodColor1	; 42
+    lda FoodItemL+6	; 26
+    sta RESP0		; 29
+    and #$F0		; 31
+    sta FoodGfxPtr1	; 34
+    tax			; 36
+    lda FoodGfx+15,x	; 40
+    sta FoodColor1	; 43
     
-    lda FoodItemR+6	; 45
-    and #$F0		; 47
-    sta FoodGfxPtr2	; 50
-    tax			; 52
-    lda FoodGfx+15,x	; 56
-    sta FoodColor2	; 59
+    lda FoodItemR+6	; 46
+    and #$F0		; 48
+    sta FoodGfxPtr2	; 51
+    tax			; 53
+    lda FoodGfx+15,x	; 57
+    sta FoodColor2	; 60
     
-    lda FoodPosX+6	; 62
-    sta Temp		; 65
+    lda FoodPosX+6	; 63
+    sta Temp		; 66
     
-    ldx #GAMEPLAY_STACK	; 67
-    txs			; 69
+    ldx #GAMEPLAY_STACK	; 68
+    txs			; 70
     
-    sta.w HMOVE		; 73
-    
-    sta WSYNC
+    sta HMOVE		; 73
     
     lda ThrobColor+1	; 03
     sta COLUBK		; 06
     sta COLUPF		; 09
+    
+    lda #$80		; 11
+    sta HMP0		; 14
     
     lda PreCatRows
     bne HiRows

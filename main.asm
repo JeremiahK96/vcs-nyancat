@@ -8,9 +8,9 @@
 ;
 ;
 ;
-; 01-03-2018 Version 2.6
+; 01-08-2018 Version 2.7
 ;
-; Draw cat and food items on both cat rows
+; Redesign the scoreboard kernel
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 

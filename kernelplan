@@ -1,0 +1,31 @@
+ScoreboardLoop
+
+    lda LevelGfx,y	; 04
+    sta.w NUSIZ1	; 08
+    
+    pla			; 12
+    sta GRP1		; 15
+    
+    pla			; 19
+    sta GRP0		; 22
+    pla			; 26
+    sta GRP1		; 29
+    pla			; 33
+    sta GRP0		; 36
+    
+    lda #3		; 38
+    sta NUSIZ1		; 41
+    
+    pla			; 45
+    tax			; 47
+    pla			; 51
+    tay			; 53
+    pla			; 57
+    
+    stx GRP1		; 60
+    sty GRP0		; 63
+    sta GRP1		; 66
+    sta GRP1		; 69
+    
+    ldy INTIM		; 73
+    bne ScoreboardLoop	; 00/75
