@@ -3,11 +3,11 @@
 ;
 ; Equates for values for the TIA registers.
 ; These can be OR'ed together, for example:
-;     lda #TWO_CLOSE | MSL_SIZE_4
-;     sta NUSIZ0
+;	lda #TWO_CLOSE | MSL_SIZE_4
+;	sta NUSIZ0
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-; NUSIZx player size and player/missile copies
+; NUSIZx player size and player/missile copy spacing values
 
 ONE_COPY		equ	$00
 TWO_CLOSE		equ	$01
@@ -19,7 +19,7 @@ THREE_MED		equ	$06
 QUAD_SIZE		equ	$07
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; NUSIZx missile size
+; NUSIZx missile size values
 
 MSL_SIZE_1		equ	$00
 MSL_SIZE_2		equ	$10

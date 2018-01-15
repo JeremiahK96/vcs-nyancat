@@ -8,46 +8,40 @@
 ;
 ;
 ;
-; 01-08-2018 Version 2.7
+; 01-11-2018 Version 2.8
 ;
-; Redesign the scoreboard kernel
+; Another code cleanup phase
 ;
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Initialization
+; Initialize
 ;
-; Include headers and set address of binary
+; Include headers, set address of binary, and initialize game
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 ; Define CPU type and include standard VCS header files
-    PROCESSOR 6502
+
+	PROCESSOR 6502
     
-    include headers/vcs.h
-    include headers/macro.h
+	include headers/vcs.h
+	include headers/macro.h
 
 ; Include TIA/program equates, RAM labels, and macros
 
-    include headers/Equates.h
-    include headers/RamVariables.h
-    include headers/Macros.h
+	include headers/Equates.h
+	include headers/RamVariables.h
+	include headers/Macros.h
 
 ; Ensure that the code is placed in the proper place in the binary
 
-    SEG CODE
-    ORG $1000	; 4K ROM
+	SEG CODE
+	ORG $1000	; 4K ROM (for now)
 
+; Clear all system RAM/registers and do any neccesary initialization
 
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Full System Clear
-;
-; Clear all system registers and RAM at startup
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-SystemClear:
-
-    CLEAN_START
+	include code/Initialize.asm
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -57,9 +51,9 @@ SystemClear:
 ; along with any game logic
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    include code/Game Logic/Overscan.asm
-    include code/Game Logic/VerticalSync.asm
-    include code/Game Logic/VerticalBlank.asm
+	include code/Game Logic/Overscan.asm
+	include code/Game Logic/VerticalSync.asm
+	include code/Game Logic/VerticalBlank.asm
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -68,7 +62,7 @@ SystemClear:
 ; Draw the screen
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    include code/Kernel.asm
+	include code/Kernel.asm
     
 Z_EndOfCode	.byte 0	; label to show how much ROM is used for the code
 
@@ -79,8 +73,7 @@ Z_EndOfCode	.byte 0	; label to show how much ROM is used for the code
 ; Include data tables
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-; Include graphics data tables
-    include data/Graphics.asm
+	include data/Graphics.asm
     
 Z_EndOfGfx	.byte 0	; label to show how much ROM is used for the graphics
 
@@ -91,7 +84,7 @@ Z_EndOfGfx	.byte 0	; label to show how much ROM is used for the graphics
 ; Define the end of the cartridge
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    ORG SystemClear+$0FFA	; set address to 6507 Interrupt Vectors 
-    .WORD SystemClear		; NMI
-    .WORD SystemClear		; RESET
-    .WORD SystemClear		; IRQ
+	ORG SystemClear+$0FFA	; set address to 6507 Interrupt Vectors 
+	.WORD SystemClear		; NMI
+	.WORD SystemClear		; RESET
+	.WORD SystemClear		; IRQ

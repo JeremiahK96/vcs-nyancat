@@ -5,12 +5,12 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 Overscan:
-    
-    inc Frame	; increment the frame number
-
-    lda #OVERSCAN_TIMER
-    sta WSYNC
-    sta TIM64T	; 3
+	
+	inc Frame	; increment the frame number
+	
+	lda #OVERSCAN_TIMER
+	sta WSYNC
+	sta TIM64T	; 3
 
 
 
@@ -22,27 +22,45 @@ Overscan:
 ; Takes 45 cycles to complete
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-    lda BCDScoreAdd+1	; 3
-    ldx BCDScoreAdd	; 3
-    
-    sed			; 2 - enable BCD mode
-    
-    clc			; 2
-    sta Temp		; 3
-    lda BCDScore+2	; 3
-    adc Temp		; 3
-    sta BCDScore+2	; 3
-    stx Temp		; 3
-    lda BCDScore+1	; 3
-    adc Temp		; 3
-    sta BCDScore+1	; 3
-    lda #$00		; 2
-    sta Temp		; 3
-    lda BCDScore+0	; 3
-    adc Temp		; 3
-    sta BCDScore+0	; 3
-    
-    cld			; 2 - disable BCD mode
+	lda BCDScoreAdd+1
+	ldx BCDScoreAdd
+	
+	sed
+	
+	clc
+	sta Temp
+	lda BCDScore+2
+	adc Temp
+	sta BCDScore+2
+	stx Temp
+	lda BCDScore+1
+	adc Temp
+	sta BCDScore+1
+	lda #$00
+	sta Temp
+	lda BCDScore+0
+	adc Temp
+	sta BCDScore+0
+	
+	cld
+	
+	
+	
+	ldy #13
+	
+.Loop
+	
+	lda FoodItemL,y
+	asl
+	adc #$80
+	rol
+	asl
+	adc #$80
+	rol
+	sta FoodItemL,y
+	
+	dey
+	bpl .Loop
 
 
 
@@ -53,5 +71,5 @@ Overscan:
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 OverscanTimerLoop
-    lda INTIM
-    bne OverscanTimerLoop
+	lda INTIM
+	bne OverscanTimerLoop

@@ -4,16 +4,12 @@
 ; Define labels for RAM locations to be used as variables
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-
-
     SEG.U VARS
     ORG $80
 
-
-    
 RamStart
 
-Frame		ds 1	; Current frame
+Frame		ds 1	; Current frame modulus 256
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables for the score and level counter - 6 bytes
