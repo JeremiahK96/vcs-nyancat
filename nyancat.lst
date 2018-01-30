@@ -861,619 +861,601 @@
      46  106d
      47  106d
      48  106d
-     49  106d		       a0 0d		      ldy	#13
-     50  106f
-     51  106f				   .Loop
-     52  106f
-     53  106f		       b9 a4 00 	      lda	FoodItemL,y
-     54  1072		       0a		      asl
-     55  1073		       69 80		      adc	#$80
-     56  1075		       2a		      rol
-     57  1076		       0a		      asl
-     58  1077		       69 80		      adc	#$80
-     59  1079		       2a		      rol
-     60  107a		       99 a4 00 	      sta	FoodItemL,y
-     61  107d
-     62  107d		       88		      dey
-     63  107e		       10 ef		      bpl	.Loop
-     64  1080
-     65  1080
-     66  1080
-     67  1080							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     68  1080							; Finish Overscan
-     69  1080							;
-     70  1080							; Loop until the end of overscan
-     71  1080							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     72  1080
-     73  1080				   OverscanTimerLoop
-     74  1080		       ad 84 02 	      lda	INTIM
-     75  1083		       d0 fb		      bne	OverscanTimerLoop
+     49  106d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     50  106d							; Finish Overscan
+     51  106d							;
+     52  106d							; Loop until the end of overscan
+     53  106d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     54  106d
+     55  106d				   OverscanTimerLoop
+     56  106d		       ad 84 02 	      lda	INTIM
+     57  1070		       d0 fb		      bne	OverscanTimerLoop
 ------- FILE main.asm
 ------- FILE code/Game Logic/VerticalSync.asm LEVEL 2 PASS 2
-      0  1085					      include	code/Game Logic/VerticalSync.asm
-      1  1085							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  1085							; Vertical Sync
-      3  1085							;
-      4  1085							; Do the vertical sync and start the vertical blanking timer
-      5  1085							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      6  1085
-      7  1085		       a9 02		      lda	#2
-      8  1087		       85 02		      sta	WSYNC
-      9  1089		       85 00		      sta	VSYNC	; enable VSYNC
-     10  108b
-     11  108b		       85 02		      sta	WSYNC
-     12  108d		       a9 2d		      lda	#VBLANK_TIMER
-     13  108f		       85 02		      sta	WSYNC
-     14  1091		       8d 96 02 	      sta	TIM64T	; start VBLANK timer
-     15  1094
-     16  1094		       85 2b		      sta	HMCLR	; clear HMOVE offsets
-     17  1096		       85 2c		      sta	CXCLR	; clear collision latches
-     18  1098
-     19  1098		       a9 00		      lda	#0
-     20  109a		       85 02		      sta	WSYNC
-     21  109c		       85 00		      sta	VSYNC	; disable VSYNC
+      0  1072					      include	code/Game Logic/VerticalSync.asm
+      1  1072							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  1072							; Vertical Sync
+      3  1072							;
+      4  1072							; Do the vertical sync and start the vertical blanking timer
+      5  1072							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      6  1072
+      7  1072		       a9 02		      lda	#2
+      8  1074		       85 02		      sta	WSYNC
+      9  1076		       85 00		      sta	VSYNC	; enable VSYNC
+     10  1078
+     11  1078		       85 02		      sta	WSYNC
+     12  107a		       a9 2d		      lda	#VBLANK_TIMER
+     13  107c		       85 02		      sta	WSYNC
+     14  107e		       8d 96 02 	      sta	TIM64T	; start VBLANK timer
+     15  1081
+     16  1081		       85 2b		      sta	HMCLR	; clear HMOVE offsets
+     17  1083		       85 2c		      sta	CXCLR	; clear collision latches
+     18  1085
+     19  1085		       a9 00		      lda	#0
+     20  1087		       85 02		      sta	WSYNC
+     21  1089		       85 00		      sta	VSYNC	; disable VSYNC
 ------- FILE main.asm
 ------- FILE code/Game Logic/VerticalBlank.asm LEVEL 2 PASS 2
-      0  109e					      include	code/Game Logic/VerticalBlank.asm
-      1  109e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  109e							; Vertical Blank
-      3  109e							;
-      4  109e							; Do the vertical blanking and game logic
-      5  109e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      6  109e
-      7  109e		       85 2b		      sta	HMCLR
-      8  10a0		       85 02		      sta	WSYNC
-      9  10a2
-     10  10a2		       a9 ff		      lda	#$FF	; 02
-     11  10a4		       85 23		      sta	HMM1	; 05
-     12  10a6		       85 8d		      sta	ProgressBar+1	; 08 - reset progress bar byte 1 to %11111111
-     13  10a8
-     14  10a8		       a2 10		      ldx	#$10	; 10
-     15  10aa		       86 21		      stx	HMP1	; 13
-     16  10ac
-     17  10ac		       a2 80		      ldx	#$80	; 15
-     18  10ae		       86 22		      stx	HMM0	; 18
-     19  10b0
-     20  10b0		       a2 e0		      ldx	#$E0	; 20
-     21  10b2		       85 13		      sta	RESM1	; 23
-     22  10b4		       86 8c		      stx	ProgressBar+0	; 26 - reset progress bar byte 0 to %11100000
-     23  10b6
-     24  10b6		       85 14		      sta	RESBL	; 29
-     25  10b8
-     26  10b8		       85 8e		      sta	ProgressBar+2	; 32 - reset progress bar byte 2 to %11111111
-     27  10ba		       85 8f		      sta	ProgressBar+3	; 35 - reset progress bar byte 3 to %11111111
-     28  10bc
-     29  10bc		       a9 fe		      lda	#$FE	; 37
-     30  10be		       85 90		      sta	ProgressBar+4	; 40 - reset byte 4 for the progress bar
-     31  10c0
-     32  10c0		       20 24 18 	      jsr	Sleep12	; 53
-     33  10c3
-     34  10c3		       85 10		      sta	RESP0	; 56
-     35  10c5		       85 11		      sta	RESP1	; 59
-     36  10c7
-      0  10c7					      SLEEP	9	; 67
-      1  10c7				   .CYCLES    SET	9
-      2  10c7
-      3  10c7				  -	      IF	.CYCLES < 2
-      4  10c7				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  10c7				  -	      ERR
-      6  10c7					      ENDIF
-      7  10c7
-      8  10c7					      IF	.CYCLES & 1
-      9  10c7					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  10c7		       04 00		      nop	0
-     11  10c9				  -	      ELSE
-     12  10c9				  -	      bit	VSYNC
-     13  10c9					      ENDIF
-     14  10c9				   .CYCLES    SET	.CYCLES - 3
-     15  10c9					      ENDIF
-     16  10c9
-     17  10c9					      REPEAT	.CYCLES / 2
-     18  10c9		       ea		      nop
-     17  10c9					      REPEND
-     18  10ca		       ea		      nop
-     17  10ca					      REPEND
-     18  10cb		       ea		      nop
-     19  10cc					      REPEND
-     38  10cc
-     39  10cc		       85 12		      sta	RESM0	; 70
-     40  10ce
-     41  10ce		       85 02		      sta	WSYNC
-     42  10d0		       85 2a		      sta	HMOVE
-     43  10d2
-     44  10d2
-     45  10d2
-     46  10d2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     47  10d2							; Prepare HMOVE offsets for all scoreboard objects, and
-     48  10d2							; reset the progress bar's RAM values to empty. (39 cycles)
-     49  10d2
-     50  10d2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     51  10d2							; Prepare for throbbing lines - 43 cycles
-     52  10d2
-     53  10d2		       a5 80		      lda	Frame	; get the current frame number
-     54  10d4		       29 1c		      and	#%00011100	; change animation frame every 4 game frames
-     55  10d6		       4a		      lsr
-     56  10d7		       4a		      lsr		; shift to get a value from 0-7
-     57  10d8		       85 c4		      sta	Temp
-     58  10da		       0a		      asl		; carry flag will always be clear after this
-     59  10db		       65 c4		      adc	Temp	; multiply by 3
-     60  10dd		       a8		      tay
-     61  10de
-     62  10de		       a5 87		      lda	ScoreColor
-     63  10e0		       29 f0		      and	#$F0
-     64  10e2		       85 c4		      sta	Temp
-     65  10e4
-     66  10e4		       b9 57 1b 	      lda	ThrobGfx+0,y
-     67  10e7		       0a		      asl
-     68  10e8		       90 01		      bcc	.Color0
-      0  10ea					      SKIP_WORD
-      1  10ea
-      2  10ea		       0c		      HEX	0C
-      3  10eb
-     70  10eb				   .Color0
-     71  10eb		       65 c4		      adc	Temp
-     72  10ed		       85 c0		      sta	ThrobColor+0
-     73  10ef
-     74  10ef		       b9 58 1b 	      lda	ThrobGfx+1,y
-     75  10f2		       0a		      asl
-     76  10f3		       90 01		      bcc	.Color1
-      0  10f5					      SKIP_WORD
-      1  10f5
-      2  10f5		       0c		      HEX	0C
-      3  10f6
-     78  10f6				   .Color1
-     79  10f6		       65 c4		      adc	Temp
-     80  10f8		       85 c1		      sta	ThrobColor+1
-     81  10fa
-     82  10fa		       b9 59 1b 	      lda	ThrobGfx+2,y
-     83  10fd		       0a		      asl
-     84  10fe		       90 01		      bcc	.Color2
-      0  1100					      SKIP_WORD
-      1  1100
-      2  1100		       0c		      HEX	0C
-      3  1101
-     86  1101				   .Color2
-     87  1101		       65 c4		      adc	Temp
-     88  1103		       85 c2		      sta	ThrobColor+2
-     89  1105
-     90  1105
-     91  1105
-     92  1105							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     93  1105							; Load Scoreboard
-     94  1105							;
-     95  1105							; Get graphics data for the scoreboard and push it onto the stack
-     96  1105							;
-     97  1105							; Takes 534 cycles to complete (7 full scanlines + 2 cycles)
-     98  1105							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     99  1105
-    100  1105					      SUBROUTINE
-    101  1105
-    102  1105							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    103  1105							; Prepare MSBs for all the scoreboard loading pointers - 23 cycles
-    104  1105
-    105  1105		       a9 1b		      lda	#>ScoreGfx
-    106  1107		       85 92		      sta	LvlLoadPtr+1
-    107  1109		       85 94		      sta	ScrLoadPtr0+1
-    108  110b		       85 96		      sta	ScrLoadPtr1+1
-    109  110d		       85 98		      sta	ScrLoadPtr2+1
-    110  110f		       85 9a		      sta	ScrLoadPtr3+1
-    111  1111		       85 9c		      sta	ScrLoadPtr4+1
-    112  1113		       85 9e		      sta	ScrLoadPtr5+1
-    113  1115
-    114  1115							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    115  1115							; Prepare pointer for level digit graphics - 14 cycles
-    116  1115
-    117  1115		       a5 86		      lda	BCDLevel
-    118  1117		       29 0f		      and	#$0F
-    119  1119		       0a		      asl
-    120  111a		       0a		      asl
-    121  111b		       0a		      asl
-    122  111c		       85 91		      sta	LvlLoadPtr	; set LSB of level digit graphics pointer
-    123  111e
-    124  111e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    125  111e							; Prepare pointers for score digit graphics - 69 cycles
-    126  111e
-    127  111e		       a7 81		      lax	BCDScore+0
-    128  1120		       29 f0		      and	#$F0
-    129  1122		       4a		      lsr
-    130  1123		       85 93		      sta	ScrLoadPtr0	; set LSB for score digit pointer 0
-    131  1125
-    132  1125		       8a		      txa
-    133  1126		       29 0f		      and	#$0F
-    134  1128		       0a		      asl
-    135  1129		       0a		      asl
-    136  112a		       0a		      asl
-    137  112b		       85 95		      sta	ScrLoadPtr1	; set LSB for score digit pointer 1
-    138  112d
-    139  112d		       a7 82		      lax	BCDScore+1
-    140  112f		       29 f0		      and	#$F0
-    141  1131		       4a		      lsr
-    142  1132		       85 97		      sta	ScrLoadPtr2	; set LSB for score digit pointer 2
-    143  1134
-    144  1134		       8a		      txa
-    145  1135		       29 0f		      and	#$0F
-    146  1137		       0a		      asl
-    147  1138		       0a		      asl
-    148  1139		       0a		      asl
-    149  113a		       85 99		      sta	ScrLoadPtr3	; set LSB for score digit pointer 3
-    150  113c
-    151  113c		       a7 83		      lax	BCDScore+2
-    152  113e		       29 f0		      and	#$F0
-    153  1140		       4a		      lsr
-    154  1141		       85 9b		      sta	ScrLoadPtr4	; set LSB for score digit pointer 4
-    155  1143
-    156  1143		       8a		      txa
-    157  1144		       29 0f		      and	#$0F
-    158  1146		       0a		      asl
-    159  1147		       0a		      asl
-    160  1148		       0a		      asl
-    161  1149		       85 9d		      sta	ScrLoadPtr5	; set LSB for score digit pointer 5
-    162  114b
-    163  114b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    164  114b							; Load the stack with the graphics for the scoreboard - 428 cycles
-    165  114b
-    166  114b		       a0 06		      ldy	#6
-    167  114d
-    168  114d				   .LoadScoreboard
-    169  114d
-    170  114d		       b1 9d		      lda	(ScrLoadPtr5),y
-    171  114f		       48		      pha
-    172  1150		       b1 9b		      lda	(ScrLoadPtr4),y
-    173  1152		       48		      pha
-    174  1153		       b1 99		      lda	(ScrLoadPtr3),y
-    175  1155		       48		      pha
-    176  1156		       b1 97		      lda	(ScrLoadPtr2),y
-    177  1158		       48		      pha
-    178  1159		       b1 95		      lda	(ScrLoadPtr1),y
-    179  115b		       48		      pha
-    180  115c		       b1 93		      lda	(ScrLoadPtr0),y
-    181  115e		       48		      pha
-    182  115f		       b1 91		      lda	(LvlLoadPtr),y
-    183  1161		       48		      pha
-    184  1162
-    185  1162		       88		      dey
-    186  1163		       10 e8		      bpl	.LoadScoreboard
-    187  1165
-    188  1165
-    189  1165
-    190  1165							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    191  1165							; Load RAM for progress bar display (28-53 cycles)
-    192  1165
-    193  1165		       a5 8a		      lda	Progress	; 3 - get amount of progress
-    194  1167
-    195  1167							; The level progress bar uses the following playfield bits:
-    196  1167							; (note that PF0 and PF2 are NOT reversed in this diagram)
-    197  1167							;
-    198  1167							; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
-    199  1167							; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
-    200  1167							; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
-    201  1167							;
-    202  1167							; When the progress bar is empty, every bit labeled "X" above should be
-    203  1167							; set (1), and when it is full, every "X" bit should be cleared (0).
-    204  1167							; The bits labeled "o" must ALWAYS be cleared.
-    205  1167							;
-    206  1167							; The leftmost playfield value (the 1st PF0) will be calculated first,
-    207  1167							; and then each playfield value to the right until the 2nd PF1
-    208  1167							; will be calculated.
-    209  1167							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    210  1167		       a0 00		      ldy	#%00000000	; 2 - value to store when a playfield byte is full
-    211  1169
-    212  1169		       38		      sec		; 2
-    213  116a		       e9 03		      sbc	#3	; 3 - 3 PF bits in 1st PF0 are used, so subtract 3
-    214  116c		       30 1e		      bmi	.Underflow1	; 2/3
-    215  116e		       84 8c		      sty	ProgressBar	; 3 - this playfield byte is full
-    216  1170
-    217  1170		       e9 08		      sbc	#8	; 3 - 8 PF bits in 1st PF1 are used, so subtract 8
-    218  1172		       30 23		      bmi	.Underflow2	; 2/3
-    219  1174		       84 8d		      sty	ProgressBar+1	; 3 - this playfield byte is full
-    220  1176
-    221  1176		       e9 08		      sbc	#8	; 3 - 8 PF bits in PF2 are used, so subtract 8
-    222  1178		       30 28		      bmi	.Underflow3	; 2/3
-    223  117a		       84 8e		      sty	ProgressBar+2	; 3 - this playfield byte is full
-    224  117c
-    225  117c		       e9 04		      sbc	#4	; 3 - 4 PF bits in 2nd PF1 are used, so subtract 4
-    226  117e		       30 2d		      bmi	.Underflow4	; 2/3
-    227  1180		       84 8f		      sty	ProgressBar+3	; 3 - this playfield byte is full
-    228  1182
-    229  1182		       aa		      tax		; 2
-    230  1183		       bd 0e 1c 	      lda	PgBarGfx+1,x	; 4 - load from normal set of playfield graphics
-    231  1186		       0a		      asl		; 2
-    232  1187		       85 90		      sta	ProgressBar+4	; 3
-    233  1189		       4c b5 11 	      jmp	.Finish	; 3
-    234  118c
-    235  118c							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    236  118c				   .Underflow1		; for 1st PF0
-    237  118c
-    238  118c		       69 03		      adc	#3	; 3 - add back the 3
-    239  118e		       aa		      tax		; 2
-    240  118f		       bd 1b 1c 	      lda	PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
-    241  1192		       85 8c		      sta	ProgressBar	; 3
-    242  1194		       4c b5 11 	      jmp	.Finish	; 3
-    243  1197
-    244  1197							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    245  1197				   .Underflow2		; for 1st PF1
-    246  1197
-    247  1197		       69 08		      adc	#8	; 3 - add back the 8
-    248  1199		       aa		      tax		; 2
-    249  119a		       bd 0d 1c 	      lda	PgBarGfx,x	; 4 - load from normal set of playfield graphics
-    250  119d		       85 8d		      sta	ProgressBar+1	; 3
-    251  119f		       4c b5 11 	      jmp	.Finish	; 3
-    252  11a2
-    253  11a2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    254  11a2				   .Underflow3		; for PF2
-    255  11a2
-    256  11a2		       69 08		      adc	#8	; 3 - add back the 8
-    257  11a4		       aa		      tax		; 2
-    258  11a5		       bd 16 1c 	      lda	PgBarGfxR,x	; 4 - load from reversed set of playfield graphics
-    259  11a8		       85 8e		      sta	ProgressBar+2	; 3
-    260  11aa		       4c b5 11 	      jmp	.Finish	; 3
-    261  11ad
-    262  11ad							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    263  11ad				   .Underflow4		; for 2nd PF0
-    264  11ad
-    265  11ad		       69 04		      adc	#4	; 3 - add back the 4
-    266  11af		       aa		      tax		; 2
-    267  11b0		       bd 1a 1c 	      lda	PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
-    268  11b3		       85 8f		      sta	ProgressBar+3	; 3
-    269  11b5
-    270  11b5							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    271  11b5				   .Finish
-    272  11b5
-    273  11b5		       85 2b		      sta	HMCLR
-    274  11b7
-    275  11b7		       a6 b2		      ldx	FoodPosX
-    276  11b9		       ca		      dex
-    277  11ba		       10 02		      bpl	.NoReset0
-    278  11bc		       a2 58		      ldx	#88
-    279  11be				   .NoReset0
-    280  11be		       86 b2		      stx	FoodPosX+0
-    281  11c0
-    282  11c0		       8a		      txa
-    283  11c1		       38		      sec
-    284  11c2
-    285  11c2		       e9 12		      sbc	#18
-    286  11c4		       b0 02		      bcs	.NoReset1
-    287  11c6		       69 59		      adc	#89
-    288  11c8				   .NoReset1
-    289  11c8		       85 b3		      sta	FoodPosX+1
-    290  11ca
-    291  11ca		       e9 34		      sbc	#52
-    292  11cc		       b0 02		      bcs	.NoReset2
-    293  11ce		       69 59		      adc	#89
-    294  11d0				   .NoReset2
-    295  11d0		       85 b4		      sta	FoodPosX+2
-    296  11d2
-    297  11d2		       e9 1b		      sbc	#27
-    298  11d4		       b0 02		      bcs	.NoReset3
-    299  11d6		       69 59		      adc	#89
-    300  11d8				   .NoReset3
-    301  11d8		       85 b5		      sta	FoodPosX+3
-    302  11da
-    303  11da		       e9 3f		      sbc	#63
-    304  11dc		       b0 02		      bcs	.NoReset4
-    305  11de		       69 59		      adc	#89
-    306  11e0				   .NoReset4
-    307  11e0		       85 b6		      sta	FoodPosX+4
-    308  11e2
-    309  11e2		       e9 29		      sbc	#41
-    310  11e4		       b0 02		      bcs	.NoReset5
-    311  11e6		       69 59		      adc	#89
-    312  11e8				   .NoReset5
-    313  11e8		       85 b7		      sta	FoodPosX+5
-    314  11ea
-    315  11ea		       e9 11		      sbc	#17
-    316  11ec		       b0 02		      bcs	.NoReset6
-    317  11ee		       69 59		      adc	#89
-    318  11f0				   .NoReset6
-    319  11f0		       85 b8		      sta	FoodPosX+6
-    320  11f2
-    321  11f2
-    322  11f2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    323  11f2							; Caclulate cat's position data
-    324  11f2
-    325  11f2					      SUBROUTINE
-    326  11f2
-    327  11f2		       a6 9f		      ldx	CatPosY
-    328  11f4		       e8		      inx
-    329  11f5		       e0 73		      cpx	#115
-    330  11f7		       d0 02		      bne	.CatY
-    331  11f9		       a2 00		      ldx	#0
-    332  11fb				   .CatY
-    333  11fb		       86 9f		      stx	CatPosY
-    334  11fd
-    335  11fd		       8a		      txa
-    336  11fe
-    337  11fe		       a2 00		      ldx	#0
-    338  1200				   .DivideLoop
-    339  1200		       38		      sec
-    340  1201		       e8		      inx
-    341  1202		       e9 13		      sbc	#19
-    342  1204		       90 07		      bcc	.AddBack
-    343  1206
-    344  1206		       e0 05		      cpx	#5
-    345  1208		       d0 f6		      bne	.DivideLoop
-    346  120a		       e8		      inx
-    347  120b		       d0 02		      bne	.SetCatPos
-    348  120d
-    349  120d				   .AddBack
-    350  120d		       69 13		      adc	#19
-    351  120f
-    352  120f				   .SetCatPos
-    353  120f		       85 a0		      sta	CatPosition
-    354  1211
-    355  1211		       8a		      txa
-    356  1212		       0a		      asl
-    357  1213		       0a		      asl
-    358  1214		       0a		      asl
-    359  1215		       0a		      asl
-    360  1216		       0a		      asl
-    361  1217		       65 a0		      adc	CatPosition
-    362  1219		       85 a0		      sta	CatPosition
-    363  121b
-    364  121b		       ca		      dex
-    365  121c		       86 a3		      stx	PreCatRows
-    366  121e
-    367  121e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    368  121e							; Calculate Hmove offsets for 2nd cat row's food items
-    369  121e
-    370  121e		       a9 05		      lda	#5
-    371  1220		       38		      sec
-    372  1221		       e5 a3		      sbc	PreCatRows
-    373  1223		       a8		      tay
-    374  1224
-    375  1224		       b9 a4 00 	      lda	FoodItemL,y
-    376  1227		       29 f0		      and	#$F0
-    377  1229		       85 bc		      sta	CatRow2FoodL
-    378  122b		       aa		      tax
-    379  122c		       bd 0f 1d 	      lda	FoodGfx+15,x
-    380  122f		       85 be		      sta	CatRow2Color1
-    381  1231
-    382  1231		       b9 ab 00 	      lda	FoodItemR,y
-    383  1234		       29 f0		      and	#$F0
-    384  1236		       85 bd		      sta	CatRow2FoodR
-    385  1238		       aa		      tax
-    386  1239		       bd 0f 1d 	      lda	FoodGfx+15,x
-    387  123c		       85 bf		      sta	CatRow2Color2
-    388  123e
-    389  123e		       b9 b2 00 	      lda	FoodPosX,y
-    390  1241		       e9 2c		      sbc	#44
-    391  1243		       f0 04		      beq	.Prepare
-    392  1245		       90 02		      bcc	.Prepare
-    393  1247		       e9 2d		      sbc	#45
-    394  1249
-    395  1249				   .Prepare
-    396  1249		       38		      sec
-    397  124a		       e9 01		      sbc	#1
-    398  124c
-    399  124c		       a2 70		      ldx	#$70
-    400  124e		       a0 02		      ldy	#2
-    401  1250
-    402  1250				   .OffsetLoop
-    403  1250		       18		      clc
-    404  1251		       69 0f		      adc	#15
-    405  1253		       f0 02		      beq	.CalcOffset
-    406  1255		       30 0d		      bmi	.MaxOffset
-    407  1257
-    408  1257				   .CalcOffset
-    409  1257		       49 07		      eor	#7
-    410  1259		       0a		      asl
-    411  125a		       0a		      asl
-    412  125b		       0a		      asl
-    413  125c		       0a		      asl
-    414  125d
-    415  125d		       99 b9 00 	      sta	CatRowHmove,y
-    416  1260		       a9 00		      lda	#0
-    417  1262		       f0 02		      beq	.NextOffset
-    418  1264
-    419  1264				   .MaxOffset
-    420  1264		       96 b9		      stx	CatRowHmove,y
-    421  1266
-    422  1266				   .NextOffset
-    423  1266		       88		      dey
-    424  1267		       10 e7		      bpl	.OffsetLoop
-    425  1269
-    426  1269
-    427  1269
-    428  1269
-    429  1269
-    430  1269					      SUBROUTINE
-    431  1269
-    432  1269
-    433  1269
-    434  1269
-    435  1269
-    436  1269
-    437  1269		       a9 7a		      lda	#COL_SCORE	; 2
-    438  126b		       85 87		      sta	ScoreColor	; 3
-    439  126d
-    440  126d		       a5 87		      lda	ScoreColor	; 3
-    441  126f		       85 06		      sta	COLUP0	; 3 - set color registers
-    442  1271		       85 07		      sta	COLUP1	; 3
-    443  1273		       85 08		      sta	COLUPF	; 3
-    444  1275		       85 09		      sta	COLUBK	; 3
-    445  1277
-    446  1277		       a5 80		      lda	Frame
-    447  1279		       29 0f		      and	#%00001111
-    448  127b		       f0 04		      beq	.IncScore
-    449  127d		       a9 00		      lda	#0
-    450  127f		       f0 02		      beq	.IncSkip
-    451  1281				   .IncScore
-    452  1281		       a9 89		      lda	#$89
-    453  1283				   .IncSkip
-    454  1283		       85 85		      sta	BCDScoreAdd+1
-    455  1285
-    456  1285		       a9 19		      lda	#$19
-    457  1287		       85 86		      sta	BCDLevel
-    458  1289
-    459  1289
-    460  1289
-    461  1289
-    462  1289							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    463  1289							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    464  1289							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    465  1289
-    466  1289		       a9 1d		      lda	#>FoodGfx
-    467  128b		       85 92		      sta	FoodGfxPtr1+1
-    468  128d		       85 94		      sta	FoodGfxPtr2+1
-    469  128f
-    470  128f		       a9 1e		      lda	#>CatTartGfx
-    471  1291		       85 96		      sta	TartGfxPtr1+1
-    472  1293		       85 9a		      sta	TartGfxPtr2+1
-    473  1295
-    474  1295		       a9 1e		      lda	#>CatFaceGfx
-    475  1297		       85 98		      sta	CatGfxPtr1+1
-    476  1299		       85 9c		      sta	CatGfxPtr2+1
-    477  129b
-    478  129b		       a5 a0		      lda	CatPosition
-    479  129d		       29 1f		      and	#%00011111
-    480  129f		       aa		      tax
-    481  12a0
-    482  12a0		       18		      clc
-    483  12a1
-    484  12a1		       69 06		      adc	#<CatTartGfx
-    485  12a3		       85 99		      sta	TartGfxPtr2
-    486  12a5		       69 13		      adc	#19
-    487  12a7		       85 95		      sta	TartGfxPtr1
-    488  12a9
-    489  12a9		       8a		      txa
-    490  12aa		       69 28		      adc	#<CatFaceGfx
-    491  12ac		       85 9b		      sta	CatGfxPtr2
-    492  12ae		       69 13		      adc	#19
-    493  12b0		       85 97		      sta	CatGfxPtr1
-    494  12b2
-    495  12b2		       a9 56		      lda	#$56
-    496  12b4		       85 88		      sta	PgBarColor
-    497  12b6
-    498  12b6		       a9 4a		      lda	#COL_CAT_TART
-    499  12b8		       85 89		      sta	CatTartColor
-    500  12ba
-    501  12ba		       a5 80		      lda	Frame
-    502  12bc		       29 08		      and	#%00001000
-    503  12be		       4a		      lsr
-    504  12bf		       4a		      lsr
-    505  12c0		       4a		      lsr
-    506  12c1		       a8		      tay
-    507  12c2		       b9 1e 1c 	      lda	RainbowGfx,y
-    508  12c5		       85 a1		      sta	Rainbow
-    509  12c7
-    510  12c7
-    511  12c7
-    512  12c7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    513  12c7							; Prepare for Main Gameplay Kernel
-    514  12c7							;
-    515  12c7							; Figure out how many rows to draw before and after the two cat rows
-    516  12c7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    517  12c7
-    518  12c7
-    519  12c7
-    520  12c7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    521  12c7							; Finish Vertical Blanking
-    522  12c7							;
-    523  12c7							; Loop until the end of vertical blanking
-    524  12c7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    525  12c7
-    526  12c7		       4c 00 13 	      jmp	VblankTimerLoop
-    527  12ca
+      0  108b					      include	code/Game Logic/VerticalBlank.asm
+      1  108b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  108b							; Vertical Blank
+      3  108b							;
+      4  108b							; Do the vertical blanking and game logic
+      5  108b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      6  108b
+      7  108b		       85 2b		      sta	HMCLR
+      8  108d		       85 02		      sta	WSYNC
+      9  108f
+     10  108f		       a9 ff		      lda	#$FF	; 02
+     11  1091		       85 23		      sta	HMM1	; 05
+     12  1093		       85 8d		      sta	ProgressBar+1	; 08 - reset progress bar byte 1 to %11111111
+     13  1095
+     14  1095		       a2 10		      ldx	#$10	; 10
+     15  1097		       86 21		      stx	HMP1	; 13
+     16  1099
+     17  1099		       a2 80		      ldx	#$80	; 15
+     18  109b		       86 22		      stx	HMM0	; 18
+     19  109d
+     20  109d		       a2 e0		      ldx	#$E0	; 20
+     21  109f		       85 13		      sta	RESM1	; 23
+     22  10a1		       86 8c		      stx	ProgressBar+0	; 26 - reset progress bar byte 0 to %11100000
+     23  10a3
+     24  10a3		       85 14		      sta	RESBL	; 29
+     25  10a5
+     26  10a5		       85 8e		      sta	ProgressBar+2	; 32 - reset progress bar byte 2 to %11111111
+     27  10a7		       85 8f		      sta	ProgressBar+3	; 35 - reset progress bar byte 3 to %11111111
+     28  10a9
+     29  10a9		       a9 fe		      lda	#$FE	; 37
+     30  10ab		       85 90		      sta	ProgressBar+4	; 40 - reset byte 4 for the progress bar
+     31  10ad
+     32  10ad		       20 24 18 	      jsr	Sleep12	; 52
+     33  10b0
+     34  10b0		       85 10		      sta	RESP0	; 55
+     35  10b2		       85 11		      sta	RESP1	; 58
+     36  10b4
+      0  10b4					      SLEEP	9	; 67
+      1  10b4				   .CYCLES    SET	9
+      2  10b4
+      3  10b4				  -	      IF	.CYCLES < 2
+      4  10b4				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  10b4				  -	      ERR
+      6  10b4					      ENDIF
+      7  10b4
+      8  10b4					      IF	.CYCLES & 1
+      9  10b4					      IFNCONST	NO_ILLEGAL_OPCODES
+     10  10b4		       04 00		      nop	0
+     11  10b6				  -	      ELSE
+     12  10b6				  -	      bit	VSYNC
+     13  10b6					      ENDIF
+     14  10b6				   .CYCLES    SET	.CYCLES - 3
+     15  10b6					      ENDIF
+     16  10b6
+     17  10b6					      REPEAT	.CYCLES / 2
+     18  10b6		       ea		      nop
+     17  10b6					      REPEND
+     18  10b7		       ea		      nop
+     17  10b7					      REPEND
+     18  10b8		       ea		      nop
+     19  10b9					      REPEND
+     38  10b9
+     39  10b9		       85 12		      sta	RESM0	; 70
+     40  10bb
+     41  10bb		       85 02		      sta	WSYNC
+     42  10bd		       85 2a		      sta	HMOVE
+     43  10bf
+     44  10bf
+     45  10bf
+     46  10bf							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     47  10bf							; Prepare HMOVE offsets for all scoreboard objects, and
+     48  10bf							; reset the progress bar's RAM values to empty. (39 cycles)
+     49  10bf
+     50  10bf							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     51  10bf							; Prepare for throbbing lines - 43 cycles
+     52  10bf
+     53  10bf		       a5 80		      lda	Frame	; get the current frame number
+     54  10c1		       29 1c		      and	#%00011100	; change animation frame every 4 game frames
+     55  10c3		       4a		      lsr
+     56  10c4		       4a		      lsr		; shift to get a value from 0-7
+     57  10c5		       85 c4		      sta	Temp
+     58  10c7		       0a		      asl		; carry flag will always be clear after this
+     59  10c8		       65 c4		      adc	Temp	; multiply by 3
+     60  10ca		       a8		      tay
+     61  10cb
+     62  10cb		       a5 87		      lda	ScoreColor
+     63  10cd		       29 f0		      and	#$F0
+     64  10cf		       85 c4		      sta	Temp
+     65  10d1
+     66  10d1		       b9 57 1b 	      lda	ThrobGfx+0,y
+     67  10d4		       0a		      asl
+     68  10d5		       90 01		      bcc	.Color0
+      0  10d7					      SKIP_WORD
+      1  10d7
+      2  10d7		       0c		      HEX	0C
+      3  10d8
+     70  10d8				   .Color0
+     71  10d8		       65 c4		      adc	Temp
+     72  10da		       85 c0		      sta	ThrobColor+0
+     73  10dc
+     74  10dc		       b9 58 1b 	      lda	ThrobGfx+1,y
+     75  10df		       0a		      asl
+     76  10e0		       90 01		      bcc	.Color1
+      0  10e2					      SKIP_WORD
+      1  10e2
+      2  10e2		       0c		      HEX	0C
+      3  10e3
+     78  10e3				   .Color1
+     79  10e3		       65 c4		      adc	Temp
+     80  10e5		       85 c1		      sta	ThrobColor+1
+     81  10e7
+     82  10e7		       b9 59 1b 	      lda	ThrobGfx+2,y
+     83  10ea		       0a		      asl
+     84  10eb		       90 01		      bcc	.Color2
+      0  10ed					      SKIP_WORD
+      1  10ed
+      2  10ed		       0c		      HEX	0C
+      3  10ee
+     86  10ee				   .Color2
+     87  10ee		       65 c4		      adc	Temp
+     88  10f0		       85 c2		      sta	ThrobColor+2
+     89  10f2
+     90  10f2
+     91  10f2
+     92  10f2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     93  10f2							; Load Scoreboard
+     94  10f2							;
+     95  10f2							; Get graphics data for the scoreboard and push it onto the stack
+     96  10f2							;
+     97  10f2							; Takes 534 cycles to complete (7 full scanlines + 2 cycles)
+     98  10f2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     99  10f2
+    100  10f2					      SUBROUTINE
+    101  10f2
+    102  10f2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    103  10f2							; Prepare MSBs for all the scoreboard loading pointers - 23 cycles
+    104  10f2
+    105  10f2		       a9 1b		      lda	#>ScoreGfx
+    106  10f4		       85 92		      sta	LvlLoadPtr+1
+    107  10f6		       85 94		      sta	ScrLoadPtr0+1
+    108  10f8		       85 96		      sta	ScrLoadPtr1+1
+    109  10fa		       85 98		      sta	ScrLoadPtr2+1
+    110  10fc		       85 9a		      sta	ScrLoadPtr3+1
+    111  10fe		       85 9c		      sta	ScrLoadPtr4+1
+    112  1100		       85 9e		      sta	ScrLoadPtr5+1
+    113  1102
+    114  1102							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    115  1102							; Prepare pointer for level digit graphics - 14 cycles
+    116  1102
+    117  1102		       a5 86		      lda	BCDLevel
+    118  1104		       29 0f		      and	#$0F
+    119  1106		       0a		      asl
+    120  1107		       0a		      asl
+    121  1108		       0a		      asl
+    122  1109		       85 91		      sta	LvlLoadPtr	; set LSB of level digit graphics pointer
+    123  110b
+    124  110b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    125  110b							; Prepare pointers for score digit graphics - 69 cycles
+    126  110b
+    127  110b		       a7 81		      lax	BCDScore+0
+    128  110d		       29 f0		      and	#$F0
+    129  110f		       4a		      lsr
+    130  1110		       85 93		      sta	ScrLoadPtr0	; set LSB for score digit pointer 0
+    131  1112
+    132  1112		       8a		      txa
+    133  1113		       29 0f		      and	#$0F
+    134  1115		       0a		      asl
+    135  1116		       0a		      asl
+    136  1117		       0a		      asl
+    137  1118		       85 95		      sta	ScrLoadPtr1	; set LSB for score digit pointer 1
+    138  111a
+    139  111a		       a7 82		      lax	BCDScore+1
+    140  111c		       29 f0		      and	#$F0
+    141  111e		       4a		      lsr
+    142  111f		       85 97		      sta	ScrLoadPtr2	; set LSB for score digit pointer 2
+    143  1121
+    144  1121		       8a		      txa
+    145  1122		       29 0f		      and	#$0F
+    146  1124		       0a		      asl
+    147  1125		       0a		      asl
+    148  1126		       0a		      asl
+    149  1127		       85 99		      sta	ScrLoadPtr3	; set LSB for score digit pointer 3
+    150  1129
+    151  1129		       a7 83		      lax	BCDScore+2
+    152  112b		       29 f0		      and	#$F0
+    153  112d		       4a		      lsr
+    154  112e		       85 9b		      sta	ScrLoadPtr4	; set LSB for score digit pointer 4
+    155  1130
+    156  1130		       8a		      txa
+    157  1131		       29 0f		      and	#$0F
+    158  1133		       0a		      asl
+    159  1134		       0a		      asl
+    160  1135		       0a		      asl
+    161  1136		       85 9d		      sta	ScrLoadPtr5	; set LSB for score digit pointer 5
+    162  1138
+    163  1138							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    164  1138							; Load the stack with the graphics for the scoreboard - 428 cycles
+    165  1138
+    166  1138		       a0 06		      ldy	#6
+    167  113a
+    168  113a				   .LoadScoreboard
+    169  113a
+    170  113a		       b1 9d		      lda	(ScrLoadPtr5),y
+    171  113c		       48		      pha
+    172  113d		       b1 9b		      lda	(ScrLoadPtr4),y
+    173  113f		       48		      pha
+    174  1140		       b1 99		      lda	(ScrLoadPtr3),y
+    175  1142		       48		      pha
+    176  1143		       b1 97		      lda	(ScrLoadPtr2),y
+    177  1145		       48		      pha
+    178  1146		       b1 95		      lda	(ScrLoadPtr1),y
+    179  1148		       48		      pha
+    180  1149		       b1 93		      lda	(ScrLoadPtr0),y
+    181  114b		       48		      pha
+    182  114c		       b1 91		      lda	(LvlLoadPtr),y
+    183  114e		       48		      pha
+    184  114f
+    185  114f		       88		      dey
+    186  1150		       10 e8		      bpl	.LoadScoreboard
+    187  1152
+    188  1152
+    189  1152
+    190  1152							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    191  1152							; Load RAM for progress bar display (28-53 cycles)
+    192  1152
+    193  1152		       a5 8a		      lda	Progress	; 3 - get amount of progress
+    194  1154
+    195  1154							; The level progress bar uses the following playfield bits:
+    196  1154							; (note that PF0 and PF2 are NOT reversed in this diagram)
+    197  1154							;
+    198  1154							; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
+    199  1154							; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
+    200  1154							; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
+    201  1154							;
+    202  1154							; When the progress bar is empty, every bit labeled "X" above should be
+    203  1154							; set (1), and when it is full, every "X" bit should be cleared (0).
+    204  1154							; The bits labeled "o" must ALWAYS be cleared.
+    205  1154							;
+    206  1154							; The leftmost playfield value (the 1st PF0) will be calculated first,
+    207  1154							; and then each playfield value to the right until the 2nd PF1
+    208  1154							; will be calculated.
+    209  1154							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    210  1154		       a0 00		      ldy	#%00000000	; 2 - value to store when a playfield byte is full
+    211  1156
+    212  1156		       38		      sec		; 2
+    213  1157		       e9 03		      sbc	#3	; 3 - 3 PF bits in 1st PF0 are used, so subtract 3
+    214  1159		       30 1e		      bmi	.Underflow1	; 2/3
+    215  115b		       84 8c		      sty	ProgressBar	; 3 - this playfield byte is full
+    216  115d
+    217  115d		       e9 08		      sbc	#8	; 3 - 8 PF bits in 1st PF1 are used, so subtract 8
+    218  115f		       30 23		      bmi	.Underflow2	; 2/3
+    219  1161		       84 8d		      sty	ProgressBar+1	; 3 - this playfield byte is full
+    220  1163
+    221  1163		       e9 08		      sbc	#8	; 3 - 8 PF bits in PF2 are used, so subtract 8
+    222  1165		       30 28		      bmi	.Underflow3	; 2/3
+    223  1167		       84 8e		      sty	ProgressBar+2	; 3 - this playfield byte is full
+    224  1169
+    225  1169		       e9 04		      sbc	#4	; 3 - 4 PF bits in 2nd PF1 are used, so subtract 4
+    226  116b		       30 2d		      bmi	.Underflow4	; 2/3
+    227  116d		       84 8f		      sty	ProgressBar+3	; 3 - this playfield byte is full
+    228  116f
+    229  116f		       aa		      tax		; 2
+    230  1170		       bd 0e 1c 	      lda	PgBarGfx+1,x	; 4 - load from normal set of playfield graphics
+    231  1173		       0a		      asl		; 2
+    232  1174		       85 90		      sta	ProgressBar+4	; 3
+    233  1176		       4c a2 11 	      jmp	.Finish	; 3
+    234  1179
+    235  1179							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    236  1179				   .Underflow1		; for 1st PF0
+    237  1179
+    238  1179		       69 03		      adc	#3	; 3 - add back the 3
+    239  117b		       aa		      tax		; 2
+    240  117c		       bd 1b 1c 	      lda	PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
+    241  117f		       85 8c		      sta	ProgressBar	; 3
+    242  1181		       4c a2 11 	      jmp	.Finish	; 3
+    243  1184
+    244  1184							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    245  1184				   .Underflow2		; for 1st PF1
+    246  1184
+    247  1184		       69 08		      adc	#8	; 3 - add back the 8
+    248  1186		       aa		      tax		; 2
+    249  1187		       bd 0d 1c 	      lda	PgBarGfx,x	; 4 - load from normal set of playfield graphics
+    250  118a		       85 8d		      sta	ProgressBar+1	; 3
+    251  118c		       4c a2 11 	      jmp	.Finish	; 3
+    252  118f
+    253  118f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    254  118f				   .Underflow3		; for PF2
+    255  118f
+    256  118f		       69 08		      adc	#8	; 3 - add back the 8
+    257  1191		       aa		      tax		; 2
+    258  1192		       bd 16 1c 	      lda	PgBarGfxR,x	; 4 - load from reversed set of playfield graphics
+    259  1195		       85 8e		      sta	ProgressBar+2	; 3
+    260  1197		       4c a2 11 	      jmp	.Finish	; 3
+    261  119a
+    262  119a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    263  119a				   .Underflow4		; for 2nd PF0
+    264  119a
+    265  119a		       69 04		      adc	#4	; 3 - add back the 4
+    266  119c		       aa		      tax		; 2
+    267  119d		       bd 1a 1c 	      lda	PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
+    268  11a0		       85 8f		      sta	ProgressBar+3	; 3
+    269  11a2
+    270  11a2							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    271  11a2				   .Finish
+    272  11a2
+    273  11a2		       85 2b		      sta	HMCLR
+    274  11a4
+    275  11a4		       a6 b2		      ldx	FoodPosX
+    276  11a6		       ca		      dex
+    277  11a7		       10 02		      bpl	.NoReset0
+    278  11a9		       a2 58		      ldx	#88
+    279  11ab				   .NoReset0
+    280  11ab		       86 b2		      stx	FoodPosX+0
+    281  11ad
+    282  11ad		       8a		      txa
+    283  11ae		       38		      sec
+    284  11af
+    285  11af		       e9 12		      sbc	#18
+    286  11b1		       b0 02		      bcs	.NoReset1
+    287  11b3		       69 59		      adc	#89
+    288  11b5				   .NoReset1
+    289  11b5		       85 b3		      sta	FoodPosX+1
+    290  11b7
+    291  11b7		       e9 34		      sbc	#52
+    292  11b9		       b0 02		      bcs	.NoReset2
+    293  11bb		       69 59		      adc	#89
+    294  11bd				   .NoReset2
+    295  11bd		       85 b4		      sta	FoodPosX+2
+    296  11bf
+    297  11bf		       e9 1b		      sbc	#27
+    298  11c1		       b0 02		      bcs	.NoReset3
+    299  11c3		       69 59		      adc	#89
+    300  11c5				   .NoReset3
+    301  11c5		       85 b5		      sta	FoodPosX+3
+    302  11c7
+    303  11c7		       e9 3f		      sbc	#63
+    304  11c9		       b0 02		      bcs	.NoReset4
+    305  11cb		       69 59		      adc	#89
+    306  11cd				   .NoReset4
+    307  11cd		       85 b6		      sta	FoodPosX+4
+    308  11cf
+    309  11cf		       e9 29		      sbc	#41
+    310  11d1		       b0 02		      bcs	.NoReset5
+    311  11d3		       69 59		      adc	#89
+    312  11d5				   .NoReset5
+    313  11d5		       85 b7		      sta	FoodPosX+5
+    314  11d7
+    315  11d7		       e9 11		      sbc	#17
+    316  11d9		       b0 02		      bcs	.NoReset6
+    317  11db		       69 59		      adc	#89
+    318  11dd				   .NoReset6
+    319  11dd		       85 b8		      sta	FoodPosX+6
+    320  11df
+    321  11df
+    322  11df							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    323  11df							; Caclulate cat's position data
+    324  11df
+    325  11df					      SUBROUTINE
+    326  11df
+    327  11df		       a6 9f		      ldx	CatPosY
+    328  11e1		       e8		      inx
+    329  11e2		       e0 73		      cpx	#115
+    330  11e4		       d0 02		      bne	.CatY
+    331  11e6		       a2 00		      ldx	#0
+    332  11e8				   .CatY
+    333  11e8		       86 9f		      stx	CatPosY
+    334  11ea
+    335  11ea		       8a		      txa
+    336  11eb
+    337  11eb		       a2 00		      ldx	#0
+    338  11ed				   .DivideLoop
+    339  11ed		       38		      sec
+    340  11ee		       e8		      inx
+    341  11ef		       e9 13		      sbc	#19
+    342  11f1		       90 07		      bcc	.AddBack
+    343  11f3
+    344  11f3		       e0 05		      cpx	#5
+    345  11f5		       d0 f6		      bne	.DivideLoop
+    346  11f7		       e8		      inx
+    347  11f8		       d0 02		      bne	.SetCatPos
+    348  11fa
+    349  11fa				   .AddBack
+    350  11fa		       69 13		      adc	#19
+    351  11fc
+    352  11fc				   .SetCatPos
+    353  11fc		       85 a0		      sta	CatPosition
+    354  11fe
+    355  11fe		       8a		      txa
+    356  11ff		       0a		      asl
+    357  1200		       0a		      asl
+    358  1201		       0a		      asl
+    359  1202		       0a		      asl
+    360  1203		       0a		      asl
+    361  1204		       65 a0		      adc	CatPosition
+    362  1206		       85 a0		      sta	CatPosition
+    363  1208
+    364  1208		       ca		      dex
+    365  1209		       86 a3		      stx	PreCatRows
+    366  120b
+    367  120b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    368  120b							; Calculate Hmove offsets for 2nd cat row's food items
+    369  120b
+    370  120b		       a9 05		      lda	#5
+    371  120d		       38		      sec
+    372  120e		       e5 a3		      sbc	PreCatRows
+    373  1210		       a8		      tay
+    374  1211
+    375  1211		       b9 a4 00 	      lda	FoodItemL,y
+    376  1214		       29 f0		      and	#$F0
+    377  1216		       85 bc		      sta	CatRow2FoodL
+    378  1218		       aa		      tax
+    379  1219		       bd 0f 1d 	      lda	FoodGfx+15,x
+    380  121c		       85 be		      sta	CatRow2Color1
+    381  121e
+    382  121e		       b9 ab 00 	      lda	FoodItemR,y
+    383  1221		       29 f0		      and	#$F0
+    384  1223		       85 bd		      sta	CatRow2FoodR
+    385  1225		       aa		      tax
+    386  1226		       bd 0f 1d 	      lda	FoodGfx+15,x
+    387  1229		       85 bf		      sta	CatRow2Color2
+    388  122b
+    389  122b		       b9 b2 00 	      lda	FoodPosX,y
+    390  122e		       e9 2c		      sbc	#44
+    391  1230		       f0 04		      beq	.Prepare
+    392  1232		       90 02		      bcc	.Prepare
+    393  1234		       e9 2d		      sbc	#45
+    394  1236
+    395  1236				   .Prepare
+    396  1236		       38		      sec
+    397  1237		       e9 01		      sbc	#1
+    398  1239
+    399  1239		       a2 70		      ldx	#$70
+    400  123b		       a0 02		      ldy	#2
+    401  123d
+    402  123d				   .OffsetLoop
+    403  123d		       18		      clc
+    404  123e		       69 0f		      adc	#15
+    405  1240		       f0 02		      beq	.CalcOffset
+    406  1242		       30 0d		      bmi	.MaxOffset
+    407  1244
+    408  1244				   .CalcOffset
+    409  1244		       49 07		      eor	#7
+    410  1246		       0a		      asl
+    411  1247		       0a		      asl
+    412  1248		       0a		      asl
+    413  1249		       0a		      asl
+    414  124a
+    415  124a		       99 b9 00 	      sta	CatRowHmove,y
+    416  124d		       a9 00		      lda	#0
+    417  124f		       f0 02		      beq	.NextOffset
+    418  1251
+    419  1251				   .MaxOffset
+    420  1251		       96 b9		      stx	CatRowHmove,y
+    421  1253
+    422  1253				   .NextOffset
+    423  1253		       88		      dey
+    424  1254		       10 e7		      bpl	.OffsetLoop
+    425  1256
+    426  1256
+    427  1256
+    428  1256
+    429  1256
+    430  1256					      SUBROUTINE
+    431  1256
+    432  1256
+    433  1256
+    434  1256
+    435  1256
+    436  1256
+    437  1256		       a9 7a		      lda	#COL_SCORE	; 2
+    438  1258		       85 87		      sta	ScoreColor	; 3
+    439  125a
+    440  125a		       a5 87		      lda	ScoreColor	; 3
+    441  125c		       85 06		      sta	COLUP0	; 3 - set color registers
+    442  125e		       85 07		      sta	COLUP1	; 3
+    443  1260		       85 08		      sta	COLUPF	; 3
+    444  1262		       85 09		      sta	COLUBK	; 3
+    445  1264
+    446  1264		       a5 80		      lda	Frame
+    447  1266		       29 0f		      and	#%00001111
+    448  1268		       f0 04		      beq	.IncScore
+    449  126a		       a9 00		      lda	#0
+    450  126c		       f0 02		      beq	.IncSkip
+    451  126e				   .IncScore
+    452  126e		       a9 89		      lda	#$89
+    453  1270				   .IncSkip
+    454  1270		       85 85		      sta	BCDScoreAdd+1
+    455  1272
+    456  1272		       a9 19		      lda	#$19
+    457  1274		       85 86		      sta	BCDLevel
+    458  1276
+    459  1276
+    460  1276
+    461  1276
+    462  1276							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    463  1276							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    464  1276							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    465  1276
+    466  1276		       a9 1d		      lda	#>FoodGfx
+    467  1278		       85 92		      sta	FoodGfxPtr1+1
+    468  127a		       85 94		      sta	FoodGfxPtr2+1
+    469  127c
+    470  127c		       a9 1e		      lda	#>CatTartGfx
+    471  127e		       85 96		      sta	TartGfxPtr1+1
+    472  1280		       85 9a		      sta	TartGfxPtr2+1
+    473  1282
+    474  1282		       a9 1e		      lda	#>CatFaceGfx
+    475  1284		       85 98		      sta	CatGfxPtr1+1
+    476  1286		       85 9c		      sta	CatGfxPtr2+1
+    477  1288
+    478  1288		       a5 a0		      lda	CatPosition
+    479  128a		       29 1f		      and	#%00011111
+    480  128c		       aa		      tax
+    481  128d
+    482  128d		       18		      clc
+    483  128e
+    484  128e		       69 06		      adc	#<CatTartGfx
+    485  1290		       85 99		      sta	TartGfxPtr2
+    486  1292		       69 13		      adc	#19
+    487  1294		       85 95		      sta	TartGfxPtr1
+    488  1296
+    489  1296		       8a		      txa
+    490  1297		       69 28		      adc	#<CatFaceGfx
+    491  1299		       85 9b		      sta	CatGfxPtr2
+    492  129b		       69 13		      adc	#19
+    493  129d		       85 97		      sta	CatGfxPtr1
+    494  129f
+    495  129f		       a9 56		      lda	#$56
+    496  12a1		       85 88		      sta	PgBarColor
+    497  12a3
+    498  12a3		       a9 4a		      lda	#COL_CAT_TART
+    499  12a5		       85 89		      sta	CatTartColor
+    500  12a7
+    501  12a7		       a5 80		      lda	Frame
+    502  12a9		       29 08		      and	#%00001000
+    503  12ab		       4a		      lsr
+    504  12ac		       4a		      lsr
+    505  12ad		       4a		      lsr
+    506  12ae		       a8		      tay
+    507  12af		       b9 1e 1c 	      lda	RainbowGfx,y
+    508  12b2		       85 a1		      sta	Rainbow
+    509  12b4
+    510  12b4
+    511  12b4
+    512  12b4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    513  12b4							; Prepare for Main Gameplay Kernel
+    514  12b4							;
+    515  12b4							; Figure out how many rows to draw before and after the two cat rows
+    516  12b4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    517  12b4
+    518  12b4
+    519  12b4
+    520  12b4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    521  12b4							; Finish Vertical Blanking
+    522  12b4							;
+    523  12b4							; Loop until the end of vertical blanking
+    524  12b4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    525  12b4
+    526  12b4		       4c 00 13 	      jmp	VblankTimerLoop
+    527  12b7
     528  1300		       00 00 00 00*	      ALIGN	$100
     529  1300
     530  1300				   VblankTimerLoop
@@ -1594,323 +1576,334 @@
       5  1373							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
       6  1373							; Clear last 34 bytes of RAM for rainbow colors - 126 cycles
       7  1373
-      8  1373
-      9  1373		       a2 ff		      ldx	#$FF
-     10  1375		       9a		      txs
-     11  1376
-     12  1376		       a0 11		      ldy	#17
+      8  1373		       a2 ff		      ldx	#$FF
+      9  1375		       9a		      txs
+     10  1376
+     11  1376		       a0 11		      ldy	#17
+     12  1378
      13  1378				   .ClearRainbow
-     14  1378		       48		      pha
-     15  1379		       48		      pha
-     16  137a
-     17  137a		       88		      dey
-     18  137b		       d0 fb		      bne	.ClearRainbow
-     19  137d
-     20  137d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     21  137d							; Load rainbow colors into RAM - 65 cycles
-     22  137d
-     23  137d		       a9 14		      lda	#20
-     24  137f		       e5 a0		      sbc	CatPosition	; carry is assumed to be set
-     25  1381		       29 1f		      and	#%00011111
-     26  1383		       18		      clc
-     27  1384		       69 eb		      adc	#RamBowColors+13
-     28  1386		       aa		      tax
-     29  1387		       9a		      txs
-     30  1388
-     31  1388		       a0 05		      ldy	#5
-     32  138a
-     33  138a				   .LoadRainbow
-     34  138a		       b9 00 1e 	      lda	RainbowColors,y
-     35  138d		       48		      pha
-     36  138e		       48		      pha
-     37  138f
-     38  138f		       88		      dey
-     39  1390		       10 f8		      bpl	.LoadRainbow
-     40  1392
+     14  1378
+     15  1378		       48		      pha
+     16  1379		       48		      pha
+     17  137a
+     18  137a		       88		      dey
+     19  137b		       d0 fb		      bne	.ClearRainbow
+     20  137d
+     21  137d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     22  137d							; Load rainbow colors into RAM - 65 cycles
+     23  137d
+     24  137d		       a9 14		      lda	#20
+     25  137f		       e5 a0		      sbc	CatPosition	; carry is assumed to be set
+     26  1381		       29 1f		      and	#%00011111
+     27  1383		       18		      clc
+     28  1384		       69 eb		      adc	#RamBowColors+13
+     29  1386		       aa		      tax
+     30  1387		       9a		      txs
+     31  1388
+     32  1388		       a0 05		      ldy	#5
+     33  138a
+     34  138a				   .LoadRainbow
+     35  138a		       b9 00 1e 	      lda	RainbowColors,y
+     36  138d		       48		      pha
+     37  138e		       48		      pha
+     38  138f
+     39  138f		       88		      dey
+     40  1390		       10 f8		      bpl	.LoadRainbow
      41  1392
-     42  1392		       85 02		      sta	WSYNC
-     43  1394
-     44  1394		       a5 87		      lda	ScoreColor
-     45  1396		       8d 09 00 	      sta.w	COLUBK
-     46  1399
-     47  1399		       85 02		      sta	WSYNC
-     48  139b
-      0  139b					      SLEEP	4
-      1  139b				   .CYCLES    SET	4
-      2  139b
-      3  139b				  -	      IF	.CYCLES < 2
-      4  139b				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  139b				  -	      ERR
-      6  139b					      ENDIF
-      7  139b
-      8  139b				  -	      IF	.CYCLES & 1
-      9  139b				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  139b				  -	      nop	0
-     11  139b				  -	      ELSE
-     12  139b				  -	      bit	VSYNC
-     13  139b				  -	      ENDIF
-     14  139b				  -.CYCLES    SET	.CYCLES - 3
-     15  139b					      ENDIF
-     16  139b
-     17  139b					      REPEAT	.CYCLES / 2
-     18  139b		       ea		      nop
-     17  139b					      REPEND
-     18  139c		       ea		      nop
-     19  139d					      REPEND
-     50  139d
-     51  139d							; Player 0 is already aligned for drawing the cat's face.
-     52  139d
-     53  139d							; Align player 1 to draw the current frame's food items for the top row.
-     54  139d
-     55  139d							; food item can be placed anywhere from 0-88
-     56  139d							; RESP1 can be strobed on cycle 27/32/37/42/47/52
-     57  139d
-     58  139d		       a5 b8		      lda	FoodPosX+6	; 07 - get the food's position for the top row
-     59  139f
-     60  139f		       38		      sec		; 09
-     61  13a0				   .DivideLoop
-     62  13a0		       e9 0f		      sbc	#15	; 11
-     63  13a2		       b0 fc		      bcs	.DivideLoop	; 13
-     64  13a4
-     65  13a4		       49 07		      eor	#7	; 15
-     66  13a6		       69 01		      adc	#1	; 17
-     67  13a8		       0a		      asl		; 19
-     68  13a9		       0a		      asl		; 21
-     69  13aa		       0a		      asl		; 23
-     70  13ab
-     71  13ab		       85 11		      sta	RESP1	; 26
-     72  13ad
-     73  13ad		       0a		      asl		; 53
-     74  13ae		       85 21		      sta	HMP1	; 56
-     75  13b0
-     76  13b0		       a9 00		      lda	#ONE_COPY	; 58
-     77  13b2		       85 04		      sta	NUSIZ0	; 61
-     78  13b4		       a9 04		      lda	#TWO_WIDE	; 63
-     79  13b6		       85 05		      sta	NUSIZ1	; 66
-     80  13b8
-     81  13b8		       85 02		      sta	WSYNC
-     82  13ba
-     83  13ba		       4c 00 14 	      jmp	.Align1
-     84  13bd
-     85  1400		       00 00 00 00*	      ALIGN	$100
-     86  1400
-     87  1400				   .Align1
-     88  1400
-     89  1400				   PreKernel
-     90  1400		       a2 06		      ldx	#6
-     91  1402		       86 c6		      stx	CurrentRow
-     92  1404
-     93  1404		       85 02		      sta	WSYNC
-     94  1406
-     95  1406		       a5 f1		      lda	RamBowColors+19
-     96  1408		       d0 02		      bne	.SetCatThrobPF
-     97  140a		       a5 c0		      lda	ThrobColor+0
-     98  140c				   .SetCatThrobPF
-     99  140c		       85 c3		      sta	CatThrobPF
-    100  140e
-    101  140e		       85 02		      sta	WSYNC
-    102  1410
-      0  1410					      SLEEP	2
-      1  1410				   .CYCLES    SET	2
-      2  1410
-      3  1410				  -	      IF	.CYCLES < 2
-      4  1410				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  1410				  -	      ERR
-      6  1410					      ENDIF
-      7  1410
-      8  1410				  -	      IF	.CYCLES & 1
-      9  1410				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  1410				  -	      nop	0
-     11  1410				  -	      ELSE
-     12  1410				  -	      bit	VSYNC
-     13  1410				  -	      ENDIF
-     14  1410				  -.CYCLES    SET	.CYCLES - 3
-     15  1410					      ENDIF
-     16  1410
-     17  1410					      REPEAT	.CYCLES / 2
-     18  1410		       ea		      nop
-     19  1411					      REPEND
-    104  1411		       a9 90		      lda	#$90
-    105  1413		       85 20		      sta	HMP0
-    106  1415
-    107  1415		       a9 01		      lda	#PF_REFLECT	; 09
-    108  1417		       85 0a		      sta	CTRLPF	; 12
-    109  1419
-    110  1419		       a5 a1		      lda	Rainbow	; 15
-    111  141b		       85 0d		      sta	PF0	; 18
-    112  141d
-    113  141d		       a9 09		      lda	#COL_CAT_FACE	; 20
-    114  141f		       85 06		      sta	COLUP0	; 23
-    115  1421
-    116  1421		       a5 aa		      lda	FoodItemL+6	; 26
-    117  1423		       85 10		      sta	RESP0	; 29
-    118  1425		       29 f0		      and	#$F0	; 31
-    119  1427		       85 91		      sta	FoodGfxPtr1	; 34
-    120  1429		       aa		      tax		; 36
-    121  142a		       bd 0f 1d 	      lda	FoodGfx+15,x	; 40
-    122  142d		       85 c7		      sta	FoodColor1	; 43
-    123  142f
-    124  142f		       a5 b1		      lda	FoodItemR+6	; 46
-    125  1431		       29 f0		      and	#$F0	; 48
-    126  1433		       85 93		      sta	FoodGfxPtr2	; 51
-    127  1435		       aa		      tax		; 53
-    128  1436		       bd 0f 1d 	      lda	FoodGfx+15,x	; 57
-    129  1439		       85 c8		      sta	FoodColor2	; 60
-    130  143b
-    131  143b		       a5 b8		      lda	FoodPosX+6	; 63
-    132  143d		       85 c4		      sta	Temp	; 66
-    133  143f
-    134  143f		       a2 dd		      ldx	#GAMEPLAY_STACK	; 68
-    135  1441		       9a		      txs		; 70
-    136  1442
-    137  1442		       85 2a		      sta	HMOVE	; 73
-    138  1444
-    139  1444		       a5 c1		      lda	ThrobColor+1	; 03
-    140  1446		       85 09		      sta	COLUBK	; 06
-    141  1448		       85 08		      sta	COLUPF	; 09
-    142  144a
-    143  144a		       a9 80		      lda	#$80	; 11
-    144  144c		       85 20		      sta	HMP0	; 14
-    145  144e
-    146  144e		       a5 a3		      lda	PreCatRows
-    147  1450		       d0 03		      bne	HiRows
-    148  1452		       4c d4 14 	      jmp	CatRows
-    149  1455
-    150  1455							; If any part of the cat needs to be drawn in the top row,
-    151  1455							; skip straight to CatRows.
-    152  1455
-    153  1455
+     42  1392
+     43  1392
+     44  1392		       a9 00		      lda	#ONE_COPY
+     45  1394		       85 04		      sta	NUSIZ0
+     46  1396		       a9 04		      lda	#TWO_WIDE
+     47  1398		       85 05		      sta	NUSIZ1
+     48  139a
+     49  139a		       a9 06		      lda	#6
+     50  139c		       85 c6		      sta	CurrentRow
+     51  139e
+     52  139e		       85 02		      sta	WSYNC
+     53  13a0
+     54  13a0		       a5 87		      lda	ScoreColor
+     55  13a2		       85 09		      sta	COLUBK
+     56  13a4
+     57  13a4		       a2 dd		      ldx	#GAMEPLAY_STACK
+     58  13a6		       9a		      txs
+     59  13a7
+     60  13a7		       20 50 14 	      jsr	SetFoodPosition
+     61  13aa
+     62  13aa		       85 02		      sta	WSYNC
+     63  13ac
+     64  13ac		       4c 00 14 	      jmp	.Align1
+     65  13af
+     66  1400		       00 00 00 00*	      ALIGN	$100
+     67  1400
+     68  1400				   .Align1
+     69  1400
+     70  1400				   PreKernel
+     71  1400
+     72  1400		       85 02		      sta	WSYNC
+     73  1402
+     74  1402		       a5 f1		      lda	RamBowColors+19
+     75  1404		       d0 02		      bne	.SetCatThrobPF
+     76  1406		       a5 c0		      lda	ThrobColor+0
+     77  1408				   .SetCatThrobPF
+     78  1408		       85 c3		      sta	CatThrobPF
+     79  140a
+     80  140a		       85 02		      sta	WSYNC
+     81  140c
+      0  140c					      SLEEP	2
+      1  140c				   .CYCLES    SET	2
+      2  140c
+      3  140c				  -	      IF	.CYCLES < 2
+      4  140c				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  140c				  -	      ERR
+      6  140c					      ENDIF
+      7  140c
+      8  140c				  -	      IF	.CYCLES & 1
+      9  140c				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  140c				  -	      nop	0
+     11  140c				  -	      ELSE
+     12  140c				  -	      bit	VSYNC
+     13  140c				  -	      ENDIF
+     14  140c				  -.CYCLES    SET	.CYCLES - 3
+     15  140c					      ENDIF
+     16  140c
+     17  140c					      REPEAT	.CYCLES / 2
+     18  140c		       ea		      nop
+     19  140d					      REPEND
+     83  140d		       a9 90		      lda	#$90
+     84  140f		       85 20		      sta	HMP0
+     85  1411
+     86  1411		       a9 01		      lda	#PF_REFLECT	; 09
+     87  1413		       85 0a		      sta	CTRLPF	; 12
+     88  1415
+     89  1415		       a5 a1		      lda	Rainbow	; 15
+     90  1417		       85 0d		      sta	PF0	; 18
+     91  1419
+     92  1419		       a9 09		      lda	#COL_CAT_FACE	; 20
+     93  141b		       85 06		      sta	COLUP0	; 23
+     94  141d
+     95  141d		       a5 aa		      lda	FoodItemL+6	; 26
+     96  141f		       85 10		      sta	RESP0	; 29
+     97  1421		       29 f0		      and	#$F0	; 31
+     98  1423		       85 91		      sta	FoodGfxPtr1	; 34
+     99  1425		       aa		      tax		; 36
+    100  1426		       bd 0f 1d 	      lda	FoodGfx+15,x	; 40
+    101  1429		       85 c7		      sta	FoodColor1	; 43
+    102  142b
+    103  142b		       a5 b1		      lda	FoodItemR+6	; 46
+    104  142d		       29 f0		      and	#$F0	; 48
+    105  142f		       85 93		      sta	FoodGfxPtr2	; 51
+    106  1431		       aa		      tax		; 53
+    107  1432		       bd 0f 1d 	      lda	FoodGfx+15,x	; 57
+    108  1435		       85 c8		      sta	FoodColor2	; 60
+    109  1437
+    110  1437		       a5 b8		      lda	FoodPosX+6	; 63
+    111  1439		       85 c4		      sta	Temp	; 66
+    112  143b
+      0  143b					      SLEEP	4	; 70
+      1  143b				   .CYCLES    SET	4
+      2  143b
+      3  143b				  -	      IF	.CYCLES < 2
+      4  143b				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  143b				  -	      ERR
+      6  143b					      ENDIF
+      7  143b
+      8  143b				  -	      IF	.CYCLES & 1
+      9  143b				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  143b				  -	      nop	0
+     11  143b				  -	      ELSE
+     12  143b				  -	      bit	VSYNC
+     13  143b				  -	      ENDIF
+     14  143b				  -.CYCLES    SET	.CYCLES - 3
+     15  143b					      ENDIF
+     16  143b
+     17  143b					      REPEAT	.CYCLES / 2
+     18  143b		       ea		      nop
+     17  143b					      REPEND
+     18  143c		       ea		      nop
+     19  143d					      REPEND
+    114  143d
+    115  143d		       85 2a		      sta	HMOVE	; 73
+    116  143f
+    117  143f		       a5 c1		      lda	ThrobColor+1	; 03
+    118  1441		       85 09		      sta	COLUBK	; 06
+    119  1443		       85 08		      sta	COLUPF	; 09
+    120  1445
+    121  1445		       a9 80		      lda	#$80	; 11
+    122  1447		       85 20		      sta	HMP0	; 14
+    123  1449
+    124  1449		       a5 a3		      lda	PreCatRows
+    125  144b		       d0 22		      bne	HiRows
+    126  144d		       4c d4 14 	      jmp	CatRows
+    127  1450
+    128  1450							; If any part of the cat needs to be drawn in the top row,
+    129  1450							; skip straight to CatRows.
+    130  1450
+    131  1450
 ------- FILE code/Gameplay Kernel/HiRows.asm LEVEL 4 PASS 2
-      0  1455					      include	code/Gameplay Kernel/HiRows.asm
-      1  1455							; Draw all the rows above the cat's two rows
-      2  1455
-      3  1455				   HiRows     SUBROUTINE
-      4  1455
-      5  1455		       85 02		      sta	WSYNC
-      6  1457
-      7  1457		       a5 c0		      lda	ThrobColor+0
-      8  1459		       85 09		      sta	COLUBK
-      9  145b		       85 08		      sta	COLUPF
-     10  145d
-     11  145d
-     12  145d							; First, output a single-color line to draw the bottom of a "throb" line.
-     13  145d							; This will probably be a good time to prepare the pointers for the
-     14  145d							; food items' graphics, as well as loading the colors for the food items.
-     15  145d
-     16  145d							; After that, output 14 lines to draw a single row with food items,
-     17  145d							; but without drawing the cat. The food graphics will be updated every line,
-     18  145d							; but there will probably not be enough time to also update the food colors
-     19  145d							; every line throughout the kernel.
-     20  145d
-     21  145d		       20 00 18 	      jsr	DrawFoodRow
-     22  1460
-     23  1460		       c6 c6		      dec	CurrentRow	; 73
-     24  1462
-     25  1462		       85 02		      sta	WSYNC
-     26  1464
-     27  1464							; Lastly, output four single-color lines to draw most of a "throb" line,
-     28  1464							; while setting the position of player 1 to draw the next set of food items.
-     29  1464
-     30  1464
-     31  1464		       a5 c0		      lda	ThrobColor+0
-     32  1466		       85 09		      sta	COLUBK
-     33  1468		       85 08		      sta	COLUPF
-     34  146a		       a9 00		      lda	#0
-     35  146c		       85 1b		      sta	GRP0
-     36  146e		       85 1c		      sta	GRP1
-     37  1470		       85 02		      sta	WSYNC
-     38  1472
-     39  1472		       a5 c1		      lda	ThrobColor+1	; 03
-     40  1474		       85 09		      sta	COLUBK	; 06
-     41  1476		       85 08		      sta	COLUPF	; 09
-     42  1478
-     43  1478		       a4 c6		      ldy	CurrentRow	; 12 - get the row we are drawing
-     44  147a		       b9 b2 00 	      lda	FoodPosX,y	; 16 - get the food's position for this row
-     45  147d
-     46  147d		       38		      sec		; 18
-     47  147e				   .DivideLoop
-     48  147e		       e9 0f		      sbc	#15	; 20
-     49  1480		       b0 fc		      bcs	.DivideLoop	; 22
-     50  1482
-     51  1482		       8d 11 00 	      sta.w	RESP1	; 26
-     52  1485
-     53  1485		       49 07		      eor	#7
-     54  1487		       69 01		      adc	#1
-     55  1489		       0a		      asl
-     56  148a		       0a		      asl
-     57  148b		       0a		      asl
-     58  148c		       0a		      asl
-     59  148d		       85 21		      sta	HMP1
-     60  148f
-     61  148f		       85 02		      sta	WSYNC
-     62  1491
-     63  1491		       a5 c2		      lda	ThrobColor+2	; 03
-     64  1493		       85 09		      sta	COLUBK	; 06
-     65  1495		       85 08		      sta	COLUPF	; 09
-     66  1497
-     67  1497		       20 24 18 	      jsr	Sleep12
-     68  149a		       20 24 18 	      jsr	Sleep12
-     69  149d		       20 24 18 	      jsr	Sleep12
-     70  14a0		       20 24 18 	      jsr	Sleep12
-     71  14a3		       20 24 18 	      jsr	Sleep12	; 69
-     72  14a6
-     73  14a6		       8d 2a 00 	      sta.w	HMOVE	; 73
-     74  14a9
-     75  14a9		       85 02		      sta	WSYNC
-     76  14ab
-     77  14ab		       a5 c1		      lda	ThrobColor+1	; 03
-     78  14ad		       85 09		      sta	COLUBK	; 06
-     79  14af		       85 08		      sta	COLUPF	; 09
-     80  14b1
-     81  14b1		       b9 a4 00 	      lda	FoodItemL,y	; 13
-     82  14b4		       29 f0		      and	#$F0	; 15
-     83  14b6		       85 91		      sta	FoodGfxPtr1	; 18
-     84  14b8		       aa		      tax		; 20
-     85  14b9		       bd 0f 1d 	      lda	FoodGfx+15,x	; 24
-     86  14bc		       85 c7		      sta	FoodColor1	; 27
-     87  14be
-     88  14be		       b9 ab 00 	      lda	FoodItemR,y	; 31
-     89  14c1		       29 f0		      and	#$F0	; 33
-     90  14c3		       85 93		      sta	FoodGfxPtr2	; 36
-     91  14c5		       aa		      tax		; 38
-     92  14c6		       bd 0f 1d 	      lda	FoodGfx+15,x	; 42
-     93  14c9		       85 c8		      sta	FoodColor2	; 45
-     94  14cb
-     95  14cb		       b9 b2 00 	      lda	FoodPosX,y	; 49
-     96  14ce		       85 c4		      sta	Temp	; 52
-     97  14d0
-     98  14d0		       c6 a3		      dec	PreCatRows
-     99  14d2		       d0 81		      bne	HiRows
-    100  14d4
-    101  14d4							; If this is not the last row before drawing the cat's rows,
-    102  14d4							; loop back to HiRows to draw the next row.
+      0  1450					      include	code/Gameplay Kernel/HiRows.asm
+      1  1450							; Draw all the rows above the cat's two rows
+      2  1450
+------- FILE subroutines/SetFoodPosition.asm LEVEL 5 PASS 2
+      0  1450					      include	subroutines/SetFoodPosition.asm
+      1  1450				   SetFoodPosition
+      2  1450
+      3  1450		       85 02		      sta	WSYNC	; 00
+      4  1452
+      5  1452		       85 09		      sta	COLUBK	; 03
+      6  1454		       85 08		      sta	COLUPF	; 06
+      7  1456
+      0  1456					      SLEEP	4	; 10
+      1  1456				   .CYCLES    SET	4
+      2  1456
+      3  1456				  -	      IF	.CYCLES < 2
+      4  1456				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  1456				  -	      ERR
+      6  1456					      ENDIF
+      7  1456
+      8  1456				  -	      IF	.CYCLES & 1
+      9  1456				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  1456				  -	      nop	0
+     11  1456				  -	      ELSE
+     12  1456				  -	      bit	VSYNC
+     13  1456				  -	      ENDIF
+     14  1456				  -.CYCLES    SET	.CYCLES - 3
+     15  1456					      ENDIF
+     16  1456
+     17  1456					      REPEAT	.CYCLES / 2
+     18  1456		       ea		      nop
+     17  1456					      REPEND
+     18  1457		       ea		      nop
+     19  1458					      REPEND
+      9  1458
+     10  1458		       a4 c6		      ldy	CurrentRow	; 13
+     11  145a		       b9 b2 00 	      lda	FoodPosX,y	; 17
+     12  145d
+     13  145d		       38		      sec		; 19
+     14  145e				   .DivideLoop
+     15  145e		       e9 0f		      sbc	#15	; 21
+     16  1460		       b0 fc		      bcs	.DivideLoop	; 23
+     17  1462
+     18  1462		       85 11		      sta	RESP1	; 26
+     19  1464
+     20  1464		       49 07		      eor	#7
+     21  1466		       69 01		      adc	#1
+     22  1468		       0a		      asl
+     23  1469		       0a		      asl
+     24  146a		       0a		      asl
+     25  146b		       0a		      asl
+     26  146c		       85 21		      sta	HMP1	; 41/66
+     27  146e
+     28  146e		       60		      rts		; 47/72
+------- FILE code/Gameplay Kernel/HiRows.asm
+      4  146f
+      5  146f				   HiRows
+      6  146f					      SUBROUTINE
+      7  146f
+      8  146f		       85 02		      sta	WSYNC
+      9  1471
+     10  1471		       a5 c0		      lda	ThrobColor+0
+     11  1473		       85 09		      sta	COLUBK
+     12  1475		       85 08		      sta	COLUPF
+     13  1477
+     14  1477
+     15  1477							; First, output a single-color line to draw the bottom of a "throb" line.
+     16  1477							; This will probably be a good time to prepare the pointers for the
+     17  1477							; food items' graphics, as well as loading the colors for the food items.
+     18  1477
+     19  1477							; After that, output 14 lines to draw a single row with food items,
+     20  1477							; but without drawing the cat. The food graphics will be updated every line,
+     21  1477							; but there will probably not be enough time to also update the food colors
+     22  1477							; every line throughout the kernel.
+     23  1477
+     24  1477		       20 00 18 	      jsr	DrawFoodRow
+     25  147a
+     26  147a		       c6 c6		      dec	CurrentRow	; 73
+     27  147c
+     28  147c		       85 02		      sta	WSYNC
+     29  147e
+     30  147e							; Lastly, output four single-color lines to draw most of a "throb" line,
+     31  147e							; while setting the position of player 1 to draw the next set of food items.
+     32  147e
+     33  147e
+     34  147e		       a5 c0		      lda	ThrobColor+0
+     35  1480		       85 09		      sta	COLUBK
+     36  1482		       85 08		      sta	COLUPF
+     37  1484		       a9 00		      lda	#0
+     38  1486		       85 1b		      sta	GRP0
+     39  1488		       85 1c		      sta	GRP1
+     40  148a
+     41  148a		       a5 c1		      lda	ThrobColor+1
+     42  148c
+     43  148c		       20 50 14 	      jsr	SetFoodPosition
+     44  148f
+     45  148f		       85 02		      sta	WSYNC
+     46  1491
+     47  1491		       a5 c2		      lda	ThrobColor+2	; 03
+     48  1493		       85 09		      sta	COLUBK	; 06
+     49  1495		       85 08		      sta	COLUPF	; 09
+     50  1497
+     51  1497		       20 24 18 	      jsr	Sleep12
+     52  149a		       20 24 18 	      jsr	Sleep12
+     53  149d		       20 24 18 	      jsr	Sleep12
+     54  14a0		       20 24 18 	      jsr	Sleep12
+     55  14a3		       20 24 18 	      jsr	Sleep12	; 69
+     56  14a6
+     57  14a6		       8d 2a 00 	      sta.w	HMOVE	; 73
+     58  14a9
+     59  14a9		       85 02		      sta	WSYNC
+     60  14ab
+     61  14ab		       a5 c1		      lda	ThrobColor+1	; 03
+     62  14ad		       85 09		      sta	COLUBK	; 06
+     63  14af		       85 08		      sta	COLUPF	; 09
+     64  14b1
+     65  14b1		       b9 a4 00 	      lda	FoodItemL,y	; 13
+     66  14b4		       29 f0		      and	#$F0	; 15
+     67  14b6		       85 91		      sta	FoodGfxPtr1	; 18
+     68  14b8		       aa		      tax		; 20
+     69  14b9		       bd 0f 1d 	      lda	FoodGfx+15,x	; 24
+     70  14bc		       85 c7		      sta	FoodColor1	; 27
+     71  14be
+     72  14be		       b9 ab 00 	      lda	FoodItemR,y	; 31
+     73  14c1		       29 f0		      and	#$F0	; 33
+     74  14c3		       85 93		      sta	FoodGfxPtr2	; 36
+     75  14c5		       aa		      tax		; 38
+     76  14c6		       bd 0f 1d 	      lda	FoodGfx+15,x	; 42
+     77  14c9		       85 c8		      sta	FoodColor2	; 45
+     78  14cb
+     79  14cb		       b9 b2 00 	      lda	FoodPosX,y	; 49
+     80  14ce		       85 c4		      sta	Temp	; 52
+     81  14d0
+     82  14d0		       c6 a3		      dec	PreCatRows
+     83  14d2		       d0 9b		      bne	HiRows
+     84  14d4
+     85  14d4							; If this is not the last row before drawing the cat's rows,
+     86  14d4							; loop back to HiRows to draw the next row.
 ------- FILE code/Gameplay Kernel/GameplayKernel.asm
 ------- FILE code/Gameplay Kernel/CatRows.asm LEVEL 4 PASS 2
       0  14d4					      include	code/Gameplay Kernel/CatRows.asm
       1  14d4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
       2  14d4							; Cat Row Kernel
       3  14d4							;
-      4  14d4							; This is the subroutine that is used to draw the two gameplay kernel rows
-      5  14d4							; containing the cat. It does not draw the throbbing line between the two rows,
-      6  14d4							; it only draws a single, 14-scanline row with the cat and food items.
-      7  14d4							; This subroutine is called twice in the kernel, once for each of the two rows
-      8  14d4							; containing the cat.
-      9  14d4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     10  14d4
-     11  14d4				   CatRows    SUBROUTINE
-     12  14d4
-     13  14d4		       85 02		      sta	WSYNC
-     14  14d6
-     15  14d6							; Output a line to finish the bottom of a "throb" line, like in HiRows.
-     16  14d6							; If the cat is at the very top of the row, draw the top of the pop-tart.
-     17  14d6
-     18  14d6		       a5 c0		      lda	ThrobColor+0	; 03
-     19  14d8		       85 09		      sta	COLUBK	; 06
-     20  14da		       85 08		      sta	COLUPF	; 09
-     21  14dc
-     22  14dc		       a6 c8		      ldx	FoodColor2	; 12
-     23  14de		       9a		      txs		; 14
-     24  14df
+      4  14d4							; This is the kernel that is used to draw the two rows containing the cat.
+      5  14d4							; It also draw the throbbing line between the cat's rows.
+      6  14d4							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      7  14d4
+      8  14d4				   CatRows
+      9  14d4
+     10  14d4					      SUBROUTINE
+     11  14d4
+     12  14d4		       85 02		      sta	WSYNC
+     13  14d6
+     14  14d6							; Output a line to finish the bottom of a "throb" line, like in HiRows.
+     15  14d6
+     16  14d6		       a5 c0		      lda	ThrobColor+0	; 03
+     17  14d8		       85 09		      sta	COLUBK	; 06
+     18  14da		       85 08		      sta	COLUPF	; 09
+     19  14dc
+     20  14dc		       a6 c8		      ldx	FoodColor2	; 12
+     21  14de		       9a		      txs		; 14
+     22  14df
       0  14df					      SLEEP	19	; 41
       1  14df				   .CYCLES    SET	19
       2  14df
@@ -1945,89 +1938,89 @@
      17  14e7					      REPEND
      18  14e8		       ea		      nop
      19  14e9					      REPEND
+     24  14e9
+     25  14e9					      SUBROUTINE
      26  14e9
-     27  14e9					      SUBROUTINE
-     28  14e9
-     29  14e9		       a4 c6		      ldy	CurrentRow	; 47
-     30  14eb		       b9 b2 00 	      lda	FoodPosX,y	; 51
-     31  14ee
-     32  14ee		       4c 00 15 	      jmp	.Align2	; 44
-     33  1500		       00 00 00 00*	      ALIGN	$100
-     34  1500				   .Align2
-     35  1500
-     36  1500		       c9 30		      cmp	#48	; 53
-     37  1502
-     38  1502		       a2 00		      ldx	#0	; 55
-     39  1504		       a0 0d		      ldy	#13	; 57
-     40  1506
-     41  1506		       b1 95		      lda	(TartGfxPtr1),y	;
-     42  1508		       85 0e		      sta	PF1	;
-     43  150a
-     44  150a							; Then output the 14 lines to draw a single row. This will include drawing
-     45  150a							; the rainbow, the pop-tart, the head and face or paws, and the food items.
-     46  150a							; All graphics will be updated every line.
-     47  150a
-     48  150a		       b0 0b		      bcs	.RightEntrance	; 60/59
-     49  150c		       90 42		      bcc	.LeftEntrance	; 62
+     27  14e9		       a4 c6		      ldy	CurrentRow	; 47
+     28  14eb		       b9 b2 00 	      lda	FoodPosX,y	; 51
+     29  14ee
+     30  14ee		       4c 00 15 	      jmp	.Align2	; 44
+     31  1500		       00 00 00 00*	      ALIGN	$100
+     32  1500				   .Align2
+     33  1500
+     34  1500		       c9 30		      cmp	#48	; 53
+     35  1502
+     36  1502		       a2 00		      ldx	#0	; 55
+     37  1504		       a0 0d		      ldy	#13	; 57
+     38  1506
+     39  1506		       b1 95		      lda	(TartGfxPtr1),y	;
+     40  1508		       85 0e		      sta	PF1	;
+     41  150a
+     42  150a							; Then output the 14 lines to draw a single row. This will include drawing
+     43  150a							; the rainbow, the pop-tart, the head and face or paws, and the food items.
+     44  150a							; All graphics will be updated every line.
+     45  150a
+     46  150a		       b0 0b		      bcs	.RightEntrance	; 60/59
+     47  150c		       90 42		      bcc	.LeftEntrance	; 62
+     48  150e
+     49  150e							; 14 bytes into the page
      50  150e
-     51  150e							; 14 bytes into the page
-     52  150e
+     51  150e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     52  150e							; Kernel used when food items are closer to the right edge of the screen
      53  150e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     54  150e							; Kernel used when food items are closer to the right edge of the screen
-     55  150e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     54  150e
+     55  150e				   .RightLoop
      56  150e
-     57  150e				   .RightLoop
-     58  150e
-     59  150e							; 8 cycles
-     60  150e		       b1 97		      lda	(CatGfxPtr1),y	; 49 - set cat's head gfx
-     61  1510		       85 1b		      sta	GRP0	; 52
-     62  1512
-     63  1512							; 9 cycles
-     64  1512		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
-     65  1514		       ba		      tsx		; 57 - load 2nd food item's color
-     66  1515		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
+     57  150e							; 8 cycles
+     58  150e		       b1 97		      lda	(CatGfxPtr1),y	; 49 - set cat's head gfx
+     59  1510		       85 1b		      sta	GRP0	; 52
+     60  1512
+     61  1512							; 9 cycles
+     62  1512		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
+     63  1514		       ba		      tsx		; 57 - load 2nd food item's color
+     64  1515		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
+     65  1517
+     66  1517				   .RightEntrance		; enter loop here
      67  1517
-     68  1517				   .RightEntrance		; enter loop here
-     69  1517
-     70  1517							; 2 cycles
-     71  1517		       a2 00		      ldx	#0	; 62 - X register must be set to 0 (black)
-     72  1519
-     73  1519							; 8 cycles
-     74  1519		       b1 95		      lda	(TartGfxPtr1),y	; 67 - load cat's tart gfx
-     75  151b		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
-     76  151d
-     77  151d							; 8 cycles
-     78  151d		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - set 1st food item's gfx
-     79  151f		       85 1c		      sta	GRP1	; 02
-     80  1521
-     81  1521							; 7 cycles
-     82  1521		       b9 f1 00 	      lda	RamBowColors+19,y	; 06 - set playfield's rainbow color
-     83  1524		       85 09		      sta	COLUBK	; 09
-     84  1526
-     85  1526							; 7 cycles
-     86  1526		       b9 f2 00 	      lda	RamBowColors+20,y	; 13 - set background's rainbow color
-     87  1529		       85 08		      sta	COLUPF	; 16
-     88  152b
-     89  152b							; 6 cycles
-     90  152b		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
-     91  152d		       85 07		      sta	COLUP1	; 22
-     92  152f
-     93  152f							; 8 cycles
-     94  152f		       a5 89		      lda	CatTartColor	; 25
-     95  1531		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
-     96  1533		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
-     97  1535		       86 08		      stx	COLUPF	; 34 - don't draw rainbow/tart on right side
-     98  1537
-     99  1537							; 5 cycles
-    100  1537		       b3 93		      lax	(FoodGfxPtr2),y	; 39 - load 2nd food item's gfx before dey
-    101  1539
-    102  1539							; 2 cycles
-    103  1539		       88		      dey		; 41
-    104  153a		       10 d2		      bpl	.RightLoop	; 44/43
-    105  153c
-    106  153c		       a0 12		      ldy	#18	; 45
-    107  153e		       b1 99		      lda	(TartGfxPtr2),y	; 50
-    108  1540
+     68  1517							; 2 cycles
+     69  1517		       a2 00		      ldx	#0	; 62 - X register must be set to 0 (black)
+     70  1519
+     71  1519							; 8 cycles
+     72  1519		       b1 95		      lda	(TartGfxPtr1),y	; 67 - load cat's tart gfx
+     73  151b		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
+     74  151d
+     75  151d							; 8 cycles
+     76  151d		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - set 1st food item's gfx
+     77  151f		       85 1c		      sta	GRP1	; 02
+     78  1521
+     79  1521							; 7 cycles
+     80  1521		       b9 f1 00 	      lda	RamBowColors+19,y	; 06 - set playfield's rainbow color
+     81  1524		       85 09		      sta	COLUBK	; 09
+     82  1526
+     83  1526							; 7 cycles
+     84  1526		       b9 f2 00 	      lda	RamBowColors+20,y	; 13 - set background's rainbow color
+     85  1529		       85 08		      sta	COLUPF	; 16
+     86  152b
+     87  152b							; 6 cycles
+     88  152b		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
+     89  152d		       85 07		      sta	COLUP1	; 22
+     90  152f
+     91  152f							; 8 cycles
+     92  152f		       a5 89		      lda	CatTartColor	; 25
+     93  1531		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
+     94  1533		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
+     95  1535		       86 08		      stx	COLUPF	; 34 - don't draw rainbow/tart on right side
+     96  1537
+     97  1537							; 5 cycles
+     98  1537		       b3 93		      lax	(FoodGfxPtr2),y	; 39 - load 2nd food item's gfx before dey
+     99  1539
+    100  1539							; 2 cycles
+    101  1539		       88		      dey		; 41
+    102  153a		       10 d2		      bpl	.RightLoop	; 44/43
+    103  153c
+    104  153c		       a0 12		      ldy	#18	; 45
+    105  153e		       b1 99		      lda	(TartGfxPtr2),y	; 50
+    106  1540
       0  1540					      SLEEP	2	; 52
       1  1540				   .CYCLES    SET	2
       2  1540
@@ -2048,99 +2041,99 @@
      17  1540					      REPEAT	.CYCLES / 2
      18  1540		       ea		      nop
      19  1541					      REPEND
-    110  1541
-    111  1541		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
-    112  1543		       ba		      tsx		; 57 - load 2nd food item's color
-    113  1544		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
-    114  1546
-    115  1546		       b0 38		      bcs	.End	; 63
-    116  1548
+    108  1541
+    109  1541		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
+    110  1543		       ba		      tsx		; 57 - load 2nd food item's color
+    111  1544		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
+    112  1546
+    113  1546		       b0 38		      bcs	.End	; 63
+    114  1548
+    115  1548							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    116  1548							; Kernel used when food items are closer to the left edge of the screen
     117  1548							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    118  1548							; Kernel used when food items are closer to the left edge of the screen
-    119  1548							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    118  1548
+    119  1548				   .LeftLoop
     120  1548
-    121  1548				   .LeftLoop
-    122  1548
-    123  1548							; 8 cycles
-    124  1548		       b1 97		      lda	(CatGfxPtr1),y	; 54 - set cat's head gfx
-    125  154a		       85 1b		      sta	GRP0	; 57
-    126  154c
-    127  154c							; 5 cycles
-    128  154c		       a2 00		      ldx	#0	; 59 - X must be set to 0 (black)
-    129  154e		       86 08		      stx	COLUPF	; 62 - don't draw rainbow/tart on right side
+    121  1548							; 8 cycles
+    122  1548		       b1 97		      lda	(CatGfxPtr1),y	; 54 - set cat's head gfx
+    123  154a		       85 1b		      sta	GRP0	; 57
+    124  154c
+    125  154c							; 5 cycles
+    126  154c		       a2 00		      ldx	#0	; 59 - X must be set to 0 (black)
+    127  154e		       86 08		      stx	COLUPF	; 62 - don't draw rainbow/tart on right side
+    128  1550
+    129  1550				   .LeftEntrance		; enter loop here
     130  1550
-    131  1550				   .LeftEntrance		; enter loop here
-    132  1550
-    133  1550							; 8 cycles
-    134  1550		       b1 95		      lda	(TartGfxPtr1),y	; 67 - load cat's tart gfx
-    135  1552		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
-    136  1554
-    137  1554							; 8 cycles
-    138  1554		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - load 1st food item's gfx
-    139  1556		       85 1c		      sta	GRP1	; 02 - set 1st food item's gfx
-    140  1558
-    141  1558							; 7 cycles
-    142  1558		       b9 f1 00 	      lda	RamBowColors+19,y	; 06 - set rainbow colors
-    143  155b		       85 09		      sta	COLUBK	; 09
-    144  155d
-    145  155d							; 7 cycles
-    146  155d		       b9 f2 00 	      lda	RamBowColors+20,y	; 13
-    147  1560		       85 08		      sta	COLUPF	; 16
-    148  1562
-    149  1562							; 6 cycles
-    150  1562		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
-    151  1564		       85 07		      sta	COLUP1	; 22
-    152  1566
-    153  1566							; 8 cycles
-    154  1566		       a5 89		      lda	CatTartColor	; 25
-    155  1568		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
-    156  156a		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
-    157  156c
-    158  156c							; 13 cycles
-    159  156c		       b1 93		      lda	(FoodGfxPtr2),y	; 36 - load 2nd food item's gfx
-    160  156e		       ba		      tsx		; 38 - load 2nd food item's color
-    161  156f		       85 1c		      sta	GRP1	; 41 - MUST set 2nd food item's gfx at cycle 41
-    162  1571		       86 07		      stx	COLUP1	; 44 - MUST set 2nd food item's color at cycle 44
-    163  1573
-    164  1573							; 5 cycles
-    165  1573		       88		      dey		; 46
-    166  1574		       10 d2		      bpl	.LeftLoop	; 49/48
-    167  1576
-    168  1576		       a2 00		      ldx	#0	; 50
-    169  1578		       86 08		      stx	COLUPF	; 53
-    170  157a
-    171  157a		       a0 12		      ldy	#18	; 55
-    172  157c		       b1 99		      lda	(TartGfxPtr2),y	; 60
-    173  157e
-    174  157e		       86 1c		      stx	GRP1	; 63
+    131  1550							; 8 cycles
+    132  1550		       b1 95		      lda	(TartGfxPtr1),y	; 67 - load cat's tart gfx
+    133  1552		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
+    134  1554
+    135  1554							; 8 cycles
+    136  1554		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - load 1st food item's gfx
+    137  1556		       85 1c		      sta	GRP1	; 02 - set 1st food item's gfx
+    138  1558
+    139  1558							; 7 cycles
+    140  1558		       b9 f1 00 	      lda	RamBowColors+19,y	; 06 - set rainbow colors
+    141  155b		       85 09		      sta	COLUBK	; 09
+    142  155d
+    143  155d							; 7 cycles
+    144  155d		       b9 f2 00 	      lda	RamBowColors+20,y	; 13
+    145  1560		       85 08		      sta	COLUPF	; 16
+    146  1562
+    147  1562							; 6 cycles
+    148  1562		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
+    149  1564		       85 07		      sta	COLUP1	; 22
+    150  1566
+    151  1566							; 8 cycles
+    152  1566		       a5 89		      lda	CatTartColor	; 25
+    153  1568		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
+    154  156a		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
+    155  156c
+    156  156c							; 13 cycles
+    157  156c		       b1 93		      lda	(FoodGfxPtr2),y	; 36 - load 2nd food item's gfx
+    158  156e		       ba		      tsx		; 38 - load 2nd food item's color
+    159  156f		       85 1c		      sta	GRP1	; 41 - MUST set 2nd food item's gfx at cycle 41
+    160  1571		       86 07		      stx	COLUP1	; 44 - MUST set 2nd food item's color at cycle 44
+    161  1573
+    162  1573							; 5 cycles
+    163  1573		       88		      dey		; 46
+    164  1574		       10 d2		      bpl	.LeftLoop	; 49/48
+    165  1576
+    166  1576		       a2 00		      ldx	#0	; 50
+    167  1578		       86 08		      stx	COLUPF	; 53
+    168  157a
+    169  157a		       a0 12		      ldy	#18	; 55
+    170  157c		       b1 99		      lda	(TartGfxPtr2),y	; 60
+    171  157e
+    172  157e		       86 1c		      stx	GRP1	; 63
+    173  1580
+    174  1580				   .End
     175  1580
-    176  1580				   .End
+    176  1580
     177  1580
-    178  1580
-    179  1580
-    180  1580							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    181  1580							; Then output the 5 lines to draw a "throb" line, but also draw the entire
-    182  1580							; cat with the rainbow. In order to align player 1 for the next row's
-    183  1580							; food items, it will be neccesary to have three versions of this kernel,
-    184  1580							; one for each of the three 60-color-clock spaced positions to reset.
-    185  1580							; HMOVE will be written to on the first four scanlines. With a maximum
-    186  1580							; movement of 15 color-clocks per scanline, this will allow a movement of
-    187  1580							; up to 60 color clocks. With three versions of the kernel, it should be
-    188  1580							; possible to put player 1 anywhere on the screen.
-    189  1580							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    178  1580							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    179  1580							; Then output the 5 lines to draw a "throb" line, but also draw the entire
+    180  1580							; cat with the rainbow. In order to align player 1 for the next row's
+    181  1580							; food items, it will be neccesary to have three versions of this kernel,
+    182  1580							; one for each of the three 60-color-clock spaced positions to reset.
+    183  1580							; HMOVE will be written to on the first four scanlines. With a maximum
+    184  1580							; movement of 15 color-clocks per scanline, this will allow a movement of
+    185  1580							; up to 60 color clocks. With three versions of the kernel, it should be
+    186  1580							; possible to put player 1 anywhere on the screen.
+    187  1580							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    188  1580
+    189  1580
     190  1580
-    191  1580
-    192  1580
-    193  1580							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    194  1580							; Draw throb line #1
-    195  1580
-    196  1580		       85 0e		      sta	PF1	; 66
-    197  1582
-    198  1582		       b1 9b		      lda	(CatGfxPtr2),y	; 71
-    199  1584		       85 1b		      sta	GRP0	; 74
-    200  1586
-    201  1586		       a6 c0		      ldx	ThrobColor+0	; 01
-    202  1588
+    191  1580							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    192  1580							; Draw throb line #1
+    193  1580
+    194  1580		       85 0e		      sta	PF1	; 66
+    195  1582
+    196  1582		       b1 9b		      lda	(CatGfxPtr2),y	; 71
+    197  1584		       85 1b		      sta	GRP0	; 74
+    198  1586
+    199  1586		       a6 c0		      ldx	ThrobColor+0	; 01
+    200  1588
       0  1588					      THROB_RAINBOW_BK	18	; 12
       1  1588					      SUBROUTINE
       2  1588				   .X	      SET	18
@@ -2156,34 +2149,34 @@
      12  1592		       ea		      nop
      13  1593
      14  1593				   .End
-    204  1593
-    205  1593		       a5 c3		      lda	CatThrobPF	; 15
-    206  1595		       85 08		      sta	COLUPF	; 18
-    207  1597		       8e 07 00 	      stx.w	COLUP1	; 22
-    208  159a
-    209  159a		       a5 89		      lda	CatTartColor	; 25
-    210  159c		       85 08		      sta	COLUPF	; 28
-    211  159e		       86 09		      stx	COLUBK	; 31
-    212  15a0
-    213  15a0		       88		      dey		; 33
-    214  15a1		       85 11		      sta	RESP1	; 36
-    215  15a3		       86 08		      stx	COLUPF	; 39
-    216  15a5
-    217  15a5		       b1 9b		      lda	(CatGfxPtr2),y	; 44
-    218  15a7		       85 1b		      sta	GRP0	; 47
-    219  15a9
-    220  15a9		       b1 99		      lda	(TartGfxPtr2),y	; 52
-    221  15ab		       85 0e		      sta	PF1	; 55
-    222  15ad
-    223  15ad		       c6 c6		      dec	CurrentRow	; 60
-    224  15af		       a2 00		      ldx	#0	; 62
-    225  15b1		       86 1c		      stx	GRP1	; 65
-    226  15b3
-    227  15b3							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    228  15b3							; Draw throb line #2
-    229  15b3
-    230  15b3		       a5 bb		      lda	CatRowHmove+2	; 68
-    231  15b5		       85 21		      sta	HMP1	; 71
+    202  1593
+    203  1593		       a5 c3		      lda	CatThrobPF	; 15
+    204  1595		       85 08		      sta	COLUPF	; 18
+    205  1597		       8e 07 00 	      stx.w	COLUP1	; 22
+    206  159a
+    207  159a		       a5 89		      lda	CatTartColor	; 25
+    208  159c		       85 08		      sta	COLUPF	; 28
+    209  159e		       86 09		      stx	COLUBK	; 31
+    210  15a0
+    211  15a0		       88		      dey		; 33
+    212  15a1		       85 11		      sta	RESP1	; 36
+    213  15a3		       86 08		      stx	COLUPF	; 39
+    214  15a5
+    215  15a5		       b1 9b		      lda	(CatGfxPtr2),y	; 44
+    216  15a7		       85 1b		      sta	GRP0	; 47
+    217  15a9
+    218  15a9		       b1 99		      lda	(TartGfxPtr2),y	; 52
+    219  15ab		       85 0e		      sta	PF1	; 55
+    220  15ad
+    221  15ad		       c6 c6		      dec	CurrentRow	; 60
+    222  15af		       a2 00		      ldx	#0	; 62
+    223  15b1		       86 1c		      stx	GRP1	; 65
+    224  15b3
+    225  15b3							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    226  15b3							; Draw throb line #2
+    227  15b3
+    228  15b3		       a5 bb		      lda	CatRowHmove+2	; 68
+    229  15b5		       85 21		      sta	HMP1	; 71
       0  15b7					      SLEEP	2	; 73
       1  15b7				   .CYCLES    SET	2
       2  15b7
@@ -2204,8 +2197,8 @@
      17  15b7					      REPEAT	.CYCLES / 2
      18  15b7		       ea		      nop
      19  15b8					      REPEND
-    233  15b8
-    234  15b8		       a6 c1		      ldx	ThrobColor+1	; 00
+    231  15b8
+    232  15b8		       a6 c1		      ldx	ThrobColor+1	; 00
       0  15ba					      THROB_RAINBOW_BK	17	; 11
       1  15ba					      SUBROUTINE
       2  15ba				   .X	      SET	17
@@ -2236,30 +2229,30 @@
      12  15cf		       ea		      nop
      13  15d0
      14  15d0				   .End
-    237  15d0
-    238  15d0		       a5 89		      lda	CatTartColor	; 25
-    239  15d2		       85 08		      sta	COLUPF	; 28
-    240  15d4		       86 09		      stx	COLUBK	; 31
-    241  15d6		       86 08		      stx	COLUPF	; 34
-    242  15d8
-    243  15d8		       88		      dey		; 36
-    244  15d9
-    245  15d9		       a6 c6		      ldx	CurrentRow	; 39
-    246  15db		       b5 b2		      lda	FoodPosX,x	; 43
-    247  15dd		       c9 2d		      cmp	#45	; 45
-    248  15df		       10 01		      bpl	.RightSide	; 48/47
+    235  15d0
+    236  15d0		       a5 89		      lda	CatTartColor	; 25
+    237  15d2		       85 08		      sta	COLUPF	; 28
+    238  15d4		       86 09		      stx	COLUBK	; 31
+    239  15d6		       86 08		      stx	COLUPF	; 34
+    240  15d8
+    241  15d8		       88		      dey		; 36
+    242  15d9
+    243  15d9		       a6 c6		      ldx	CurrentRow	; 39
+    244  15db		       b5 b2		      lda	FoodPosX,x	; 43
+    245  15dd		       c9 2d		      cmp	#45	; 45
+    246  15df		       10 01		      bpl	.RightSide	; 48/47
       0  15e1					      SKIP_WORD		; 51
       1  15e1
       2  15e1		       0c		      HEX	0C
       3  15e2
-    250  15e2				   .RightSide
-    251  15e2		       85 11		      sta	RESP1	; 51
-    252  15e4
-    253  15e4		       b1 9b		      lda	(CatGfxPtr2),y	; 56
-    254  15e6		       85 1b		      sta	GRP0	; 59
-    255  15e8
-    256  15e8		       b1 99		      lda	(TartGfxPtr2),y	; 64
-    257  15ea		       85 0e		      sta	PF1	; 67
+    248  15e2				   .RightSide
+    249  15e2		       85 11		      sta	RESP1	; 51
+    250  15e4
+    251  15e4		       b1 9b		      lda	(CatGfxPtr2),y	; 56
+    252  15e6		       85 1b		      sta	GRP0	; 59
+    253  15e8
+    254  15e8		       b1 99		      lda	(TartGfxPtr2),y	; 64
+    255  15ea		       85 0e		      sta	PF1	; 67
       0  15ec					      SLEEP	3	; 70
       1  15ec				   .CYCLES    SET	3
       2  15ec
@@ -2280,12 +2273,12 @@
      17  15ee				  -	      REPEAT	.CYCLES / 2
      18  15ee				  -	      nop
      19  15ee					      REPEND
-    259  15ee		       85 2a		      sta	HMOVE	; 73
-    260  15f0
-    261  15f0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    262  15f0							; Draw throb line #3
-    263  15f0
-    264  15f0		       a6 c2		      ldx	ThrobColor+2	; 00
+    257  15ee		       85 2a		      sta	HMOVE	; 73
+    258  15f0
+    259  15f0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    260  15f0							; Draw throb line #3
+    261  15f0
+    262  15f0		       a6 c2		      ldx	ThrobColor+2	; 00
       0  15f2					      THROB_RAINBOW_BK	16	; 11
       1  15f2					      SUBROUTINE
       2  15f2				   .X	      SET	16
@@ -2316,34 +2309,34 @@
      12  1607		       ea		      nop
      13  1608
      14  1608				   .End
-    267  1608
-    268  1608		       a5 89		      lda	CatTartColor	; 25
-    269  160a		       85 08		      sta	COLUPF	; 28
-    270  160c		       86 09		      stx	COLUBK	; 31
-    271  160e		       86 08		      stx	COLUPF	; 34
-    272  1610
-    273  1610		       88		      dey		; 36
-    274  1611
-    275  1611		       b1 9b		      lda	(CatGfxPtr2),y	; 41
-    276  1613		       85 1b		      sta	GRP0	; 44
-    277  1615
-    278  1615		       b1 99		      lda	(TartGfxPtr2),y	; 49
-    279  1617		       85 0e		      sta	PF1	; 52
-    280  1619
-    281  1619		       a5 bc		      lda	CatRow2FoodL	; 55
-    282  161b		       85 91		      sta	FoodGfxPtr1	; 58
-    283  161d		       a5 bd		      lda	CatRow2FoodR	; 61
-    284  161f		       85 93		      sta	FoodGfxPtr2	; 64
-    285  1621
-    286  1621		       a5 ba		      lda	CatRowHmove+1	; 67
-    287  1623		       85 21		      sta	HMP1	; 70
-    288  1625
-    289  1625		       85 2a		      sta	HMOVE	; 73
-    290  1627
-    291  1627							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    292  1627							; Draw throb line #4
-    293  1627
-    294  1627		       a6 c1		      ldx	ThrobColor+1	; 00
+    265  1608
+    266  1608		       a5 89		      lda	CatTartColor	; 25
+    267  160a		       85 08		      sta	COLUPF	; 28
+    268  160c		       86 09		      stx	COLUBK	; 31
+    269  160e		       86 08		      stx	COLUPF	; 34
+    270  1610
+    271  1610		       88		      dey		; 36
+    272  1611
+    273  1611		       b1 9b		      lda	(CatGfxPtr2),y	; 41
+    274  1613		       85 1b		      sta	GRP0	; 44
+    275  1615
+    276  1615		       b1 99		      lda	(TartGfxPtr2),y	; 49
+    277  1617		       85 0e		      sta	PF1	; 52
+    278  1619
+    279  1619		       a5 bc		      lda	CatRow2FoodL	; 55
+    280  161b		       85 91		      sta	FoodGfxPtr1	; 58
+    281  161d		       a5 bd		      lda	CatRow2FoodR	; 61
+    282  161f		       85 93		      sta	FoodGfxPtr2	; 64
+    283  1621
+    284  1621		       a5 ba		      lda	CatRowHmove+1	; 67
+    285  1623		       85 21		      sta	HMP1	; 70
+    286  1625
+    287  1625		       85 2a		      sta	HMOVE	; 73
+    288  1627
+    289  1627							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    290  1627							; Draw throb line #4
+    291  1627
+    292  1627		       a6 c1		      ldx	ThrobColor+1	; 00
       0  1629					      THROB_RAINBOW_BK	15	; 11
       1  1629					      SUBROUTINE
       2  1629				   .X	      SET	15
@@ -2374,36 +2367,36 @@
      12  163e		       ea		      nop
      13  163f
      14  163f				   .End
-    297  163f
-    298  163f		       a5 89		      lda	CatTartColor	; 25
-    299  1641		       85 08		      sta	COLUPF	; 28
-    300  1643		       86 09		      stx	COLUBK	; 31
-    301  1645		       86 08		      stx	COLUPF	; 34
-    302  1647
-    303  1647		       88		      dey		; 36
-    304  1648
-    305  1648		       b1 9b		      lda	(CatGfxPtr2),y	; 41
-    306  164a		       85 1b		      sta	GRP0	; 44
-    307  164c
-    308  164c		       b1 99		      lda	(TartGfxPtr2),y	; 49
-    309  164e		       85 0e		      sta	PF1	; 52
-    310  1650
-    311  1650		       a5 be		      lda	CatRow2Color1	; 55
-    312  1652		       85 c7		      sta	FoodColor1	; 58
-    313  1654		       ae bf 00 	      ldx.w	CatRow2Color2	; 55
-    314  1657		       9a		      txs		; 58
-    315  1658
-    316  1658		       a5 b9		      lda	CatRowHmove+0	; 67
-    317  165a		       85 21		      sta	HMP1	; 70
-    318  165c
-    319  165c		       85 2a		      sta	HMOVE	; 73
-    320  165e
-    321  165e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    322  165e							; Draw throb line #5
+    295  163f
+    296  163f		       a5 89		      lda	CatTartColor	; 25
+    297  1641		       85 08		      sta	COLUPF	; 28
+    298  1643		       86 09		      stx	COLUBK	; 31
+    299  1645		       86 08		      stx	COLUPF	; 34
+    300  1647
+    301  1647		       88		      dey		; 36
+    302  1648
+    303  1648		       b1 9b		      lda	(CatGfxPtr2),y	; 41
+    304  164a		       85 1b		      sta	GRP0	; 44
+    305  164c
+    306  164c		       b1 99		      lda	(TartGfxPtr2),y	; 49
+    307  164e		       85 0e		      sta	PF1	; 52
+    308  1650
+    309  1650		       a5 be		      lda	CatRow2Color1	; 55
+    310  1652		       85 c7		      sta	FoodColor1	; 58
+    311  1654		       ae bf 00 	      ldx.w	CatRow2Color2	; 55
+    312  1657		       9a		      txs		; 58
+    313  1658
+    314  1658		       a5 b9		      lda	CatRowHmove+0	; 67
+    315  165a		       85 21		      sta	HMP1	; 70
+    316  165c
+    317  165c		       85 2a		      sta	HMOVE	; 73
+    318  165e
+    319  165e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    320  165e							; Draw throb line #5
+    321  165e
+    322  165e					      SUBROUTINE
     323  165e
-    324  165e					      SUBROUTINE
-    325  165e
-    326  165e		       a6 c0		      ldx	ThrobColor+0	; 00
+    324  165e		       a6 c0		      ldx	ThrobColor+0	; 00
       0  1660					      THROB_RAINBOW_BK	14	; 11
       1  1660					      SUBROUTINE
       2  1660				   .X	      SET	14
@@ -2434,89 +2427,89 @@
      12  1675		       ea		      nop
      13  1676
      14  1676				   .End
-    329  1676
-    330  1676		       a5 89		      lda	CatTartColor	; 25
-    331  1678		       85 08		      sta	COLUPF	; 28
-    332  167a		       86 09		      stx	COLUBK	; 31
-    333  167c		       86 08		      stx	COLUPF	; 34
-    334  167e
-    335  167e		       88		      dey		; 36
-    336  167f
-    337  167f		       b1 9b		      lda	(CatGfxPtr2),y	; 41
-    338  1681		       85 1b		      sta	GRP0	; 44
-    339  1683
-    340  1683		       a6 c6		      ldx	CurrentRow	; 47
-    341  1685		       b5 b2		      lda	FoodPosX,x	; 51
-    342  1687		       c9 30		      cmp	#48	; 53
-    343  1689
-    344  1689		       a2 00		      ldx	#0	; 55
-    345  168b		       ea		      nop		; 57
-    346  168c
-    347  168c							; Then output the 14 lines to draw a single row. This will include drawing
-    348  168c							; the rainbow, the pop-tart, the head and face or paws, and the food items.
-    349  168c							; All graphics will be updated every line.
-    350  168c
-    351  168c		       b0 0b		      bcs	.RightEntrance	; 60/59
-    352  168e		       90 42		      bcc	.LeftEntrance	; 62
+    327  1676
+    328  1676		       a5 89		      lda	CatTartColor	; 25
+    329  1678		       85 08		      sta	COLUPF	; 28
+    330  167a		       86 09		      stx	COLUBK	; 31
+    331  167c		       86 08		      stx	COLUPF	; 34
+    332  167e
+    333  167e		       88		      dey		; 36
+    334  167f
+    335  167f		       b1 9b		      lda	(CatGfxPtr2),y	; 41
+    336  1681		       85 1b		      sta	GRP0	; 44
+    337  1683
+    338  1683		       a6 c6		      ldx	CurrentRow	; 47
+    339  1685		       b5 b2		      lda	FoodPosX,x	; 51
+    340  1687		       c9 30		      cmp	#48	; 53
+    341  1689
+    342  1689		       a2 00		      ldx	#0	; 55
+    343  168b		       ea		      nop		; 57
+    344  168c
+    345  168c							; Then output the 14 lines to draw a single row. This will include drawing
+    346  168c							; the rainbow, the pop-tart, the head and face or paws, and the food items.
+    347  168c							; All graphics will be updated every line.
+    348  168c
+    349  168c		       b0 0b		      bcs	.RightEntrance	; 60/59
+    350  168e		       90 42		      bcc	.LeftEntrance	; 62
+    351  1690
+    352  1690							; 14 bytes into the page
     353  1690
-    354  1690							; 14 bytes into the page
-    355  1690
+    354  1690							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    355  1690							; Kernel used when food items are closer to the right edge of the screen
     356  1690							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    357  1690							; Kernel used when food items are closer to the right edge of the screen
-    358  1690							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    357  1690
+    358  1690				   .RightLoop
     359  1690
-    360  1690				   .RightLoop
-    361  1690
-    362  1690							; 8 cycles
-    363  1690		       b1 9b		      lda	(CatGfxPtr2),y	; 49 - set cat's head gfx
-    364  1692		       85 1b		      sta	GRP0	; 52
-    365  1694
-    366  1694							; 9 cycles
-    367  1694		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
-    368  1696		       ba		      tsx		; 57 - load 2nd food item's color
-    369  1697		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
+    360  1690							; 8 cycles
+    361  1690		       b1 9b		      lda	(CatGfxPtr2),y	; 49 - set cat's head gfx
+    362  1692		       85 1b		      sta	GRP0	; 52
+    363  1694
+    364  1694							; 9 cycles
+    365  1694		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
+    366  1696		       ba		      tsx		; 57 - load 2nd food item's color
+    367  1697		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
+    368  1699
+    369  1699				   .RightEntrance		; enter loop here
     370  1699
-    371  1699				   .RightEntrance		; enter loop here
-    372  1699
-    373  1699							; 2 cycles
-    374  1699		       a2 00		      ldx	#0	; 62 - X register must be set to 0 (black)
-    375  169b
-    376  169b							; 8 cycles
-    377  169b		       b1 99		      lda	(TartGfxPtr2),y	; 67 - load cat's tart gfx
-    378  169d		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
-    379  169f
-    380  169f							; 8 cycles
-    381  169f		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - set 1st food item's gfx
-    382  16a1		       85 1c		      sta	GRP1	; 02
-    383  16a3
-    384  16a3							; 7 cycles
-    385  16a3		       b9 de 00 	      lda	RamBowColors,y	; 06 - set playfield's rainbow color
-    386  16a6		       85 09		      sta	COLUBK	; 09
-    387  16a8
-    388  16a8							; 7 cycles
-    389  16a8		       b9 df 00 	      lda	RamBowColors+1,y	; 13 - set background's rainbow color
-    390  16ab		       85 08		      sta	COLUPF	; 16
-    391  16ad
-    392  16ad							; 6 cycles
-    393  16ad		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
-    394  16af		       85 07		      sta	COLUP1	; 22
-    395  16b1
-    396  16b1							; 8 cycles
-    397  16b1		       a5 89		      lda	CatTartColor	; 25
-    398  16b3		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
-    399  16b5		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
-    400  16b7		       86 08		      stx	COLUPF	; 34 - don't draw rainbow/tart on right side
-    401  16b9
-    402  16b9							; 5 cycles
-    403  16b9		       b3 93		      lax	(FoodGfxPtr2),y	; 39 - load 2nd food item's gfx before dey
-    404  16bb
-    405  16bb							; 2 cycles
-    406  16bb		       88		      dey		; 41
-    407  16bc		       10 d2		      bpl	.RightLoop	; 44/43
-    408  16be
-    409  16be		       a0 12		      ldy	#18	; 45
-    410  16c0		       b1 99		      lda	(TartGfxPtr2),y	; 50
-    411  16c2
+    371  1699							; 2 cycles
+    372  1699		       a2 00		      ldx	#0	; 62 - X register must be set to 0 (black)
+    373  169b
+    374  169b							; 8 cycles
+    375  169b		       b1 99		      lda	(TartGfxPtr2),y	; 67 - load cat's tart gfx
+    376  169d		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
+    377  169f
+    378  169f							; 8 cycles
+    379  169f		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - set 1st food item's gfx
+    380  16a1		       85 1c		      sta	GRP1	; 02
+    381  16a3
+    382  16a3							; 7 cycles
+    383  16a3		       b9 de 00 	      lda	RamBowColors,y	; 06 - set playfield's rainbow color
+    384  16a6		       85 09		      sta	COLUBK	; 09
+    385  16a8
+    386  16a8							; 7 cycles
+    387  16a8		       b9 df 00 	      lda	RamBowColors+1,y	; 13 - set background's rainbow color
+    388  16ab		       85 08		      sta	COLUPF	; 16
+    389  16ad
+    390  16ad							; 6 cycles
+    391  16ad		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
+    392  16af		       85 07		      sta	COLUP1	; 22
+    393  16b1
+    394  16b1							; 8 cycles
+    395  16b1		       a5 89		      lda	CatTartColor	; 25
+    396  16b3		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
+    397  16b5		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
+    398  16b7		       86 08		      stx	COLUPF	; 34 - don't draw rainbow/tart on right side
+    399  16b9
+    400  16b9							; 5 cycles
+    401  16b9		       b3 93		      lax	(FoodGfxPtr2),y	; 39 - load 2nd food item's gfx before dey
+    402  16bb
+    403  16bb							; 2 cycles
+    404  16bb		       88		      dey		; 41
+    405  16bc		       10 d2		      bpl	.RightLoop	; 44/43
+    406  16be
+    407  16be		       a0 12		      ldy	#18	; 45
+    408  16c0		       b1 99		      lda	(TartGfxPtr2),y	; 50
+    409  16c2
       0  16c2					      SLEEP	2	; 52
       1  16c2				   .CYCLES    SET	2
       2  16c2
@@ -2537,88 +2530,88 @@
      17  16c2					      REPEAT	.CYCLES / 2
      18  16c2		       ea		      nop
      19  16c3					      REPEND
-    413  16c3
-    414  16c3		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
-    415  16c5		       ba		      tsx		; 57 - load 2nd food item's color
-    416  16c6		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
-    417  16c8
-    418  16c8		       b0 36		      bcs	.End	; 63
-    419  16ca
+    411  16c3
+    412  16c3		       86 1c		      stx	GRP1	; 55 - set 2nd food item's gfx no sooner than cycle 55
+    413  16c5		       ba		      tsx		; 57 - load 2nd food item's color
+    414  16c6		       86 07		      stx	COLUP1	; 60 - set 2nd food item's color no later than cycle 60
+    415  16c8
+    416  16c8		       b0 36		      bcs	.End	; 63
+    417  16ca
+    418  16ca							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    419  16ca							; Kernel used when food items are closer to the left edge of the screen
     420  16ca							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    421  16ca							; Kernel used when food items are closer to the left edge of the screen
-    422  16ca							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    421  16ca
+    422  16ca				   .LeftLoop
     423  16ca
-    424  16ca				   .LeftLoop
-    425  16ca
-    426  16ca							; 8 cycles
-    427  16ca		       b1 9b		      lda	(CatGfxPtr2),y	; 54 - set cat's head gfx
-    428  16cc		       85 1b		      sta	GRP0	; 57
-    429  16ce
-    430  16ce							; 5 cycles
-    431  16ce		       a2 00		      ldx	#0	; 59 - X must be set to 0 (black)
-    432  16d0		       86 08		      stx	COLUPF	; 62 - don't draw rainbow/tart on right side
+    424  16ca							; 8 cycles
+    425  16ca		       b1 9b		      lda	(CatGfxPtr2),y	; 54 - set cat's head gfx
+    426  16cc		       85 1b		      sta	GRP0	; 57
+    427  16ce
+    428  16ce							; 5 cycles
+    429  16ce		       a2 00		      ldx	#0	; 59 - X must be set to 0 (black)
+    430  16d0		       86 08		      stx	COLUPF	; 62 - don't draw rainbow/tart on right side
+    431  16d2
+    432  16d2				   .LeftEntrance		; enter loop here
     433  16d2
-    434  16d2				   .LeftEntrance		; enter loop here
-    435  16d2
-    436  16d2							; 8 cycles
-    437  16d2		       b1 99		      lda	(TartGfxPtr2),y	; 67 - load cat's tart gfx
-    438  16d4		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
-    439  16d6
-    440  16d6							; 8 cycles
-    441  16d6		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - load 1st food item's gfx
-    442  16d8		       85 1c		      sta	GRP1	; 02 - set 1st food item's gfx
-    443  16da
-    444  16da							; 7 cycles
-    445  16da		       b9 de 00 	      lda	RamBowColors,y	; 06 - set rainbow colors
-    446  16dd		       85 09		      sta	COLUBK	; 09
-    447  16df
-    448  16df							; 7 cycles
-    449  16df		       b9 df 00 	      lda	RamBowColors+1,y	; 13
-    450  16e2		       85 08		      sta	COLUPF	; 16
-    451  16e4
-    452  16e4							; 6 cycles
-    453  16e4		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
-    454  16e6		       85 07		      sta	COLUP1	; 22
-    455  16e8
-    456  16e8							; 8 cycles
-    457  16e8		       a5 89		      lda	CatTartColor	; 25
-    458  16ea		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
-    459  16ec		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
-    460  16ee
-    461  16ee							; 13 cycles
-    462  16ee		       b1 93		      lda	(FoodGfxPtr2),y	; 35 - load 2nd food item's gfx
-    463  16f0		       ba		      tsx		; 38 - load 2nd food item's color
-    464  16f1		       85 1c		      sta	GRP1	; 41 - MUST set 2nd food item's gfx at cycle 41
-    465  16f3		       86 07		      stx	COLUP1	; 44 - MUST set 2nd food item's color at cycle 44
-    466  16f5
-    467  16f5							; 5 cycles
-    468  16f5		       88		      dey		; 46
-    469  16f6		       10 d2		      bpl	.LeftLoop	; 49/48
-    470  16f8
-    471  16f8		       a2 00		      ldx	#0	; 50
-    472  16fa		       86 08		      stx	COLUPF	; 53
-    473  16fc
-    474  16fc		       a0 12		      ldy	#18	; 55
-    475  16fe		       b1 99		      lda	(TartGfxPtr2),y	; 60
+    434  16d2							; 8 cycles
+    435  16d2		       b1 99		      lda	(TartGfxPtr2),y	; 67 - load cat's tart gfx
+    436  16d4		       85 0e		      sta	PF1	; 70 - set cat's tart gfx
+    437  16d6
+    438  16d6							; 8 cycles
+    439  16d6		       b1 91		      lda	(FoodGfxPtr1),y	; 75 - load 1st food item's gfx
+    440  16d8		       85 1c		      sta	GRP1	; 02 - set 1st food item's gfx
+    441  16da
+    442  16da							; 7 cycles
+    443  16da		       b9 de 00 	      lda	RamBowColors,y	; 06 - set rainbow colors
+    444  16dd		       85 09		      sta	COLUBK	; 09
+    445  16df
+    446  16df							; 7 cycles
+    447  16df		       b9 df 00 	      lda	RamBowColors+1,y	; 13
+    448  16e2		       85 08		      sta	COLUPF	; 16
+    449  16e4
+    450  16e4							; 6 cycles
+    451  16e4		       a5 c7		      lda	FoodColor1	; 19 - set 1st food item's color
+    452  16e6		       85 07		      sta	COLUP1	; 22
+    453  16e8
+    454  16e8							; 8 cycles
+    455  16e8		       a5 89		      lda	CatTartColor	; 25
+    456  16ea		       85 08		      sta	COLUPF	; 28 - MUST set tart color at cycle 28
+    457  16ec		       86 09		      stx	COLUBK	; 31 - MUST set face/bg color to black at cycle 31
+    458  16ee
+    459  16ee							; 13 cycles
+    460  16ee		       b1 93		      lda	(FoodGfxPtr2),y	; 35 - load 2nd food item's gfx
+    461  16f0		       ba		      tsx		; 38 - load 2nd food item's color
+    462  16f1		       85 1c		      sta	GRP1	; 41 - MUST set 2nd food item's gfx at cycle 41
+    463  16f3		       86 07		      stx	COLUP1	; 44 - MUST set 2nd food item's color at cycle 44
+    464  16f5
+    465  16f5							; 5 cycles
+    466  16f5		       88		      dey		; 46
+    467  16f6		       10 d2		      bpl	.LeftLoop	; 49/48
+    468  16f8
+    469  16f8		       a2 00		      ldx	#0	; 50
+    470  16fa		       86 08		      stx	COLUPF	; 53
+    471  16fc
+    472  16fc		       a0 12		      ldy	#18	; 55
+    473  16fe		       b1 99		      lda	(TartGfxPtr2),y	; 60
+    474  1700
+    475  1700							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
     476  1700
-    477  1700							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    477  1700				   .End
     478  1700
-    479  1700				   .End
-    480  1700
-    481  1700		       a2 ff		      ldx	#$FF	; 65
-    482  1702		       9a		      txs		; 67
-    483  1703
-    484  1703		       a2 00		      ldx	#0
-    485  1705
-    486  1705							; Lastly, output only one line (not four) to draw the top of a "throb" line.
-    487  1705							; Use this time to prepare the next row's food item pointers (unless this is
-    488  1705							; the last row). If this is the last row, skip over LoRows.
-    489  1705
-    490  1705		       85 02		      sta	WSYNC
-    491  1707		       a5 c0		      lda	ThrobColor+0
-    492  1709		       85 09		      sta	COLUBK
-    493  170b		       85 08		      sta	COLUPF
-    494  170d		       86 1c		      stx	GRP1
+    479  1700		       a2 ff		      ldx	#$FF	; 65
+    480  1702		       9a		      txs		; 67
+    481  1703
+    482  1703		       a2 00		      ldx	#0
+    483  1705
+    484  1705							; Lastly, output only one line (not four) to draw the top of a "throb" line.
+    485  1705							; Use this time to prepare the next row's food item pointers (unless this is
+    486  1705							; the last row). If this is the last row, skip over LoRows.
+    487  1705
+    488  1705		       85 02		      sta	WSYNC
+    489  1707		       a5 c0		      lda	ThrobColor+0
+    490  1709		       85 09		      sta	COLUBK
+    491  170b		       85 08		      sta	COLUPF
+    492  170d		       86 1c		      stx	GRP1
       0  170f					      SLEEP	25
       1  170f				   .CYCLES    SET	25
       2  170f
@@ -2659,24 +2652,24 @@
      17  171a					      REPEND
      18  171b		       ea		      nop
      19  171c					      REPEND
-    496  171c		       86 1b		      stx	GRP0
-    497  171e
-    498  171e		       c6 c6		      dec	CurrentRow
-    499  1720		       30 03		      bmi	.GpEnd
-    500  1722
-    501  1722							; If the cat is at the very bottom of the screen, don't disable the
-    502  1722							; missile/player graphics until after they are drawn, so they don't get
-    503  1722							; clipped at the bottom of the screen. An easy way to do this would be to
-    504  1722							; simply disable them after they would have been drawn, whether they are
-    505  1722							; already disabled or not.
-    506  1722
-    507  1722		       4c 25 18 	      jmp	LoRows
-    508  1725
-    509  1725				   .GpEnd
-    510  1725		       4c a7 18 	      jmp	GameplayEnd
-    511  1728
-    512  1800		       00 00 00 00*	      ALIGN	$100
-    513  1800
+    494  171c		       86 1b		      stx	GRP0
+    495  171e
+    496  171e		       c6 c6		      dec	CurrentRow
+    497  1720		       30 03		      bmi	.GpEnd
+    498  1722
+    499  1722							; If the cat is at the very bottom of the screen, don't disable the
+    500  1722							; missile/player graphics until after they are drawn, so they don't get
+    501  1722							; clipped at the bottom of the screen. An easy way to do this would be to
+    502  1722							; simply disable them after they would have been drawn, whether they are
+    503  1722							; already disabled or not.
+    504  1722
+    505  1722		       4c 25 18 	      jmp	LoRows
+    506  1725
+    507  1725				   .GpEnd
+    508  1725		       4c 8d 18 	      jmp	GameplayEnd
+    509  1728
+    510  1800		       00 00 00 00*	      ALIGN	$100
+    511  1800
 ------- FILE subroutines/DrawFoodRow.asm LEVEL 5 PASS 2
       0  1800					      include	subroutines/DrawFoodRow.asm
       1  1800				   DrawFoodRow
@@ -2714,257 +2707,237 @@
      33  1824				   Sleep12
      34  1824		       60		      rts		; 68
 ------- FILE code/Gameplay Kernel/CatRows.asm
-    515  1825
+    513  1825
 ------- FILE code/Gameplay Kernel/GameplayKernel.asm
 ------- FILE code/Gameplay Kernel/LoRows.asm LEVEL 4 PASS 2
       0  1825					      include	code/Gameplay Kernel/LoRows.asm
       1  1825							; Draw all the rows below the cat's two rows.
       2  1825
-      3  1825				   LoRows     SUBROUTINE
-      4  1825
-      5  1825		       85 02		      sta	WSYNC
-      6  1827
-      7  1827							; Output 4 lines, drawing the rest of the "throb" line, while preparing
-      8  1827							; player 1 for the next row's food items.
-      9  1827
-     10  1827		       a5 c1		      lda	ThrobColor+1	; 03
-     11  1829		       85 09		      sta	COLUBK	; 06
-     12  182b		       85 08		      sta	COLUPF	; 09
-     13  182d
-     14  182d		       a4 c6		      ldy	CurrentRow	; 12 - get the row we are drawing
-     15  182f		       b9 b2 00 	      lda	FoodPosX,y	; 16 - get the food's position for this row
-     16  1832
-     17  1832		       38		      sec		; 18
-     18  1833				   .DivideLoop
-     19  1833		       e9 0f		      sbc	#15	; 20
-     20  1835		       b0 fc		      bcs	.DivideLoop	; 22
-     21  1837
-     22  1837		       8d 11 00 	      sta.w	RESP1	; 26
-     23  183a
-     24  183a		       49 07		      eor	#7
-     25  183c
-     26  183c		       69 01		      adc	#1
-     27  183e		       0a		      asl
-     28  183f		       0a		      asl
-     29  1840		       0a		      asl
-     30  1841		       0a		      asl
-     31  1842		       85 21		      sta	HMP1
-     32  1844
-     33  1844		       85 02		      sta	WSYNC
-     34  1846
-     35  1846		       a5 c2		      lda	ThrobColor+2	; 03
-     36  1848		       85 09		      sta	COLUBK	; 06
-     37  184a		       85 08		      sta	COLUPF	; 09
-     38  184c
-     39  184c		       20 24 18 	      jsr	Sleep12
-     40  184f		       20 24 18 	      jsr	Sleep12
-     41  1852		       20 24 18 	      jsr	Sleep12
-     42  1855		       20 24 18 	      jsr	Sleep12
-     43  1858		       20 24 18 	      jsr	Sleep12	; 69
-     44  185b
-     45  185b		       8d 2a 00 	      sta.w	HMOVE	; 73
-     46  185e
-     47  185e		       85 02		      sta	WSYNC
-     48  1860
-     49  1860		       a5 c1		      lda	ThrobColor+1
-     50  1862		       85 09		      sta	COLUBK
-     51  1864		       85 08		      sta	COLUPF
-     52  1866		       85 02		      sta	WSYNC
-     53  1868
-     54  1868		       a5 c0		      lda	ThrobColor+0	; 3
-     55  186a		       85 09		      sta	COLUBK	; 6
-     56  186c		       85 08		      sta	COLUPF	; 9
-     57  186e
-     58  186e		       a4 c6		      ldy	CurrentRow	; 12
-     59  1870
-     60  1870		       b9 a4 00 	      lda	FoodItemL,y	; 16
-     61  1873		       29 f0		      and	#$F0	; 18
-     62  1875		       85 91		      sta	FoodGfxPtr1	; 21
-     63  1877		       aa		      tax		; 23
-     64  1878		       bd 0f 1d 	      lda	FoodGfx+15,x	; 27
-     65  187b		       85 c7		      sta	FoodColor1	; 30
-     66  187d
-     67  187d		       b9 ab 00 	      lda	FoodItemR,y	; 34
-     68  1880		       29 f0		      and	#$F0	; 37
-     69  1882		       85 93		      sta	FoodGfxPtr2	; 39
-     70  1884		       aa		      tax		; 41
-     71  1885		       bd 0f 1d 	      lda	FoodGfx+15,x	; 45
-     72  1888		       85 c8		      sta	FoodColor2	; 48
-     73  188a
-     74  188a		       b9 b2 00 	      lda	FoodPosX,y	; 52
-     75  188d		       85 c4		      sta	Temp	; 55
-     76  188f
-     77  188f
-     78  188f
-     79  188f							; Output 14 lines to draw a row, exactly the same as in HiRows.
-     80  188f							; It may be possible to code this as a subroutine to save ROM space.
-     81  188f
-     82  188f		       20 00 18 	      jsr	DrawFoodRow	; 61
-     83  1892
-     84  1892		       85 02		      sta	WSYNC
-     85  1894
-     86  1894							; Lastly, output a single line for the next "throb" line.
-     87  1894							; Use this time to prepare the next row's food item pointers (unless this is
-     88  1894							; the last row). If this is not the last row, loop to LoRows for the next row.
-     89  1894
-     90  1894		       a5 c0		      lda	ThrobColor+0
-     91  1896		       85 09		      sta	COLUBK
-     92  1898		       85 08		      sta	COLUPF
-     93  189a		       a9 00		      lda	#0
-     94  189c		       85 1b		      sta	GRP0
-     95  189e		       85 1c		      sta	GRP1
-     96  18a0
-     97  18a0		       c6 c6		      dec	CurrentRow
-     98  18a2		       10 81		      bpl	LoRows
-     99  18a4
-    100  18a4		       a2 ff		      ldx	#$FF
-    101  18a6		       9a		      txs
-    102  18a7
-    103  18a7				   GameplayEnd
-    104  18a7		       85 02		      sta	WSYNC
-      0  18a9					      SLEEP	2
-      1  18a9				   .CYCLES    SET	2
-      2  18a9
-      3  18a9				  -	      IF	.CYCLES < 2
-      4  18a9				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  18a9				  -	      ERR
-      6  18a9					      ENDIF
-      7  18a9
-      8  18a9				  -	      IF	.CYCLES & 1
-      9  18a9				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  18a9				  -	      nop	0
-     11  18a9				  -	      ELSE
-     12  18a9				  -	      bit	VSYNC
-     13  18a9				  -	      ENDIF
-     14  18a9				  -.CYCLES    SET	.CYCLES - 3
-     15  18a9					      ENDIF
-     16  18a9
-     17  18a9					      REPEAT	.CYCLES / 2
-     18  18a9		       ea		      nop
-     19  18aa					      REPEND
+      3  1825				   LoRows
+      4  1825					      SUBROUTINE
+      5  1825
+      6  1825							; Output 4 lines, drawing the rest of the "throb" line, while preparing
+      7  1825							; player 1 for the next row's food items.
+      8  1825
+      9  1825		       a5 c1		      lda	ThrobColor+1
+     10  1827
+     11  1827		       20 50 14 	      jsr	SetFoodPosition
+     12  182a
+     13  182a		       85 02		      sta	WSYNC
+     14  182c
+     15  182c		       a5 c2		      lda	ThrobColor+2	; 03
+     16  182e		       85 09		      sta	COLUBK	; 06
+     17  1830		       85 08		      sta	COLUPF	; 09
+     18  1832
+     19  1832		       20 24 18 	      jsr	Sleep12
+     20  1835		       20 24 18 	      jsr	Sleep12
+     21  1838		       20 24 18 	      jsr	Sleep12
+     22  183b		       20 24 18 	      jsr	Sleep12
+     23  183e		       20 24 18 	      jsr	Sleep12	; 69
+     24  1841
+     25  1841		       8d 2a 00 	      sta.w	HMOVE	; 73
+     26  1844
+     27  1844		       85 02		      sta	WSYNC
+     28  1846
+     29  1846		       a5 c1		      lda	ThrobColor+1
+     30  1848		       85 09		      sta	COLUBK
+     31  184a		       85 08		      sta	COLUPF
+     32  184c		       85 02		      sta	WSYNC
+     33  184e
+     34  184e		       a5 c0		      lda	ThrobColor+0	; 3
+     35  1850		       85 09		      sta	COLUBK	; 6
+     36  1852		       85 08		      sta	COLUPF	; 9
+     37  1854
+     38  1854		       a4 c6		      ldy	CurrentRow	; 12
+     39  1856
+     40  1856		       b9 a4 00 	      lda	FoodItemL,y	; 16
+     41  1859		       29 f0		      and	#$F0	; 18
+     42  185b		       85 91		      sta	FoodGfxPtr1	; 21
+     43  185d		       aa		      tax		; 23
+     44  185e		       bd 0f 1d 	      lda	FoodGfx+15,x	; 27
+     45  1861		       85 c7		      sta	FoodColor1	; 30
+     46  1863
+     47  1863		       b9 ab 00 	      lda	FoodItemR,y	; 34
+     48  1866		       29 f0		      and	#$F0	; 37
+     49  1868		       85 93		      sta	FoodGfxPtr2	; 39
+     50  186a		       aa		      tax		; 41
+     51  186b		       bd 0f 1d 	      lda	FoodGfx+15,x	; 45
+     52  186e		       85 c8		      sta	FoodColor2	; 48
+     53  1870
+     54  1870		       b9 b2 00 	      lda	FoodPosX,y	; 52
+     55  1873		       85 c4		      sta	Temp	; 55
+     56  1875
+     57  1875
+     58  1875
+     59  1875							; Output 14 lines to draw a row, exactly the same as in HiRows.
+     60  1875							; It may be possible to code this as a subroutine to save ROM space.
+     61  1875
+     62  1875		       20 00 18 	      jsr	DrawFoodRow	; 61
+     63  1878
+     64  1878		       85 02		      sta	WSYNC
+     65  187a
+     66  187a							; Lastly, output a single line for the next "throb" line.
+     67  187a							; Use this time to prepare the next row's food item pointers (unless this is
+     68  187a							; the last row). If this is not the last row, loop to LoRows for the next row.
+     69  187a
+     70  187a		       a5 c0		      lda	ThrobColor+0
+     71  187c		       85 09		      sta	COLUBK
+     72  187e		       85 08		      sta	COLUPF
+     73  1880		       a9 00		      lda	#0
+     74  1882		       85 1b		      sta	GRP0
+     75  1884		       85 1c		      sta	GRP1
+     76  1886
+     77  1886		       c6 c6		      dec	CurrentRow
+     78  1888		       10 9b		      bpl	LoRows
+     79  188a
+     80  188a		       a2 ff		      ldx	#$FF
+     81  188c		       9a		      txs
+     82  188d
+     83  188d				   GameplayEnd
+     84  188d		       85 02		      sta	WSYNC
+      0  188f					      SLEEP	2
+      1  188f				   .CYCLES    SET	2
+      2  188f
+      3  188f				  -	      IF	.CYCLES < 2
+      4  188f				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  188f				  -	      ERR
+      6  188f					      ENDIF
+      7  188f
+      8  188f				  -	      IF	.CYCLES & 1
+      9  188f				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  188f				  -	      nop	0
+     11  188f				  -	      ELSE
+     12  188f				  -	      bit	VSYNC
+     13  188f				  -	      ENDIF
+     14  188f				  -.CYCLES    SET	.CYCLES - 3
+     15  188f					      ENDIF
+     16  188f
+     17  188f					      REPEAT	.CYCLES / 2
+     18  188f		       ea		      nop
+     19  1890					      REPEND
 ------- FILE code/Gameplay Kernel/GameplayKernel.asm
 ------- FILE code/Kernel.asm
 ------- FILE code/ProgressHealthKernel.asm LEVEL 3 PASS 2
-      0  18aa					      include	code/ProgressHealthKernel.asm
-      1  18aa		       a5 c1		      lda	ThrobColor+1
-      2  18ac		       85 09		      sta	COLUBK
-      3  18ae		       a9 00		      lda	#0
-      4  18b0		       85 0d		      sta	PF0
-      5  18b2		       85 0a		      sta	CTRLPF
-      6  18b4		       a9 09		      lda	#COL_CAT_FACE
-      7  18b6		       85 08		      sta	COLUPF
-      8  18b8
-      9  18b8		       20 24 18 	      jsr	Sleep12
-     10  18bb		       20 24 18 	      jsr	Sleep12
-      0  18be					      SLEEP	8	; 53
-      1  18be				   .CYCLES    SET	8
-      2  18be
-      3  18be				  -	      IF	.CYCLES < 2
-      4  18be				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  18be				  -	      ERR
-      6  18be					      ENDIF
-      7  18be
-      8  18be				  -	      IF	.CYCLES & 1
-      9  18be				  -	      IFNCONST	NO_ILLEGAL_OPCODES
-     10  18be				  -	      nop	0
-     11  18be				  -	      ELSE
-     12  18be				  -	      bit	VSYNC
-     13  18be				  -	      ENDIF
-     14  18be				  -.CYCLES    SET	.CYCLES - 3
-     15  18be					      ENDIF
-     16  18be
-     17  18be					      REPEAT	.CYCLES / 2
-     18  18be		       ea		      nop
-     17  18be					      REPEND
-     18  18bf		       ea		      nop
-     17  18bf					      REPEND
-     18  18c0		       ea		      nop
-     17  18c0					      REPEND
-     18  18c1		       ea		      nop
-     19  18c2					      REPEND
-     12  18c2
-     13  18c2		       a9 20		      lda	#$20	; 55
-     14  18c4		       85 20		      sta	HMP0	; 58
-     15  18c6		       a9 b0		      lda	#$B0	; 60
-     16  18c8		       85 21		      sta	HMP1	; 63
-     17  18ca
-     18  18ca		       85 10		      sta	RESP0	; 66
-     19  18cc		       85 11		      sta	RESP1	; 69
-     20  18ce
-     21  18ce		       a9 00		      lda	#$00	; 71
-     22  18d0
-     23  18d0		       85 2a		      sta	HMOVE	; 74
-     24  18d2
-     25  18d2		       85 06		      sta	COLUP0
-     26  18d4		       85 07		      sta	COLUP1
-     27  18d6
-     28  18d6		       a5 87		      lda	ScoreColor
-     29  18d8		       85 09		      sta	COLUBK
-     30  18da
-     31  18da		       a9 05		      lda	#DOUBLE_SIZE	; 08
-     32  18dc		       85 04		      sta	NUSIZ0
-     33  18de		       85 05		      sta	NUSIZ1
-     34  18e0
-     35  18e0		       a9 08		      lda	#REFP_TRUE
-     36  18e2		       85 0c		      sta	REFP1
-     37  18e4
-     38  18e4					      SUBROUTINE
-     39  18e4
-     40  18e4		       a0 04		      ldy	#4
-     41  18e6		       85 02		      sta	WSYNC
-     42  18e8
-     43  18e8							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     44  18e8				   .HealthTop		; draw top of health
-     45  18e8
-     46  18e8		       a2 03		      ldx	#3
-     47  18ea
-     48  18ea				   .Loop
-     49  18ea		       85 02		      sta	WSYNC
-     50  18ec
-     51  18ec		       b9 6f 1b 	      lda	HealthTopGfx,y	; 04
-     52  18ef		       85 1b		      sta	GRP0	; 07
-     53  18f1		       85 1c		      sta	GRP1	; 10
-     54  18f3		       a9 00		      lda	#$00	; 12
-     55  18f5		       85 0f		      sta	PF2	; 15
-     56  18f7
-     57  18f7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     58  18f7							; Set the pointers for health graphics - 26 cycles
-     59  18f7
-     60  18f7		       18		      clc		; 17
-     61  18f8
-     62  18f8		       a9 1b		      lda	#>HealthLeftGfx	; 19
-     63  18fa		       85 9a		      sta	HthGfxLPtr+1	; 22
-     64  18fc		       85 9c		      sta	HthGfxRPtr+1	; 25
-     65  18fe
-     66  18fe		       a9 74		      lda	#<HealthLeftGfx	; 27
-     67  1900		       65 8b		      adc	Health	; 30
-     68  1902		       85 99		      sta	HthGfxLPtr	; 33
-     69  1904
-     70  1904		       a9 94		      lda	#<HealthRightGfx	; 35
-     71  1906		       65 8b		      adc	Health	; 38
-     72  1908		       85 9b		      sta	HthGfxRPtr	; 41
-     73  190a
-     74  190a
-     75  190a
-     76  190a		       b9 08 1c 	      lda	HealthBgGfx+8,y	; 45
-     77  190d		       85 0f		      sta	PF2	; 48
-     78  190f
-     79  190f		       ca		      dex		; 50
-     80  1910		       d0 d8		      bne	.Loop	; 52
-     81  1912
-     82  1912		       88		      dey		; 54
-     83  1913		       10 d3		      bpl	.HealthTop	; 56
-     84  1915
-     85  1915
-     86  1915					      SUBROUTINE
-     87  1915
-     88  1915
-     89  1915		       a0 03		      ldy	#3	; 58
-     90  1917		       a2 03		      ldx	#3	; 60
-     91  1919		       86 c4		      stx	Temp	; 63
-     92  191b
-     93  191b		       4c 00 1a 	      jmp	.HealthMiddle	; 66
-     94  191e
+      0  1890					      include	code/ProgressHealthKernel.asm
+      1  1890		       a5 c1		      lda	ThrobColor+1
+      2  1892		       85 09		      sta	COLUBK
+      3  1894		       a9 00		      lda	#0
+      4  1896		       85 0d		      sta	PF0
+      5  1898		       85 0a		      sta	CTRLPF
+      6  189a		       a9 09		      lda	#COL_CAT_FACE
+      7  189c		       85 08		      sta	COLUPF
+      8  189e
+      9  189e		       20 24 18 	      jsr	Sleep12
+     10  18a1		       20 24 18 	      jsr	Sleep12
+      0  18a4					      SLEEP	8	; 53
+      1  18a4				   .CYCLES    SET	8
+      2  18a4
+      3  18a4				  -	      IF	.CYCLES < 2
+      4  18a4				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  18a4				  -	      ERR
+      6  18a4					      ENDIF
+      7  18a4
+      8  18a4				  -	      IF	.CYCLES & 1
+      9  18a4				  -	      IFNCONST	NO_ILLEGAL_OPCODES
+     10  18a4				  -	      nop	0
+     11  18a4				  -	      ELSE
+     12  18a4				  -	      bit	VSYNC
+     13  18a4				  -	      ENDIF
+     14  18a4				  -.CYCLES    SET	.CYCLES - 3
+     15  18a4					      ENDIF
+     16  18a4
+     17  18a4					      REPEAT	.CYCLES / 2
+     18  18a4		       ea		      nop
+     17  18a4					      REPEND
+     18  18a5		       ea		      nop
+     17  18a5					      REPEND
+     18  18a6		       ea		      nop
+     17  18a6					      REPEND
+     18  18a7		       ea		      nop
+     19  18a8					      REPEND
+     12  18a8
+     13  18a8		       a9 20		      lda	#$20	; 55
+     14  18aa		       85 20		      sta	HMP0	; 58
+     15  18ac		       a9 b0		      lda	#$B0	; 60
+     16  18ae		       85 21		      sta	HMP1	; 63
+     17  18b0
+     18  18b0		       85 10		      sta	RESP0	; 66
+     19  18b2		       85 11		      sta	RESP1	; 69
+     20  18b4
+     21  18b4		       a9 00		      lda	#$00	; 71
+     22  18b6
+     23  18b6		       85 2a		      sta	HMOVE	; 74
+     24  18b8
+     25  18b8		       85 06		      sta	COLUP0
+     26  18ba		       85 07		      sta	COLUP1
+     27  18bc
+     28  18bc		       a5 87		      lda	ScoreColor
+     29  18be		       85 09		      sta	COLUBK
+     30  18c0
+     31  18c0		       a9 05		      lda	#DOUBLE_SIZE	; 08
+     32  18c2		       85 04		      sta	NUSIZ0
+     33  18c4		       85 05		      sta	NUSIZ1
+     34  18c6
+     35  18c6		       a9 08		      lda	#REFP_TRUE
+     36  18c8		       85 0c		      sta	REFP1
+     37  18ca
+     38  18ca					      SUBROUTINE
+     39  18ca
+     40  18ca		       a0 04		      ldy	#4
+     41  18cc		       85 02		      sta	WSYNC
+     42  18ce
+     43  18ce							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     44  18ce				   .HealthTop		; draw top of health
+     45  18ce
+     46  18ce		       a2 03		      ldx	#3
+     47  18d0
+     48  18d0				   .Loop
+     49  18d0		       85 02		      sta	WSYNC
+     50  18d2
+     51  18d2		       b9 6f 1b 	      lda	HealthTopGfx,y	; 04
+     52  18d5		       85 1b		      sta	GRP0	; 07
+     53  18d7		       85 1c		      sta	GRP1	; 10
+     54  18d9		       a9 00		      lda	#$00	; 12
+     55  18db		       85 0f		      sta	PF2	; 15
+     56  18dd
+     57  18dd							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     58  18dd							; Set the pointers for health graphics - 26 cycles
+     59  18dd
+     60  18dd		       18		      clc		; 17
+     61  18de
+     62  18de		       a9 1b		      lda	#>HealthLeftGfx	; 19
+     63  18e0		       85 9a		      sta	HthGfxLPtr+1	; 22
+     64  18e2		       85 9c		      sta	HthGfxRPtr+1	; 25
+     65  18e4
+     66  18e4		       a9 74		      lda	#<HealthLeftGfx	; 27
+     67  18e6		       65 8b		      adc	Health	; 30
+     68  18e8		       85 99		      sta	HthGfxLPtr	; 33
+     69  18ea
+     70  18ea		       a9 94		      lda	#<HealthRightGfx	; 35
+     71  18ec		       65 8b		      adc	Health	; 38
+     72  18ee		       85 9b		      sta	HthGfxRPtr	; 41
+     73  18f0
+     74  18f0
+     75  18f0
+     76  18f0		       b9 08 1c 	      lda	HealthBgGfx+8,y	; 45
+     77  18f3		       85 0f		      sta	PF2	; 48
+     78  18f5
+     79  18f5		       ca		      dex		; 50
+     80  18f6		       d0 d8		      bne	.Loop	; 52
+     81  18f8
+     82  18f8		       88		      dey		; 54
+     83  18f9		       10 d3		      bpl	.HealthTop	; 56
+     84  18fb
+     85  18fb
+     86  18fb					      SUBROUTINE
+     87  18fb
+     88  18fb
+     89  18fb		       a0 03		      ldy	#3	; 58
+     90  18fd		       a2 03		      ldx	#3	; 60
+     91  18ff		       86 c4		      stx	Temp	; 63
+     92  1901
+     93  1901		       4c 00 1a 	      jmp	.HealthMiddle	; 66
+     94  1904
      95  1a00		       00 00 00 00*	      ALIGN	$100	; align to page
      96  1a00
      97  1a00							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

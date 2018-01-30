@@ -43,24 +43,6 @@ Overscan:
 	sta BCDScore+0
 	
 	cld
-	
-	
-	
-	ldy #13
-	
-.Loop
-	
-	lda FoodItemL,y
-	asl
-	adc #$80
-	rol
-	asl
-	adc #$80
-	rol
-	sta FoodItemL,y
-	
-	dey
-	bpl .Loop
 
 
 
