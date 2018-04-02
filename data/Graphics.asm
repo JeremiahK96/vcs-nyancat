@@ -779,3 +779,14 @@ CatFaceGfx
     .byte %00000000
     
     ds 19, $00
+
+
+
+RowPosition
+	.byte 0
+	.byte 19
+	.byte 38
+	.byte 57
+	.byte 76
+	.byte 95
+	.byte 114

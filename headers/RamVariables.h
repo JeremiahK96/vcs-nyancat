@@ -1,7 +1,5 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Ram Variables
-;
-; Define labels for RAM locations to be used as variables
+; Define Ram Variables
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
     SEG.U VARS
@@ -9,7 +7,9 @@
 
 RamStart
 
-Frame		ds 1	; Current frame modulus 256
+Frame	ds 1	; Current frame mod 256
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables for the score and level counter - 6 bytes
@@ -25,12 +25,16 @@ BCDLevel	; value for the current level which will be stored as a
 	ds 1	; BCD encoded 2-digit number and used to control the
 		; level counter display
 
+
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variable game colors - 3 bytes
 
 ScoreColor	ds 1	; color of the score text and scoreboard
 PgBarColor	ds 1	; color for full part of progress bar
 CatTartColor	ds 1	; color of the cat's tart body
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables for the progress bar and health display - 7 bytes
@@ -43,6 +47,8 @@ Health		; amount of health
 
 ProgressBar	; array of 5 values to be written to the playfield
 	ds 5	; registers when drawing progress bar
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Pointers - 14 bytes
@@ -77,15 +83,19 @@ ThrobPtr	; pointer for loading the throb colors
 ScrLoadPtr5	; pointer for digit 5 in scoreboard loading routine
 	ds 2
 
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Variables used when drawing the cat - 5 bytes
 
-CatPosY		; number of scanlines to skip before drawing cat
-	ds 1
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Variables used when drawing the cat - 6 bytes
+
+CatPosY	ds 1	; number of scanlines to skip before drawing cat
+
 CatPosition	; data describing the cat's position
 	ds 1	; bits 7-5 store the cat's row, from 1-7
 		; bits 4-0 store the number of scanlines to skip after
 		; top of the cat's row before drawing the cat, from 0-18
+
+CatRow	ds 1	; the row that the cat is on or wants to be on/is moving towards
 
 Rainbow		; PF0 value for the rainbow graphics
 ScoreDigit4	; temporary variable for digit 4 in scoreboard loading routine
@@ -97,6 +107,8 @@ ScoreDigit5	; temporary variable for digit 5 in scoreboard loading routine
 
 PreCatRows	; number of rows to draw before the two "cat" rows
 	ds 1
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables used for the food items - 21 bytes
@@ -110,6 +122,8 @@ FoodItemR	; the left items, last 7 bytes are for the right items.
 
 FoodPosX	; (range 0-88)
 	ds 7
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables used to pre-load for 2nd "cat" row's food items - 7 bytes
@@ -128,6 +142,8 @@ CatRow2Color1	;
 CatRow2Color2	; 
 	ds 1	; 
 
+
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables for the throbbing lines' colors - 4 bytes
 
@@ -137,15 +153,21 @@ ThrobColor	ds 3	; 3-byte array for the colors used to draw the
 
 CatThrobPF	ds 1
 
+
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Temporary variables - 2 bytes
 
 Temp		ds 1
 TempLoop	ds 1
 
+
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; 69 of 79 non-temporary RAM bytes used (10 left)
 ; last 49 bytes of RAM are used for stack space in the scoreboard display
+
+
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Variables which can be shared with the stack - 3 bytes

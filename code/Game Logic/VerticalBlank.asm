@@ -317,53 +317,9 @@
 	adc #89
 .NoReset6
 	sta FoodPosX+6
-    
-    
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Caclulate cat's position data
-	
-	SUBROUTINE
-	
-	ldx CatPosY
-	inx
-	cpx #115
-	bne .CatY
-	ldx #0
-.CatY
-	stx CatPosY
-	
-	txa
-	
-	ldx #0
-.DivideLoop
-	sec
-	inx
-	sbc #19
-	bcc .AddBack
-	
-	cpx #5
-	bne .DivideLoop
-	inx
-	bne .SetCatPos
-    
-.AddBack
-	adc #19
-    
-.SetCatPos
-	sta CatPosition
-	
-	txa
-	asl
-	asl
-	asl
-	asl
-	asl
-	adc CatPosition
-	sta CatPosition
-	
-	dex
-	stx PreCatRows
-	
+
+
+
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Calculate Hmove offsets for 2nd cat row's food items
     
