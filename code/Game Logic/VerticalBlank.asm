@@ -460,9 +460,11 @@
 	lsr
 	lsr
 	tay
-	lda RainbowGfx,y
+	lda Rainbow
+	and #$0F
+	eor RainbowGfx,y
 	sta Rainbow
-	
+
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

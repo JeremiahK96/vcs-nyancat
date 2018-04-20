@@ -50,19 +50,21 @@ Overscan:
 ; Proccess Joysticks
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-; skip joystick control if cat is still transitioning between rows
-	
-	lda CatPosition
-	and #$1F
-	beq .ReadJoy
-	cmp #19
-	bne .Skip
-	
-.ReadJoy
 	lda #0
 	sta SWACNT	; set all I/O pins to input for joystick reading
 	
-	lda SWCHA	; get joystick inputs (only left joystick used for now)
+	lda SWCHA	; get joystick position for this frame ONLY ONCE
+	sta Temp	; save joystick position for consistency
+
+	lda CatPosition	; get cat's position
+	and #$1F	; check right 5 bits only
+	beq .ReadJoy	; if zero, we are centered on a row (read joystick)
+	cmp #19		; or if 19, we are centered on the bottom row
+	bne .Skip	; if not centered, skip reading joystick
+	
+.ReadJoy
+
+	lda Temp
 	
 	asl	; ignore joystick right
 	asl	; ignore joystick left
@@ -78,9 +80,7 @@ Overscan:
 	
 	inx
 	stx CatRow
-	
-	; If the joystick's position has not been returned to center since the
-	; last movement, don't move down, unless the fire butten is depressed.
+	jmp .Skip
 
 .NoDown
 	asl	; check joystick up

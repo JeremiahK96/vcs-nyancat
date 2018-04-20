@@ -13,31 +13,37 @@ CatRows:
 	
 	; Output a line to finish the bottom of a "throb" line, like in HiRows.
 	
-	lda ThrobColor+0	; 03
-	sta COLUBK		; 06
-	sta COLUPF		; 09
+	ldx ThrobColor+0	; 03
+	stx COLUBK		; 06
+	stx COLUPF		; 09
 	
-	ldx FoodColor2		; 12
-	txs			; 14
+	ldy #13			; 11
+	lda (TartGfxPtr1),y	; 16
+	sta PF1			; 19
 	
-	SLEEP 19		; 41
+	SLEEP 3			; 22
+	lda CatTartColor	; 25
+	sta COLUPF		; 28
+	SLEEP 2			; 30
+	stx COLUPF		; 33
 	
 	SUBROUTINE
 	
-	ldy CurrentRow		; 47
-	lda FoodPosX,y		; 51
+	ldx CurrentRow		; 36
+	lda FoodPosX,x		; 40
 	
-	jmp .Align2		; 44
+	jmp .Align2		; 43
 	ALIGN $100
 .Align2
 	
-	cmp #48			; 53
+	SLEEP 5			; 48
 	
-	ldx #0			; 55
-	ldy #13			; 57
+	ldx FoodColor2		; 51
+	txs			; 53
 	
-	lda (TartGfxPtr1),y	; 
-	sta PF1			; 
+	cmp #48			; 55
+	
+	ldx #0			; 57
 	
 	; Then output the 14 lines to draw a single row. This will include drawing
 	; the rainbow, the pop-tart, the head and face or paws, and the food items.
@@ -490,7 +496,7 @@ CatRows:
 	sta COLUBK
 	sta COLUPF
 	stx GRP1
-	SLEEP 25
+	SLEEP 18
 	stx GRP0
 	
 	dec CurrentRow

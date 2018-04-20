@@ -98,11 +98,10 @@ CatPosition	; data describing the cat's position
 CatRow	ds 1	; the row that the cat is on or wants to be on/is moving towards
 
 Rainbow		; PF0 value for the rainbow graphics
-ScoreDigit4	; temporary variable for digit 4 in scoreboard loading routine
+JoyCenter	; least significant bit, true if joystick has been returned to center
 	ds 1
 		
 RainbowStack	; value to set stack pointer to before pushing rainbow colors
-ScoreDigit5	; temporary variable for digit 5 in scoreboard loading routine
 	ds 1
 
 PreCatRows	; number of rows to draw before the two "cat" rows
@@ -164,7 +163,7 @@ TempLoop	ds 1
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; 69 of 79 non-temporary RAM bytes used (10 left)
+; 71 of 79 non-temporary RAM bytes used (8 left)
 ; last 49 bytes of RAM are used for stack space in the scoreboard display
 
 

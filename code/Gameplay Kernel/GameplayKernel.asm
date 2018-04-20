@@ -80,10 +80,11 @@ PreKernel:
 	sta WSYNC
 	
 	SLEEP 2
-	lda #$90
-	sta HMP0
 	
-	lda #PF_REFLECT	; 09
+	lda #$90		; 04
+	sta HMP0		; 07
+	
+	lda #PF_REFLECT		; 09
 	sta CTRLPF		; 12
 	
 	lda Rainbow		; 15
