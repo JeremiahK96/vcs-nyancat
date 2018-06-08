@@ -1,0 +1,14 @@
+RAM Variables:
+
+	RainbowPfColor	*
+	RainbowBkColor	*
+	MenuCatGfxR	*
+	MenuCatPfR	*
+	MenuMissile	*
+	CatTartColor	*
+	
+	MenuCatGfxPtrL
+	MenuCatGfxPtrR
+	MenuCatPfPtrL
+	MenuCatPfPtrR
+	MenuMissilePtr

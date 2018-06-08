@@ -1,0 +1,29 @@
+bank 1:
+	vertical sync subroutine
+		check console switches
+	
+	system init
+	game init
+	
+	menu vertical blank
+	menu kernel
+	menu graphics
+
+
+
+bank 2:
+	game overscan
+	game vertical blank
+	game kernel
+	game graphics
+	
+	music/sound player
+	music/sound data
+
+
+
+bank 3:
+
+
+
+bank 4:

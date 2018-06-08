@@ -1,0 +1,8 @@
+
+	sta HMCLR
+	lda #$20
+	sta HMP0
+	lda #$E0
+	sta HMP1
+	lda #$C0
+	sta HMM0
