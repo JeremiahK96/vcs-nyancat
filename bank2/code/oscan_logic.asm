@@ -5,28 +5,17 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 Overscan:
-	
 	inc Frame	; increment the frame number
-	
-	lda #OVERSCAN_TIMER
-	sta WSYNC
-	sta TIM64T	; 3
-
+	SET_OSCAN_TIMER
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Update Score
-;
-; Add to the score
-;
-; Takes 45 cycles to complete
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	lda BCDScoreAdd+1
 	ldx BCDScoreAdd
-	
 	sed
-	
 	clc
 	sta Temp
 	lda BCDScore+2
@@ -41,9 +30,7 @@ Overscan:
 	lda BCDScore+0
 	adc Temp
 	sta BCDScore+0
-	
 	cld
-
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -52,35 +39,28 @@ Overscan:
 
 	lda #0
 	sta SWACNT	; set all I/O pins to input for joystick reading
-	
 	lda SWCHA	; get joystick position for this frame ONLY ONCE
 	sta Temp	; save joystick position for consistency
-	
 	and #$30	; check left stick's up/down bit states
 	cmp #$30	; to see if they are both HI (joystick centered)
 	bne .NotCenter	; if not, skip ahead
 	lda JoyCenter	; otherwise set rightmost bit of JoyCenter
 	ora #1		; (to signify that the joystick HAS been re-centered
 	sta JoyCenter	; before the cat's next movement)
-
 .NotCenter
 	lda INPT4	; if the left fire button is pressed,
 	bpl .CheckPos	; skip the check for a previously centered joystick
 	lda JoyCenter	; otherwise, check if the joystick has been centered
 	and #1
 	beq .Skip	; if it hasn't, don't make a movement
-
 .CheckPos
 	lda CatPosition	; get cat's position
 	and #$1F	; check right 5 bits only
 	beq .ReadJoy	; if zero, we are centered on a row (read joystick)
 	cmp #19		; or if 19, we are centered on the bottom row
 	bne .Skip	; if not centered, skip reading joystick
-	
 .ReadJoy
-
 	lda Temp
-	
 	asl	; ignore joystick right
 	asl	; ignore joystick left
 	asl	; check joystick down
@@ -92,52 +72,39 @@ Overscan:
 	ldx CatRow
 	cpx #6
 	beq .Skip	; If already at the bottom row, don't move down
-	
 	inx
 	bne .ChangeRow
 
 .NoDown
 	asl	; check joystick up
 	bcs .Skip
-	
 	ldx CatRow
 	beq .Skip	; If already at the top row, don't move up
-	
 	dex
 .ChangeRow
 	stx CatRow
-	
 	lda JoyCenter
 	and #$FE
 	sta JoyCenter	; clear rightmost bit in JoyCenter
-
-
-
 .Skip
 
 
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Caclulate cat's position data
-	
 	SUBROUTINE
-	
+
 	lda CatRow
 	and #$07
 	tax
 	lda RowPosition,x
-	
 	cmp CatPosY
 	beq .NoMove
 	bmi .MoveUp
-
 .MoveDown
 	sec
 	sbc CatPosY
 	lsr
 	adc CatPosY
 	bne .UpdatePos
-
 .MoveUp
 	lda CatPosY
 	sec
@@ -145,12 +112,9 @@ Overscan:
 	lsr
 	clc
 	adc RowPosition,x
-
 .UpdatePos
 	sta CatPosY
-
 .NoMove
-	
 	ldx #0
 .DivideLoop
 	sec
@@ -162,13 +126,10 @@ Overscan:
 	bne .DivideLoop
 	inx
 	bne .SetCatPos
-    
 .AddBack
 	adc #19
-    
 .SetCatPos
 	sta CatPosition
-	
 	txa
 	asl
 	asl
@@ -177,18 +138,12 @@ Overscan:
 	asl
 	adc CatPosition
 	sta CatPosition
-	
 	dex
 	stx PreCatRows
 
 
-
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Finish Overscan
-;
-; Loop until the end of overscan
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-OverscanTimerLoop
-	lda INTIM
-	bne OverscanTimerLoop
+	TIMER_LOOP

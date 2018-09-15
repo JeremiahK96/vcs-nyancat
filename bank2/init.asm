@@ -3,9 +3,10 @@
 ;
 ; Clear all system registers and RAM at startup
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+	
+	SUBROUTINE
 
-SystemClear:
-
+SystemClear
 	CLEAN_START
 
 
