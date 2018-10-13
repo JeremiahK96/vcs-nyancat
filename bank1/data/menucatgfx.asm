@@ -142,103 +142,103 @@ MenuCatPfL
 	.byte %11111111	; PF2(L) gfx block 20
 	.byte %10010011
 	.byte %11110011
-	.byte %11111111
-	.byte %11111111
-	.byte %01111111
-	.byte %01111111
-	.byte %01111111
-	.byte %01111011
-	.byte %01111001
-	.byte %11111101
-	.byte %11111100
-	.byte %11111111
-	.byte %11111111
+	.byte %10111111
+	.byte %10111111
+	.byte %00111111
+	.byte %00111111
+	.byte %00111111
+	.byte %00111011
+	.byte %00111001
+	.byte %10111101
+	.byte %10111100
+	.byte %10111111
+	.byte %10111111
 	.byte %11111111	; PF2(L) gfx block 6
 
 ; frame 2
 ;	.byte %11111111	; PF2(L) gfx block 20 (shared with frame 1)
 	.byte %10010111
 	.byte %11110111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111011
-	.byte %11111001
-	.byte %11111100
-	.byte %11111100
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111011
+	.byte %10111001
+	.byte %10111100
+	.byte %10111100
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
 	.byte %11111111	; PF2(L) gfx block 6
 
 ; frame 3
 ;	.byte %11111111	; PF2(L) gfx block 20 (shared with frame 2)
 	.byte %10100111
 	.byte %11110111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111100
-	.byte %11111001
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111100
+	.byte %10111001
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
 	.byte %11111111	; PF2(L) gfx block 6
 
 ; frame 4
 ;	.byte %11111111	; PF2(L) gfx block 20 (shared with frame 3)
 	.byte %10010111
 	.byte %11110111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111100
-	.byte %11111100
-	.byte %11111001
-	.byte %11111011
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111100
+	.byte %10111100
+	.byte %10111001
+	.byte %10111011
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
 	.byte %11111111	; PF2(L) gfx block 6
 
 ; frame 5
 ;	.byte %11111111	; PF2(L) gfx block 20 (shared with frame 4)
 	.byte %11001011
 	.byte %11110011
-	.byte %11111111
-	.byte %11111111
-	.byte %01111111
-	.byte %01111111
-	.byte %01111111
-	.byte %01111011
-	.byte %01111000
-	.byte %11111100
-	.byte %11111111
-	.byte %11111111
-	.byte %11111111
+	.byte %10111111
+	.byte %10111111
+	.byte %00111111
+	.byte %00111111
+	.byte %00111111
+	.byte %00111011
+	.byte %00111000
+	.byte %10111100
+	.byte %10111111
+	.byte %10111111
+	.byte %10111111
 	.byte %11111111	; PF2(L) gfx block 6
 
 ; frame 6
 ;	.byte %11111111	; PF2(L) gfx block 20 (shared with frame 5)
 	.byte %11001011
 	.byte %11110011
-	.byte %11111011
-	.byte %11111111
-	.byte %11111111
-	.byte %01111111
-	.byte %01111111
-	.byte %01111011
-	.byte %01111001
-	.byte %01111100
-	.byte %11111100
-	.byte %11111111
-	.byte %11111111
-;	.byte %11111111	; PF2(L) gfx block 6 (shared with MenuCatPfR)
+	.byte %10111011
+	.byte %10111111
+	.byte %10111111
+	.byte %00111111
+	.byte %00111111
+	.byte %00111011
+	.byte %00111001
+	.byte %00111100
+	.byte %10111100
+	.byte %10111111
+	.byte %10111111
+;	.byte %10111111	; PF2(L) gfx block 6 (shared with MenuCatPfR)
 
 ; 136 bytes used in page
 
@@ -255,7 +255,7 @@ MenuCatPfL
 MenuCatPfR
 
 ; frames 1/5
-	.byte %11111111	; PF2(R) gfx block 18
+	.byte %10111111	; PF2(R) gfx block 18
 	.byte %10000001
 	.byte %10000001
 	.byte %10000000

@@ -11,14 +11,16 @@ MenuOverScan:
 	jmp JmpGamePlay
 .NoResetPress
 
-	lda #%00001000
-	bit SWCHB
-	beq .NoFrameInc		; temp animation pause
+	bmi .NoFrameInc
 
 	inc Frame		; next frame
 	lda Frame
 	and #%00000011		; update animation every 4 frames
 	bne .NoFrameInc
+
+	bit SWCHB
+	bvs .NoFrameInc
+
 	ldx MenuCatFrame
 	inx
 	cpx #6

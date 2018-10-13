@@ -23,7 +23,7 @@ JmpMenuOverScan
 	jmp MenuOverScan
 JmpGamePlay
 	nop SelectBank2
-	jmp SystemClear
+;	jmp SystemClear
 
 	ENDM
 
@@ -56,10 +56,17 @@ JmpGamePlay
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	MAC SET_OSCAN_TIMER
+	SUBROUTINE
 
-	lda #OVERSCAN_TIMER
+	ldx #OSCAN_NTSC
+	lda #%1000
+	bit SWCHB
+	bne .NtscMode
+	ldx #OSCAN_PAL
+.NtscMode
+
 	sta WSYNC
-	sta TIM64T		; set overscan timer
+	stx TIM64T		; set overscan timer
 
 	ENDM
 
@@ -74,27 +81,22 @@ JmpGamePlay
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	MAC VERT_SYNC
+	SUBROUTINE
 
-	lda #2
+	ldx #VBLANK_NTSC	; TIM64T value for NTSC mode
+	lda #%1000
+	bit SWCHB
+	bne .NtscMode
+	ldx #VBLANK_PAL		; TIM64T value for PAL mode
+.NtscMode
+
+	lda #%1110
+.VsyncLoop
 	sta WSYNC
-	sta VSYNC		; enable VSYNC
-	sta WSYNC
-	ldx #VBLANK_TIMER
-	sta WSYNC
-	stx TIM64T		; set VBLANK timer
-	sta HMCLR
+	sta VSYNC
+	stx TIM64T
 	lsr
-	sta WSYNC
-	sta VSYNC		; 03 disable VSYNC
-
-;	lda #%1110
-;	ldx #VBLANK_TIMER
-;.VsyncLoop
-;	sta WSYNC
-;	sta VSYNC		; enable VSYNC
-;	stx TIM64T		; set VBLANK timer
-;	lsr
-;	bne .VsyncLoop
+	bne .VsyncLoop
 
 	ENDM
 

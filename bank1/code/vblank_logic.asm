@@ -2,41 +2,34 @@
 ; Vertical Sync and Logic
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	VERT_SYNC
+	VERT_SYNC		; 11
 
-	lda #$A4		; 05
-	sta MenuBgColor		; 08
-	lda #$5A		; 10
-	sta CatTartColor	; 13
-	lda #QUAD_SIZE		; 15
-	sta NUSIZ0		; 18
-	lda #DOUBLE_SIZE | MSL_SIZE_2	; 20
-	sta NUSIZ1		; 23
-
-	lda #$31		; 25
-	sta CTRLPF		; 28
-	sta VDELP0		; 31
-	asl			; 33
-	sta RESBL
-	SLEEP 3
-	sta.w RESP0
-	sta RESM1
-	sta RESM0
-	sta RESP1
-
-	lda #$40
-	sta HMBL
-	lda #$D0
-	sta HMP0
-	lda #$E0
-	sta HMM1
-	lda #$70
-	sta HMM0
-	lda #$60
-	sta HMP1
-
+	lda #$40		; 13
+	sta HMBL		; 16
+	lda #$D0		; 18
+	sta HMP0		; 21
+	lda #$E0		; 23
+	sta HMM1		; 26
+	lda #$70		; 28
+	sta HMM0		; 31
+	lda #$60		; 33
+	sta RESBL		; 36
+	sta HMP1		; 39
+	sta.w RESP0		; 43
+	sta RESM1		; 46
+	sta RESM0		; 49
+	sta RESP1		; 52
 	sta WSYNC
 	sta HMOVE
+
+	lda #QUAD_SIZE
+	sta NUSIZ0
+	lda #DOUBLE_SIZE | MSL_SIZE_2
+	sta NUSIZ1
+	lda #$31
+	sta CTRLPF
+	sta VDELP0
+
 	sta WSYNC
 	sta HMCLR
 
@@ -87,30 +80,28 @@
 .Jmp2
 	txs
 
-	lda #$44
+	ldx #0
+	lda #%1000
+	bit SWCHB
+	bne .NtscMode
+	ldx #8
+.NtscMode
+
+	lda MenuColors,x
+	sta MenuBgColor
+	inx
+	lda MenuColors,x
+	sta CatTartColor
+
+	ldy #6
+.SetBowColors
+	lda MenuColors+1,x
 	pha
 	pha
 	pha
-	lda #$38
-	pha
-	pha
-	pha
-	lda #$1C
-	pha
-	pha
-	pha
-	lda #$CA
-	pha
-	pha
-	pha
-	lda #$A8
-	pha
-	pha
-	pha
-	lda #$76
-	pha
-	pha
-	pha
+	inx
+	dey
+	bne .SetBowColors
 
 	ldx #RamMenuCatGfxR+15
 	txs

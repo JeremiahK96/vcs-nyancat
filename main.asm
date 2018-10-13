@@ -2,9 +2,9 @@
 ; Project - Nyan Cat Game
 ; by Jeremiah Knol
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; 09-14-2018 Version 4.1
+; 10-06-2018 Version 4.1
 ;
-; Improve code structure
+; Add NTSC/PAL functionality and fix face stripe glitch on some systems
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	PROCESSOR 6502
@@ -17,6 +17,6 @@
 	include headers/macros.h
 
 	include bank1.asm
-	include bank2.asm
-	include bank3.asm
-	include bank4.asm
+;	include bank2.asm
+;	include bank3.asm
+;	include bank4.asm

@@ -44,39 +44,40 @@ ENA_FALSE		equ	0
 ; Program Equates
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-; number of scanlines in vertical blank and overscan
-VBLANK_SCANLINES	equ	37
-OVERSCAN_SCANLINES	equ	29
+VBLANK_LINES_NTSC	equ	40
+OSCAN_LINES_NTSC	equ	30
+VBLANK_NTSC		equ	[[VBLANK_LINES_NTSC - 3] * 76 - 7] / 64
+OSCAN_NTSC		equ	[[OSCAN_LINES_NTSC] * 76 + 26] / 64
 
-; converted values to store to TIM64T
-VBLANK_TIMER		equ	[[VBLANK_SCANLINES + 1] * 76 + 13] / 64
-OVERSCAN_TIMER		equ	[[OVERSCAN_SCANLINES + 1] * 76 + 13] / 64
+VBLANK_LINES_PAL	equ	66
+OSCAN_LINES_PAL		equ	54
+VBLANK_PAL		equ	[[VBLANK_LINES_PAL - 3] * 76 - 7] / 64
+OSCAN_PAL		equ	[[OSCAN_LINES_PAL] * 76 + 26] / 64
 
 ; colors
-COL_SCORE		equ $7A
-COL_SCOREBOARD		equ $70
-COL_BACKGROUND		equ $00
-COL_CAT_FACE		equ $09
-COL_CAT_TART		equ $4A
+COL_SCORE		equ	$7A
+COL_SCOREBOARD		equ	$70
+COL_BACKGROUND		equ	$00
+COL_CAT_FACE		equ 	$08
 
 ; luminosity values for throb line data
-LUM_0			equ $0>>1
-LUM_2			equ $2>>1
-LUM_4			equ $4>>1
-LUM_6			equ $6>>1
-LUM_8			equ $8>>1
-LUM_A			equ $A>>1
-LUM_C			equ $C>>1
-LUM_E			equ $E>>1
+LUM_0			equ	$0>>1
+LUM_2			equ	$2>>1
+LUM_4			equ	$4>>1
+LUM_6			equ	$6>>1
+LUM_8			equ	$8>>1
+LUM_A			equ	$A>>1
+LUM_C			equ	$C>>1
+LUM_E			equ	$E>>1
 
 ; color modes for throb line data
-MODE_GREY		equ $80	; for greyscale throb lines
-MODE_COLOR		equ $00	; for colored throb lines
+MODE_GREY		equ	$80	; for greyscale throb lines
+MODE_COLOR		equ	$00	; for colored throb lines
 
-GAMEPLAY_STACK		equ $DD	; stack location during gameplay kernel
+GAMEPLAY_STACK		equ	$DD	; stack location during gameplay kernel
 
 ; bankswitching hotspots
-SelectBank1		equ $1FF6
-SelectBank2		equ $1FF7
-SelectBank3		equ $1FF8
-SelectBank4		equ $1FF9
+SelectBank1		equ	$1FF6
+SelectBank2		equ	$1FF7
+SelectBank3		equ	$1FF8
+SelectBank4		equ	$1FF9

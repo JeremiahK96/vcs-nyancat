@@ -9,5 +9,6 @@
 	include bank1/code/vblank_logic.asm
 	include bank1/code/kernel.asm
 	include bank1/data/menucatgfx.asm
+	include bank1/data/colors.asm
 
 	END_BANK 1
