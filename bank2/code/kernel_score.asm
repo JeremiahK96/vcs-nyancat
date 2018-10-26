@@ -1,7 +1,7 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Scoreboard Display
-;
-; Draw the 6-digit score and level counter.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw the 6-digit score and level counter
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	SUBROUTINE
@@ -17,8 +17,8 @@
 	lsr
 	lsr
 	lsr
-	sta ENAM1
 	sta ENAM0
+	sta ENAM1
 
 	lda #0
 	sta COLUP0
@@ -26,7 +26,6 @@
 	sta GRP0
 
 	lda #$FF
-	sta ENAM0
 	sta ENABL
 	sta VDELP0
 	sta VDELP1

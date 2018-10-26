@@ -1,0 +1,44 @@
+NOTE_HOLD	equ	0
+NOTE_D4S	equ	16
+NOTE_E4		equ	15
+NOTE_F4S	equ	14
+NOTE_G4S	equ	12
+NOTE_A4S	equ	10
+NOTE_B4		equ	128 + 31
+NOTE_C5S	equ	128 + 27
+NOTE_D5		equ	128 + 26
+NOTE_D5S	equ	128 + 24
+NOTE_E5		equ	128 + 23
+NOTE_F5S	equ	128 + 20
+NOTE_G5S	equ	128 + 18
+
+SEQUENCE_0
+SEQUENCE_1
+SEQUENCE_2
+SEQUENCE_3
+SEQUENCE_0
+SEQUENCE_1
+SEQUENCE_2
+SEQUENCE_4
+SEQUENCE_5
+SEQUENCE_6
+SEQUENCE_7
+SEQUENCE_8
+SEQUENCE_5
+SEQUENCE_6
+SEQUENCE_7
+SEQUENCE_9
+
+How to make the music work:
+
+if new note is starting:
+	increment position in sequence
+	if end of sequence reached:
+		move to start of next sequence
+	find note for position in sequence
+	set audio voice based on note
+	set audio frequency based on note
+	set volume envelope position to beginning
+else:
+	increment position in volume envelope
+set volume based on position in volume envelope

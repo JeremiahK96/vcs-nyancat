@@ -5,46 +5,31 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	VERT_SYNC
-	
+
 	sta HMCLR
 	sta WSYNC
-	
-	lda #$FF	; 02
-	sta HMM1	; 05
-	sta ProgressBar+1	; 08 - reset progress bar byte 1 to %11111111
 
-	ldx #$10	; 10
-	stx HMP1	; 13
-	ldx #$80	; 15
-	stx HMM0	; 18
-	ldx #$E0	; 20
+; set gfx obj positions for scoreboard display
+	lda #$F0	; 02
+	sta HMM1	; 05
+	lda #$10	; 07
+	sta HMP1	; 10
+	sta HMM0	; 13
+	SLEEP 7		; 20
 	sta RESM1	; 23
-	stx ProgressBar+0	; 26 - reset progress bar byte 0 to %11100000
+	SLEEP 3		; 26
 	sta RESBL	; 29
-	
-	sta ProgressBar+2	; 32 - reset progress bar byte 2 to %11111111
-	sta ProgressBar+3	; 35 - reset progress bar byte 3 to %11111111
-	lda #$FE		; 37
-	sta ProgressBar+4	; 40 - reset byte 4 for the progress bar
-	
-	jsr Sleep12	; 52
+	jsr Sleep12	; 41
+	SLEEP 11	; 52
 	sta RESP0	; 55
 	sta RESP1	; 58
-	SLEEP 9		; 67
+	jsr Sleep12	; 67
 	sta RESM0	; 70
 	
 	sta WSYNC
 	sta HMOVE
 
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare HMOVE offsets for all scoreboard objects, and
-; reset the progress bar's RAM values to empty. (39 cycles)
-    
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Prepare for throbbing lines - 43 cycles
-
+; prepare for throbbing lines
 	lda Frame	; get the current frame number
 	and #%00011100	; change animation frame every 4 game frames
 	lsr
@@ -79,14 +64,9 @@
 	adc Temp
 	sta ThrobColor+2
 
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Load Scoreboard
-;
-; Get graphics data for the scoreboard and push it onto the stack
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
 	SUBROUTINE
+
+; get graphics data for the scoreboard and push it onto the stack
 
 ; Prepare MSBs for all the scoreboard loading pointers - 23 cycles    
 	lda #>ScoreGfx
@@ -164,80 +144,12 @@
 	dey
 	bpl .LoadScoreboard
 
+	lda Frame
+	lsr
+	lsr
+	lsr
+	sta Progress
 
-; Load RAM for progress bar display (28-53 cycles)
-	lda Progress		; 3 - get amount of progress
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; The level progress bar uses the following playfield bits:
-; (note that PF0 and PF2 are NOT reversed in this diagram)
-;
-; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
-; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
-; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
-;
-; When the progress bar is empty, every bit labeled "X" above should be
-; set (1), and when it is full, every "X" bit should be cleared (0).
-; The bits labeled "o" must ALWAYS be cleared.
-;
-; The leftmost playfield value (the 1st PF0) will be calculated first,
-; and then each playfield value to the right until the 2nd PF1
-; will be calculated.
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-	ldy #%00000000	; 2 - value to store when a playfield byte is full
-
-	sec		; 2
-	sbc #3		; 3 - 3 PF bits in 1st PF0 are used, so subtract 3
-	bmi .Underflow1	; 2/3
-	sty ProgressBar	; 3 - this playfield byte is full
-
-	sbc #8		; 3 - 8 PF bits in 1st PF1 are used, so subtract 8
-	bmi .Underflow2	; 2/3
-	sty ProgressBar+1	; 3 - this playfield byte is full
-
-	sbc #8		; 3 - 8 PF bits in PF2 are used, so subtract 8
-	bmi .Underflow3	; 2/3
-	sty ProgressBar+2	; 3 - this playfield byte is full
-
-	sbc #4		; 3 - 4 PF bits in 2nd PF1 are used, so subtract 4
-	bmi .Underflow4	; 2/3
-	sty ProgressBar+3	; 3 - this playfield byte is full
-
-	tax		; 2
-	lda PgBarGfx+1,x; 4 - load from normal set of playfield graphics
-	asl		; 2
-	sta ProgressBar+4	; 3
-	jmp .Finish	; 3
-
-.Underflow1	; for 1st PF0
-	adc #3			; 3 - add back the 3
-	tax			; 2
-	lda PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
-	sta ProgressBar		; 3
-	jmp .Finish		; 3
-
-.Underflow2	; for 1st PF1
-	adc #8			; 3 - add back the 8
-	tax			; 2
-	lda PgBarGfx,x		; 4 - load from normal set of playfield graphics
-	sta ProgressBar+1	; 3
-	jmp .Finish		; 3
-
-.Underflow3	; for PF2
-	adc #8			; 3 - add back the 8
-	tax			; 2
-	lda PgBarGfxR,x		; 4 - load from reversed set of playfield graphics
-	sta ProgressBar+2	; 3
-	jmp .Finish		; 3
-
-.Underflow4	; for 2nd PF0
-	adc #4			; 3 - add back the 4
-	tax			; 2
-	lda PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
-	sta ProgressBar+3	; 3
-
-.Finish
 	sta HMCLR
 	ldx FoodPosX
 	dex
@@ -346,18 +258,6 @@
 	sta COLUP1		; 3
 	sta COLUPF		; 3
 	sta COLUBK		; 3
-
-	lda Frame
-	and #%00001111
-	beq .IncScore
-	lda #0
-	beq .IncSkip
-.IncScore
-	lda #$89
-.IncSkip
-	sta BCDScoreAdd+1
-	lda #$19
-	sta BCDLevel
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

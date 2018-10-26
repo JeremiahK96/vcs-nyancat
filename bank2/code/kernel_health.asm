@@ -1,42 +1,128 @@
-
-	lda ThrobColor+1
-	sta COLUBK
-	lda #0
-	sta PF0
-	sta CTRLPF
-	lda #COL_CAT_FACE
-	sta COLUPF
-
-	jsr Sleep12
-	jsr Sleep12
-	SLEEP 8		; 53
-	lda #$20	; 55
-	sta HMP0	; 58
-	lda #$B0	; 60
-	sta HMP1	; 63
-	sta RESP0	; 66
-	sta RESP1	; 69
-	lda #$00	; 71
-	sta HMOVE	; 74
-
-	sta COLUP0
-	sta COLUP1
-	lda ScoreColor
-	sta COLUBK
-	lda #DOUBLE_SIZE; 08
-	sta NUSIZ0
-	sta NUSIZ1
-	lda #REFP_TRUE
-	sta REFP1
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Health Display
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Draw the health indicator and progress bar
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	SUBROUTINE
+
+	sta WSYNC
+	lda ThrobColor+1	; 03	
+	sta COLUBK		; 06
+
+	lda #0			; 08
+	sta PF0			; 11
+	sta CTRLPF		; 14
+	sta COLUP0		; 17
+	sta COLUP1		; 20
+
+	lda #DOUBLE_SIZE	; 22
+	sta NUSIZ0		; 25
+	sta NUSIZ1		; 28
+	lda #$80 + REFP_TRUE	; 30
+	sta REFP1		; 33
+	sta HMP1		; 36
+	ldx #$FF		; 38
+	stx HMP0		; 41
+
+	stx ProgressBar+1	; 44
+	stx ProgressBar+2	; 47
+	stx ProgressBar+3	; 50
+	dex			; 52
+	stx ProgressBar+4	; 55
+	ldx #$E0		; 57
+	stx ProgressBar+0	; 60
+
+	lda #COL_CAT_FACE	; 62
+	sta RESP0		; 65
+	sta RESP1		; 68
+	sta COLUPF		; 71
+	sta HMOVE		; 74
+
+	lda ScoreColor		; 01
+	sta COLUBK		; 04
+
+; Load RAM for progress bar display (28-53 cycles)
+
+	lda Progress		; 3 - get amount of progress
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; The level progress bar uses the following playfield bits:
+; (note that PF0 and PF2 are NOT reversed in this diagram)
+;
+; *PF0*  *PF1*    *PF2*  *PF0*  *PF1*
+; ^^^^ ^^^^^^^^ ^^^^^^^^ ^^^^ ^^^^^^^^	X = bit used
+; oXXX XXXXXXXX XXXXXXXX XXXX XXXXXXXo	o = bit not used
+;
+; When the progress bar is empty, every bit labeled "X" above should be
+; set (1), and when it is full, every "X" bit should be cleared (0).
+; The bits labeled "o" must ALWAYS be cleared.
+;
+; The leftmost playfield value (the 1st PF0) will be calculated first,
+; and then each playfield value to the right until the 2nd PF1
+; will be calculated.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+	ldy #%00000000	; 2 - value to store when a playfield byte is full
+
+	sec		; 2
+	sbc #3		; 3 - 3 PF bits in 1st PF0 are used, so subtract 3
+	bmi .Underflow1	; 2/3
+	sty ProgressBar	; 3 - this playfield byte is full
+
+	sbc #8		; 3 - 8 PF bits in 1st PF1 are used, so subtract 8
+	bmi .Underflow2	; 2/3
+	sty ProgressBar+1	; 3 - this playfield byte is full
+
+	sbc #8		; 3 - 8 PF bits in PF2 are used, so subtract 8
+	bmi .Underflow3	; 2/3
+	sty ProgressBar+2	; 3 - this playfield byte is full
+
+	sbc #4		; 3 - 4 PF bits in 2nd PF1 are used, so subtract 4
+	bmi .Underflow4	; 2/3
+	sty ProgressBar+3	; 3 - this playfield byte is full
+
+	tax		; 2
+	lda PgBarGfx+1,x; 4 - load from normal set of playfield graphics
+	asl		; 2
+	sta ProgressBar+4	; 3
+	jmp .Finish	; 3
+
+.Underflow1	; for 1st PF0
+	adc #3			; 3 - add back the 3
+	tax			; 2
+	lda PgBarGfxR+5,x	; 4 - load from reversed set of playfield graphics
+	sta ProgressBar		; 3
+	jmp .Finish		; 3
+
+.Underflow2	; for 1st PF1
+	adc #8			; 3 - add back the 8
+	tax			; 2
+	lda PgBarGfx,x		; 4 - load from normal set of playfield graphics
+	sta ProgressBar+1	; 3
+	jmp .Finish		; 3
+
+.Underflow3	; for PF2
+	adc #8			; 3 - add back the 8
+	tax			; 2
+	lda PgBarGfxR,x		; 4 - load from reversed set of playfield graphics
+	sta ProgressBar+2	; 3
+	jmp .Finish		; 3
+
+.Underflow4	; for 2nd PF0
+	adc #4			; 3 - add back the 4
+	tax			; 2
+	lda PgBarGfxR+4,x	; 4 - load from reversed set of playfield graphics
+	sta ProgressBar+3	; 3
+
+.Finish				; 57
 
 	ldy #4
 	sta WSYNC
 
 ; draw top of health
 .HealthTop	
-	ldx #3
+	ldx #3			; 02
 .Loop
 	sta WSYNC
 	lda HealthTopGfx,y	; 04
@@ -137,10 +223,9 @@
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	lda #$00
-	sta GRP0
-	sta GRP1
-	sta REFP0
-	sta REFP1
-	sta PF2
+	stx GRP0
+	stx GRP1
+	stx REFP1
+	stx PF2
+
 	sta WSYNC

@@ -4,34 +4,10 @@
 ; Start the overscan timer and do game logic
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-Overscan:
+Overscan:	SUBROUTINE
+
 	inc Frame	; increment the frame number
 	SET_OSCAN_TIMER
-
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Update Score
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-	lda BCDScoreAdd+1
-	ldx BCDScoreAdd
-	sed
-	clc
-	sta Temp
-	lda BCDScore+2
-	adc Temp
-	sta BCDScore+2
-	stx Temp
-	lda BCDScore+1
-	adc Temp
-	sta BCDScore+1
-	lda #$00
-	sta Temp
-	lda BCDScore+0
-	adc Temp
-	sta BCDScore+0
-	cld
-
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Proccess Joysticks
@@ -140,7 +116,6 @@ Overscan:
 	sta CatPosition
 	dex
 	stx PreCatRows
-
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Finish Overscan

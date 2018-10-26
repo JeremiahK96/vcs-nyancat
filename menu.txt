@@ -1,0 +1,18 @@
+
+1 PLAYER/2 PLAYER
+START/NEXT
+BEGINNER/NOVICE/ADVANCED/EXPERT
+COLOR
+SHADE
+
+beginner (child)- rows always at identical speeds
+		- super easy level 1, slowly getting harder, never too hard
+
+novice (default)- rows at identical speeds until level 10
+		- easy until level 6, slowly getting more difficult
+
+advanced	- rows at identical speeds until level 4
+		- first level pretty easy, getting much harder later
+
+expert		- rows always at random speeds
+		- first level medium difficulty, ramping up quickly

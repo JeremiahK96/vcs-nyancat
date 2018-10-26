@@ -59,6 +59,7 @@ COL_SCORE		equ	$7A
 COL_SCOREBOARD		equ	$70
 COL_BACKGROUND		equ	$00
 COL_CAT_FACE		equ 	$08
+COL_CAT_TART		equ	$5F
 
 ; luminosity values for throb line data
 LUM_0			equ	$0>>1

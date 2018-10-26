@@ -1,20 +1,18 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Full System Clear
-;
-; Clear all system registers and RAM at startup
+; Gameplay Initialization
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-	
-	SUBROUTINE
 
-SystemClear
-	CLEAN_START
+GameplayInit:	SUBROUTINE
 
+	lda #0
+	ldx #RamLocal
+.ClearRam
+	sta $00,x
+	txs
+	inx
+	bne .ClearRam
 
-
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Set the food items (temporary demo code)
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
 	lda #$10
 	sta FoodItemL+0
 	lda #$70

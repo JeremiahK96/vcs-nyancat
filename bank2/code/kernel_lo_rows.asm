@@ -73,5 +73,3 @@ LoRows:
 	txs
 
 GameplayEnd
-	sta WSYNC
-	SLEEP 2

@@ -10,7 +10,7 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; These variables are used globally and cannot be shared or otherwise corrupted
 ;
-; Uses 14 bytes of RAM
+; Uses 13 bytes of RAM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 RamGlobal
@@ -49,9 +49,8 @@ BCDLevel	; value for the current level which will be stored as a
 	ds 1	; BCD encoded 2-digit number and used to control the
 		; level counter display
 
-; Random Numbers - 3 bytes
+; Random Numbers - 2 bytes
 Rand16	ds 2	; 16-bit random number
-RandEor	ds 1	; value to eor with random, affected by user input
 
 ; Cat colors - 2 bytes
 CatTartColor	; color for current player's cat in the kernels
@@ -127,13 +126,10 @@ MenuBgColor	; menu background color in current color palatte (NTSC/PAL)
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; These variables are only needed in the gameplay routine
 ;
-; Uses 63 bytes of RAM
+; Uses 55 bytes of RAM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	RORG RamLocal
-
-BCDScoreAdd	; 2-byte array for the value to be added to the score
-	ds 2	; on the next frame (BCD, max of 9,999)
 
 ; Pointers - 14 bytes
 
@@ -168,15 +164,7 @@ ScrLoadPtr5	; pointer for digit 5 in scoreboard loading routine
 ScoreColor	ds 1	; color of the score text and scoreboard
 PgBarColor	ds 1	; color for full part of progress bar
 
-; Variables for the progress bar and health display - 7 bytes
-Progress	; value for level progress, which can be
-	ds 1	; from 0 to 30 and will be used to draw progress bar
-Health		; amount of health
-	ds 1	; 0=full 8=medium 16=low 24=empty
-ProgressBar	; array of 5 values to be written to the playfield
-	ds 5	; registers when drawing progress bar
-
-; Variables used when drawing the cat - 6 bytes
+; Variables used when drawing the cat - 5 bytes
 CatPosY	ds 1	; number of scanlines to skip before drawing cat
 CatPosition	; data describing the cat's position
 	ds 1	; bits 7-5 store the cat's row, from 1-7
@@ -185,8 +173,6 @@ CatPosition	; data describing the cat's position
 CatRow	ds 1	; the row that the cat is on or wants to be on/is moving towards
 Rainbow		; PF0 value for the rainbow graphics
 JoyCenter	; least significant bit, true if joystick has been returned to center
-	ds 1
-RainbowStack	; value to set stack pointer to before pushing rainbow colors
 	ds 1
 PreCatRows	; number of rows to draw before the two "cat" rows
 	ds 1
@@ -205,6 +191,14 @@ FoodItemR	; Hi nybble holds the value of the left object to draw
 		; for the row's position (0-15).
 FoodPosX	; (range 0-88)
 	ds 7
+
+; Variables for the progress bar and health display - 2 bytes
+Progress	; value for level progress, which can be
+	ds 1	; from 0 to 30 and will be used to draw progress bar
+Health		; amount of health
+	ds 1	; 0=full 8=medium 16=low 24=empty
+ProgressBar	; array of 5 playfield values for progress bar
+		; (shared with next 5 bytes of RAM)
 
 ; Variables used to pre-load for 2nd "cat" row's food items - 7 bytes
 CatRowHmove	; array of 3 values to store to HMP1 before strobing

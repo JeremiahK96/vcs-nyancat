@@ -2,15 +2,15 @@
 ; Kernel
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	lda #0
 	sta WSYNC
-	sta VBLANK		; enable display
 
-	ldy #63
+	ldy #62
 .Loop1
 	dey
 	sta WSYNC
-	bne .Loop1
+	bne .Loop1		; 02
+
+	include bank1/code/menucat_prep.asm
 
 	lda MenuCatFrame
 	cmp #2
@@ -21,8 +21,7 @@
 .HiCat	sta WSYNC
 	nop			; 02
 
-	jmp .Align1
-.Align1	ALIGN $100
+	NEXT_PAGE
 
 	include bank1/code/menucat1_4.asm
 	include bank1/code/menucat5.asm
@@ -43,8 +42,5 @@
 	dey
 	sta WSYNC
 	bne .Loop2
-
-	lda #2
-	sta VBLANK		; disable display
 
 	jmp MenuOverScan

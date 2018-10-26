@@ -4,44 +4,6 @@
 
 	VERT_SYNC		; 11
 
-	lda #$40		; 13
-	sta HMBL		; 16
-	lda #$D0		; 18
-	sta HMP0		; 21
-	lda #$E0		; 23
-	sta HMM1		; 26
-	lda #$70		; 28
-	sta HMM0		; 31
-	lda #$60		; 33
-	sta RESBL		; 36
-	sta HMP1		; 39
-	sta.w RESP0		; 43
-	sta RESM1		; 46
-	sta RESM0		; 49
-	sta RESP1		; 52
-	sta WSYNC
-	sta HMOVE
-
-	lda #QUAD_SIZE
-	sta NUSIZ0
-	lda #DOUBLE_SIZE | MSL_SIZE_2
-	sta NUSIZ1
-	lda #$31
-	sta CTRLPF
-	sta VDELP0
-
-	sta WSYNC
-	sta HMCLR
-
-	lda #$60
-	sta HMP0
-	lda #$E0
-	sta HMM0
-	sta HMP1
-	sta HMM1
-	lda #$80
-	sta HMBL
-
 	ldx #RamBowColorsBk+19
 	lda Frame
 	and #%00001000

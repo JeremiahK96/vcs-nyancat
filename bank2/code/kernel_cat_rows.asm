@@ -175,7 +175,6 @@ CatRows
 ; possible to put player 1 anywhere on the screen.
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-
 ; Draw throb line #1
 	sta PF1			; 66
 	lda (CatGfxPtr2),y	; 71

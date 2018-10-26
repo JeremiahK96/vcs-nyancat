@@ -9,7 +9,7 @@
 ; Uses 18 bytes of ROM for the jump table
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	MAC START_BANK	
+	MAC START_BANK
 	SEG BANK_{1}
 	ORG [{1} - 1] * $1000
 	RORG $1000
@@ -23,7 +23,7 @@ JmpMenuOverScan
 	jmp MenuOverScan
 JmpGamePlay
 	nop SelectBank2
-;	jmp SystemClear
+	jmp GameplayInit
 
 	ENDM
 
@@ -52,21 +52,19 @@ JmpGamePlay
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Sets and starts the timer for the overscan
 ;
-; Uses 7 bytes of ROM
+; Uses 13 bytes of ROM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	MAC SET_OSCAN_TIMER
 	SUBROUTINE
 
-	ldx #OSCAN_NTSC
-	lda #%1000
-	bit SWCHB
-	bne .NtscMode
-	ldx #OSCAN_PAL
+	lda #OSCAN_NTSC
+	bit Variation
+	bmi .NtscMode
+	lda #OSCAN_PAL
 .NtscMode
-
 	sta WSYNC
-	stx TIM64T		; set overscan timer
+	sta TIM64T		; set overscan timer
 
 	ENDM
 
@@ -75,7 +73,6 @@ JmpGamePlay
 ; Vertical Sync
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Performs a vertical sync, and starts the timer for vertical blanking
-; Also clears any values in the HMOVE registers
 ;
 ; Uses 22 bytes of ROM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -84,16 +81,15 @@ JmpGamePlay
 	SUBROUTINE
 
 	ldx #VBLANK_NTSC	; TIM64T value for NTSC mode
-	lda #%1000
-	bit SWCHB
-	bne .NtscMode
+	bit Variation
+	bmi .NtscMode
 	ldx #VBLANK_PAL		; TIM64T value for PAL mode
 .NtscMode
-
 	lda #%1110
 .VsyncLoop
 	sta WSYNC
 	sta VSYNC
+	sta VBLANK
 	stx TIM64T
 	lsr
 	bne .VsyncLoop
