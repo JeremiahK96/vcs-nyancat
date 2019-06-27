@@ -4,11 +4,7 @@
 
 	sta WSYNC
 
-	ldy #62
-.Loop1
-	dey
-	sta WSYNC
-	bne .Loop1		; 02
+	include bank1/code/menuscore.asm
 
 	include bank1/code/menucat_prep.asm
 
@@ -36,11 +32,12 @@
 	sta WSYNC
 	sta WSYNC
 .LoCat	sta WSYNC
-	
+
 	ldy #62
-.Loop2
+.Loop8
 	dey
 	sta WSYNC
-	bne .Loop2
+	bne .Loop8
 
 	jmp MenuOverScan
+

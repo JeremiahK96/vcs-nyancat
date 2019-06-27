@@ -178,4 +178,6 @@
 .Not5
 	sty MenuCatMslPtr
 
+	include bank1/code/music.asm
+
 	TIMER_LOOP

@@ -79,15 +79,14 @@
 	sta ScrLoadPtr5+1
 
 ; Prepare pointer for level digit graphics - 14 cycles
-	lda BCDLevel
-	and #$0F
-	asl
-	asl
-	asl
+	lda Level
+	cmp #$10
+	bmi .Less10_1
+	sbc #10
+.Less10_1
 	sta LvlLoadPtr	; set LSB of level digit graphics pointer
 
 ; Prepare pointers for score digit graphics - 69 cycles
-
 	lax BCDScore+0
 	and #$F0
 	lsr
@@ -250,14 +249,22 @@
 
 	SUBROUTINE
 
-	lda #COL_SCORE	; 2
-	sta ScoreColor	; 3
+	lda #10
+	sta Level
 
-	lda ScoreColor	; 3
-	sta COLUP0		; 3 - set color registers
-	sta COLUP1		; 3
-	sta COLUPF		; 3
-	sta COLUBK		; 3
+	lda Level
+	cmp #$10
+	bmi .Less10
+	sbc #6
+.Less10
+	asl
+	tax
+	lda LevelColors,x
+	sta ScoreColor
+	sta COLUP0
+	sta COLUP1
+	sta COLUPF
+	sta COLUBK
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -295,17 +302,6 @@
 	sta PgBarColor
 	lda #COL_CAT_TART
 	sta CatTartColor
-
-	lda Frame
-	and #%00001000
-	lsr
-	lsr
-	lsr
-	tay
-	lda Rainbow
-	and #$0F
-	eor RainbowGfx,y
-	sta Rainbow
 
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>

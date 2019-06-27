@@ -1,10 +1,11 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Define Ram Variables
+; Scoreboard for main menu
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	SEG.U VARS
-	RORG $80
+	
 
-	include headers/ram_global.asm
-	include headers/ram_menu.asm
-	include headers/ram_gameplay.asm
+	ldy #62
+.Loop1	dey
+	sta WSYNC
+	bne .Loop1
+

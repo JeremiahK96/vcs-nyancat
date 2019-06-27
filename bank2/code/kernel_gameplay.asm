@@ -56,15 +56,23 @@ PreKernel
 	lda ThrobColor+0
 .SetCatThrobPF
 	sta CatThrobPF
+
+	lda Frame
+	and #%00001000
+	lsr
+	lsr
+	lsr
+	tay
+	lda RainbowGfx,y
+	sta PF0
+
 	sta WSYNC
 
-	SLEEP 2
-	lda #$90		; 04
-	sta HMP0		; 07
-	lda #PF_REFLECT		; 09
-	sta CTRLPF		; 12
-	lda Rainbow		; 15
-	sta PF0			; 18
+	SLEEP 8			; 08
+	lda #$90		; 10
+	sta HMP0		; 13
+	lda #PF_REFLECT		; 15
+	sta CTRLPF		; 18
 	lda #COL_CAT_FACE	; 20
 	sta COLUP0		; 23
 

@@ -13,10 +13,10 @@
 	lda #%00110101
 	sta CTRLPF
 
-	lda BCDLevel
-	lsr
-	lsr
-	lsr
+	lda Level
+	cmp #$10
+	rol
+	asl
 	sta ENAM0
 	sta ENAM1
 

@@ -1,9 +1,8 @@
-
-1 PLAYER/2 PLAYER
+1 PLAYER/2 PLAYER/BACK
 START/NEXT
 BEGINNER/NOVICE/ADVANCED/EXPERT
-COLOR
 SHADE
+COLOR
 
 beginner (child)- rows always at identical speeds
 		- super easy level 1, slowly getting harder, never too hard
@@ -16,3 +15,74 @@ advanced	- rows at identical speeds until level 4
 
 expert		- rows always at random speeds
 		- first level medium difficulty, ramping up quickly
+
+menu navigation:
+
+________	8
+___BY___	5
+__FIRE__	6
+__BACK__	6
+__NEXT__	6
+__GAME__	6
+__OVER__	6
+__KNOL__	6
+__MEME__	6
+__2019__	6
+__PRESS_	6
+__START_	7
+__SHADE_	7
+__COLOR_	7
+__READY_	7
+__CHRIS_	7
+_NOVICE_	7
+_EXPERT_	7
+_THANKS_	7
+_TO_THE_	7
+_TORRES_	7
+_SPECIAL	7
+_CREATED	7
+_CREATOR	7
+PLAYER_1	8
+_PLAYER_	8
+2_PLAYER	8
+BEGINNER	8
+ADVANCED	8
+JEREMIAH	8
+ORIGINAL	8
+NYAN_CAT	8
+
+PLAYER_1
+_PLAYER_
+2_PLAYER
+BEGINNER
+ADVANCED
+JEREMIAH
+ORIGINAL
+NYAN_CAT
+_CREATED
+_CREATOR
+
+__PRESS
+__FIRE
+__BACK
+__NEXT
+__START
+_NOVICE
+_EXPERT_
+__SHADE
+__COLOR
+__READY
+__GAME
+__OVER
+_____
+___BY_
+__KNOL
+__2019
+__MEME
+__CHRIS
+_TORRES
+_SPECIAL
+_THANKS
+_TO_THE
+
+

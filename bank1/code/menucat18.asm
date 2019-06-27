@@ -1,5 +1,5 @@
-; 59
 
+				; 59
 	sty ENAM0		; 62	2
 	lda RamMenuCatGfx	; 65	2
 	sta GRP1		; 68	2

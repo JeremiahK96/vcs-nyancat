@@ -10,5 +10,6 @@
 	include bank1/code/kernel.asm
 	include bank1/data/menucatgfx.asm
 	include bank1/data/colors.asm
+	include bank1/data/music.asm
 
 	END_BANK 1
