@@ -10,13 +10,13 @@
 0.Exit4                  1381              (R )
 0.Frame0                 114c              (R )
 0.FREE_BYTES             0000                  
-0.HiCat                  1207              (R )
-0.HiNote                 1174              (R )
-0.Hold                   1178              (R )
+0.HiCat                  1218              (R )
+0.HiNote                 1185              (R )
+0.Hold                   1189              (R )
 0.Jmp2                   10a2              (R )
 0.LoCat                  1633              (R )
 0.Loop                   1312              (R )
-0.Loop1                  11b6              (R )
+0.Loop1                  11c7              (R )
 0.Loop18                 1533              (R )
 0.Loop4                  135a              (R )
 0.Loop8                  1637              (R )
@@ -26,19 +26,19 @@
 0.LoopPfR                10ee              (R )
 0.LP                     1309              (R )
 0.NoFrameInc             104a              (R )
-0.NoHold                 118a              (R )
+0.NoHold                 119b              (R )
 0.NoReset                1048              (R )
 0.NoResetPress           1037              (R )
-0.NoRoll                 11a9              (R )
+0.NoRoll                 11ba              (R )
 0.Not5                   1158              (R )
 0.NotFrame5              113b              (R )
 0.NtscMode               10ae              (R )
 0.Rainbow1               107c              (R )
 0.Rainbow2               1089              (R )
-0.Same                   11ad              (R )
+0.Same                   11be              (R )
 0.SetBowColors           10bb              (R )
 0.Skip                   1327              (R )
-10.TimerLoop             11ad              (R )
+10.TimerLoop             11be              (R )
 11.CYCLES                000a              (R )
 13.NextPage              1300              (R )
 14.CYCLES                0002              (R )
@@ -173,16 +173,17 @@
 96.Loop                  1a3d              (R )
 97.CYCLES                000e              (R )
 AUDC0                    0015              (R )
-AUDC1                    0016                  
+AUDC1                    0016              (R )
 AUDF0                    0017              (R )
-AUDF1                    0018                  
+AUDF1                    0018              (R )
 AUDV0                    0019              (R )
-AUDV1                    001a                  
+AUDV1                    001a              (R )
 BALL_SIZE_1              0000                  
 BALL_SIZE_2              0010                  
 BALL_SIZE_4              0020                  
 BALL_SIZE_8              0030                  
-BCDScore                 0082              (R )
+BassSeq                  18dc              (R )
+BCDScore                 0088              (R )
 BowColorsPfPtr           0097              (R )
 CatFaceGfx               1e28              (R )
 CatGfxPtr1               0095              (R )
@@ -196,7 +197,7 @@ CatRow2FoodL             00be              (R )
 CatRow2FoodR             00bf              (R )
 CatRowHmove              00bb              (R )
 CatRows                  14e0              (R )
-CatTartColor             008b              (R )
+CatTartColor             0086              (R )
 CatTartGfx               1e06              (R )
 CatThrobPF               00c5              (R )
 COL_BACKGROUND           0000              (R )
@@ -268,7 +269,7 @@ JmpGamePlay              100c              (R )
 JmpInitSystem            1000              (R )
 JmpMenuOverScan          1006                  
 JoyCenter                00a2              (R )
-Level                    0088              (R )
+Level                    008e              (R )
 LevelColors              1e62              (R )
 LevelGfx                 1b50              (R )
 LoRows                   1825              (R )
@@ -316,20 +317,9 @@ MSL_SIZE_1               0000
 MSL_SIZE_2               0010              (R )
 MSL_SIZE_4               0020              (R )
 MSL_SIZE_8               0030              (R )
-MusicNote                008d              (R )
-MusicSeq0                18fa              (R )
-MusicSeq1                190a                  
-MusicSeq2                191a                  
-MusicSeq3                192a                  
-MusicSeq4                193a                  
-MusicSeq5                194a                  
-MusicSeq6                195a                  
-MusicSeq7                196a                  
-MusicSeq8                197a                  
-MusicSeq9                198a                  
-MusicSeqA                199a                  
-MusicSeqB                19aa                  
-MusicSeqs                18ea              (R )
+MusicNote                0084              (R )
+MusicSeq0                190a              (R )
+MusicSeqs                18fa              (R )
 NO_ILLEGAL_OPCODES       0000 ????         (R )
 NOTE_A4S                 000a              (R )
 NOTE_B4                  009f              (R )
@@ -344,7 +334,7 @@ NOTE_F5S                 0094              (R )
 NOTE_G4S                 000c              (R )
 NOTE_G5S                 0092              (R )
 NOTE_HOLD                0000              (R )
-NoteData                 008e              (R )
+NoteData                 0085              (R )
 NoteLengths              18ca              (R )
 NUSIZ0                   0004              (R )
 NUSIZ1                   0005              (R )
@@ -353,7 +343,7 @@ OSCAN_LINES_NTSC         001e              (R )
 OSCAN_LINES_PAL          0036              (R )
 OSCAN_NTSC               0024              (R )
 OSCAN_PAL                0040              (R )
-OtherTartColor           008c                  
+OtherTartColor           0087                  
 Overscan                 1054              (R )
 PF0                      000d              (R )
 PF1                      000e              (R )
@@ -383,7 +373,7 @@ RamMenuCatGfxR           00c9              (R )
 RamMenuCatMissile        009a              (R )
 RamMenuCatPfL            00ab              (R )
 RamMenuCatPfR            00ba              (R )
-Rand16                   0089                  
+Rand16                   0082                  
 REFP0                    000b                  
 REFP1                    000c              (R )
 REFP_FALSE               0000                  
@@ -449,7 +439,7 @@ VDELP0                   0025              (R )
 VDELP1                   0026              (R )
 VERSION_MACRO            006a                  
 VERSION_VCS              0069                  
-VlmEnvelope              18dc              (R )
+VlmEnvelope              18ec              (R )
 VSYNC                    0000              (R )
 WSYNC                    0002              (R )
 --- End of Symbol List.

@@ -1,22 +1,23 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Music Engine
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+;
 ; Handles the main music melody, using voice 0
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	; NoteData:	-----xxx	frames left in note
-	;		xxxxx---	note length table offset
+	lda #6
+	sta AUDC1
+	lda #4
+	sta AUDV1
 
-	; MusicNote:	----xxxx	current note in sequence
-	;		xxxx----	current sequence table
-
-	; write audio registers for music
-	
-	; volume
-	; frequency and voice
-	
-	; get current note offset and store in Y
+	; set bass frequency
 	lax MusicNote
+	asr #%00011110
+	tay
+	lda BassSeq,y
+	sta AUDF1
+
+	; get current note offset and store in Y
+	txa
 	lsr
 	lsr
 	lsr
@@ -28,7 +29,7 @@
 	adc MusicSeqs,y
 	tay
 
-	; set note volume and frequency
+	; set note voice and frequency
 	lda #$C
 	ldx MusicSeq0,y
 	beq .Hold
@@ -44,10 +45,8 @@
 	lsr
 	lsr
 	tay
-
 	lda NoteData
 	and #7
-	
 	dex
 	inx
 	bne .NoHold
@@ -64,7 +63,6 @@
 	and #7
 	cmp NoteLengths,y
 	bne .Same
-
 	lda NoteData	
 	and #$F8
 	clc
@@ -74,7 +72,6 @@
 	lda #0
 .NoRoll
 	sta NoteData
-
 	inc MusicNote
 .Same
 

@@ -1,3 +1,8 @@
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Music Data Tables
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+; equates for main voice's note frequencies
 NOTE_HOLD	equ	0
 NOTE_D4S	equ	16
 NOTE_E4		equ	15
@@ -12,6 +17,7 @@ NOTE_E5		equ	128 + 23
 NOTE_F5S	equ	128 + 20
 NOTE_G5S	equ	128 + 18
 
+; note lengths in frames - 19 bytes
 	.byte	6
 NoteLengths
 	.byte	6
@@ -33,10 +39,30 @@ NoteLengths
 	.byte	7
 	.byte	6
 
+BassSeq
+	.byte $1F
+	.byte $0B
+	.byte $1F
+	.byte $0A
+	.byte $1F
+	.byte $0C
+	.byte $1F
+	.byte $09
+	.byte $1F
+	.byte $0D
+	.byte $1F
+	.byte $0A
+	.byte $1F
+	.byte $0F
+	.byte $1F
+	.byte $0F
+
+; main voice volume envelope - 14 bytes
 VlmEnvelope
 	HEX	09 0B 0D 0E 0F 0F 0F
 	HEX	0E 0D 0C 0A 09 07 05
 
+; music sequence order for main voice - 16 bytes
 MusicSeqs
 	HEX	00
 	HEX	10
@@ -55,6 +81,7 @@ MusicSeqs
 	HEX	70
 	HEX	90
 
+; music note sequences for main voice - 160 bytes
 MusicSeq0
 	.byte	NOTE_F5S
 	.byte	NOTE_HOLD
@@ -73,7 +100,6 @@ MusicSeq0
 	.byte	NOTE_C5S
 	.byte	NOTE_HOLD
 
-MusicSeq1
 	.byte	NOTE_D5
 	.byte	NOTE_HOLD
 	.byte	NOTE_D5
@@ -91,7 +117,6 @@ MusicSeq1
 	.byte	NOTE_C5S
 	.byte	NOTE_B4
 
-MusicSeq2
 	.byte	NOTE_D5S
 	.byte	NOTE_HOLD
 	.byte	NOTE_F5S
@@ -109,7 +134,6 @@ MusicSeq2
 	.byte	NOTE_B4
 	.byte	NOTE_C5S
 
-MusicSeq3
 	.byte	NOTE_D5
 	.byte	NOTE_HOLD
 	.byte	NOTE_B4
@@ -127,7 +151,6 @@ MusicSeq3
 	.byte	NOTE_C5S
 	.byte	NOTE_HOLD
 
-MusicSeq4
 	.byte	NOTE_D5
 	.byte	NOTE_HOLD
 	.byte	NOTE_B4
@@ -145,7 +168,6 @@ MusicSeq4
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 
-MusicSeq5
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 	.byte	NOTE_F4S
@@ -163,7 +185,6 @@ MusicSeq5
 	.byte	NOTE_E5
 	.byte	NOTE_F5S
 
-MusicSeq6
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 	.byte	NOTE_B4
@@ -181,7 +202,6 @@ MusicSeq6
 	.byte	NOTE_E4
 	.byte	NOTE_F4S
 
-MusicSeq7
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 	.byte	NOTE_F4S
@@ -199,7 +219,6 @@ MusicSeq7
 	.byte	NOTE_G4S
 	.byte	NOTE_F4S
 
-MusicSeq8
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 	.byte	NOTE_B4
@@ -217,7 +236,6 @@ MusicSeq8
 	.byte	NOTE_A4S
 	.byte	NOTE_HOLD
 
-MusicSeq9
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 	.byte	NOTE_B4
@@ -235,7 +253,6 @@ MusicSeq9
 	.byte	NOTE_C5S
 	.byte	NOTE_HOLD
 
-MusicSeqA
 	.byte	NOTE_D4S
 	.byte	NOTE_E4
 	.byte	NOTE_F4S
@@ -253,7 +270,6 @@ MusicSeqA
 	.byte	NOTE_B4
 	.byte	NOTE_HOLD
 
-MusicSeqB
 	.byte	NOTE_F4S
 	.byte	NOTE_HOLD
 	.byte	NOTE_D4S
