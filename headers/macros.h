@@ -22,8 +22,9 @@ JmpMenuOverScan
 	nop SelectBank1
 	jmp MenuOverScan
 JmpGamePlay
-	nop SelectBank2
-	jmp GameplayInit
+;	nop SelectBank2
+;	jmp GameplayInit
+	jmp JmpInitSystem
 
 	ENDM
 

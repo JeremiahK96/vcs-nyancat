@@ -2,6 +2,8 @@
 ; Music Data Tables
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
+	ALIGN $100
+
 ; equates for main voice's note frequencies
 NOTE_HOLD	equ	0
 NOTE_D4S	equ	16
@@ -16,6 +18,13 @@ NOTE_D5S	equ	128 + 24
 NOTE_E5		equ	128 + 23
 NOTE_F5S	equ	128 + 20
 NOTE_G5S	equ	128 + 18
+NOTE_B5		equ	128 + 15
+NOTE_C6S	equ	128 + 13
+NOTE_D6		equ	128 + 12
+NOTE_E6		equ	128 + 11
+NOTE_F6		equ	128 + 10
+NOTE_G6		equ	128 + 9
+NOTE_A6		equ	128 + 8
 
 ; note lengths in frames - 19 bytes
 	.byte	6
@@ -40,27 +49,60 @@ NoteLengths
 	.byte	6
 
 BassSeq
-	.byte $1F
 	.byte $0B
-	.byte $1F
 	.byte $0A
-	.byte $1F
 	.byte $0C
-	.byte $1F
 	.byte $09
-	.byte $1F
 	.byte $0D
-	.byte $1F
 	.byte $0A
-	.byte $1F
 	.byte $0F
-	.byte $1F
 	.byte $0F
 
 ; main voice volume envelope - 14 bytes
 VlmEnvelope
 	HEX	09 0B 0D 0E 0F 0F 0F
 	HEX	0E 0D 0C 0A 09 07 05
+
+IntroVlm
+	HEX	0F 0E 0D 0B 0A 09 08
+	HEX	07 06 05 04 03 02 01
+
+IntroSeq
+	.byte	NOTE_D5S
+	.byte	NOTE_E5
+	.byte	NOTE_F5S
+	.byte	NOTE_HOLD
+	.byte	NOTE_B5
+	.byte	NOTE_HOLD
+	.byte	NOTE_D5S
+	.byte	NOTE_E5
+
+	.byte	NOTE_F5S
+	.byte	NOTE_B5
+	.byte	NOTE_C6S
+	.byte	NOTE_HOLD
+	.byte	NOTE_C6S
+	.byte	NOTE_E5
+	.byte	NOTE_F5S
+	.byte	NOTE_HOLD
+
+	.byte	NOTE_F5S
+	.byte	NOTE_HOLD
+	.byte	NOTE_D5S
+	.byte	NOTE_E5
+	.byte	NOTE_F5S
+	.byte	NOTE_HOLD
+	.byte	NOTE_B5
+	.byte	NOTE_HOLD
+
+	.byte	NOTE_C6S
+	.byte	128 + 16
+	.byte	NOTE_B5
+	.byte	NOTE_C6S
+	.byte	NOTE_E6
+	.byte	NOTE_C6S
+	.byte	NOTE_E6
+	.byte	NOTE_B5
 
 ; music sequence order for main voice - 16 bytes
 MusicSeqs

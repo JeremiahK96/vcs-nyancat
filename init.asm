@@ -19,3 +19,4 @@ InitSystem:
 ; check for forced 50hz mode
 	lsr SWCHB	; reset switch state -> carry flag
 	ror Variation	; write to D7
+

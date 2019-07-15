@@ -4,6 +4,8 @@
 
 	VERT_SYNC		; 11
 
+	include bank1/code/music.asm
+
 	ldx #RamBowColorsBk+19
 	lda Frame
 	and #%00001000
@@ -177,7 +179,5 @@
 	dey
 .Not5
 	sty MenuCatMslPtr
-
-	include bank1/code/music.asm
 
 	TIMER_LOOP
