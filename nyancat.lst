@@ -979,118 +979,117 @@
       7  001d		       a9 fa		      lda	#250
       8  001f		       85 84		      sta	MusicNote
       9  0021
-     10  0021				   .IntroVblank
-      0  0021					      VERT_SYNC
+     10  0021				   .IntroOscan
+      0  0021					      SET_OSCAN_TIMER
       1  0021					      SUBROUTINE
       2  0021
-      3  0021		       a2 2b		      ldx	#VBLANK_NTSC
+      3  0021		       a9 24		      lda	#OSCAN_NTSC
       4  0023		       24 81		      bit	Variation
       5  0025		       30 02		      bmi	.NtscMode
-      6  0027		       a2 4a		      ldx	#VBLANK_PAL
+      6  0027		       a9 40		      lda	#OSCAN_PAL
       7  0029				   .NtscMode
-      8  0029		       a9 0e		      lda	#%1110
-      9  002b				   .VsyncLoop
-     10  002b		       85 02		      sta	WSYNC
-     11  002d		       85 00		      sta	VSYNC
-     12  002f		       85 01		      sta	VBLANK
-     13  0031		       8e 96 02 	      stx	TIM64T
-     14  0034		       4a		      lsr
-     15  0035		       d0 f4		      bne	.VsyncLoop
-     16  0037
-     12  0037
-     13  0037		       a5 84		      lda	MusicNote
-     14  0039		       10 1d		      bpl	.IntroMusic
-     15  003b
-     16  003b		       a2 08		      ldx	#8
-     17  003d		       c9 fc		      cmp	#252
-     18  003f		       f0 0b		      beq	.IntroClick
-     19  0041		       ca		      dex
-     20  0042		       c9 fd		      cmp	#253
-     21  0044		       f0 06		      beq	.IntroClick
-     22  0046
-     23  0046		       a9 00		      lda	#0
-     24  0048		       85 19		      sta	AUDV0
-     25  004a		       f0 3a		      beq	.NoEcho
-     26  004c
-     27  004c				   .IntroClick
-     28  004c		       a9 02		      lda	#2
-     29  004e		       85 19		      sta	AUDV0
-     30  0050		       a9 08		      lda	#$8
-     31  0052		       85 15		      sta	AUDC0
-     32  0054		       86 17		      stx	AUDF0
-     33  0056		       d0 2e		      bne	.NoEcho
-     34  0058
-     35  0058				   .IntroMusic
-     36  0058		       a9 19		      lda	#>IntroSeq
-     37  005a		       85 f1		      sta	MusicPtr+1
-     38  005c		       a9 37		      lda	#<IntroSeq
-     39  005e		       85 f0		      sta	MusicPtr
-     40  0060		       a2 00		      ldx	#0
-     41  0062		       20 3f 16 	      jsr	SetNote
-     42  0065		       a9 29		      lda	#<IntroVlm
-     43  0067		       85 f0		      sta	MusicPtr
-     44  0069		       20 53 16 	      jsr	SetVolume
-     45  006c
-     46  006c		       a5 84		      lda	MusicNote
-     47  006e		       c9 02		      cmp	#2
-     48  0070		       30 14		      bmi	.NoEcho
-     49  0072
-     50  0072		       a9 35		      lda	#<IntroSeq-2
-     51  0074		       85 f0		      sta	MusicPtr
-     52  0076		       a2 01		      ldx	#1
-     53  0078		       20 3f 16 	      jsr	SetNote
-     54  007b		       a9 29		      lda	#<IntroVlm
-     55  007d		       85 f0		      sta	MusicPtr
-     56  007f		       20 53 16 	      jsr	SetVolume
-     57  0082		       4a		      lsr
-     58  0083		       4a		      lsr
-     59  0084		       85 1a		      sta	AUDV1
-     60  0086
-     61  0086		       20 6e 16    .NoEcho    jsr	UpdateNote
-     62  0089
-      0  0089					      TIMER_LOOP
-      1  0089					      SUBROUTINE
-      2  0089
-      3  0089				   .TimerLoop
-      4  0089		       ad 84 02 	      lda	INTIM
-      5  008c		       d0 fb		      bne	.TimerLoop
-      6  008e
-     64  008e
-     65  008e
-     66  008e		       a2 c1		      ldx	#193
-     67  0090				   .IntroLoop
-     68  0090		       ca		      dex
-     69  0091		       85 02		      sta	WSYNC
-     70  0093		       d0 fb		      bne	.IntroLoop
-     71  0095
-     72  0095
-      0  0095					      SET_OSCAN_TIMER
-      1  0095					      SUBROUTINE
-      2  0095
-      3  0095		       a9 24		      lda	#OSCAN_NTSC
-      4  0097		       24 81		      bit	Variation
-      5  0099		       30 02		      bmi	.NtscMode
-      6  009b		       a9 40		      lda	#OSCAN_PAL
-      7  009d				   .NtscMode
-      8  009d		       85 02		      sta	WSYNC
-      9  009f		       8d 96 02 	      sta	TIM64T
-     10  00a2
-      0  00a2					      TIMER_LOOP
-      1  00a2					      SUBROUTINE
-      2  00a2
-      3  00a2				   .TimerLoop
-      4  00a2		       ad 84 02 	      lda	INTIM
-      5  00a5		       d0 fb		      bne	.TimerLoop
-      6  00a7
-     75  00a7
-     76  00a7		       a5 84		      lda	MusicNote
-     77  00a9		       c9 20		      cmp	#32
-     78  00ab		       f0 03		      beq	.IntroEnd
-     79  00ad		       4c 21 10 	      jmp	.IntroVblank
-     80  00b0
-     81  00b0				   .IntroEnd
-     82  00b0		       86 84		      stx	MusicNote
-     83  00b2
+      8  0029		       85 02		      sta	WSYNC
+      9  002b		       8d 96 02 	      sta	TIM64T
+     10  002e
+      0  002e					      TIMER_LOOP
+      1  002e					      SUBROUTINE
+      2  002e
+      3  002e				   .TimerLoop
+      4  002e		       ad 84 02 	      lda	INTIM
+      5  0031		       d0 fb		      bne	.TimerLoop
+      6  0033
+     13  0033
+      0  0033					      VERT_SYNC
+      1  0033					      SUBROUTINE
+      2  0033
+      3  0033		       a2 2b		      ldx	#VBLANK_NTSC
+      4  0035		       24 81		      bit	Variation
+      5  0037		       30 02		      bmi	.NtscMode
+      6  0039		       a2 4a		      ldx	#VBLANK_PAL
+      7  003b				   .NtscMode
+      8  003b		       a9 0e		      lda	#%1110
+      9  003d				   .VsyncLoop
+     10  003d		       85 02		      sta	WSYNC
+     11  003f		       85 00		      sta	VSYNC
+     12  0041		       85 01		      sta	VBLANK
+     13  0043		       8e 96 02 	      stx	TIM64T
+     14  0046		       4a		      lsr
+     15  0047		       d0 f4		      bne	.VsyncLoop
+     16  0049
+     15  0049
+     16  0049		       a5 84		      lda	MusicNote
+     17  004b		       10 1d		      bpl	.IntroMusic
+     18  004d
+     19  004d		       a2 08		      ldx	#8
+     20  004f		       c9 fc		      cmp	#252
+     21  0051		       f0 0b		      beq	.IntroClick
+     22  0053		       ca		      dex
+     23  0054		       c9 fd		      cmp	#253
+     24  0056		       f0 06		      beq	.IntroClick
+     25  0058
+     26  0058		       a9 00		      lda	#0
+     27  005a		       85 19		      sta	AUDV0
+     28  005c		       f0 3a		      beq	.NoEcho
+     29  005e
+     30  005e				   .IntroClick
+     31  005e		       a9 1f		      lda	#$1F
+     32  0060		       85 19		      sta	AUDV0
+     33  0062		       a9 08		      lda	#$8
+     34  0064		       85 15		      sta	AUDC0
+     35  0066		       86 17		      stx	AUDF0
+     36  0068		       d0 2e		      bne	.NoEcho
+     37  006a
+     38  006a				   .IntroMusic
+     39  006a		       a9 19		      lda	#>IntroSeq
+     40  006c		       85 f1		      sta	MusicPtr+1
+     41  006e		       a9 49		      lda	#<IntroSeq
+     42  0070		       85 f0		      sta	MusicPtr
+     43  0072		       a2 00		      ldx	#0
+     44  0074		       20 3f 16 	      jsr	SetNote
+     45  0077		       a9 3b		      lda	#<IntroVlm
+     46  0079		       85 f0		      sta	MusicPtr
+     47  007b		       20 53 16 	      jsr	SetVolume
+     48  007e
+     49  007e		       a5 84		      lda	MusicNote
+     50  0080		       c9 02		      cmp	#2
+     51  0082		       30 14		      bmi	.NoEcho
+     52  0084
+     53  0084		       a9 47		      lda	#<IntroSeq-2
+     54  0086		       85 f0		      sta	MusicPtr
+     55  0088		       a2 01		      ldx	#1
+     56  008a		       20 3f 16 	      jsr	SetNote
+     57  008d		       a9 3b		      lda	#<IntroVlm
+     58  008f		       85 f0		      sta	MusicPtr
+     59  0091		       20 53 16 	      jsr	SetVolume
+     60  0094		       4a		      lsr
+     61  0095		       4a		      lsr
+     62  0096		       85 1a		      sta	AUDV1
+     63  0098
+     64  0098		       20 6e 16    .NoEcho    jsr	UpdateNote
+     65  009b
+      0  009b					      TIMER_LOOP
+      1  009b					      SUBROUTINE
+      2  009b
+      3  009b				   .TimerLoop
+      4  009b		       ad 84 02 	      lda	INTIM
+      5  009e		       d0 fb		      bne	.TimerLoop
+      6  00a0
+     67  00a0
+     68  00a0
+     69  00a0		       a2 c1		      ldx	#193
+     70  00a2				   .IntroLoop
+     71  00a2		       ca		      dex
+     72  00a3		       85 02		      sta	WSYNC
+     73  00a5		       d0 fb		      bne	.IntroLoop
+     74  00a7
+     75  00a7		       a5 84		      lda	MusicNote
+     76  00a9		       c9 20		      cmp	#32
+     77  00ab		       f0 03		      beq	.IntroEnd
+     78  00ad		       4c 21 10 	      jmp	.IntroOscan
+     79  00b0
+     80  00b0				   .IntroEnd
+     81  00b0		       86 84		      stx	MusicNote
+     82  00b2
 ------- FILE bank1.asm
 ------- FILE bank1/code/oscan_logic.asm LEVEL 3 PASS 2
       0  00b2					      include	bank1/code/oscan_logic.asm
@@ -1176,7 +1175,7 @@
       9  00f9		       4b 1e		      asr	#%00011110
      10  00fb		       4a		      lsr
      11  00fc		       a8		      tay
-     12  00fd		       b9 13 19 	      lda	BassSeq,y
+     12  00fd		       b9 25 19 	      lda	BassSeq,y
      13  0100		       85 18		      sta	AUDF1
      14  0102		       a9 06		      lda	#6
      15  0104		       a0 07		      ldy	#7
@@ -1195,16 +1194,16 @@
      28  0114		       8a		      txa
      29  0115		       29 0f		      and	#$F
      30  0117		       18		      clc
-     31  0118		       79 57 19 	      adc	MusicSeqs,y
+     31  0118		       79 69 19 	      adc	MusicSeqs,y
      32  011b		       a8		      tay
      33  011c
      34  011c		       a9 19		      lda	#>MusicSeq0
      35  011e		       85 f1		      sta	MusicPtr+1
-     36  0120		       a9 67		      lda	#<MusicSeq0
+     36  0120		       a9 79		      lda	#<MusicSeq0
      37  0122		       85 f0		      sta	MusicPtr
      38  0124		       a2 00		      ldx	#0
      39  0126		       20 41 16 	      jsr	SetNote2
-     40  0129		       a9 1b		      lda	#<VlmEnvelope
+     40  0129		       a9 2d		      lda	#<VlmEnvelope
      41  012b		       85 f0		      sta	MusicPtr
      42  012d		       20 53 16 	      jsr	SetVolume
      43  0130
@@ -2412,7 +2411,7 @@
      36  065e		       a6 f3		      ldx	TempNote	; recover current note
      37  0660		       d0 04		      bne	.NoHold	; reset envelope if no note hold
      38  0662		       18		      clc		; otherwise...
-     39  0663		       79 00 19 	      adc	NoteLengths-1,y	; add last note's length to envelope offset
+     39  0663		       79 00 19 	      adc	NoteLenNTSC-1,y	; add last note's length to envelope offset
      40  0666		       a8	   .NoHold    tay
      41  0667		       b1 f0		      lda	(MusicPtr),y	; get new volume for voice X
      42  0669		       a6 f2		      ldx	TempX	; recover voice number
@@ -2426,35 +2425,36 @@
      50  066e		       e6 85		      inc	NoteData	; move to the next step of this note
      51  0670		       a5 85		      lda	NoteData
      52  0672		       29 07		      and	#7
-     53  0674		       24 81		      bit	Variation
-     54  0676		       10 04		      bpl	.PAL
-     55  0678		       d9 01 19 	      cmp	NoteLengths,y	; check for end of note in NTSC mode
-      0  067b					      SKIP_WORD
-      1  067b		       0c		      HEX	0C
-     57  067c		       c9 05	   .PAL       cmp	#5	; check for end of note in PAL mode
-     58  067e		       d0 11		      bne	.Same	; branch if note not over yet
-     59  0680		       a5 85		      lda	NoteData	; otherwise...
-     60  0682		       29 f8		      and	#$F8	; reset 3 low bits of NoteData
-     61  0684		       18		      clc
-     62  0685		       69 08		      adc	#1<<3	; step forward to the next note length
-     63  0687		       c9 90		      cmp	#18<<3
-     64  0689		       d0 02		      bne	.NoRoll
-     65  068b		       a9 00		      lda	#0	; roll note length counter after 18 notes
-     66  068d		       85 85	   .NoRoll    sta	NoteData
-     67  068f		       e6 84		      inc	MusicNote	; step forward to the next note
-     68  0691		       60	   .Same      rts
-     69  0692
+     53  0674		       a8		      tay
+     54  0675		       24 81		      bit	Variation
+     55  0677		       10 07		      bpl	.PAL
+     56  0679		       d9 01 19 	      cmp	NoteLenNTSC,y	; check for end of note in NTSC mode
+     57  067c		       d0 18		      bne	.Same
+     58  067e		       f0 05		      beq	.NTSC
+     59  0680		       d9 13 19    .PAL       cmp	NoteLenPAL,y	; check for end of note in PAL mode
+     60  0683		       d0 11		      bne	.Same	; branch if note not over yet
+     61  0685		       a5 85	   .NTSC      lda	NoteData	; otherwise...
+     62  0687		       29 f8		      and	#$F8	; reset 3 low bits of NoteData
+     63  0689		       18		      clc
+     64  068a		       69 08		      adc	#1<<3	; step forward to the next note length
+     65  068c		       c9 90		      cmp	#18<<3
+     66  068e		       d0 02		      bne	.NoRoll
+     67  0690		       a9 00		      lda	#0	; roll note length counter after 18 notes
+     68  0692		       85 85	   .NoRoll    sta	NoteData
+     69  0694		       e6 84		      inc	MusicNote	; step forward to the next note
+     70  0696		       60	   .Same      rts
+     71  0697
 ------- FILE bank1.asm
 ------- FILE bank1/data/menucatgfx.asm LEVEL 3 PASS 2
-      0  0692					      include	bank1/data/menucatgfx.asm
-      1  0692							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  0692							; Menu Cat Graphics
-      3  0692							;
-      4  0692							; Graphics for drawing the menu cat display
-      5  0692							;
-      6  0692							; Uses 1 page + 173 bytes of ROM
-      7  0692							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      8  0692
+      0  0697					      include	bank1/data/menucatgfx.asm
+      1  0697							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  0697							; Menu Cat Graphics
+      3  0697							;
+      4  0697							; Graphics for drawing the menu cat display
+      5  0697							;
+      6  0697							; Uses 1 page + 173 bytes of ROM
+      7  0697							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      8  0697
       9  0700		       00 00 00 00*	      ALIGN	$100
      10  0700
      11  0700				   MenuCatGfxPage1
@@ -3249,9 +3249,9 @@
      26  0900		       00 89	   NOTE_G6    equ	128 + 9
      27  0900		       00 88	   NOTE_A6    equ	128 + 8
      28  0900
-     29  0900							; note lengths in frames - 19 bytes
+     29  0900							; note lengths in frames - 37 bytes
      30  0900		       06		      .byte.b	6
-     31  0901				   NoteLengths
+     31  0901				   NoteLenNTSC
      32  0901		       06		      .byte.b	6
      33  0902		       07		      .byte.b	7
      34  0903		       06		      .byte.b	6
@@ -3271,290 +3271,310 @@
      48  0911		       07		      .byte.b	7
      49  0912		       06		      .byte.b	6
      50  0913
-     51  0913				   BassSeq
-     52  0913		       0b		      .byte.b	$0B
-     53  0914		       0a		      .byte.b	$0A
-     54  0915		       0c		      .byte.b	$0C
-     55  0916		       09		      .byte.b	$09
-     56  0917		       0d		      .byte.b	$0D
-     57  0918		       0a		      .byte.b	$0A
-     58  0919		       0f		      .byte.b	$0F
-     59  091a		       0f		      .byte.b	$0F
-     60  091b
-     61  091b							; main voice volume envelope - 14 bytes
-     62  091b				   VlmEnvelope
-     63  091b		       09 0b 0d 0e*	      HEX	09 0B 0D 0E 0F 0F 0F
-     64  0922		       0e 0d 0c 0a*	      HEX	0E 0D 0C 0A 09 07 05
-     65  0929
-     66  0929				   IntroVlm
-     67  0929		       0f 0e 0d 0b*	      HEX	0F 0E 0D 0B 0A 09 08
-     68  0930		       07 06 05 04*	      HEX	07 06 05 04 03 02 01
-     69  0937
-     70  0937				   IntroSeq
-     71  0937		       98		      .byte.b	NOTE_D5S
-     72  0938		       97		      .byte.b	NOTE_E5
-     73  0939		       94		      .byte.b	NOTE_F5S
-     74  093a		       00		      .byte.b	NOTE_HOLD
-     75  093b		       8f		      .byte.b	NOTE_B5
-     76  093c		       00		      .byte.b	NOTE_HOLD
-     77  093d		       98		      .byte.b	NOTE_D5S
-     78  093e		       97		      .byte.b	NOTE_E5
-     79  093f
-     80  093f		       94		      .byte.b	NOTE_F5S
-     81  0940		       8f		      .byte.b	NOTE_B5
-     82  0941		       8d		      .byte.b	NOTE_C6S
-     83  0942		       00		      .byte.b	NOTE_HOLD
-     84  0943		       8d		      .byte.b	NOTE_C6S
-     85  0944		       97		      .byte.b	NOTE_E5
-     86  0945		       94		      .byte.b	NOTE_F5S
-     87  0946		       00		      .byte.b	NOTE_HOLD
-     88  0947
-     89  0947		       94		      .byte.b	NOTE_F5S
-     90  0948		       00		      .byte.b	NOTE_HOLD
+     51  0913				   NoteLenPAL
+     52  0913		       05		      .byte.b	5
+     53  0914		       05		      .byte.b	5
+     54  0915		       05		      .byte.b	5
+     55  0916		       06		      .byte.b	6
+     56  0917		       05		      .byte.b	5
+     57  0918		       05		      .byte.b	5
+     58  0919		       05		      .byte.b	5
+     59  091a		       06		      .byte.b	6
+     60  091b		       05		      .byte.b	5
+     61  091c		       05		      .byte.b	5
+     62  091d		       06		      .byte.b	6
+     63  091e		       05		      .byte.b	5
+     64  091f		       05		      .byte.b	5
+     65  0920		       05		      .byte.b	5
+     66  0921		       06		      .byte.b	6
+     67  0922		       05		      .byte.b	5
+     68  0923		       05		      .byte.b	5
+     69  0924		       06		      .byte.b	6
+     70  0925
+     71  0925				   BassSeq
+     72  0925		       0b		      .byte.b	$0B
+     73  0926		       0a		      .byte.b	$0A
+     74  0927		       0c		      .byte.b	$0C
+     75  0928		       09		      .byte.b	$09
+     76  0929		       0d		      .byte.b	$0D
+     77  092a		       0a		      .byte.b	$0A
+     78  092b		       0f		      .byte.b	$0F
+     79  092c		       0f		      .byte.b	$0F
+     80  092d
+     81  092d							; main voice volume envelope - 14 bytes
+     82  092d				   VlmEnvelope
+     83  092d		       09 0b 0d 0e*	      HEX	09 0B 0D 0E 0F 0F 0F
+     84  0934		       0e 0d 0c 0a*	      HEX	0E 0D 0C 0A 09 07 05
+     85  093b
+     86  093b				   IntroVlm
+     87  093b		       0f 0e 0d 0b*	      HEX	0F 0E 0D 0B 0A 09 08
+     88  0942		       07 06 05 04*	      HEX	07 06 05 04 03 02 01
+     89  0949
+     90  0949				   IntroSeq
      91  0949		       98		      .byte.b	NOTE_D5S
      92  094a		       97		      .byte.b	NOTE_E5
      93  094b		       94		      .byte.b	NOTE_F5S
      94  094c		       00		      .byte.b	NOTE_HOLD
      95  094d		       8f		      .byte.b	NOTE_B5
      96  094e		       00		      .byte.b	NOTE_HOLD
-     97  094f
-     98  094f		       8d		      .byte.b	NOTE_C6S
-     99  0950		       90		      .byte.b	128 + 16
-    100  0951		       8f		      .byte.b	NOTE_B5
-    101  0952		       8d		      .byte.b	NOTE_C6S
-    102  0953		       8b		      .byte.b	NOTE_E6
-    103  0954		       8d		      .byte.b	NOTE_C6S
-    104  0955		       8b		      .byte.b	NOTE_E6
-    105  0956		       8f		      .byte.b	NOTE_B5
-    106  0957
-    107  0957							; music sequence order for main voice - 16 bytes
-    108  0957				   MusicSeqs
-    109  0957		       00		      HEX	00
-    110  0958		       10		      HEX	10
-    111  0959		       20		      HEX	20
-    112  095a		       30		      HEX	30
-    113  095b		       00		      HEX	00
-    114  095c		       10		      HEX	10
-    115  095d		       20		      HEX	20
-    116  095e		       40		      HEX	40
-    117  095f		       50		      HEX	50
-    118  0960		       60		      HEX	60
-    119  0961		       70		      HEX	70
-    120  0962		       80		      HEX	80
-    121  0963		       50		      HEX	50
-    122  0964		       60		      HEX	60
-    123  0965		       70		      HEX	70
-    124  0966		       90		      HEX	90
-    125  0967
-    126  0967							; music note sequences for main voice - 160 bytes
-    127  0967				   MusicSeq0
-    128  0967		       94		      .byte.b	NOTE_F5S
-    129  0968		       00		      .byte.b	NOTE_HOLD
-    130  0969		       92		      .byte.b	NOTE_G5S
-    131  096a		       00		      .byte.b	NOTE_HOLD
-    132  096b		       98		      .byte.b	NOTE_D5S
-    133  096c		       98		      .byte.b	NOTE_D5S
-    134  096d		       00		      .byte.b	NOTE_HOLD
-    135  096e		       9f		      .byte.b	NOTE_B4
-    136  096f		       9a		      .byte.b	NOTE_D5
-    137  0970		       9b		      .byte.b	NOTE_C5S
-    138  0971		       9f		      .byte.b	NOTE_B4
-    139  0972		       00		      .byte.b	NOTE_HOLD
-    140  0973		       9f		      .byte.b	NOTE_B4
-    141  0974		       00		      .byte.b	NOTE_HOLD
-    142  0975		       9b		      .byte.b	NOTE_C5S
-    143  0976		       00		      .byte.b	NOTE_HOLD
-    144  0977
-    145  0977		       9a		      .byte.b	NOTE_D5
-    146  0978		       00		      .byte.b	NOTE_HOLD
-    147  0979		       9a		      .byte.b	NOTE_D5
-    148  097a		       9b		      .byte.b	NOTE_C5S
-    149  097b		       9f		      .byte.b	NOTE_B4
-    150  097c		       9b		      .byte.b	NOTE_C5S
-    151  097d		       98		      .byte.b	NOTE_D5S
-    152  097e		       94		      .byte.b	NOTE_F5S
-    153  097f		       92		      .byte.b	NOTE_G5S
-    154  0980		       98		      .byte.b	NOTE_D5S
-    155  0981		       94		      .byte.b	NOTE_F5S
-    156  0982		       9b		      .byte.b	NOTE_C5S
-    157  0983		       98		      .byte.b	NOTE_D5S
-    158  0984		       9f		      .byte.b	NOTE_B4
-    159  0985		       9b		      .byte.b	NOTE_C5S
-    160  0986		       9f		      .byte.b	NOTE_B4
-    161  0987
-    162  0987		       98		      .byte.b	NOTE_D5S
+     97  094f		       98		      .byte.b	NOTE_D5S
+     98  0950		       97		      .byte.b	NOTE_E5
+     99  0951
+    100  0951		       94		      .byte.b	NOTE_F5S
+    101  0952		       8f		      .byte.b	NOTE_B5
+    102  0953		       8d		      .byte.b	NOTE_C6S
+    103  0954		       00		      .byte.b	NOTE_HOLD
+    104  0955		       8d		      .byte.b	NOTE_C6S
+    105  0956		       97		      .byte.b	NOTE_E5
+    106  0957		       94		      .byte.b	NOTE_F5S
+    107  0958		       00		      .byte.b	NOTE_HOLD
+    108  0959
+    109  0959		       94		      .byte.b	NOTE_F5S
+    110  095a		       00		      .byte.b	NOTE_HOLD
+    111  095b		       98		      .byte.b	NOTE_D5S
+    112  095c		       97		      .byte.b	NOTE_E5
+    113  095d		       94		      .byte.b	NOTE_F5S
+    114  095e		       00		      .byte.b	NOTE_HOLD
+    115  095f		       8f		      .byte.b	NOTE_B5
+    116  0960		       00		      .byte.b	NOTE_HOLD
+    117  0961
+    118  0961		       8d		      .byte.b	NOTE_C6S
+    119  0962		       90		      .byte.b	128 + 16
+    120  0963		       8f		      .byte.b	NOTE_B5
+    121  0964		       8d		      .byte.b	NOTE_C6S
+    122  0965		       8b		      .byte.b	NOTE_E6
+    123  0966		       8d		      .byte.b	NOTE_C6S
+    124  0967		       8b		      .byte.b	NOTE_E6
+    125  0968		       8f		      .byte.b	NOTE_B5
+    126  0969
+    127  0969							; music sequence order for main voice - 16 bytes
+    128  0969				   MusicSeqs
+    129  0969		       00		      HEX	00
+    130  096a		       10		      HEX	10
+    131  096b		       20		      HEX	20
+    132  096c		       30		      HEX	30
+    133  096d		       00		      HEX	00
+    134  096e		       10		      HEX	10
+    135  096f		       20		      HEX	20
+    136  0970		       40		      HEX	40
+    137  0971		       50		      HEX	50
+    138  0972		       60		      HEX	60
+    139  0973		       70		      HEX	70
+    140  0974		       80		      HEX	80
+    141  0975		       50		      HEX	50
+    142  0976		       60		      HEX	60
+    143  0977		       70		      HEX	70
+    144  0978		       90		      HEX	90
+    145  0979
+    146  0979							; music note sequences for main voice - 160 bytes
+    147  0979				   MusicSeq0
+    148  0979		       94		      .byte.b	NOTE_F5S
+    149  097a		       00		      .byte.b	NOTE_HOLD
+    150  097b		       92		      .byte.b	NOTE_G5S
+    151  097c		       00		      .byte.b	NOTE_HOLD
+    152  097d		       98		      .byte.b	NOTE_D5S
+    153  097e		       98		      .byte.b	NOTE_D5S
+    154  097f		       00		      .byte.b	NOTE_HOLD
+    155  0980		       9f		      .byte.b	NOTE_B4
+    156  0981		       9a		      .byte.b	NOTE_D5
+    157  0982		       9b		      .byte.b	NOTE_C5S
+    158  0983		       9f		      .byte.b	NOTE_B4
+    159  0984		       00		      .byte.b	NOTE_HOLD
+    160  0985		       9f		      .byte.b	NOTE_B4
+    161  0986		       00		      .byte.b	NOTE_HOLD
+    162  0987		       9b		      .byte.b	NOTE_C5S
     163  0988		       00		      .byte.b	NOTE_HOLD
-    164  0989		       94		      .byte.b	NOTE_F5S
-    165  098a		       00		      .byte.b	NOTE_HOLD
-    166  098b		       92		      .byte.b	NOTE_G5S
-    167  098c		       98		      .byte.b	NOTE_D5S
-    168  098d		       94		      .byte.b	NOTE_F5S
-    169  098e		       9b		      .byte.b	NOTE_C5S
-    170  098f		       98		      .byte.b	NOTE_D5S
-    171  0990		       9f		      .byte.b	NOTE_B4
-    172  0991		       9b		      .byte.b	NOTE_C5S
-    173  0992		       98		      .byte.b	NOTE_D5S
-    174  0993		       9a		      .byte.b	NOTE_D5
-    175  0994		       9b		      .byte.b	NOTE_C5S
-    176  0995		       9f		      .byte.b	NOTE_B4
-    177  0996		       9b		      .byte.b	NOTE_C5S
-    178  0997
-    179  0997		       9a		      .byte.b	NOTE_D5
-    180  0998		       00		      .byte.b	NOTE_HOLD
-    181  0999		       9f		      .byte.b	NOTE_B4
-    182  099a		       9b		      .byte.b	NOTE_C5S
-    183  099b		       98		      .byte.b	NOTE_D5S
-    184  099c		       94		      .byte.b	NOTE_F5S
-    185  099d		       9b		      .byte.b	NOTE_C5S
-    186  099e		       9a		      .byte.b	NOTE_D5
-    187  099f		       9b		      .byte.b	NOTE_C5S
-    188  09a0		       9f		      .byte.b	NOTE_B4
-    189  09a1		       9b		      .byte.b	NOTE_C5S
-    190  09a2		       00		      .byte.b	NOTE_HOLD
-    191  09a3		       9f		      .byte.b	NOTE_B4
-    192  09a4		       00		      .byte.b	NOTE_HOLD
-    193  09a5		       9b		      .byte.b	NOTE_C5S
-    194  09a6		       00		      .byte.b	NOTE_HOLD
-    195  09a7
-    196  09a7		       9a		      .byte.b	NOTE_D5
-    197  09a8		       00		      .byte.b	NOTE_HOLD
-    198  09a9		       9f		      .byte.b	NOTE_B4
-    199  09aa		       9b		      .byte.b	NOTE_C5S
-    200  09ab		       98		      .byte.b	NOTE_D5S
-    201  09ac		       94		      .byte.b	NOTE_F5S
-    202  09ad		       9b		      .byte.b	NOTE_C5S
-    203  09ae		       9a		      .byte.b	NOTE_D5
-    204  09af		       9b		      .byte.b	NOTE_C5S
-    205  09b0		       9f		      .byte.b	NOTE_B4
-    206  09b1		       9b		      .byte.b	NOTE_C5S
-    207  09b2		       00		      .byte.b	NOTE_HOLD
-    208  09b3		       9f		      .byte.b	NOTE_B4
-    209  09b4		       00		      .byte.b	NOTE_HOLD
-    210  09b5		       9f		      .byte.b	NOTE_B4
-    211  09b6		       00		      .byte.b	NOTE_HOLD
-    212  09b7
-    213  09b7		       9f		      .byte.b	NOTE_B4
+    164  0989
+    165  0989		       9a		      .byte.b	NOTE_D5
+    166  098a		       00		      .byte.b	NOTE_HOLD
+    167  098b		       9a		      .byte.b	NOTE_D5
+    168  098c		       9b		      .byte.b	NOTE_C5S
+    169  098d		       9f		      .byte.b	NOTE_B4
+    170  098e		       9b		      .byte.b	NOTE_C5S
+    171  098f		       98		      .byte.b	NOTE_D5S
+    172  0990		       94		      .byte.b	NOTE_F5S
+    173  0991		       92		      .byte.b	NOTE_G5S
+    174  0992		       98		      .byte.b	NOTE_D5S
+    175  0993		       94		      .byte.b	NOTE_F5S
+    176  0994		       9b		      .byte.b	NOTE_C5S
+    177  0995		       98		      .byte.b	NOTE_D5S
+    178  0996		       9f		      .byte.b	NOTE_B4
+    179  0997		       9b		      .byte.b	NOTE_C5S
+    180  0998		       9f		      .byte.b	NOTE_B4
+    181  0999
+    182  0999		       98		      .byte.b	NOTE_D5S
+    183  099a		       00		      .byte.b	NOTE_HOLD
+    184  099b		       94		      .byte.b	NOTE_F5S
+    185  099c		       00		      .byte.b	NOTE_HOLD
+    186  099d		       92		      .byte.b	NOTE_G5S
+    187  099e		       98		      .byte.b	NOTE_D5S
+    188  099f		       94		      .byte.b	NOTE_F5S
+    189  09a0		       9b		      .byte.b	NOTE_C5S
+    190  09a1		       98		      .byte.b	NOTE_D5S
+    191  09a2		       9f		      .byte.b	NOTE_B4
+    192  09a3		       9b		      .byte.b	NOTE_C5S
+    193  09a4		       98		      .byte.b	NOTE_D5S
+    194  09a5		       9a		      .byte.b	NOTE_D5
+    195  09a6		       9b		      .byte.b	NOTE_C5S
+    196  09a7		       9f		      .byte.b	NOTE_B4
+    197  09a8		       9b		      .byte.b	NOTE_C5S
+    198  09a9
+    199  09a9		       9a		      .byte.b	NOTE_D5
+    200  09aa		       00		      .byte.b	NOTE_HOLD
+    201  09ab		       9f		      .byte.b	NOTE_B4
+    202  09ac		       9b		      .byte.b	NOTE_C5S
+    203  09ad		       98		      .byte.b	NOTE_D5S
+    204  09ae		       94		      .byte.b	NOTE_F5S
+    205  09af		       9b		      .byte.b	NOTE_C5S
+    206  09b0		       9a		      .byte.b	NOTE_D5
+    207  09b1		       9b		      .byte.b	NOTE_C5S
+    208  09b2		       9f		      .byte.b	NOTE_B4
+    209  09b3		       9b		      .byte.b	NOTE_C5S
+    210  09b4		       00		      .byte.b	NOTE_HOLD
+    211  09b5		       9f		      .byte.b	NOTE_B4
+    212  09b6		       00		      .byte.b	NOTE_HOLD
+    213  09b7		       9b		      .byte.b	NOTE_C5S
     214  09b8		       00		      .byte.b	NOTE_HOLD
-    215  09b9		       0d		      .byte.b	NOTE_F4S
-    216  09ba		       0c		      .byte.b	NOTE_G4S
-    217  09bb		       9f		      .byte.b	NOTE_B4
-    218  09bc		       00		      .byte.b	NOTE_HOLD
-    219  09bd		       0d		      .byte.b	NOTE_F4S
-    220  09be		       0c		      .byte.b	NOTE_G4S
-    221  09bf		       9f		      .byte.b	NOTE_B4
-    222  09c0		       9b		      .byte.b	NOTE_C5S
-    223  09c1		       98		      .byte.b	NOTE_D5S
-    224  09c2		       9f		      .byte.b	NOTE_B4
-    225  09c3		       97		      .byte.b	NOTE_E5
-    226  09c4		       98		      .byte.b	NOTE_D5S
-    227  09c5		       97		      .byte.b	NOTE_E5
-    228  09c6		       94		      .byte.b	NOTE_F5S
-    229  09c7
+    215  09b9
+    216  09b9		       9a		      .byte.b	NOTE_D5
+    217  09ba		       00		      .byte.b	NOTE_HOLD
+    218  09bb		       9f		      .byte.b	NOTE_B4
+    219  09bc		       9b		      .byte.b	NOTE_C5S
+    220  09bd		       98		      .byte.b	NOTE_D5S
+    221  09be		       94		      .byte.b	NOTE_F5S
+    222  09bf		       9b		      .byte.b	NOTE_C5S
+    223  09c0		       9a		      .byte.b	NOTE_D5
+    224  09c1		       9b		      .byte.b	NOTE_C5S
+    225  09c2		       9f		      .byte.b	NOTE_B4
+    226  09c3		       9b		      .byte.b	NOTE_C5S
+    227  09c4		       00		      .byte.b	NOTE_HOLD
+    228  09c5		       9f		      .byte.b	NOTE_B4
+    229  09c6		       00		      .byte.b	NOTE_HOLD
     230  09c7		       9f		      .byte.b	NOTE_B4
     231  09c8		       00		      .byte.b	NOTE_HOLD
-    232  09c9		       9f		      .byte.b	NOTE_B4
-    233  09ca		       00		      .byte.b	NOTE_HOLD
-    234  09cb		       0d		      .byte.b	NOTE_F4S
-    235  09cc		       0c		      .byte.b	NOTE_G4S
-    236  09cd		       9f		      .byte.b	NOTE_B4
-    237  09ce		       0d		      .byte.b	NOTE_F4S
-    238  09cf		       97		      .byte.b	NOTE_E5
-    239  09d0		       98		      .byte.b	NOTE_D5S
-    240  09d1		       9b		      .byte.b	NOTE_C5S
-    241  09d2		       9f		      .byte.b	NOTE_B4
-    242  09d3		       0d		      .byte.b	NOTE_F4S
-    243  09d4		       10		      .byte.b	NOTE_D4S
-    244  09d5		       0f		      .byte.b	NOTE_E4
-    245  09d6		       0d		      .byte.b	NOTE_F4S
-    246  09d7
-    247  09d7		       9f		      .byte.b	NOTE_B4
-    248  09d8		       00		      .byte.b	NOTE_HOLD
-    249  09d9		       0d		      .byte.b	NOTE_F4S
-    250  09da		       0c		      .byte.b	NOTE_G4S
-    251  09db		       9f		      .byte.b	NOTE_B4
-    252  09dc		       00		      .byte.b	NOTE_HOLD
-    253  09dd		       0d		      .byte.b	NOTE_F4S
-    254  09de		       0c		      .byte.b	NOTE_G4S
-    255  09df		       9f		      .byte.b	NOTE_B4
-    256  09e0		       9f		      .byte.b	NOTE_B4
-    257  09e1		       9b		      .byte.b	NOTE_C5S
-    258  09e2		       98		      .byte.b	NOTE_D5S
-    259  09e3		       9f		      .byte.b	NOTE_B4
-    260  09e4		       0d		      .byte.b	NOTE_F4S
-    261  09e5		       0c		      .byte.b	NOTE_G4S
-    262  09e6		       0d		      .byte.b	NOTE_F4S
-    263  09e7
-    264  09e7		       9f		      .byte.b	NOTE_B4
-    265  09e8		       00		      .byte.b	NOTE_HOLD
-    266  09e9		       9f		      .byte.b	NOTE_B4
-    267  09ea		       0a		      .byte.b	NOTE_A4S
-    268  09eb		       9f		      .byte.b	NOTE_B4
-    269  09ec		       0d		      .byte.b	NOTE_F4S
-    270  09ed		       0c		      .byte.b	NOTE_G4S
-    271  09ee		       9f		      .byte.b	NOTE_B4
-    272  09ef		       97		      .byte.b	NOTE_E5
-    273  09f0		       98		      .byte.b	NOTE_D5S
-    274  09f1		       97		      .byte.b	NOTE_E5
-    275  09f2		       94		      .byte.b	NOTE_F5S
-    276  09f3		       9f		      .byte.b	NOTE_B4
-    277  09f4		       00		      .byte.b	NOTE_HOLD
-    278  09f5		       0a		      .byte.b	NOTE_A4S
-    279  09f6		       00		      .byte.b	NOTE_HOLD
-    280  09f7
-    281  09f7		       9f		      .byte.b	NOTE_B4
-    282  09f8		       00		      .byte.b	NOTE_HOLD
-    283  09f9		       9f		      .byte.b	NOTE_B4
-    284  09fa		       0a		      .byte.b	NOTE_A4S
-    285  09fb		       9f		      .byte.b	NOTE_B4
-    286  09fc		       0d		      .byte.b	NOTE_F4S
-    287  09fd		       0c		      .byte.b	NOTE_G4S
-    288  09fe		       9f		      .byte.b	NOTE_B4
-    289  09ff		       97		      .byte.b	NOTE_E5
-    290  0a00		       98		      .byte.b	NOTE_D5S
-    291  0a01		       97		      .byte.b	NOTE_E5
-    292  0a02		       94		      .byte.b	NOTE_F5S
-    293  0a03		       9f		      .byte.b	NOTE_B4
-    294  0a04		       00		      .byte.b	NOTE_HOLD
-    295  0a05		       9b		      .byte.b	NOTE_C5S
-    296  0a06		       00		      .byte.b	NOTE_HOLD
-    297  0a07
-    298  0a07		       10		      .byte.b	NOTE_D4S
-    299  0a08		       0f		      .byte.b	NOTE_E4
-    300  0a09		       0d		      .byte.b	NOTE_F4S
-    301  0a0a		       00		      .byte.b	NOTE_HOLD
-    302  0a0b		       9f		      .byte.b	NOTE_B4
-    303  0a0c		       00		      .byte.b	NOTE_HOLD
-    304  0a0d		       10		      .byte.b	NOTE_D4S
-    305  0a0e		       0f		      .byte.b	NOTE_E4
-    306  0a0f		       0d		      .byte.b	NOTE_F4S
-    307  0a10		       9f		      .byte.b	NOTE_B4
-    308  0a11		       9b		      .byte.b	NOTE_C5S
-    309  0a12		       98		      .byte.b	NOTE_D5S
-    310  0a13		       9b		      .byte.b	NOTE_C5S
-    311  0a14		       0a		      .byte.b	NOTE_A4S
-    312  0a15		       9f		      .byte.b	NOTE_B4
-    313  0a16		       00		      .byte.b	NOTE_HOLD
-    314  0a17
-    315  0a17		       0d		      .byte.b	NOTE_F4S
+    232  09c9
+    233  09c9		       9f		      .byte.b	NOTE_B4
+    234  09ca		       00		      .byte.b	NOTE_HOLD
+    235  09cb		       0d		      .byte.b	NOTE_F4S
+    236  09cc		       0c		      .byte.b	NOTE_G4S
+    237  09cd		       9f		      .byte.b	NOTE_B4
+    238  09ce		       00		      .byte.b	NOTE_HOLD
+    239  09cf		       0d		      .byte.b	NOTE_F4S
+    240  09d0		       0c		      .byte.b	NOTE_G4S
+    241  09d1		       9f		      .byte.b	NOTE_B4
+    242  09d2		       9b		      .byte.b	NOTE_C5S
+    243  09d3		       98		      .byte.b	NOTE_D5S
+    244  09d4		       9f		      .byte.b	NOTE_B4
+    245  09d5		       97		      .byte.b	NOTE_E5
+    246  09d6		       98		      .byte.b	NOTE_D5S
+    247  09d7		       97		      .byte.b	NOTE_E5
+    248  09d8		       94		      .byte.b	NOTE_F5S
+    249  09d9
+    250  09d9		       9f		      .byte.b	NOTE_B4
+    251  09da		       00		      .byte.b	NOTE_HOLD
+    252  09db		       9f		      .byte.b	NOTE_B4
+    253  09dc		       00		      .byte.b	NOTE_HOLD
+    254  09dd		       0d		      .byte.b	NOTE_F4S
+    255  09de		       0c		      .byte.b	NOTE_G4S
+    256  09df		       9f		      .byte.b	NOTE_B4
+    257  09e0		       0d		      .byte.b	NOTE_F4S
+    258  09e1		       97		      .byte.b	NOTE_E5
+    259  09e2		       98		      .byte.b	NOTE_D5S
+    260  09e3		       9b		      .byte.b	NOTE_C5S
+    261  09e4		       9f		      .byte.b	NOTE_B4
+    262  09e5		       0d		      .byte.b	NOTE_F4S
+    263  09e6		       10		      .byte.b	NOTE_D4S
+    264  09e7		       0f		      .byte.b	NOTE_E4
+    265  09e8		       0d		      .byte.b	NOTE_F4S
+    266  09e9
+    267  09e9		       9f		      .byte.b	NOTE_B4
+    268  09ea		       00		      .byte.b	NOTE_HOLD
+    269  09eb		       0d		      .byte.b	NOTE_F4S
+    270  09ec		       0c		      .byte.b	NOTE_G4S
+    271  09ed		       9f		      .byte.b	NOTE_B4
+    272  09ee		       00		      .byte.b	NOTE_HOLD
+    273  09ef		       0d		      .byte.b	NOTE_F4S
+    274  09f0		       0c		      .byte.b	NOTE_G4S
+    275  09f1		       9f		      .byte.b	NOTE_B4
+    276  09f2		       9f		      .byte.b	NOTE_B4
+    277  09f3		       9b		      .byte.b	NOTE_C5S
+    278  09f4		       98		      .byte.b	NOTE_D5S
+    279  09f5		       9f		      .byte.b	NOTE_B4
+    280  09f6		       0d		      .byte.b	NOTE_F4S
+    281  09f7		       0c		      .byte.b	NOTE_G4S
+    282  09f8		       0d		      .byte.b	NOTE_F4S
+    283  09f9
+    284  09f9		       9f		      .byte.b	NOTE_B4
+    285  09fa		       00		      .byte.b	NOTE_HOLD
+    286  09fb		       9f		      .byte.b	NOTE_B4
+    287  09fc		       0a		      .byte.b	NOTE_A4S
+    288  09fd		       9f		      .byte.b	NOTE_B4
+    289  09fe		       0d		      .byte.b	NOTE_F4S
+    290  09ff		       0c		      .byte.b	NOTE_G4S
+    291  0a00		       9f		      .byte.b	NOTE_B4
+    292  0a01		       97		      .byte.b	NOTE_E5
+    293  0a02		       98		      .byte.b	NOTE_D5S
+    294  0a03		       97		      .byte.b	NOTE_E5
+    295  0a04		       94		      .byte.b	NOTE_F5S
+    296  0a05		       9f		      .byte.b	NOTE_B4
+    297  0a06		       00		      .byte.b	NOTE_HOLD
+    298  0a07		       0a		      .byte.b	NOTE_A4S
+    299  0a08		       00		      .byte.b	NOTE_HOLD
+    300  0a09
+    301  0a09		       9f		      .byte.b	NOTE_B4
+    302  0a0a		       00		      .byte.b	NOTE_HOLD
+    303  0a0b		       9f		      .byte.b	NOTE_B4
+    304  0a0c		       0a		      .byte.b	NOTE_A4S
+    305  0a0d		       9f		      .byte.b	NOTE_B4
+    306  0a0e		       0d		      .byte.b	NOTE_F4S
+    307  0a0f		       0c		      .byte.b	NOTE_G4S
+    308  0a10		       9f		      .byte.b	NOTE_B4
+    309  0a11		       97		      .byte.b	NOTE_E5
+    310  0a12		       98		      .byte.b	NOTE_D5S
+    311  0a13		       97		      .byte.b	NOTE_E5
+    312  0a14		       94		      .byte.b	NOTE_F5S
+    313  0a15		       9f		      .byte.b	NOTE_B4
+    314  0a16		       00		      .byte.b	NOTE_HOLD
+    315  0a17		       9b		      .byte.b	NOTE_C5S
     316  0a18		       00		      .byte.b	NOTE_HOLD
-    317  0a19		       10		      .byte.b	NOTE_D4S
-    318  0a1a		       0f		      .byte.b	NOTE_E4
-    319  0a1b		       0d		      .byte.b	NOTE_F4S
-    320  0a1c		       00		      .byte.b	NOTE_HOLD
-    321  0a1d		       9f		      .byte.b	NOTE_B4
-    322  0a1e		       00		      .byte.b	NOTE_HOLD
-    323  0a1f		       9b		      .byte.b	NOTE_C5S
-    324  0a20		       0a		      .byte.b	NOTE_A4S
-    325  0a21		       9f		      .byte.b	NOTE_B4
-    326  0a22		       9b		      .byte.b	NOTE_C5S
-    327  0a23		       97		      .byte.b	NOTE_E5
-    328  0a24		       98		      .byte.b	NOTE_D5S
-    329  0a25		       97		      .byte.b	NOTE_E5
-    330  0a26		       9b		      .byte.b	NOTE_C5S
-    331  0a27
+    317  0a19
+    318  0a19		       10		      .byte.b	NOTE_D4S
+    319  0a1a		       0f		      .byte.b	NOTE_E4
+    320  0a1b		       0d		      .byte.b	NOTE_F4S
+    321  0a1c		       00		      .byte.b	NOTE_HOLD
+    322  0a1d		       9f		      .byte.b	NOTE_B4
+    323  0a1e		       00		      .byte.b	NOTE_HOLD
+    324  0a1f		       10		      .byte.b	NOTE_D4S
+    325  0a20		       0f		      .byte.b	NOTE_E4
+    326  0a21		       0d		      .byte.b	NOTE_F4S
+    327  0a22		       9f		      .byte.b	NOTE_B4
+    328  0a23		       9b		      .byte.b	NOTE_C5S
+    329  0a24		       98		      .byte.b	NOTE_D5S
+    330  0a25		       9b		      .byte.b	NOTE_C5S
+    331  0a26		       0a		      .byte.b	NOTE_A4S
+    332  0a27		       9f		      .byte.b	NOTE_B4
+    333  0a28		       00		      .byte.b	NOTE_HOLD
+    334  0a29
+    335  0a29		       0d		      .byte.b	NOTE_F4S
+    336  0a2a		       00		      .byte.b	NOTE_HOLD
+    337  0a2b		       10		      .byte.b	NOTE_D4S
+    338  0a2c		       0f		      .byte.b	NOTE_E4
+    339  0a2d		       0d		      .byte.b	NOTE_F4S
+    340  0a2e		       00		      .byte.b	NOTE_HOLD
+    341  0a2f		       9f		      .byte.b	NOTE_B4
+    342  0a30		       00		      .byte.b	NOTE_HOLD
+    343  0a31		       9b		      .byte.b	NOTE_C5S
+    344  0a32		       0a		      .byte.b	NOTE_A4S
+    345  0a33		       9f		      .byte.b	NOTE_B4
+    346  0a34		       9b		      .byte.b	NOTE_C5S
+    347  0a35		       97		      .byte.b	NOTE_E5
+    348  0a36		       98		      .byte.b	NOTE_D5S
+    349  0a37		       97		      .byte.b	NOTE_E5
+    350  0a38		       9b		      .byte.b	NOTE_C5S
+    351  0a39
 ------- FILE bank1.asm
-     16  0a27
-      0  0a27					      END_BANK	1
+     16  0a39
+      0  0a39					      END_BANK	1
       1  0ffa					      ORG	[1 - 1] * $1000 + $0FFA
       2  0ffa
       3  0ffa		       00 10		      .word.w	JmpInitSystem

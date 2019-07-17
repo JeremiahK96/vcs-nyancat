@@ -7,7 +7,10 @@ Intro
 	lda #250
 	sta MusicNote
 
-.IntroVblank
+.IntroOscan
+	SET_OSCAN_TIMER
+	TIMER_LOOP
+
 	VERT_SYNC
 
 	lda MusicNote
@@ -25,7 +28,7 @@ Intro
 	beq .NoEcho
 
 .IntroClick
-	lda #2
+	lda #$1F
 	sta AUDV0
 	lda #$8
 	sta AUDC0
@@ -69,14 +72,10 @@ Intro
 	sta WSYNC
 	bne .IntroLoop
 
-
-	SET_OSCAN_TIMER
-	TIMER_LOOP
-
 	lda MusicNote
 	cmp #32
 	beq .IntroEnd
-	jmp .IntroVblank
+	jmp .IntroOscan
 
 .IntroEnd
 	stx MusicNote

@@ -11,11 +11,11 @@
 0.Frame0                 121a              (R )
 0.FREE_BYTES             0000                  
 0.HiCat                  1282              (R )
-0.IntroClick             104c              (R )
+0.IntroClick             105e              (R )
 0.IntroEnd               10b0              (R )
-0.IntroLoop              1090              (R )
-0.IntroMusic             1058              (R )
-0.IntroVblank            1021              (R )
+0.IntroLoop              10a2              (R )
+0.IntroMusic             106a              (R )
+0.IntroOscan             1021              (R )
 0.Jmp2                   1170              (R )
 0.LoCat                  1633              (R )
 0.Loop                   1312              (R )
@@ -29,7 +29,7 @@
 0.LoopPfR                11bc              (R )
 0.Loud                   110a              (R )
 0.LP                     1309              (R )
-0.NoEcho                 1086              (R )
+0.NoEcho                 1098              (R )
 0.NoFrameInc             10dc              (R )
 0.NoReset                10da              (R )
 0.NoResetPress           10c9              (R )
@@ -40,7 +40,7 @@
 0.Rainbow2               1157              (R )
 0.SetBowColors           1189              (R )
 0.Skip                   1327              (R )
-10.TimerLoop             10a2              (R )
+10.TimerLoop             109b              (R )
 12.NtscMode              10ba              (R )
 14.TimerLoop             10dc              (R )
 16.NtscMode              10e9              (R )
@@ -65,13 +65,14 @@
 37.HiNote                164e              (R )
 37.Hold                  1652              (R )
 37.NoHold                1666              (R )
-37.NoRoll                168d              (R )
-37.PAL                   167c              (R )
-37.Same                  1691              (R )
+37.NoRoll                1692              (R )
+37.NTSC                  1685              (R )
+37.PAL                   1680              (R )
+37.Same                  1696              (R )
 4.NtscMode               1029              (R )
-4.VsyncLoop              102b              (R )
-6.TimerLoop              1089              (R )
-8.NtscMode               109d              (R )
+6.TimerLoop              102e              (R )
+8.NtscMode               103b              (R )
+8.VsyncLoop              103d              (R )
 AUDC0                    0015              (R )
 AUDC1                    0016              (R )
 AUDF0                    0017              (R )
@@ -82,7 +83,7 @@ BALL_SIZE_1              0000
 BALL_SIZE_2              0010                  
 BALL_SIZE_4              0020                  
 BALL_SIZE_8              0030                  
-BassSeq                  1913              (R )
+BassSeq                  1925              (R )
 BCDScore                 0088                  
 BowColorsPfPtr           0097              (R )
 CatGfxPtr1               0095                  
@@ -154,8 +155,8 @@ INPT4                    000c
 INPT5                    000d                  
 INTIM                    0284              (R )
 Intro                    101d                  
-IntroSeq                 1937              (R )
-IntroVlm                 1929              (R )
+IntroSeq                 1949              (R )
+IntroVlm                 193b              (R )
 JmpGamePlay              100c              (R )
 JmpInitSystem            1000              (R )
 JmpMenuOverScan          1006                  
@@ -207,8 +208,8 @@ MSL_SIZE_4               0020              (R )
 MSL_SIZE_8               0030              (R )
 MusicNote                0084              (R )
 MusicPtr                 00f0              (R )
-MusicSeq0                1967              (R )
-MusicSeqs                1957              (R )
+MusicSeq0                1979              (R )
+MusicSeqs                1969              (R )
 NO_ILLEGAL_OPCODES       0000 ????         (R )
 NOTE_A4S                 000a              (R )
 NOTE_A6                  0088                  
@@ -231,7 +232,8 @@ NOTE_G5S                 0092              (R )
 NOTE_G6                  0089                  
 NOTE_HOLD                0000              (R )
 NoteData                 0085              (R )
-NoteLengths              1901              (R )
+NoteLenNTSC              1901              (R )
+NoteLenPAL               1913              (R )
 NUSIZ0                   0004              (R )
 NUSIZ1                   0005              (R )
 ONE_COPY                 0000                  
@@ -329,7 +331,7 @@ VDELP0                   0025              (R )
 VDELP1                   0026                  
 VERSION_MACRO            006a                  
 VERSION_VCS              0069                  
-VlmEnvelope              191b              (R )
+VlmEnvelope              192d              (R )
 VSYNC                    0000              (R )
 WSYNC                    0002              (R )
 --- End of Symbol List.

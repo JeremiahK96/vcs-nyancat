@@ -26,12 +26,9 @@ NOTE_F6		equ	128 + 10
 NOTE_G6		equ	128 + 9
 NOTE_A6		equ	128 + 8
 
-; note lengths in frames - 19 bytes
+; note lengths in frames - 37 bytes
 	.byte	6
-NoteLengths
-	.byte	6
-	.byte	7
-	.byte	6
+NoteLenNTSC
 	.byte	6
 	.byte	7
 	.byte	6
@@ -46,6 +43,29 @@ NoteLengths
 	.byte	6
 	.byte	6
 	.byte	7
+	.byte	6
+	.byte	6
+	.byte	7
+	.byte	6
+
+NoteLenPAL
+	.byte	5
+	.byte	5
+	.byte	5
+	.byte	6
+	.byte	5
+	.byte	5
+	.byte	5
+	.byte	6
+	.byte	5
+	.byte	5
+	.byte	6
+	.byte	5
+	.byte	5
+	.byte	5
+	.byte	6
+	.byte	5
+	.byte	5
 	.byte	6
 
 BassSeq

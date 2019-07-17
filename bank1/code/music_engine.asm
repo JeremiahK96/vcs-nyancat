@@ -36,7 +36,7 @@ SetVolume
 	ldx TempNote		; recover current note
 	bne .NoHold		; reset envelope if no note hold
 	clc			; otherwise...
-	adc NoteLengths-1,y	; add last note's length to envelope offset
+	adc NoteLenNTSC-1,y	; add last note's length to envelope offset
 .NoHold	tay
 	lda (MusicPtr),y	; get new volume for voice X
 	ldx TempX		; recover voice number
@@ -50,13 +50,15 @@ UpdateNote
 	inc NoteData		; move to the next step of this note
 	lda NoteData
 	and #7
+	tay
 	bit Variation
 	bpl .PAL
-	cmp NoteLengths,y	; check for end of note in NTSC mode
-	SKIP_WORD
-.PAL	cmp #5			; check for end of note in PAL mode
+	cmp NoteLenNTSC,y	; check for end of note in NTSC mode
+	bne .Same
+	beq .NTSC
+.PAL	cmp NoteLenPAL,y	; check for end of note in PAL mode
 	bne .Same		; branch if note not over yet
-	lda NoteData		; otherwise...
+.NTSC	lda NoteData		; otherwise...
 	and #$F8		; reset 3 low bits of NoteData
 	clc
 	adc #1<<3		; step forward to the next note length
