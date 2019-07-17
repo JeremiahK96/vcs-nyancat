@@ -473,459 +473,461 @@
       2  0000 ????						; Define Ram Variables
       3  0000 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
       4  0000 ????
-      5 U00af ????				      SEG.U	VARS
-      6 U00af ????				      RORG	$80
-      7 U00af ????
+      5 U00b0 ????				      SEG.U	VARS
+      6 U00b0 ????				      RORG	$80
+      7 U00b0 ????
 ------- FILE headers/ram_global.asm LEVEL 3 PASS 2
-      0 U00af ????				      include	headers/ram_global.asm
-      1 U00af ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2 U00af ????						; Global Variables
-      3 U00af ????						;
-      4 U00af ????						; These variables are used globally and cannot be shared or otherwise corrupted
-      5 U00af ????						; Uses 15 bytes of RAM
-      6 U00af ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      7 U00af ????
-      8 U00af ????			   RamGlobal
-      9 U00af ????
-     10 U00af ????						; Game housekeeping - 2 bytes
-     11 U00af ????	       00	   Frame      ds	1	; current frame mod 256
-     12 U00b0 ????			   Variation		; game variation options
-     13 U00b0 ????	       00		      ds	1	; x-------	number of players
-     14 U00b1 ????						; -x------	current player
-     15 U00b1 ????						; --xx----	P1 difficulty
-     16 U00b1 ????						; ----xx--	P2 difficulty
-     17 U00b1 ????
-     18 U00b1 ????						; Random Numbers - 2 bytes
-     19 U00b1 ????	       00 00	   Rand16     ds	2	; 16-bit random number
-     20 U00b3 ????
-     21 U00b3 ????						; Music - 2 bytes
-     22 U00b3 ????			   MusicNote		; xxxx----	current sequence
-     23 U00b3 ????	       00		      ds	1	; ----xxxx	note in sequence
-     24 U00b4 ????
-     25 U00b4 ????			   NoteData		; xxxxx---	note length table offset
-     26 U00b4 ????	       00		      ds	1	; -----xxx	frames left in note
-     27 U00b5 ????
-     28 U00b5 ????						; Cat colors - 2 bytes
-     29 U00b5 ????			   CatTartColor 		; color for current player's cat in the kernels
-     30 U00b5 ????	       00		      ds	1
-     31 U00b6 ????			   OtherTartColor		; color for the other player's cat
-     32 U00b6 ????	       00		      ds	1
-     33 U00b7 ????
-     34 U00b7 ????						; Scores and current level - 7 bytes
-     35 U00b7 ????			   BCDScore		; 3-byte array for the 2 scores which will each be stored as
-     36 U00b7 ????	       00 00 00 00*	      ds	6	; BCD encoded 6-digit numbers. First 3 bytes for player 1,
-     37 U00bd ????						; last 3 for player 2.
-     38 U00bd ????			   Level		; value for the current level
-     39 U00bd ????	       00		      ds	1
-     40 U00be ????
-     41 U00be ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     42 U00be ????						; Local Variables
-     43 U00be ????						;
-     44 U00be ????						; These variables are only used locally, and are redefined for each area of code
-     45 U00be ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     46 U00be ????
-     47 U00be ????			   RamLocal
-     48 U00be ????
+      0 U00b0 ????				      include	headers/ram_global.asm
+      1 U00b0 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2 U00b0 ????						; Global Variables
+      3 U00b0 ????						;
+      4 U00b0 ????						; These variables are used globally and cannot be shared or otherwise corrupted
+      5 U00b0 ????						; Uses 15 bytes of RAM
+      6 U00b0 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      7 U00b0 ????
+      8 U00b0 ????			   RamGlobal
+      9 U00b0 ????
+     10 U00b0 ????						; Game housekeeping - 2 bytes
+     11 U00b0 ????	       00	   Frame      ds	1	; current frame mod 256
+     12 U00b1 ????			   Variation		; game variation options
+     13 U00b1 ????	       00		      ds	1	; x-------	number of players
+     14 U00b2 ????						; -x------	current player
+     15 U00b2 ????						; --xx----	P1 difficulty
+     16 U00b2 ????						; ----xx--	P2 difficulty
+     17 U00b2 ????
+     18 U00b2 ????						; Random Numbers - 2 bytes
+     19 U00b2 ????	       00 00	   Rand16     ds	2	; 16-bit random number
+     20 U00b4 ????
+     21 U00b4 ????						; Music - 2 bytes
+     22 U00b4 ????			   MusicNote		; xxxx----	current sequence
+     23 U00b4 ????	       00		      ds	1	; ----xxxx	note in sequence
+     24 U00b5 ????
+     25 U00b5 ????			   NoteData		; xxxxx---	note length table offset
+     26 U00b5 ????	       00		      ds	1	; -----xxx	frames left in note
+     27 U00b6 ????
+     28 U00b6 ????						; Cat colors - 2 bytes
+     29 U00b6 ????			   CatTartColor 		; color for current player's cat in the kernels
+     30 U00b6 ????	       00		      ds	1
+     31 U00b7 ????			   OtherTartColor		; color for the other player's cat
+     32 U00b7 ????	       00		      ds	1
+     33 U00b8 ????
+     34 U00b8 ????						; Scores and current level - 7 bytes
+     35 U00b8 ????			   BCDScore		; 3-byte array for the 2 scores which will each be stored as
+     36 U00b8 ????	       00 00 00 00*	      ds	6	; BCD encoded 6-digit numbers. First 3 bytes for player 1,
+     37 U00be ????						; last 3 for player 2.
+     38 U00be ????			   Level		; value for the current level
+     39 U00be ????	       00		      ds	1
+     40 U00bf ????
+     41 U00bf ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     42 U00bf ????						; Local Variables
+     43 U00bf ????						;
+     44 U00bf ????						; These variables are only used locally, and are redefined for each area of code
+     45 U00bf ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     46 U00bf ????
+     47 U00bf ????			   RamLocal
+     48 U00bf ????
 ------- FILE headers/variables.h
 ------- FILE headers/ram_menu.asm LEVEL 3 PASS 2
-      0 U00be ????				      include	headers/ram_menu.asm
-      1 U00be ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2 U00be ????						; Menu Variables
-      3 U00be ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4 U00be ????						; These variables are only needed in the main menu routine.
-      5 U00be ????						;
-      6 U00be ????						; Uses 96 bytes of RAM
-      7 U00be ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      8 U00be ????
-      9 U00be ????				      RORG	RamLocal
-     10 U00be ????
-     11 U00be ????						; Menu navigation - 1 byte
-     12 U00be ????			   CursorPos		; -----xxx	cursor position
-     13 U00be ????
-     14 U00be ????						; Frame counters - 2 bytes
-     15 U00be ????			   MenuCatFrame 		; animation frame for menu cat
-     16 U00be ????	       00		      ds	1
-     17 U00bf ????			   MenuCatFrameX14		; animation frame for menu cat times 14
-     18 U00bf ????	       00		      ds	1
-     19 U00c0 ????
-     20 U00c0 ????						; Pointers - 8 bytes
-     21 U00c0 ????			   MenuCatRamPtr		; pointer for loading menu cat gfx to push to the stack
-     22 U00c0 ????			   MenuCatHmvPtrM		; pointer used to access HMOVE graphics for the missiles
-     23 U00c0 ????	       00 00		      ds	2
-     24 U00c2 ????			   MenuCatHmvPtrP		; pointer used to access HMOVE graphics for the players
+      0 U00bf ????				      include	headers/ram_menu.asm
+      1 U00bf ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2 U00bf ????						; Menu Variables
+      3 U00bf ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4 U00bf ????						; These variables are only needed in the main menu routine.
+      5 U00bf ????						;
+      6 U00bf ????						; Uses 96 bytes of RAM
+      7 U00bf ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      8 U00bf ????
+      9 U00bf ????				      RORG	RamLocal
+     10 U00bf ????
+     11 U00bf ????						; Menu navigation - 1 byte
+     12 U00bf ????			   CursorPos		; -----xxx	cursor position
+     13 U00bf ????
+     14 U00bf ????						; Frame counters - 2 bytes
+     15 U00bf ????			   MenuCatFrame 		; animation frame for menu cat
+     16 U00bf ????	       00		      ds	1
+     17 U00c0 ????			   MenuCatFrameX14		; animation frame for menu cat times 14
+     18 U00c0 ????	       00		      ds	1
+     19 U00c1 ????			   MenuCatTiming		; xxxxx---	animation frame length offset from 0-26
+     20 U00c1 ????	       00		      ds	1	; -----xxx	game frames left in current animation frame
+     21 U00c2 ????
+     22 U00c2 ????						; Pointers - 8 bytes
+     23 U00c2 ????			   MenuCatRamPtr		; pointer for loading menu cat gfx to push to the stack
+     24 U00c2 ????			   MenuCatHmvPtrM		; pointer used to access HMOVE graphics for the missiles
      25 U00c2 ????	       00 00		      ds	2
-     26 U00c4 ????			   MenuCatMslPtr		; pointer used to access missile graphics
+     26 U00c4 ????			   MenuCatHmvPtrP		; pointer used to access HMOVE graphics for the players
      27 U00c4 ????	       00 00		      ds	2
-     28 U00c6 ????			   BowColorsPfPtr		; pointer used to access rainbow colors in RAM
+     28 U00c6 ????			   MenuCatMslPtr		; pointer used to access missile graphics
      29 U00c6 ????	       00 00		      ds	2
-     30 U00c8 ????
-     31 U00c8 ????						; Pre-load variables for within kernel - 4 bytes
-     32 U00c8 ????			   RamMenuCatGfx		; GRP1 graphics in menu cat
-     33 U00c8 ????	       00		      ds	1
-     34 U00c9 ????			   RamMenuCatMissile		; missile graphics in menu cat
-     35 U00c9 ????	       00		      ds	1
-     36 U00ca ????			   RainbowColorBk		; COLUBK rainbow color in menu cat
-     37 U00ca ????			   RainbowColorPf		; COLUPF rainbow color in menu cat
-     38 U00ca ????	       00		      ds	1
-     39 U00cb ????			   MenuCatShift
-     40 U00cb ????	       00		      ds	1
-     41 U00cc ????
-     42 U00cc ????						; Data blocks - 82 bytes
-     43 U00cc ????			   RamMenuCatGfxL		; GRP0 graphics for menu cat
-     44 U00cc ????	       00 00 00 00*	      ds	14
-     45 U00da ????			   RamMenuCatPfL		; left PF2 graphics for menu cat
-     46 U00da ????	       00 00 00 00*	      ds	15
-     47 U00e9 ????			   RamMenuCatPfR		; right PF2 graphics for menu cat
-     48 U00e9 ????	       00 00 00 00*	      ds	15
-     49 U00f8 ????			   RamMenuCatGfxR		; GRP1 graphics for menu cat
-     50 U00f8 ????	       00 00 00 00*	      ds	16
-     51 U0108 ????	       00		      ds	1	; extra byte needed for next data block
-     52 U0109 ????			   RamBowColorsBk		; rainbow colors
-     53 U0109 ????	       00 00 00 00*	      ds	20
-     54 U011d ????			   MenuBgColor		; menu background color in current color palatte (NTSC/PAL)
-     55 U011d ????	       00		      ds	1
-     56 U011e ????
-     57 U011e ????						; 18 bytes free
+     30 U00c8 ????			   BowColorsPfPtr		; pointer used to access rainbow colors in RAM
+     31 U00c8 ????	       00 00		      ds	2
+     32 U00ca ????
+     33 U00ca ????						; Pre-load variables for within kernel - 4 bytes
+     34 U00ca ????			   RamMenuCatGfx		; GRP1 graphics in menu cat
+     35 U00ca ????	       00		      ds	1
+     36 U00cb ????			   RamMenuCatMissile		; missile graphics in menu cat
+     37 U00cb ????	       00		      ds	1
+     38 U00cc ????			   RainbowColorBk		; COLUBK rainbow color in menu cat
+     39 U00cc ????			   RainbowColorPf		; COLUPF rainbow color in menu cat
+     40 U00cc ????	       00		      ds	1
+     41 U00cd ????			   MenuCatShift
+     42 U00cd ????	       00		      ds	1
+     43 U00ce ????
+     44 U00ce ????						; Data blocks - 82 bytes
+     45 U00ce ????			   RamMenuCatGfxL		; GRP0 graphics for menu cat
+     46 U00ce ????	       00 00 00 00*	      ds	14
+     47 U00dc ????			   RamMenuCatPfL		; left PF2 graphics for menu cat
+     48 U00dc ????	       00 00 00 00*	      ds	15
+     49 U00eb ????			   RamMenuCatPfR		; right PF2 graphics for menu cat
+     50 U00eb ????	       00 00 00 00*	      ds	15
+     51 U00fa ????			   RamMenuCatGfxR		; GRP1 graphics for menu cat
+     52 U00fa ????	       00 00 00 00*	      ds	16
+     53 U010a ????	       00		      ds	1	; extra byte needed for next data block
+     54 U010b ????			   RamBowColorsBk		; rainbow colors
+     55 U010b ????	       00 00 00 00*	      ds	20
+     56 U011f ????			   MenuBgColor		; menu background color in current color palatte (NTSC/PAL)
+     57 U011f ????	       00		      ds	1
+     58 U0120 ????
+     59 U0120 ????						; 18 bytes free
 ------- FILE headers/variables.h
 ------- FILE headers/ram_gameplay.asm LEVEL 3 PASS 2
-      0 U011e ????				      include	headers/ram_gameplay.asm
-      1 U011e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2 U011e ????						; Gameplay variables
-      3 U011e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4 U011e ????						; These variables are only needed in the gameplay routine
-      5 U011e ????						;
-      6 U011e ????						; Uses 55 bytes of RAM
-      7 U011e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      8 U011e ????
-      9 U011e ????				      RORG	RamLocal
-     10 U011e ????
-     11 U011e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     12 U011e ????						; Variables that shouldn't be shared - ? bytes
-     13 U011e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     14 U011e ????
-     15 U011e ????						; Pointers - 14 bytes
-     16 U011e ????
-     17 U011e ????						; The unused 3 bits of the high byte in each pointer
-     18 U011e ????						; may be used for the speeds of each row
-     19 U011e ????
-     20 U011e ????			   FoodGfxPtr1		; pointer for 1st food item's graphics
-     21 U011e ????			   LvlLoadPtr		; pointer for level digit graphics in scoreboard loading routine
-     22 U011e ????	       00 00		      ds	2
-     23 U0120 ????			   FoodGfxPtr2		; pointer for 2nd food item's graphics
-     24 U0120 ????			   ScrLoadPtr0		; pointer for digit 0 in scoreboard loading routine
-     25 U0120 ????	       00 00		      ds	2
-     26 U0122 ????			   TartGfxPtr1		; pointer for the tart graphics
-     27 U0122 ????			   ScrLoadPtr1		; pointer for digit 1 in scoreboard loading routine
-     28 U0122 ????	       00 00		      ds	2
-     29 U0124 ????			   CatGfxPtr1		; pointer for the cat face/paws graphics
-     30 U0124 ????			   ScrLoadPtr2		; pointer for digit 2 in scoreboard loading routine
-     31 U0124 ????	       00 00		      ds	2
-     32 U0126 ????			   TartGfxPtr2		; pointer for the tart graphics
-     33 U0126 ????			   HthGfxLPtr		; pointer for left half of the health graphics
-     34 U0126 ????			   ScrLoadPtr3		; pointer for digit 3 in scoreboard loading routine
-     35 U0126 ????	       00 00		      ds	2
-     36 U0128 ????			   CatGfxPtr2		; pointer for the cat face/paws graphics
-     37 U0128 ????			   HthGfxRPtr		; pointer for right half of the health graphics
-     38 U0128 ????			   ScrLoadPtr4		; pointer for digit 4 in scoreboard loading routine
-     39 U0128 ????	       00 00		      ds	2
-     40 U012a ????			   ThrobPtr		; pointer for loading the throb colors
-     41 U012a ????			   ScrLoadPtr5		; pointer for digit 5 in scoreboard loading routine
-     42 U012a ????	       00 00		      ds	2
-     43 U012c ????
-     44 U012c ????						; Variable game colors - 2 bytes
-     45 U012c ????	       00	   ScoreColor ds	1	; color of the score text and scoreboard
-     46 U012d ????	       00	   PgBarColor ds	1	; color for full part of progress bar
-     47 U012e ????
-     48 U012e ????						; Variables used when drawing the cat - 5 bytes
-     49 U012e ????	       00	   CatPosY    ds	1	; number of scanlines to skip before drawing cat
-     50 U012f ????			   CatPosition		; data describing the cat's position
-     51 U012f ????	       00		      ds	1	; bits 7-5 store the cat's row, from 1-7
-     52 U0130 ????						; bits 4-0 store the number of scanlines to skip after
-     53 U0130 ????						; top of the cat's row before drawing the cat, from 0-18
-     54 U0130 ????	       00	   CatRow     ds	1	; the row that the cat is on or wants to be on/is moving towards
-     55 U0131 ????			   JoyCenter		; least significant bit, true if joystick has been returned to center
-     56 U0131 ????	       00		      ds	1
-     57 U0132 ????			   PreCatRows		; number of rows to draw before the two "cat" rows
-     58 U0132 ????	       00		      ds	1
-     59 U0133 ????
-     60 U0133 ????						; Variables used for the food items - 21 bytes
-     61 U0133 ????			   FoodItemL		; Hi nybble holds the value (0-15) of the right object to draw
-     62 U0133 ????	       00 00 00 00*	      ds	7	; this frame.
-     63 U013a ????						; Lo nybble either holds the pre-loaded value of the next
-     64 U013a ????						; food item to appear in this row, or temporarily holds the
-     65 U013a ????						; 3rd food item which isn't shown this frame, based on how many
-     66 U013a ????						; food items are visible in this row (2-3), which is determined
-     67 U013a ????						; by the position of the leftmost food item.
-     68 U013a ????			   FoodItemR		; Hi nybble holds the value of the left object to draw
-     69 U013a ????	       00 00 00 00*	      ds	7	; this frame.
-     70 U0141 ????						; Lo nybble holds the fractional positional value
-     71 U0141 ????						; for the row's position (0-15).
-     72 U0141 ????			   FoodPosX		; (range 0-88)
-     73 U0141 ????	       00 00 00 00*	      ds	7
-     74 U0148 ????
-     75 U0148 ????						; Variables for the progress bar and health display - 2 bytes
-     76 U0148 ????			   Progress		; value for level progress, which can be
-     77 U0148 ????	       00		      ds	1	; from 0 to 30 and will be used to draw progress bar
-     78 U0149 ????			   Health		; amount of health
-     79 U0149 ????	       00		      ds	1	; 0=full 8=medium 16=low 24=empty
-     80 U014a ????						;ProgressBar	; array of 5 playfield values for progress bar
-     81 U014a ????						; (shared with next 5 bytes of RAM)
-     82 U014a ????
-     83 U014a ????						; Variables used to pre-load for 2nd "cat" row's food items - 7 bytes
-     84 U014a ????			   CatRowHmove		; array of 3 values to store to HMP1 before strobing
-     85 U014a ????	       00 00 00 	      ds	3	; HMOVE to position food items in 2nd cat row
-     86 U014d ????			   CatRow2FoodL
-     87 U014d ????	       00		      ds	1
-     88 U014e ????			   CatRow2FoodR
-     89 U014e ????	       00		      ds	1
-     90 U014f ????			   CatRow2Color1
-     91 U014f ????	       00		      ds	1
-     92 U0150 ????			   CatRow2Color2
-     93 U0150 ????	       00		      ds	1
-     94 U0151 ????
-     95 U0151 ????						; Variables for the throbbing lines' colors - 4 bytes
-     96 U0151 ????	       00 00 00    ThrobColor ds	3	; 3-byte array for the colors used to draw the
-     97 U0154 ????						; throbbing lines. The first color is darkest,
-     98 U0154 ????						; the last is brightest.
-     99 U0154 ????	       00	   CatThrobPF ds	1
-    100 U0155 ????
-    101 U0155 ????						; Temporary variables - 2 bytes
-    102 U0155 ????			   ProgressBar
-    103 U0155 ????	       00	   Temp       ds	1
-    104 U0156 ????	       00	   TempLoop   ds	1
-    105 U0157 ????
-    106 U0157 ????						; 51 bytes free
-    107 U0157 ????
-    108 U0157 ????						; Variables which can be shared with the scoreboard stack - 3 bytes
-    109 U0157 ????	       00	   CurrentRow ds	1	; the current row being drawn in the gameplay kernel
-    110 U0158 ????	       00	   FoodColor1 ds	1	; color of the 1st food item
-    111 U0159 ????	       00	   FoodColor2 ds	1	; color of the 2nd food item
-    112 U015a ????
-    113 U015a ????						; 7 of 15 available temporary RAM bytes used (8 left)
-    114 U015a ????						; last 34 bytes of RAM are used to hold the rainbow color graphics
-    115 U015a ????
-    116 U015a ????				      RORG	$100 - 34
-    117 U015a ????			   RamBowColors
+      0 U0120 ????				      include	headers/ram_gameplay.asm
+      1 U0120 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2 U0120 ????						; Gameplay variables
+      3 U0120 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4 U0120 ????						; These variables are only needed in the gameplay routine
+      5 U0120 ????						;
+      6 U0120 ????						; Uses 55 bytes of RAM
+      7 U0120 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      8 U0120 ????
+      9 U0120 ????				      RORG	RamLocal
+     10 U0120 ????
+     11 U0120 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     12 U0120 ????						; Variables that shouldn't be shared - ? bytes
+     13 U0120 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     14 U0120 ????
+     15 U0120 ????						; Pointers - 14 bytes
+     16 U0120 ????
+     17 U0120 ????						; The unused 3 bits of the high byte in each pointer
+     18 U0120 ????						; may be used for the speeds of each row
+     19 U0120 ????
+     20 U0120 ????			   FoodGfxPtr1		; pointer for 1st food item's graphics
+     21 U0120 ????			   LvlLoadPtr		; pointer for level digit graphics in scoreboard loading routine
+     22 U0120 ????	       00 00		      ds	2
+     23 U0122 ????			   FoodGfxPtr2		; pointer for 2nd food item's graphics
+     24 U0122 ????			   ScrLoadPtr0		; pointer for digit 0 in scoreboard loading routine
+     25 U0122 ????	       00 00		      ds	2
+     26 U0124 ????			   TartGfxPtr1		; pointer for the tart graphics
+     27 U0124 ????			   ScrLoadPtr1		; pointer for digit 1 in scoreboard loading routine
+     28 U0124 ????	       00 00		      ds	2
+     29 U0126 ????			   CatGfxPtr1		; pointer for the cat face/paws graphics
+     30 U0126 ????			   ScrLoadPtr2		; pointer for digit 2 in scoreboard loading routine
+     31 U0126 ????	       00 00		      ds	2
+     32 U0128 ????			   TartGfxPtr2		; pointer for the tart graphics
+     33 U0128 ????			   HthGfxLPtr		; pointer for left half of the health graphics
+     34 U0128 ????			   ScrLoadPtr3		; pointer for digit 3 in scoreboard loading routine
+     35 U0128 ????	       00 00		      ds	2
+     36 U012a ????			   CatGfxPtr2		; pointer for the cat face/paws graphics
+     37 U012a ????			   HthGfxRPtr		; pointer for right half of the health graphics
+     38 U012a ????			   ScrLoadPtr4		; pointer for digit 4 in scoreboard loading routine
+     39 U012a ????	       00 00		      ds	2
+     40 U012c ????			   ThrobPtr		; pointer for loading the throb colors
+     41 U012c ????			   ScrLoadPtr5		; pointer for digit 5 in scoreboard loading routine
+     42 U012c ????	       00 00		      ds	2
+     43 U012e ????
+     44 U012e ????						; Variable game colors - 2 bytes
+     45 U012e ????	       00	   ScoreColor ds	1	; color of the score text and scoreboard
+     46 U012f ????	       00	   PgBarColor ds	1	; color for full part of progress bar
+     47 U0130 ????
+     48 U0130 ????						; Variables used when drawing the cat - 5 bytes
+     49 U0130 ????	       00	   CatPosY    ds	1	; number of scanlines to skip before drawing cat
+     50 U0131 ????			   CatPosition		; data describing the cat's position
+     51 U0131 ????	       00		      ds	1	; bits 7-5 store the cat's row, from 1-7
+     52 U0132 ????						; bits 4-0 store the number of scanlines to skip after
+     53 U0132 ????						; top of the cat's row before drawing the cat, from 0-18
+     54 U0132 ????	       00	   CatRow     ds	1	; the row that the cat is on or wants to be on/is moving towards
+     55 U0133 ????			   JoyCenter		; least significant bit, true if joystick has been returned to center
+     56 U0133 ????	       00		      ds	1
+     57 U0134 ????			   PreCatRows		; number of rows to draw before the two "cat" rows
+     58 U0134 ????	       00		      ds	1
+     59 U0135 ????
+     60 U0135 ????						; Variables used for the food items - 21 bytes
+     61 U0135 ????			   FoodItemL		; Hi nybble holds the value (0-15) of the right object to draw
+     62 U0135 ????	       00 00 00 00*	      ds	7	; this frame.
+     63 U013c ????						; Lo nybble either holds the pre-loaded value of the next
+     64 U013c ????						; food item to appear in this row, or temporarily holds the
+     65 U013c ????						; 3rd food item which isn't shown this frame, based on how many
+     66 U013c ????						; food items are visible in this row (2-3), which is determined
+     67 U013c ????						; by the position of the leftmost food item.
+     68 U013c ????			   FoodItemR		; Hi nybble holds the value of the left object to draw
+     69 U013c ????	       00 00 00 00*	      ds	7	; this frame.
+     70 U0143 ????						; Lo nybble holds the fractional positional value
+     71 U0143 ????						; for the row's position (0-15).
+     72 U0143 ????			   FoodPosX		; (range 0-88)
+     73 U0143 ????	       00 00 00 00*	      ds	7
+     74 U014a ????
+     75 U014a ????						; Variables for the progress bar and health display - 2 bytes
+     76 U014a ????			   Progress		; value for level progress, which can be
+     77 U014a ????	       00		      ds	1	; from 0 to 30 and will be used to draw progress bar
+     78 U014b ????			   Health		; amount of health
+     79 U014b ????	       00		      ds	1	; 0=full 8=medium 16=low 24=empty
+     80 U014c ????						;ProgressBar	; array of 5 playfield values for progress bar
+     81 U014c ????						; (shared with next 5 bytes of RAM)
+     82 U014c ????
+     83 U014c ????						; Variables used to pre-load for 2nd "cat" row's food items - 7 bytes
+     84 U014c ????			   CatRowHmove		; array of 3 values to store to HMP1 before strobing
+     85 U014c ????	       00 00 00 	      ds	3	; HMOVE to position food items in 2nd cat row
+     86 U014f ????			   CatRow2FoodL
+     87 U014f ????	       00		      ds	1
+     88 U0150 ????			   CatRow2FoodR
+     89 U0150 ????	       00		      ds	1
+     90 U0151 ????			   CatRow2Color1
+     91 U0151 ????	       00		      ds	1
+     92 U0152 ????			   CatRow2Color2
+     93 U0152 ????	       00		      ds	1
+     94 U0153 ????
+     95 U0153 ????						; Variables for the throbbing lines' colors - 4 bytes
+     96 U0153 ????	       00 00 00    ThrobColor ds	3	; 3-byte array for the colors used to draw the
+     97 U0156 ????						; throbbing lines. The first color is darkest,
+     98 U0156 ????						; the last is brightest.
+     99 U0156 ????	       00	   CatThrobPF ds	1
+    100 U0157 ????
+    101 U0157 ????						; Temporary variables - 2 bytes
+    102 U0157 ????			   ProgressBar
+    103 U0157 ????	       00	   Temp       ds	1
+    104 U0158 ????	       00	   TempLoop   ds	1
+    105 U0159 ????
+    106 U0159 ????						; 51 bytes free
+    107 U0159 ????
+    108 U0159 ????						; Variables which can be shared with the scoreboard stack - 3 bytes
+    109 U0159 ????	       00	   CurrentRow ds	1	; the current row being drawn in the gameplay kernel
+    110 U015a ????	       00	   FoodColor1 ds	1	; color of the 1st food item
+    111 U015b ????	       00	   FoodColor2 ds	1	; color of the 2nd food item
+    112 U015c ????
+    113 U015c ????						; 7 of 15 available temporary RAM bytes used (8 left)
+    114 U015c ????						; last 34 bytes of RAM are used to hold the rainbow color graphics
+    115 U015c ????
+    116 U015c ????				      RORG	$100 - 34
+    117 U015c ????			   RamBowColors
 ------- FILE headers/variables.h
 ------- FILE headers/ram_temp.asm LEVEL 3 PASS 2
-      0 U015a ????				      include	headers/ram_temp.asm
-      1 U015a ????
-      2 U015a ????				      RORG	$F0
-      3 U015a ????
-      4 U015a ????			   MusicPtr
-      5 U015a ????	       00 00		      ds	2
-      6 U015c ????			   TempX
-      7 U015c ????	       00		      ds	1
-      8 U015d ????			   TempNote
-      9 U015d ????	       00		      ds	1
-     10 U015e ????
+      0 U015c ????				      include	headers/ram_temp.asm
+      1 U015c ????
+      2 U015c ????				      RORG	$F0
+      3 U015c ????
+      4 U015c ????			   MusicPtr
+      5 U015c ????	       00 00		      ds	2
+      6 U015e ????			   TempX
+      7 U015e ????	       00		      ds	1
+      8 U015f ????			   TempNote
+      9 U015f ????	       00		      ds	1
+     10 U0160 ????
 ------- FILE headers/variables.h
-     12 U015e ????
+     12 U0160 ????
 ------- FILE main.asm
 ------- FILE headers/macros.h LEVEL 2 PASS 2
-      0 U015e ????				      include	headers/macros.h
-      1 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2 U015e ????						; Start Bank
-      3 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4 U015e ????						; Takes an integer for the bank
-      5 U015e ????						;
-      6 U015e ????						; Placed at the start of each bank
-      7 U015e ????						; Sets the bank's ROM location, and adds the global jump table
-      8 U015e ????						;
-      9 U015e ????						; Uses 18 bytes of ROM for the jump table
-     10 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     11 U015e ????
-     12 U015e ????				      MAC	start_bank
-     13 U015e ????				      SEG	BANK_{1}
-     14 U015e ????				      ORG	[{1} - 1] * $1000
-     15 U015e ????				      RORG	$1000
-     16 U015e ????				      SUBROUTINE
-     17 U015e ????
-     18 U015e ????			   JmpInitSystem
-     19 U015e ????				      nop	SelectBank1
-     20 U015e ????				      jmp	InitSystem
-     21 U015e ????			   JmpMenuOverScan
-     22 U015e ????				      nop	SelectBank1
-     23 U015e ????				      jmp	MenuOverScan
-     24 U015e ????			   JmpGamePlay
-     25 U015e ????						;	nop SelectBank2
-     26 U015e ????						;	jmp GameplayInit
-     27 U015e ????				      jmp	JmpInitSystem
-     28 U015e ????
-     29 U015e ????				      ENDM
-     30 U015e ????
-     31 U015e ????
-     32 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     33 U015e ????						; End Bank
-     34 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     35 U015e ????						; Takes an integer for the bank
-     36 U015e ????						;
-     37 U015e ????						; Placed at the end of each bank
-     38 U015e ????						; Pads the remaining space in the 4K bank, and defines the system vectors
-     39 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     40 U015e ????
-     41 U015e ????				      MAC	end_bank
-     42 U015e ????				      ORG	[{1} - 1] * $1000 + $0FFA
-     43 U015e ????
-     44 U015e ????				      .word	JmpInitSystem	; NMI
-     45 U015e ????				      .word	JmpInitSystem	; RESET
-     46 U015e ????				      .word	JmpInitSystem	; IRQ
-     47 U015e ????
-     48 U015e ????				      ENDM
-     49 U015e ????
-     50 U015e ????
-     51 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     52 U015e ????						; Set Overscan Timer
-     53 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     54 U015e ????						; Sets and starts the timer for the overscan
-     55 U015e ????						;
-     56 U015e ????						; Uses 13 bytes of ROM
-     57 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     58 U015e ????
-     59 U015e ????				      MAC	set_oscan_timer
-     60 U015e ????				      SUBROUTINE
-     61 U015e ????
-     62 U015e ????				      lda	#OSCAN_NTSC
-     63 U015e ????				      bit	Variation
-     64 U015e ????				      bmi	.NtscMode
-     65 U015e ????				      lda	#OSCAN_PAL
-     66 U015e ????			   .NtscMode
-     67 U015e ????				      sta	WSYNC
-     68 U015e ????				      sta	TIM64T	; set overscan timer
-     69 U015e ????
-     70 U015e ????				      ENDM
-     71 U015e ????
-     72 U015e ????
-     73 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     74 U015e ????						; Vertical Sync
-     75 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     76 U015e ????						; Performs a vertical sync, and starts the timer for vertical blanking
-     77 U015e ????						;
-     78 U015e ????						; Uses 22 bytes of ROM
-     79 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-     80 U015e ????
-     81 U015e ????				      MAC	vert_sync
-     82 U015e ????				      SUBROUTINE
-     83 U015e ????
-     84 U015e ????				      ldx	#VBLANK_NTSC	; TIM64T value for NTSC mode
-     85 U015e ????				      bit	Variation
-     86 U015e ????				      bmi	.NtscMode
-     87 U015e ????				      ldx	#VBLANK_PAL	; TIM64T value for PAL mode
-     88 U015e ????			   .NtscMode
-     89 U015e ????				      lda	#%1110
-     90 U015e ????			   .VsyncLoop
-     91 U015e ????				      sta	WSYNC
-     92 U015e ????				      sta	VSYNC
-     93 U015e ????				      sta	VBLANK
-     94 U015e ????				      stx	TIM64T
-     95 U015e ????				      lsr
-     96 U015e ????				      bne	.VsyncLoop
-     97 U015e ????
-     98 U015e ????				      ENDM
-     99 U015e ????
-    100 U015e ????
-    101 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    102 U015e ????						; Timer Loop
-    103 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    104 U015e ????						; Loops until the timer runs down
-    105 U015e ????						; Used to finish vertical blanking and overscan
-    106 U015e ????						;
-    107 U015e ????						; Uses 5 bytes of ROM
-    108 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    109 U015e ????
-    110 U015e ????				      MAC	timer_loop
-    111 U015e ????				      SUBROUTINE
-    112 U015e ????
-    113 U015e ????			   .TimerLoop
-    114 U015e ????				      lda	INTIM
-    115 U015e ????				      bne	.TimerLoop	; loop until end of vertical blanking
-    116 U015e ????
-    117 U015e ????				      ENDM
-    118 U015e ????
-    119 U015e ????
-    120 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    121 U015e ????						; Throb Rainbow Background
-    122 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    123 U015e ????						; Checks the background color, and if black, the throb color is used instead
-    124 U015e ????						; The throb color must be pre-loaded into the X register
-    125 U015e ????						;
-    126 U015e ????						; Uses 11 bytes of ROM
-    127 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    128 U015e ????
-    129 U015e ????				      MAC	throb_rainbow_bk
-    130 U015e ????				      SUBROUTINE
-    131 U015e ????			   .X	      SET	{1}
-    132 U015e ????
-    133 U015e ????				      lda	RamBowColors+.X	; 3
-    134 U015e ????				      bne	.Rainbow	; 5/6
-    135 U015e ????				      stx	COLUBK	; 8
-    136 U015e ????				      beq	.End	; 11
-    137 U015e ????			   .Rainbow
-    138 U015e ????				      sta	COLUBK	; 9
-    139 U015e ????				      nop		; 11
-    140 U015e ????			   .End
-    141 U015e ????				      ENDM
-    142 U015e ????
-    143 U015e ????
-    144 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    145 U015e ????						; Throb Rainbow Playfield
-    146 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    147 U015e ????						; Checks the playfield color, and if black, the throb color is used instead
-    148 U015e ????						; The throb color must be pre-loaded into the X register
-    149 U015e ????						;
-    150 U015e ????						; Uses 11 bytes of ROM
-    151 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    152 U015e ????
-    153 U015e ????				      MAC	throb_rainbow_pf
-    154 U015e ????				      SUBROUTINE
-    155 U015e ????			   .X	      SET	{1}
-    156 U015e ????
-    157 U015e ????				      lda	RamBowColors+.X	; 3
-    158 U015e ????				      bne	.Rainbow	; 5/6
-    159 U015e ????				      stx	COLUPF	; 8
-    160 U015e ????				      beq	.End	; 11
-    161 U015e ????			   .Rainbow
-    162 U015e ????				      sta	COLUPF	; 9
-    163 U015e ????				      nop		; 11
-    164 U015e ????			   .End
-    165 U015e ????				      ENDM
-    166 U015e ????
-    167 U015e ????
-    168 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    169 U015e ????						; Jump to Next Page
-    170 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    171 U015e ????						; Jumps to the beginning of the next page, padding the end of the current one
-    172 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    173 U015e ????
-    174 U015e ????				      MAC	next_page
-    175 U015e ????				      SUBROUTINE
-    176 U015e ????
-    177 U015e ????				      jmp	.NextPage
-    178 U015e ????				      ALIGN	$100
-    179 U015e ????			   .NextPage
-    180 U015e ????
-    181 U015e ????				      ENDM
-    182 U015e ????
-    183 U015e ????
-    184 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    185 U015e ????						; Skip Word
-    186 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    187 U015e ????						; Gives a name to opcode $0C, which is a 4-cycle nop,
-    188 U015e ????						; skipping the next two bytes of ROM.
-    189 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-    190 U015e ????
-    191 U015e ????				      MAC	skip_word
-    192 U015e ????				      HEX	0C
-    193 U015e ????				      ENDM
+      0 U0160 ????				      include	headers/macros.h
+      1 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2 U0160 ????						; Start Bank
+      3 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4 U0160 ????						; Takes an integer for the bank
+      5 U0160 ????						;
+      6 U0160 ????						; Placed at the start of each bank
+      7 U0160 ????						; Sets the bank's ROM location, and adds the global jump table
+      8 U0160 ????						;
+      9 U0160 ????						; Uses 18 bytes of ROM for the jump table
+     10 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     11 U0160 ????
+     12 U0160 ????				      MAC	start_bank
+     13 U0160 ????				      SEG	BANK_{1}
+     14 U0160 ????				      ORG	[{1} - 1] * $1000
+     15 U0160 ????				      RORG	$1000
+     16 U0160 ????				      SUBROUTINE
+     17 U0160 ????
+     18 U0160 ????			   JmpInitSystem
+     19 U0160 ????				      nop	SelectBank1
+     20 U0160 ????				      jmp	InitSystem
+     21 U0160 ????			   JmpMenuOverScan
+     22 U0160 ????				      nop	SelectBank1
+     23 U0160 ????				      jmp	MenuOverScan
+     24 U0160 ????			   JmpGamePlay
+     25 U0160 ????						;	nop SelectBank2
+     26 U0160 ????						;	jmp GameplayInit
+     27 U0160 ????				      jmp	JmpInitSystem
+     28 U0160 ????
+     29 U0160 ????				      ENDM
+     30 U0160 ????
+     31 U0160 ????
+     32 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     33 U0160 ????						; End Bank
+     34 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     35 U0160 ????						; Takes an integer for the bank
+     36 U0160 ????						;
+     37 U0160 ????						; Placed at the end of each bank
+     38 U0160 ????						; Pads the remaining space in the 4K bank, and defines the system vectors
+     39 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     40 U0160 ????
+     41 U0160 ????				      MAC	end_bank
+     42 U0160 ????				      ORG	[{1} - 1] * $1000 + $0FFA
+     43 U0160 ????
+     44 U0160 ????				      .word	JmpInitSystem	; NMI
+     45 U0160 ????				      .word	JmpInitSystem	; RESET
+     46 U0160 ????				      .word	JmpInitSystem	; IRQ
+     47 U0160 ????
+     48 U0160 ????				      ENDM
+     49 U0160 ????
+     50 U0160 ????
+     51 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     52 U0160 ????						; Set Overscan Timer
+     53 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     54 U0160 ????						; Sets and starts the timer for the overscan
+     55 U0160 ????						;
+     56 U0160 ????						; Uses 13 bytes of ROM
+     57 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     58 U0160 ????
+     59 U0160 ????				      MAC	set_oscan_timer
+     60 U0160 ????				      SUBROUTINE
+     61 U0160 ????
+     62 U0160 ????				      lda	#OSCAN_NTSC
+     63 U0160 ????				      bit	Variation
+     64 U0160 ????				      bmi	.NtscMode
+     65 U0160 ????				      lda	#OSCAN_PAL
+     66 U0160 ????			   .NtscMode
+     67 U0160 ????				      sta	WSYNC
+     68 U0160 ????				      sta	TIM64T	; set overscan timer
+     69 U0160 ????
+     70 U0160 ????				      ENDM
+     71 U0160 ????
+     72 U0160 ????
+     73 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     74 U0160 ????						; Vertical Sync
+     75 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     76 U0160 ????						; Performs a vertical sync, and starts the timer for vertical blanking
+     77 U0160 ????						;
+     78 U0160 ????						; Uses 22 bytes of ROM
+     79 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     80 U0160 ????
+     81 U0160 ????				      MAC	vert_sync
+     82 U0160 ????				      SUBROUTINE
+     83 U0160 ????
+     84 U0160 ????				      ldx	#VBLANK_NTSC	; TIM64T value for NTSC mode
+     85 U0160 ????				      bit	Variation
+     86 U0160 ????				      bmi	.NtscMode
+     87 U0160 ????				      ldx	#VBLANK_PAL	; TIM64T value for PAL mode
+     88 U0160 ????			   .NtscMode
+     89 U0160 ????				      lda	#%1110
+     90 U0160 ????			   .VsyncLoop
+     91 U0160 ????				      sta	WSYNC
+     92 U0160 ????				      sta	VSYNC
+     93 U0160 ????				      sta	VBLANK
+     94 U0160 ????				      stx	TIM64T
+     95 U0160 ????				      lsr
+     96 U0160 ????				      bne	.VsyncLoop
+     97 U0160 ????
+     98 U0160 ????				      ENDM
+     99 U0160 ????
+    100 U0160 ????
+    101 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    102 U0160 ????						; Timer Loop
+    103 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    104 U0160 ????						; Loops until the timer runs down
+    105 U0160 ????						; Used to finish vertical blanking and overscan
+    106 U0160 ????						;
+    107 U0160 ????						; Uses 5 bytes of ROM
+    108 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    109 U0160 ????
+    110 U0160 ????				      MAC	timer_loop
+    111 U0160 ????				      SUBROUTINE
+    112 U0160 ????
+    113 U0160 ????			   .TimerLoop
+    114 U0160 ????				      lda	INTIM
+    115 U0160 ????				      bne	.TimerLoop	; loop until end of vertical blanking
+    116 U0160 ????
+    117 U0160 ????				      ENDM
+    118 U0160 ????
+    119 U0160 ????
+    120 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    121 U0160 ????						; Throb Rainbow Background
+    122 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    123 U0160 ????						; Checks the background color, and if black, the throb color is used instead
+    124 U0160 ????						; The throb color must be pre-loaded into the X register
+    125 U0160 ????						;
+    126 U0160 ????						; Uses 11 bytes of ROM
+    127 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    128 U0160 ????
+    129 U0160 ????				      MAC	throb_rainbow_bk
+    130 U0160 ????				      SUBROUTINE
+    131 U0160 ????			   .X	      SET	{1}
+    132 U0160 ????
+    133 U0160 ????				      lda	RamBowColors+.X	; 3
+    134 U0160 ????				      bne	.Rainbow	; 5/6
+    135 U0160 ????				      stx	COLUBK	; 8
+    136 U0160 ????				      beq	.End	; 11
+    137 U0160 ????			   .Rainbow
+    138 U0160 ????				      sta	COLUBK	; 9
+    139 U0160 ????				      nop		; 11
+    140 U0160 ????			   .End
+    141 U0160 ????				      ENDM
+    142 U0160 ????
+    143 U0160 ????
+    144 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    145 U0160 ????						; Throb Rainbow Playfield
+    146 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    147 U0160 ????						; Checks the playfield color, and if black, the throb color is used instead
+    148 U0160 ????						; The throb color must be pre-loaded into the X register
+    149 U0160 ????						;
+    150 U0160 ????						; Uses 11 bytes of ROM
+    151 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    152 U0160 ????
+    153 U0160 ????				      MAC	throb_rainbow_pf
+    154 U0160 ????				      SUBROUTINE
+    155 U0160 ????			   .X	      SET	{1}
+    156 U0160 ????
+    157 U0160 ????				      lda	RamBowColors+.X	; 3
+    158 U0160 ????				      bne	.Rainbow	; 5/6
+    159 U0160 ????				      stx	COLUPF	; 8
+    160 U0160 ????				      beq	.End	; 11
+    161 U0160 ????			   .Rainbow
+    162 U0160 ????				      sta	COLUPF	; 9
+    163 U0160 ????				      nop		; 11
+    164 U0160 ????			   .End
+    165 U0160 ????				      ENDM
+    166 U0160 ????
+    167 U0160 ????
+    168 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    169 U0160 ????						; Jump to Next Page
+    170 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    171 U0160 ????						; Jumps to the beginning of the next page, padding the end of the current one
+    172 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    173 U0160 ????
+    174 U0160 ????				      MAC	next_page
+    175 U0160 ????				      SUBROUTINE
+    176 U0160 ????
+    177 U0160 ????				      jmp	.NextPage
+    178 U0160 ????				      ALIGN	$100
+    179 U0160 ????			   .NextPage
+    180 U0160 ????
+    181 U0160 ????				      ENDM
+    182 U0160 ????
+    183 U0160 ????
+    184 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    185 U0160 ????						; Skip Word
+    186 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    187 U0160 ????						; Gives a name to opcode $0C, which is a 4-cycle nop,
+    188 U0160 ????						; skipping the next two bytes of ROM.
+    189 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    190 U0160 ????
+    191 U0160 ????				      MAC	skip_word
+    192 U0160 ????				      HEX	0C
+    193 U0160 ????				      ENDM
 ------- FILE main.asm
-     18 U015e ????
+     18 U0160 ????
 ------- FILE bank1.asm LEVEL 2 PASS 2
-      0 U015e ????				      include	bank1.asm
-      1 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2 U015e ????						; Bank 1
-      3 U015e ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4 U015e ????
-      0 U015e ????				      START_BANK	1
+      0 U0160 ????				      include	bank1.asm
+      1 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2 U0160 ????						; Bank 1
+      3 U0160 ????						; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4 U0160 ????
+      0 U0160 ????				      START_BANK	1
       1  1000 ????				      SEG	BANK_1
       2  0000					      ORG	[1 - 1] * $1000
       3  0000					      RORG	$1000
@@ -1042,11 +1044,11 @@
      38  006a				   .IntroMusic
      39  006a		       a9 19		      lda	#>IntroSeq
      40  006c		       85 f1		      sta	MusicPtr+1
-     41  006e		       a9 49		      lda	#<IntroSeq
+     41  006e		       a9 3f		      lda	#<IntroSeq
      42  0070		       85 f0		      sta	MusicPtr
      43  0072		       a2 00		      ldx	#0
      44  0074		       20 3f 16 	      jsr	SetNote
-     45  0077		       a9 3b		      lda	#<IntroVlm
+     45  0077		       a9 25		      lda	#<IntroVlm
      46  0079		       85 f0		      sta	MusicPtr
      47  007b		       20 53 16 	      jsr	SetVolume
      48  007e
@@ -1054,11 +1056,11 @@
      50  0080		       c9 02		      cmp	#2
      51  0082		       30 14		      bmi	.NoEcho
      52  0084
-     53  0084		       a9 47		      lda	#<IntroSeq-2
+     53  0084		       a9 3d		      lda	#<IntroSeq-2
      54  0086		       85 f0		      sta	MusicPtr
      55  0088		       a2 01		      ldx	#1
      56  008a		       20 3f 16 	      jsr	SetNote
-     57  008d		       a9 3b		      lda	#<IntroVlm
+     57  008d		       a9 25		      lda	#<IntroVlm
      58  008f		       85 f0		      sta	MusicPtr
      59  0091		       20 53 16 	      jsr	SetVolume
      60  0094		       4a		      lsr
@@ -1117,393 +1119,425 @@
      12  00c9				   .NoResetPress
      13  00c9
      14  00c9		       e6 80		      inc	Frame	; next frame
-     15  00cb		       a5 80		      lda	Frame
-     16  00cd		       29 03		      and	#%00000011	; update animation every 4 frames
-     17  00cf		       d0 0b		      bne	.NoFrameInc
-     18  00d1
-     19  00d1		       a6 8f		      ldx	MenuCatFrame
-     20  00d3		       e8		      inx
-     21  00d4		       e0 06		      cpx	#6
-     22  00d6		       d0 02		      bne	.NoReset
-     23  00d8		       a2 00		      ldx	#0
-     24  00da				   .NoReset
-     25  00da		       86 8f		      stx	MenuCatFrame
-     26  00dc				   .NoFrameInc
-     27  00dc
-      0  00dc					      TIMER_LOOP
-      1  00dc					      SUBROUTINE
-      2  00dc
-      3  00dc				   .TimerLoop
-      4  00dc		       ad 84 02 	      lda	INTIM
-      5  00df		       d0 fb		      bne	.TimerLoop
-      6  00e1
+     15  00cb
+      0  00cb					      TIMER_LOOP
+      1  00cb					      SUBROUTINE
+      2  00cb
+      3  00cb				   .TimerLoop
+      4  00cb		       ad 84 02 	      lda	INTIM
+      5  00ce		       d0 fb		      bne	.TimerLoop
+      6  00d0
+     17  00d0
 ------- FILE bank1.asm
 ------- FILE bank1/code/vblank_logic.asm LEVEL 3 PASS 2
-      0  00e1					      include	bank1/code/vblank_logic.asm
-      1  00e1							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  00e1							; Vertical Sync and Logic
-      3  00e1							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  00e1
-      0  00e1					      VERT_SYNC		; 11
-      1  00e1					      SUBROUTINE
-      2  00e1
-      3  00e1		       a2 2b		      ldx	#VBLANK_NTSC
-      4  00e3		       24 81		      bit	Variation
-      5  00e5		       30 02		      bmi	.NtscMode
-      6  00e7		       a2 4a		      ldx	#VBLANK_PAL
-      7  00e9				   .NtscMode
-      8  00e9		       a9 0e		      lda	#%1110
-      9  00eb				   .VsyncLoop
-     10  00eb		       85 02		      sta	WSYNC
-     11  00ed		       85 00		      sta	VSYNC
-     12  00ef		       85 01		      sta	VBLANK
-     13  00f1		       8e 96 02 	      stx	TIM64T
-     14  00f4		       4a		      lsr
-     15  00f5		       d0 f4		      bne	.VsyncLoop
-     16  00f7
-      6  00f7
+      0  00d0					      include	bank1/code/vblank_logic.asm
+      1  00d0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  00d0							; Vertical Sync and Logic
+      3  00d0							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  00d0
+      0  00d0					      VERT_SYNC		; 11
+      1  00d0					      SUBROUTINE
+      2  00d0
+      3  00d0		       a2 2b		      ldx	#VBLANK_NTSC
+      4  00d2		       24 81		      bit	Variation
+      5  00d4		       30 02		      bmi	.NtscMode
+      6  00d6		       a2 4a		      ldx	#VBLANK_PAL
+      7  00d8				   .NtscMode
+      8  00d8		       a9 0e		      lda	#%1110
+      9  00da				   .VsyncLoop
+     10  00da		       85 02		      sta	WSYNC
+     11  00dc		       85 00		      sta	VSYNC
+     12  00de		       85 01		      sta	VBLANK
+     13  00e0		       8e 96 02 	      stx	TIM64T
+     14  00e3		       4a		      lsr
+     15  00e4		       d0 f4		      bne	.VsyncLoop
+     16  00e6
+      6  00e6
 ------- FILE bank1/code/music.asm LEVEL 4 PASS 2
-      0  00f7					      include	bank1/code/music.asm
-      1  00f7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  00f7							; Music Engine
-      3  00f7							;
-      4  00f7							; Handles the main music melody
-      5  00f7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      6  00f7
-      7  00f7							; set bass frequency
-      8  00f7		       a7 84		      lax	MusicNote
-      9  00f9		       4b 1e		      asr	#%00011110
-     10  00fb		       4a		      lsr
-     11  00fc		       a8		      tay
-     12  00fd		       b9 25 19 	      lda	BassSeq,y
-     13  0100		       85 18		      sta	AUDF1
-     14  0102		       a9 06		      lda	#6
-     15  0104		       a0 07		      ldy	#7
-     16  0106		       b0 02		      bcs	.Loud
-     17  0108		       a0 03		      ldy	#3
-     18  010a		       85 16	   .Loud      sta	AUDC1
-     19  010c		       84 1a		      sty	AUDV1
-     20  010e
-     21  010e							; get current note offset and store in Y
-     22  010e		       8a		      txa
-     23  010f		       4a		      lsr
-     24  0110		       4a		      lsr
-     25  0111		       4a		      lsr
-     26  0112		       4a		      lsr
-     27  0113		       a8		      tay
-     28  0114		       8a		      txa
-     29  0115		       29 0f		      and	#$F
-     30  0117		       18		      clc
-     31  0118		       79 69 19 	      adc	MusicSeqs,y
-     32  011b		       a8		      tay
-     33  011c
-     34  011c		       a9 19		      lda	#>MusicSeq0
-     35  011e		       85 f1		      sta	MusicPtr+1
-     36  0120		       a9 79		      lda	#<MusicSeq0
-     37  0122		       85 f0		      sta	MusicPtr
-     38  0124		       a2 00		      ldx	#0
-     39  0126		       20 41 16 	      jsr	SetNote2
-     40  0129		       a9 2d		      lda	#<VlmEnvelope
-     41  012b		       85 f0		      sta	MusicPtr
-     42  012d		       20 53 16 	      jsr	SetVolume
-     43  0130
-     44  0130		       20 6e 16 	      jsr	UpdateNote
-     45  0133
+      0  00e6					      include	bank1/code/music.asm
+      1  00e6							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  00e6							; Music Engine
+      3  00e6							;
+      4  00e6							; Handles the main music melody
+      5  00e6							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      6  00e6
+      7  00e6							; set bass frequency
+      8  00e6		       a7 84		      lax	MusicNote
+      9  00e8		       4b 1e		      asr	#%00011110
+     10  00ea		       4a		      lsr
+     11  00eb		       a8		      tay
+     12  00ec		       b9 5f 19 	      lda	BassSeq,y
+     13  00ef		       85 18		      sta	AUDF1
+     14  00f1		       a9 06		      lda	#6
+     15  00f3		       a0 07		      ldy	#7
+     16  00f5		       b0 02		      bcs	.Loud
+     17  00f7		       a0 03		      ldy	#3
+     18  00f9		       85 16	   .Loud      sta	AUDC1
+     19  00fb		       84 1a		      sty	AUDV1
+     20  00fd
+     21  00fd							; get current note offset and store in Y
+     22  00fd		       8a		      txa
+     23  00fe		       4a		      lsr
+     24  00ff		       4a		      lsr
+     25  0100		       4a		      lsr
+     26  0101		       4a		      lsr
+     27  0102		       a8		      tay
+     28  0103		       8a		      txa
+     29  0104		       29 0f		      and	#$F
+     30  0106		       18		      clc
+     31  0107		       79 67 19 	      adc	MusicSeqs,y
+     32  010a		       a8		      tay
+     33  010b
+     34  010b		       a9 19		      lda	#>MusicSeq0
+     35  010d		       85 f1		      sta	MusicPtr+1
+     36  010f		       a9 77		      lda	#<MusicSeq0
+     37  0111		       85 f0		      sta	MusicPtr
+     38  0113		       a2 00		      ldx	#0
+     39  0115		       20 41 16 	      jsr	SetNote2
+     40  0118		       a9 32		      lda	#<MusicVlm
+     41  011a		       85 f0		      sta	MusicPtr
+     42  011c		       20 53 16 	      jsr	SetVolume
+     43  011f
+     44  011f		       20 6e 16 	      jsr	UpdateNote
+     45  0122
 ------- FILE bank1/code/vblank_logic.asm
-      8  0133
-      9  0133		       a2 ed		      ldx	#RamBowColorsBk+19
-     10  0135		       a5 80		      lda	Frame
-     11  0137		       29 08		      and	#%00001000
-     12  0139		       d0 0f		      bne	.Rainbow1
-     13  013b		       a9 e0		      lda	#%11100000
-     14  013d		       85 0d		      sta	PF0
-     15  013f		       a9 c1		      lda	#%11000001
-     16  0141		       85 0e		      sta	PF1
-     17  0143		       a9 eb		      lda	#RamBowColorsBk+17
-     18  0145		       85 97		      sta	BowColorsPfPtr
-     19  0147		       4c 57 11 	      jmp	.Rainbow2
-     20  014a				   .Rainbow1
-     21  014a		       ca		      dex
-     22  014b		       a9 c0		      lda	#%11000000
-     23  014d		       85 0d		      sta	PF0
-     24  014f		       a9 e0		      lda	#%11100000
-     25  0151		       85 0e		      sta	PF1
-     26  0153		       a9 e9		      lda	#RamBowColorsBk+15
-     27  0155		       85 97		      sta	BowColorsPfPtr
-     28  0157				   .Rainbow2
-     29  0157		       a9 00		      lda	#0
-     30  0159		       85 98		      sta	BowColorsPfPtr+1
-     31  015b
-     32  015b		       a5 ee		      lda	MenuBgColor
-     33  015d		       85 d9		      sta	RamBowColorsBk-1
-     34  015f		       85 da		      sta	RamBowColorsBk
-     35  0161		       85 db		      sta	RamBowColorsBk+1
-     36  0163		       85 ec		      sta	RamBowColorsBk+18
-     37  0165		       85 ed		      sta	RamBowColorsBk+19
-     38  0167		       85 ee		      sta	RamBowColorsBk+20
-     39  0169
-     40  0169		       a5 8f		      lda	MenuCatFrame
-     41  016b		       c9 02		      cmp	#2
-     42  016d		       10 01		      bpl	.Jmp2
-     43  016f		       ca		      dex
-     44  0170				   .Jmp2
-     45  0170		       9a		      txs
-     46  0171
-     47  0171		       a2 00		      ldx	#0
-     48  0173		       a9 08		      lda	#%1000
-     49  0175		       2c 82 02 	      bit	SWCHB
-     50  0178		       d0 02		      bne	.NtscMode
-     51  017a		       a2 08		      ldx	#8
-     52  017c				   .NtscMode
-     53  017c
-     54  017c		       bd b9 18 	      lda	MenuColors,x
-     55  017f		       85 ee		      sta	MenuBgColor
-     56  0181		       e8		      inx
-     57  0182		       bd b9 18 	      lda	MenuColors,x
-     58  0185		       85 86		      sta	CatTartColor
-     59  0187
-     60  0187		       a0 06		      ldy	#6
-     61  0189				   .SetBowColors
-     62  0189		       bd ba 18 	      lda	MenuColors+1,x
-     63  018c		       48		      pha
-     64  018d		       48		      pha
-     65  018e		       48		      pha
-     66  018f		       e8		      inx
-     67  0190		       88		      dey
-     68  0191		       d0 f6		      bne	.SetBowColors
-     69  0193
-     70  0193		       a2 d8		      ldx	#RamMenuCatGfxR+15
-     71  0195		       9a		      txs
-     72  0196
-     73  0196							; push graphics for GRP1
-     74  0196		       a9 17		      lda	#>MenuCatGfxPage1	; get 1st page of menu cat gfx
-     75  0198		       85 92		      sta	MenuCatRamPtr+1	; and set pointer to this page
-     76  019a		       a6 8f		      ldx	MenuCatFrame	; get animation frame
-     77  019c		       bd ad 18 	      lda	MenuCatOffsetGfx,x	; get offset within page
-     78  019f		       85 91		      sta	MenuCatRamPtr	; and set pointer address
-     79  01a1
-     80  01a1		       a0 0d		      ldy	#13
-     81  01a3				   .LoopGfxR
-     82  01a3		       b1 91		      lda	(MenuCatRamPtr),y	; get next byte of gfx
-     83  01a5		       48		      pha		; and push to RAM
-     84  01a6		       88		      dey
-     85  01a7		       10 fa		      bpl	.LoopGfxR
-     86  01a9
-     87  01a9		       8a		      txa		; get animation frame
-     88  01aa		       0a		      asl		; multiply by 2
-     89  01ab		       a8		      tay
-     90  01ac		       b9 54 18 	      lda	MenuCatLowGfxR,y
-     91  01af		       48		      pha
-     92  01b0		       c8		      iny
-     93  01b1		       b9 54 18 	      lda	MenuCatLowGfxR,y
-     94  01b4		       48		      pha
-     95  01b5
-     96  01b5							; push graphics for right copies of PF2
-     97  01b5		       bd b3 18 	      lda	MenuCatOffsetPf,x
-     98  01b8		       85 91		      sta	MenuCatRamPtr
-     99  01ba
-    100  01ba		       a0 0c		      ldy	#12
-    101  01bc				   .LoopPfR
-    102  01bc		       b1 91		      lda	(MenuCatRamPtr),y	; get next byte of gfx
-    103  01be		       48		      pha		; and push to RAM
-    104  01bf		       88		      dey
-    105  01c0		       10 fa		      bpl	.LoopPfR
-    106  01c2
-    107  01c2		       8a		      txa		; get animation frame
-    108  01c3		       0a		      asl		; multiply by 2
-    109  01c4		       a8		      tay
-    110  01c5		       b9 60 18 	      lda	MenuCatLowPfGfxR,y
-    111  01c8		       48		      pha
-    112  01c9		       c8		      iny
-    113  01ca		       b9 60 18 	      lda	MenuCatLowPfGfxR,y
-    114  01cd		       48		      pha
-    115  01ce		       85 9c		      sta	MenuCatShift	; use highest bit for cat face shift
-    116  01d0
-    117  01d0							; push graphics for left copies of PF2
-    118  01d0		       8a		      txa		; get animation frame
-    119  01d1		       0a		      asl
-    120  01d2		       0a		      asl
-    121  01d3		       0a		      asl
-    122  01d4		       38		      sec
-    123  01d5		       e5 8f		      sbc	MenuCatFrame
-    124  01d7		       0a		      asl		; multiply by 14 (clears carry flag)
-    125  01d8		       85 90		      sta	MenuCatFrameX14	; save to reuse later
-    126  01da		       69 34		      adc	#<MenuCatPfL	; add graphics table offset
-    127  01dc		       85 91		      sta	MenuCatRamPtr	; and set pointer address
-    128  01de
-    129  01de		       a0 0e		      ldy	#14
-    130  01e0				   .LoopPfL
-    131  01e0		       b1 91		      lda	(MenuCatRamPtr),y
-    132  01e2		       48		      pha
-    133  01e3		       88		      dey
-    134  01e4		       10 fa		      bpl	.LoopPfL
-    135  01e6
-    136  01e6							; push graphics for GRP0
-    137  01e6		       a9 18		      lda	#>MenuCatGfxPage2	; get 2nd page of menu cat gfx
-    138  01e8		       85 92		      sta	MenuCatRamPtr+1	; and set pointer to this page
-    139  01ea		       a5 90		      lda	MenuCatFrameX14	; get animation frame times 14
-    140  01ec		       85 91		      sta	MenuCatRamPtr	; and set pointer address
-    141  01ee
-    142  01ee		       a0 0d		      ldy	#13
-    143  01f0				   .LoopGfxL
-    144  01f0		       b1 91		      lda	(MenuCatRamPtr),y
-    145  01f2		       48		      pha
-    146  01f3		       88		      dey
-    147  01f4		       10 fa		      bpl	.LoopGfxL
-    148  01f6
-    149  01f6							; prepare graphics pointers for kernel
-    150  01f6		       a9 17		      lda	#>MenuCatGfxPage1
-    151  01f8		       85 94		      sta	MenuCatHmvPtrP+1
-    152  01fa		       85 96		      sta	MenuCatMslPtr+1
-    153  01fc		       a9 18		      lda	#>MenuCatGfxPage2
-    154  01fe		       85 92		      sta	MenuCatHmvPtrM+1
-    155  0200
-    156  0200		       a5 90		      lda	MenuCatFrameX14	; get animation frame times 14
-    157  0202		       e0 05		      cpx	#5
-    158  0204		       d0 03		      bne	.NotFrame5
-    159  0206		       38		      sec
-    160  0207		       e9 0e		      sbc	#14
-    161  0209				   .NotFrame5
-    162  0209		       18		      clc
-    163  020a		       69 ad		      adc	#<MenuCatHmoveP
-    164  020c		       85 93		      sta	MenuCatHmvPtrP
-    165  020e		       a5 90		      lda	MenuCatFrameX14	; get animation frame times 14
-    166  0210		       38		      sec
-    167  0211		       e5 8f		      sbc	MenuCatFrame	; adjust to times 13
-    168  0213		       e0 00		      cpx	#0
-    169  0215		       f0 03		      beq	.Frame0
-    170  0217		       38		      sec
-    171  0218		       e9 0d		      sbc	#13
-    172  021a				   .Frame0
-    173  021a		       18		      clc
-    174  021b		       69 6c		      adc	#<MenuCatHmoveM
-    175  021d		       85 91		      sta	MenuCatHmvPtrM
-    176  021f		       a0 f3		      ldy	#<MenuCatMslGfx
-    177  0221		       e0 05		      cpx	#5
-    178  0223		       d0 01		      bne	.Not5
-    179  0225		       88		      dey
-    180  0226				   .Not5
-    181  0226		       84 95		      sty	MenuCatMslPtr
-    182  0228
-      0  0228					      TIMER_LOOP
-      1  0228					      SUBROUTINE
-      2  0228
-      3  0228				   .TimerLoop
-      4  0228		       ad 84 02 	      lda	INTIM
-      5  022b		       d0 fb		      bne	.TimerLoop
-      6  022d
+      8  0122
+      9  0122
+     10  0122
+     11  0122		       a7 91		      lax	MenuCatTiming
+     12  0124		       29 07		      and	#7
+     13  0126		       d0 2d		      bne	.KeepCatFrame
+     14  0128
+     15  0128		       8a		      txa
+     16  0129		       18		      clc
+     17  012a		       69 08		      adc	#1<<3
+     18  012c		       c9 d8		      cmp	#27<<3
+     19  012e		       d0 02		      bne	.NoRollCatFrameLen
+     20  0130		       a9 00		      lda	#0
+     21  0132				   .NoRollCatFrameLen
+     22  0132		       85 91		      sta	MenuCatTiming
+     23  0134
+     24  0134		       4a		      lsr
+     25  0135		       4a		      lsr
+     26  0136		       4a		      lsr
+     27  0137		       a8		      tay
+     28  0138		       24 81		      bit	Variation
+     29  013a		       10 05		      bpl	.CatTimingPAL
+     30  013c		       b9 37 1a 	      lda	CatTimingNTSC,y
+     31  013f		       d0 03		      bne	.CatTimingNTSC
+     32  0141				   .CatTimingPAL
+     33  0141		       b9 52 1a 	      lda	CatTimingPAL,y
+     34  0144				   .CatTimingNTSC
+     35  0144		       18		      clc
+     36  0145		       65 91		      adc	MenuCatTiming
+     37  0147		       85 91		      sta	MenuCatTiming
+     38  0149
+     39  0149		       e6 8f		      inc	MenuCatFrame
+     40  014b		       a5 8f		      lda	MenuCatFrame
+     41  014d		       c9 06		      cmp	#6
+     42  014f		       d0 04		      bne	.NoRollCatFrame
+     43  0151		       a9 00		      lda	#0
+     44  0153		       85 8f		      sta	MenuCatFrame
+     45  0155				   .NoRollCatFrame
+     46  0155
+     47  0155				   .KeepCatFrame
+     48  0155		       c6 91		      dec	MenuCatTiming
+     49  0157
+     50  0157
+     51  0157
+     52  0157		       a2 ee		      ldx	#RamBowColorsBk+19
+     53  0159		       a5 80		      lda	Frame
+     54  015b		       29 08		      and	#%00001000
+     55  015d		       d0 0f		      bne	.Rainbow1
+     56  015f		       a9 e0		      lda	#%11100000
+     57  0161		       85 0d		      sta	PF0
+     58  0163		       a9 c1		      lda	#%11000001
+     59  0165		       85 0e		      sta	PF1
+     60  0167		       a9 ec		      lda	#RamBowColorsBk+17
+     61  0169		       85 98		      sta	BowColorsPfPtr
+     62  016b		       4c 7b 11 	      jmp	.Rainbow2
+     63  016e				   .Rainbow1
+     64  016e		       ca		      dex
+     65  016f		       a9 c0		      lda	#%11000000
+     66  0171		       85 0d		      sta	PF0
+     67  0173		       a9 e0		      lda	#%11100000
+     68  0175		       85 0e		      sta	PF1
+     69  0177		       a9 ea		      lda	#RamBowColorsBk+15
+     70  0179		       85 98		      sta	BowColorsPfPtr
+     71  017b				   .Rainbow2
+     72  017b		       a9 00		      lda	#0
+     73  017d		       85 99		      sta	BowColorsPfPtr+1
+     74  017f
+     75  017f		       a5 ef		      lda	MenuBgColor
+     76  0181		       85 da		      sta	RamBowColorsBk-1
+     77  0183		       85 db		      sta	RamBowColorsBk
+     78  0185		       85 dc		      sta	RamBowColorsBk+1
+     79  0187		       85 ed		      sta	RamBowColorsBk+18
+     80  0189		       85 ee		      sta	RamBowColorsBk+19
+     81  018b		       85 ef		      sta	RamBowColorsBk+20
+     82  018d
+     83  018d		       a5 8f		      lda	MenuCatFrame
+     84  018f		       c9 02		      cmp	#2
+     85  0191		       10 01		      bpl	.Jmp2
+     86  0193		       ca		      dex
+     87  0194				   .Jmp2
+     88  0194		       9a		      txs
+     89  0195
+     90  0195		       a2 00		      ldx	#0
+     91  0197		       a9 08		      lda	#%1000
+     92  0199		       2c 82 02 	      bit	SWCHB
+     93  019c		       d0 02		      bne	.NtscMode
+     94  019e		       a2 08		      ldx	#8
+     95  01a0				   .NtscMode
+     96  01a0
+     97  01a0		       bd b9 18 	      lda	MenuColors,x
+     98  01a3		       85 ef		      sta	MenuBgColor
+     99  01a5		       e8		      inx
+    100  01a6		       bd b9 18 	      lda	MenuColors,x
+    101  01a9		       85 86		      sta	CatTartColor
+    102  01ab
+    103  01ab		       a0 06		      ldy	#6
+    104  01ad				   .SetBowColors
+    105  01ad		       bd ba 18 	      lda	MenuColors+1,x
+    106  01b0		       48		      pha
+    107  01b1		       48		      pha
+    108  01b2		       48		      pha
+    109  01b3		       e8		      inx
+    110  01b4		       88		      dey
+    111  01b5		       d0 f6		      bne	.SetBowColors
+    112  01b7
+    113  01b7		       a2 d9		      ldx	#RamMenuCatGfxR+15
+    114  01b9		       9a		      txs
+    115  01ba
+    116  01ba							; push graphics for GRP1
+    117  01ba		       a9 17		      lda	#>MenuCatGfxPage1	; get 1st page of menu cat gfx
+    118  01bc		       85 93		      sta	MenuCatRamPtr+1	; and set pointer to this page
+    119  01be		       a6 8f		      ldx	MenuCatFrame	; get animation frame
+    120  01c0		       bd ad 18 	      lda	MenuCatOffsetGfx,x	; get offset within page
+    121  01c3		       85 92		      sta	MenuCatRamPtr	; and set pointer address
+    122  01c5
+    123  01c5		       a0 0d		      ldy	#13
+    124  01c7				   .LoopGfxR
+    125  01c7		       b1 92		      lda	(MenuCatRamPtr),y	; get next byte of gfx
+    126  01c9		       48		      pha		; and push to RAM
+    127  01ca		       88		      dey
+    128  01cb		       10 fa		      bpl	.LoopGfxR
+    129  01cd
+    130  01cd		       8a		      txa		; get animation frame
+    131  01ce		       0a		      asl		; multiply by 2
+    132  01cf		       a8		      tay
+    133  01d0		       b9 54 18 	      lda	MenuCatLowGfxR,y
+    134  01d3		       48		      pha
+    135  01d4		       c8		      iny
+    136  01d5		       b9 54 18 	      lda	MenuCatLowGfxR,y
+    137  01d8		       48		      pha
+    138  01d9
+    139  01d9							; push graphics for right copies of PF2
+    140  01d9		       bd b3 18 	      lda	MenuCatOffsetPf,x
+    141  01dc		       85 92		      sta	MenuCatRamPtr
+    142  01de
+    143  01de		       a0 0c		      ldy	#12
+    144  01e0				   .LoopPfR
+    145  01e0		       b1 92		      lda	(MenuCatRamPtr),y	; get next byte of gfx
+    146  01e2		       48		      pha		; and push to RAM
+    147  01e3		       88		      dey
+    148  01e4		       10 fa		      bpl	.LoopPfR
+    149  01e6
+    150  01e6		       8a		      txa		; get animation frame
+    151  01e7		       0a		      asl		; multiply by 2
+    152  01e8		       a8		      tay
+    153  01e9		       b9 60 18 	      lda	MenuCatLowPfGfxR,y
+    154  01ec		       48		      pha
+    155  01ed		       c8		      iny
+    156  01ee		       b9 60 18 	      lda	MenuCatLowPfGfxR,y
+    157  01f1		       48		      pha
+    158  01f2		       85 9d		      sta	MenuCatShift	; use highest bit for cat face shift
+    159  01f4
+    160  01f4							; push graphics for left copies of PF2
+    161  01f4		       8a		      txa		; get animation frame
+    162  01f5		       0a		      asl
+    163  01f6		       0a		      asl
+    164  01f7		       0a		      asl
+    165  01f8		       38		      sec
+    166  01f9		       e5 8f		      sbc	MenuCatFrame
+    167  01fb		       0a		      asl		; multiply by 14 (clears carry flag)
+    168  01fc		       85 90		      sta	MenuCatFrameX14	; save to reuse later
+    169  01fe		       69 34		      adc	#<MenuCatPfL	; add graphics table offset
+    170  0200		       85 92		      sta	MenuCatRamPtr	; and set pointer address
+    171  0202
+    172  0202		       a0 0e		      ldy	#14
+    173  0204				   .LoopPfL
+    174  0204		       b1 92		      lda	(MenuCatRamPtr),y
+    175  0206		       48		      pha
+    176  0207		       88		      dey
+    177  0208		       10 fa		      bpl	.LoopPfL
+    178  020a
+    179  020a							; push graphics for GRP0
+    180  020a		       a9 18		      lda	#>MenuCatGfxPage2	; get 2nd page of menu cat gfx
+    181  020c		       85 93		      sta	MenuCatRamPtr+1	; and set pointer to this page
+    182  020e		       a5 90		      lda	MenuCatFrameX14	; get animation frame times 14
+    183  0210		       85 92		      sta	MenuCatRamPtr	; and set pointer address
+    184  0212
+    185  0212		       a0 0d		      ldy	#13
+    186  0214				   .LoopGfxL
+    187  0214		       b1 92		      lda	(MenuCatRamPtr),y
+    188  0216		       48		      pha
+    189  0217		       88		      dey
+    190  0218		       10 fa		      bpl	.LoopGfxL
+    191  021a
+    192  021a							; prepare graphics pointers for kernel
+    193  021a		       a9 17		      lda	#>MenuCatGfxPage1
+    194  021c		       85 95		      sta	MenuCatHmvPtrP+1
+    195  021e		       85 97		      sta	MenuCatMslPtr+1
+    196  0220		       a9 18		      lda	#>MenuCatGfxPage2
+    197  0222		       85 93		      sta	MenuCatHmvPtrM+1
+    198  0224
+    199  0224		       a5 90		      lda	MenuCatFrameX14	; get animation frame times 14
+    200  0226		       e0 05		      cpx	#5
+    201  0228		       d0 03		      bne	.NotFrame5
+    202  022a		       38		      sec
+    203  022b		       e9 0e		      sbc	#14
+    204  022d				   .NotFrame5
+    205  022d		       18		      clc
+    206  022e		       69 ad		      adc	#<MenuCatHmoveP
+    207  0230		       85 94		      sta	MenuCatHmvPtrP
+    208  0232		       a5 90		      lda	MenuCatFrameX14	; get animation frame times 14
+    209  0234		       38		      sec
+    210  0235		       e5 8f		      sbc	MenuCatFrame	; adjust to times 13
+    211  0237		       e0 00		      cpx	#0
+    212  0239		       f0 03		      beq	.Frame0
+    213  023b		       38		      sec
+    214  023c		       e9 0d		      sbc	#13
+    215  023e				   .Frame0
+    216  023e		       18		      clc
+    217  023f		       69 6c		      adc	#<MenuCatHmoveM
+    218  0241		       85 92		      sta	MenuCatHmvPtrM
+    219  0243		       a0 f3		      ldy	#<MenuCatMslGfx
+    220  0245		       e0 05		      cpx	#5
+    221  0247		       d0 01		      bne	.Not5
+    222  0249		       88		      dey
+    223  024a				   .Not5
+    224  024a		       84 96		      sty	MenuCatMslPtr
+    225  024c
+      0  024c					      TIMER_LOOP
+      1  024c					      SUBROUTINE
+      2  024c
+      3  024c				   .TimerLoop
+      4  024c		       ad 84 02 	      lda	INTIM
+      5  024f		       d0 fb		      bne	.TimerLoop
+      6  0251
 ------- FILE bank1.asm
 ------- FILE bank1/code/kernel.asm LEVEL 3 PASS 2
-      0  022d					      include	bank1/code/kernel.asm
-      1  022d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  022d							; Kernel
-      3  022d							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  022d
-      5  022d		       85 02		      sta	WSYNC
-      6  022f
+      0  0251					      include	bank1/code/kernel.asm
+      1  0251							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  0251							; Kernel
+      3  0251							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  0251
+      5  0251		       85 02		      sta	WSYNC
+      6  0253
 ------- FILE bank1/code/menuscore.asm LEVEL 4 PASS 2
-      0  022f					      include	bank1/code/menuscore.asm
-      1  022f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  022f							; Scoreboard for main menu
-      3  022f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  022f
-      5  022f
-      6  022f
-      7  022f		       a0 3e		      ldy	#62
-      8  0231		       88	   .Loop1     dey
-      9  0232		       85 02		      sta	WSYNC
-     10  0234		       d0 fb		      bne	.Loop1
-     11  0236
+      0  0253					      include	bank1/code/menuscore.asm
+      1  0253							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  0253							; Scoreboard for main menu
+      3  0253							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  0253
+      5  0253
+      6  0253
+      7  0253		       a0 3e		      ldy	#62
+      8  0255		       88	   .Loop1     dey
+      9  0256		       85 02		      sta	WSYNC
+     10  0258		       d0 fb		      bne	.Loop1
+     11  025a
 ------- FILE bank1/code/kernel.asm
-      8  0236
+      8  025a
 ------- FILE bank1/code/menucat_prep.asm LEVEL 4 PASS 2
-      0  0236					      include	bank1/code/menucat_prep.asm
-      1  0236							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  0236							; Menu Cat Prep
-      3  0236							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  0236							; Positions the graphics objects for the giant Nyan Cat display on the menu.
-      5  0236							;
-      6  0236							; Uses 64 bytes of ROM
-      7  0236							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      8  0236
-      0  0236					      SLEEP	13	; 15
-      1  0236				   .CYCLES    SET	13
-      2  0236
-      3  0236				  -	      IF	.CYCLES < 2
-      4  0236				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
-      5  0236				  -	      ERR
-      6  0236					      ENDIF
-      7  0236
-      8  0236					      IF	.CYCLES & 1
-      9  0236					      IFNCONST	NO_ILLEGAL_OPCODES
-     10  0236		       04 00		      nop	0
-     11  0238				  -	      ELSE
-     12  0238				  -	      bit	VSYNC
-     13  0238					      ENDIF
-     14  0238				   .CYCLES    SET	.CYCLES - 3
-     15  0238					      ENDIF
-     16  0238
-     17  0238					      REPEAT	.CYCLES / 2
-     18  0238		       ea		      nop
-     17  0238					      REPEND
-     18  0239		       ea		      nop
-     17  0239					      REPEND
-     18  023a		       ea		      nop
-     17  023a					      REPEND
-     18  023b		       ea		      nop
-     17  023b					      REPEND
-     18  023c		       ea		      nop
-     19  023d					      REPEND
-     10  023d
-     11  023d		       a9 10		      lda	#$10	; 17
-     12  023f		       85 21		      sta	HMP1	; 20	left 9 clocks
-     13  0241		       0a		      asl		; 22	A = #$20
-     14  0242		       85 24		      sta	HMBL	; 25	left 10 clocks
-     15  0244		       85 23		      sta	HMM1	; 28	left 10 clocks
-     16  0246		       a0 80		      ldy	#$80	; 30
-     17  0248		       84 20		      sty	HMP0	; 33	no movement
-     18  024a		       a9 90		      lda	#$90	; 35
-     19  024c
-     20  024c		       85 14		      sta	RESBL	; 38
-     21  024e		       85 22		      sta	HMM0	; 41	left 1 clock
-     22  0250		       85 10		      sta	RESP0	; 44
-     23  0252		       85 12		      sta	RESM0	; 47
-     24  0254		       85 13		      sta	RESM1	; 50
-     25  0256		       85 11		      sta	RESP1	; 53
-     26  0258
-     27  0258		       a9 07		      lda	#QUAD_SIZE	; 55
-     28  025a		       85 04		      sta	NUSIZ0	; 58
-     29  025c		       a9 15		      lda	#DOUBLE_SIZE | MSL_SIZE_2
-     30  025e							; 60
-     31  025e		       85 05		      sta	NUSIZ1	; 63
-     32  0260		       a9 31		      lda	#$31	; 65
-     33  0262		       85 0a		      sta	CTRLPF	; 68
-     34  0264		       85 25		      sta	VDELP0	; 71	enable VDELP0
-     35  0266		       85 2a		      sta	HMOVE	; 74	cycle 74!
-     36  0268
-     37  0268		       ea		      nop		; 00
-     38  0269		       0a		      asl		; 02	A = #$62
-     39  026a		       a2 e0		      ldx	#$E0	; 04
-     40  026c		       85 20		      sta	HMP0	; 07	left 6 clocks
-     41  026e		       86 22		      stx	HMM0	; 10	right 2 clocks
-     42  0270		       86 21		      stx	HMP1	; 13	right 2 clocks
-     43  0272		       86 23		      stx	HMM1	; 16	right 2 clocks
-     44  0274		       84 24		      sty	HMBL	; 19	no movement
+      0  025a					      include	bank1/code/menucat_prep.asm
+      1  025a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  025a							; Menu Cat Prep
+      3  025a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      4  025a							; Positions the graphics objects for the giant Nyan Cat display on the menu.
+      5  025a							;
+      6  025a							; Uses 64 bytes of ROM
+      7  025a							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      8  025a
+      0  025a					      SLEEP	13	; 15
+      1  025a				   .CYCLES    SET	13
+      2  025a
+      3  025a				  -	      IF	.CYCLES < 2
+      4  025a				  -	      ECHO	"MACRO ERROR: 'SLEEP': Duration must be > 1"
+      5  025a				  -	      ERR
+      6  025a					      ENDIF
+      7  025a
+      8  025a					      IF	.CYCLES & 1
+      9  025a					      IFNCONST	NO_ILLEGAL_OPCODES
+     10  025a		       04 00		      nop	0
+     11  025c				  -	      ELSE
+     12  025c				  -	      bit	VSYNC
+     13  025c					      ENDIF
+     14  025c				   .CYCLES    SET	.CYCLES - 3
+     15  025c					      ENDIF
+     16  025c
+     17  025c					      REPEAT	.CYCLES / 2
+     18  025c		       ea		      nop
+     17  025c					      REPEND
+     18  025d		       ea		      nop
+     17  025d					      REPEND
+     18  025e		       ea		      nop
+     17  025e					      REPEND
+     18  025f		       ea		      nop
+     17  025f					      REPEND
+     18  0260		       ea		      nop
+     19  0261					      REPEND
+     10  0261
+     11  0261		       a9 10		      lda	#$10	; 17
+     12  0263		       85 21		      sta	HMP1	; 20	left 9 clocks
+     13  0265		       0a		      asl		; 22	A = #$20
+     14  0266		       85 24		      sta	HMBL	; 25	left 10 clocks
+     15  0268		       85 23		      sta	HMM1	; 28	left 10 clocks
+     16  026a		       a0 80		      ldy	#$80	; 30
+     17  026c		       84 20		      sty	HMP0	; 33	no movement
+     18  026e		       a9 90		      lda	#$90	; 35
+     19  0270
+     20  0270		       85 14		      sta	RESBL	; 38
+     21  0272		       85 22		      sta	HMM0	; 41	left 1 clock
+     22  0274		       85 10		      sta	RESP0	; 44
+     23  0276		       85 12		      sta	RESM0	; 47
+     24  0278		       85 13		      sta	RESM1	; 50
+     25  027a		       85 11		      sta	RESP1	; 53
+     26  027c
+     27  027c		       a9 07		      lda	#QUAD_SIZE	; 55
+     28  027e		       85 04		      sta	NUSIZ0	; 58
+     29  0280		       a9 15		      lda	#DOUBLE_SIZE | MSL_SIZE_2
+     30  0282							; 60
+     31  0282		       85 05		      sta	NUSIZ1	; 63
+     32  0284		       a9 31		      lda	#$31	; 65
+     33  0286		       85 0a		      sta	CTRLPF	; 68
+     34  0288		       85 25		      sta	VDELP0	; 71	enable VDELP0
+     35  028a		       85 2a		      sta	HMOVE	; 74	cycle 74!
+     36  028c
+     37  028c		       ea		      nop		; 00
+     38  028d		       0a		      asl		; 02	A = #$62
+     39  028e		       a2 e0		      ldx	#$E0	; 04
+     40  0290		       85 20		      sta	HMP0	; 07	left 6 clocks
+     41  0292		       86 22		      stx	HMM0	; 10	right 2 clocks
+     42  0294		       86 21		      stx	HMP1	; 13	right 2 clocks
+     43  0296		       86 23		      stx	HMM1	; 16	right 2 clocks
+     44  0298		       84 24		      sty	HMBL	; 19	no movement
 ------- FILE bank1/code/kernel.asm
-     10  0276
-     11  0276		       a5 8f		      lda	MenuCatFrame
-     12  0278		       c9 02		      cmp	#2
-     13  027a		       30 06		      bmi	.HiCat
-     14  027c		       85 02		      sta	WSYNC
-     15  027e		       85 02		      sta	WSYNC
-     16  0280		       85 02		      sta	WSYNC
-     17  0282		       85 02	   .HiCat     sta	WSYNC
-     18  0284		       ea		      nop		; 02
-     19  0285
-      0  0285					      NEXT_PAGE
-      1  0285					      SUBROUTINE
-      2  0285
-      3  0285		       4c 00 13 	      jmp	.NextPage
+     10  029a
+     11  029a		       a5 8f		      lda	MenuCatFrame
+     12  029c		       c9 02		      cmp	#2
+     13  029e		       30 06		      bmi	.HiCat
+     14  02a0		       85 02		      sta	WSYNC
+     15  02a2		       85 02		      sta	WSYNC
+     16  02a4		       85 02		      sta	WSYNC
+     17  02a6		       85 02	   .HiCat     sta	WSYNC
+     18  02a8		       ea		      nop		; 02
+     19  02a9
+      0  02a9					      NEXT_PAGE
+      1  02a9					      SUBROUTINE
+      2  02a9
+      3  02a9		       4c 00 13 	      jmp	.NextPage
       4  0300		       00 00 00 00*	      ALIGN	$100
       5  0300				   .NextPage
       6  0300
@@ -1612,9 +1646,9 @@
      41  0327				   .Skip
      42  0327
      43  0327							; 8 bytes
-     44  0327		       b9 ea 00 	      lda	RamBowColorsBk+16,y	; 11	2
+     44  0327		       b9 eb 00 	      lda	RamBowColorsBk+16,y	; 11	2
      45  032a		       85 09		      sta	COLUBK	; 14	2
-     46  032c		       b1 97		      lda	(BowColorsPfPtr),y	; 19	2
+     46  032c		       b1 98		      lda	(BowColorsPfPtr),y	; 19	2
      47  032e		       85 08		      sta	COLUPF	; 22	2
      48  0330
      49  0330							; 8 bytes
@@ -1626,7 +1660,7 @@
      55  033a							; 17 bytes
      56  033a		       a5 86		      lda	CatTartColor	; 39	2
      57  033c		       85 09		      sta	COLUBK	; 42	2
-     58  033e		       a5 ee		      lda	MenuBgColor	; 45	2
+     58  033e		       a5 ef		      lda	MenuBgColor	; 45	2
      59  0340		       85 08		      sta	COLUPF	; 48	2
      60  0342		       ca		      dex		; 50	1
      61  0343		       d0 cd		      bne	.Loop	; 53/52	2
@@ -1675,9 +1709,9 @@
      18  035a				  -	      nop
      19  035a					      REPEND
      87  035a				   .Loop4
-     88  035a		       a5 ea		      lda	RamBowColorsBk+16	; 06	2
+     88  035a		       a5 eb		      lda	RamBowColorsBk+16	; 06	2
      89  035c		       85 09		      sta	COLUBK	; 09	2
-     90  035e		       b1 97		      lda	(BowColorsPfPtr),y	; 14	2
+     90  035e		       b1 98		      lda	(BowColorsPfPtr),y	; 14	2
      91  0360		       85 08		      sta	COLUPF	; 17	2
      92  0362
      93  0362		       ad 2d 17 	      lda	MenuCatTopGfxR	; 20	2
@@ -1713,7 +1747,7 @@
     100  036e
     101  036e		       a5 86		      lda	CatTartColor	; 39	2
     102  0370		       85 09		      sta	COLUBK	; 42	2
-    103  0372		       a5 ee		      lda	MenuBgColor	; 45	2
+    103  0372		       a5 ef		      lda	MenuBgColor	; 45	2
     104  0374		       85 08		      sta	COLUPF	; 48	2
     105  0376
     106  0376		       38		      sec		; 50	1
@@ -1731,32 +1765,32 @@
       0  0381					      include	bank1/code/menucat5.asm
       1  0381							;
       2  0381
-      3  0381		       a5 9c		      lda	MenuCatShift	; 62	2
+      3  0381		       a5 9d		      lda	MenuCatShift	; 62	2
       4  0383		       10 01		      bpl	.ClearHmove	; 65/64	2
       0  0385					      SKIP_WORD		; 68	1
       1  0385		       0c		      HEX	0C
       6  0386				   .ClearHmove
       7  0386		       85 2b		      sta	HMCLR	; 68	2
       8  0388
-      9  0388		       a5 97		      lda	BowColorsPfPtr	; 71	2
+      9  0388		       a5 98		      lda	BowColorsPfPtr	; 71	2
      10  038a		       e9 0d		      sbc	#13	; 73	2
-     11  038c		       85 97		      sta	BowColorsPfPtr	; 00	2
+     11  038c		       85 98		      sta	BowColorsPfPtr	; 00	2
      12  038e
      13  038e		       85 2a		      sta	HMOVE	; 03	2
-     14  0390		       85 97		      sta	BowColorsPfPtr	; 06	2
+     14  0390		       85 98		      sta	BowColorsPfPtr	; 06	2
      15  0392		       a0 0c		      ldy	#12	; 08	2
      16  0394
      17  0394							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      18  0394
      19  0394							; 10 bytes
-     20  0394		       a5 e9		      lda	RamBowColorsBk+15	; 11	2
+     20  0394		       a5 ea		      lda	RamBowColorsBk+15	; 11	2
      21  0396		       85 09		      sta	COLUBK	; 14	2
-     22  0398		       b1 97		      lda	(BowColorsPfPtr),y	; 19	2
+     22  0398		       b1 98		      lda	(BowColorsPfPtr),y	; 19	2
      23  039a		       85 08		      sta	COLUPF	; 22	2
-     24  039c		       85 9b		      sta	RainbowColorPf	; 25	2
+     24  039c		       85 9c		      sta	RainbowColorPf	; 25	2
      25  039e
      26  039e							; 7 bytes
-     27  039e		       a5 d8		      lda	RamMenuCatGfxR+15	; 28	2
+     27  039e		       a5 d9		      lda	RamMenuCatGfxR+15	; 28	2
      28  03a0		       85 1c		      sta	GRP1	; 31	2
      29  03a2		       4a		      lsr		; 33	1
      30  03a3		       85 1d		      sta	ENAM0	; 36	2
@@ -1766,11 +1800,11 @@
      34  03a7		       85 09		      sta	COLUBK	; 42	2
      35  03a9
      36  03a9							; 5 bytes
-     37  03a9		       a5 d7		      lda	RamMenuCatGfxR+14	; 45	2
-     38  03ab		       85 99		      sta	RamMenuCatGfx	; 48	2
+     37  03a9		       a5 d8		      lda	RamMenuCatGfxR+14	; 45	2
+     38  03ab		       85 9a		      sta	RamMenuCatGfx	; 48	2
      39  03ad
      40  03ad							; 10 bytes
-     41  03ad		       a5 ee		      lda	MenuBgColor	; 51	2
+     41  03ad		       a5 ef		      lda	MenuBgColor	; 51	2
      42  03af		       85 08		      sta	COLUPF	; 54	2
      43  03b1		       85 09		      sta	COLUBK	; 57	2
      44  03b3		       85 2b		      sta	HMCLR	; 60	2
@@ -1779,13 +1813,13 @@
      47  03b7							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      48  03b7
      49  03b7							; 8 bytes
-     50  03b7		       a5 e9		      lda	RamBowColorsBk+15	; 03	2
+     50  03b7		       a5 ea		      lda	RamBowColorsBk+15	; 03	2
      51  03b9		       85 09		      sta	COLUBK	; 06	2
-     52  03bb		       a5 9b		      lda	RainbowColorPf	; 09	2
+     52  03bb		       a5 9c		      lda	RainbowColorPf	; 09	2
      53  03bd		       85 08		      sta	COLUPF	; 12	2
      54  03bf
      55  03bf							; 8 bytes
-     56  03bf		       b1 91		      lda	(MenuCatHmvPtrM),y	; 17	2
+     56  03bf		       b1 92		      lda	(MenuCatHmvPtrM),y	; 17	2
      57  03c1		       85 22		      sta	HMM0	; 20	2
      58  03c3		       0a		      asl		; 22	1
      59  03c4		       0a		      asl		; 24	1
@@ -1817,11 +1851,11 @@
      66  03ca		       a5 86		      lda	CatTartColor	; 36	2
      67  03cc		       85 09		      sta	COLUBK	; 39	2
      68  03ce
-     69  03ce		       b1 95		      lda	(MenuCatMslPtr),y	; 44	2
-     70  03d0		       85 9a		      sta	RamMenuCatMissile	; 47	2
+     69  03ce		       b1 96		      lda	(MenuCatMslPtr),y	; 44	2
+     70  03d0		       85 9b		      sta	RamMenuCatMissile	; 47	2
      71  03d2
      72  03d2							; 8 bytes
-     73  03d2		       a5 ee		      lda	MenuBgColor	; 50	2
+     73  03d2		       a5 ef		      lda	MenuBgColor	; 50	2
      74  03d4		       85 08		      sta	COLUPF	; 53	2
      75  03d6		       85 09		      sta	COLUBK	; 56	2
      76  03d8		       85 02		      sta	WSYNC	; 00	2
@@ -1829,9 +1863,9 @@
      78  03da							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      79  03da
      80  03da							; 8 bytes
-     81  03da		       a5 e9		      lda	RamBowColorsBk+15	; 03	2
+     81  03da		       a5 ea		      lda	RamBowColorsBk+15	; 03	2
      82  03dc		       85 09		      sta	COLUBK	; 06	2
-     83  03de		       a5 9b		      lda	RainbowColorPf	; 09	2
+     83  03de		       a5 9c		      lda	RainbowColorPf	; 09	2
      84  03e0		       85 08		      sta	COLUPF	; 12	2
      85  03e2
      86  03e2							; 11 bytes
@@ -1881,7 +1915,7 @@
      93  03f1
      94  03f1							; 12 bytes
      95  03f1		       a2 ff		      ldx	#$FF	; 42	2
-     96  03f3		       a5 ee		      lda	MenuBgColor	; 45	3
+     96  03f3		       a5 ef		      lda	MenuBgColor	; 45	3
      97  03f5		       85 08		      sta	COLUPF	; 48	2
      98  03f7		       86 1f		      stx	ENABL	; 51	2
      99  03f9		       86 1e		      stx	ENAM1	; 54	2
@@ -1905,15 +1939,15 @@
      13  0400				   MenuCatKernel6_17
      14  0400
      15  0400							; 24 bytes
-     16  0400		       b9 af 00 	      lda	RamMenuCatPfL+4,y	; 28	3 - get left PF2 copy gfx
+     16  0400		       b9 b0 00 	      lda	RamMenuCatPfL+4,y	; 28	3 - get left PF2 copy gfx
      17  0403		       85 0f		      sta	PF2	; 31	2 - set PF2
      18  0405		       a9 08		      lda	#COL_CAT_FACE	; 33	2 - get cat face/tail/paws color
      19  0407		       a6 86		      ldx	CatTartColor	; 36	2 - get cat body color
      20  0409		       85 09		      sta	COLUBK	; 39	2 - set cat face/tail/paws color
      21  040b		       8e 08 00 	      stx.w	COLUPF	; 43	3 - set cat body color
-     22  040e		       b9 be 00 	      lda	RamMenuCatPfR+4,y	; 47	3 - get right PF2 copy gfx
+     22  040e		       b9 bf 00 	      lda	RamMenuCatPfR+4,y	; 47	3 - get right PF2 copy gfx
      23  0411		       85 0f		      sta	PF2	; 50	2 - set PF2
-     24  0413		       a5 ee		      lda	MenuBgColor	; 53	2 - get BG color for palette (NTSC/PAL)
+     24  0413		       a5 ef		      lda	MenuBgColor	; 53	2 - get BG color for palette (NTSC/PAL)
      25  0415		       85 08		      sta	COLUPF	; 56	2 - set both colors
      26  0417		       8d 09 00 	      sta.w	COLUBK	; 60	3 - to BG color
      27  041a
@@ -1922,39 +1956,39 @@
      30  041a				   .Enter6_17		; enter sandman
      31  041a
      32  041a							; 14 bytes
-     33  041a		       a5 99		      lda	RamMenuCatGfx	; 63	2 - get preloaded gfx
+     33  041a		       a5 9a		      lda	RamMenuCatGfx	; 63	2 - get preloaded gfx
      34  041c		       85 1c		      sta	GRP1	; 66	2 - use for P1
-     35  041e		       a5 9a		      lda	RamMenuCatMissile	; 69	2 - get preloaded data
+     35  041e		       a5 9b		      lda	RamMenuCatMissile	; 69	2 - get preloaded data
      36  0420		       85 1d		      sta	ENAM0	; 72	2 - use bit #1 for M0 enable/disable
      37  0422		       85 2a		      sta	HMOVE	; 75	2 - move objects
      38  0424		       29 fd		      and	#%11111101	; 01	2 - clear bit 1 for correct NUSIZ value
      39  0426		       85 04		      sta	NUSIZ0	; 04	2 - set size of M0 (double player size)
      40  0428
      41  0428							; 12 bytes
-     42  0428		       b9 dd 00 	      lda	RamBowColorsBk+3,y	; 08	3 - get this block's rainbow BG color
+     42  0428		       b9 de 00 	      lda	RamBowColorsBk+3,y	; 08	3 - get this block's rainbow BG color
      43  042b		       85 09		      sta	COLUBK	; 11	2 - set BG color
-     44  042d		       85 9b		      sta	RainbowColorBk	; 14	2 - save for later
-     45  042f		       b3 97		      lax	(BowColorsPfPtr),y	; 19	2 - get this block's rainbow PF color
+     44  042d		       85 9c		      sta	RainbowColorBk	; 14	2 - save for later
+     45  042f		       b3 98		      lax	(BowColorsPfPtr),y	; 19	2 - get this block's rainbow PF color
      46  0431		       86 08		      stx	COLUPF	; 22	2 - set PF color
      47  0433		       9a		      txs		; 24	1 - save for later
      48  0434
      49  0434							; 26 bytes
-     50  0434		       b9 ae 00 	      lda	RamMenuCatPfL+3,y	; 28	3
+     50  0434		       b9 af 00 	      lda	RamMenuCatPfL+3,y	; 28	3
      51  0437		       85 0f		      sta	PF2	; 31	2
      52  0439		       a9 08		      lda	#COL_CAT_FACE	; 33	2
      53  043b		       a6 86		      ldx	CatTartColor	; 36	2
      54  043d		       85 09		      sta	COLUBK	; 39	2
      55  043f		       8e 08 00 	      stx.w	COLUPF	; 43	3
-     56  0442		       b9 bd 00 	      lda	RamMenuCatPfR+3,y	; 47	3
+     56  0442		       b9 be 00 	      lda	RamMenuCatPfR+3,y	; 47	3
      57  0445		       85 0f		      sta	PF2	; 50	2
-     58  0447		       a5 ee		      lda	MenuBgColor	; 53	2
+     58  0447		       a5 ef		      lda	MenuBgColor	; 53	2
      59  0449		       85 08		      sta	COLUPF	; 56	2
      60  044b		       8d 09 00 	      sta.w	COLUBK	; 60	3
      61  044e
      62  044e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      63  044e
      64  044e							; 10 bytes
-     65  044e		       b1 91		      lda	(MenuCatHmvPtrM),y	; 65	2 - get next block's missile HMOVE data
+     65  044e		       b1 92		      lda	(MenuCatHmvPtrM),y	; 65	2 - get next block's missile HMOVE data
      66  0450		       85 22		      sta	HMM0	; 68	2 - use left nybble for HMM0
      67  0452		       0a		      asl		; 70	1
      68  0453		       0a		      asl		; 72	1
@@ -1963,41 +1997,41 @@
      71  0456		       85 23		      sta	HMM1	; 03	2 - use right nybble for HMM1
      72  0458
      73  0458							; 7 bytes
-     74  0458		       a5 9b		      lda	RainbowColorBk	; 06	2 - recover BG rainbow color
+     74  0458		       a5 9c		      lda	RainbowColorBk	; 06	2 - recover BG rainbow color
      75  045a		       85 09		      sta	COLUBK	; 09	2 - set COLUBK
      76  045c		       ba		      tsx		; 11	1 - recover PF rainbow color
      77  045d		       86 08		      stx	COLUPF	; 14	2 - set COLUPF
      78  045f
      79  045f							; 5 bytes
-     80  045f		       b1 93		      lda	(MenuCatHmvPtrP),y	; 19	2 - get next block's player HMOVE data
+     80  045f		       b1 94		      lda	(MenuCatHmvPtrP),y	; 19	2 - get next block's player HMOVE data
      81  0461		       85 20		      sta	HMP0	; 22	2 - set HMP0 (P1 isn't moved in kernel)
      82  0463		       ea		      nop		; 24	1
      83  0464
      84  0464							; 26 bytes
-     85  0464		       b9 ae 00 	      lda	RamMenuCatPfL+3,y	; 28	3
+     85  0464		       b9 af 00 	      lda	RamMenuCatPfL+3,y	; 28	3
      86  0467		       85 0f		      sta	PF2	; 31	2
      87  0469		       a9 08		      lda	#COL_CAT_FACE	; 33	2
      88  046b		       a6 86		      ldx	CatTartColor	; 36	2
      89  046d		       85 09		      sta	COLUBK	; 39	2
      90  046f		       8e 08 00 	      stx.w	COLUPF	; 43	3
-     91  0472		       b9 bd 00 	      lda	RamMenuCatPfR+3,y	; 47	3
+     91  0472		       b9 be 00 	      lda	RamMenuCatPfR+3,y	; 47	3
      92  0475		       85 0f		      sta	PF2	; 50	2
-     93  0477		       a5 ee		      lda	MenuBgColor	; 53	2
+     93  0477		       a5 ef		      lda	MenuBgColor	; 53	2
      94  0479		       85 08		      sta	COLUPF	; 56	2
      95  047b		       8d 09 00 	      sta.w	COLUBK	; 60	3
      96  047e
      97  047e							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
      98  047e
      99  047e							; 14 bytes
-    100  047e		       b9 9f 00 	      lda	RamMenuCatGfxL+2,y	; 64	3 - get next block's P0 gfx
+    100  047e		       b9 a0 00 	      lda	RamMenuCatGfxL+2,y	; 64	3 - get next block's P0 gfx
     101  0481		       85 1b		      sta	GRP0	; 67	2 - set GRP0 (VDELP0 is on)
-    102  0483		       b9 cb 00 	      lda	RamMenuCatGfxR+2,y	; 71	3 - get next block's P1 gfx
-    103  0486		       85 99		      sta	RamMenuCatGfx	; 74	2 - save in RAM
-    104  0488		       b1 95		      lda	(MenuCatMslPtr),y	; 03	2 - get next block's M0 size/enable data
-    105  048a		       85 9a		      sta	RamMenuCatMissile	; 06	2 - save in RAM
+    102  0483		       b9 cc 00 	      lda	RamMenuCatGfxR+2,y	; 71	3 - get next block's P1 gfx
+    103  0486		       85 9a		      sta	RamMenuCatGfx	; 74	2 - save in RAM
+    104  0488		       b1 96		      lda	(MenuCatMslPtr),y	; 03	2 - get next block's M0 size/enable data
+    105  048a		       85 9b		      sta	RamMenuCatMissile	; 06	2 - save in RAM
     106  048c
     107  048c							; 7 bytes
-    108  048c		       a5 9b		      lda	RainbowColorBk	; 09	2
+    108  048c		       a5 9c		      lda	RainbowColorBk	; 09	2
     109  048e		       85 09		      sta	COLUBK	; 12	2
     110  0490		       ba		      tsx		; 14	1
     111  0491		       86 08		      stx	COLUPF	; 17	2
@@ -2015,16 +2049,16 @@
     123  0500		       00 00 00 00*	      ALIGN	$100
     124  0500				   .Align6_17
     125  0500
-    126  0500		       a5 ae		      lda	RamMenuCatPfL+3	; 28	2
+    126  0500		       a5 af		      lda	RamMenuCatPfL+3	; 28	2
     127  0502		       85 0f		      sta	PF2	; 31	2
     128  0504		       a9 08		      lda	#COL_CAT_FACE	; 33	2
     129  0506		       a6 86		      ldx	CatTartColor	; 36	2
     130  0508		       85 09		      sta	COLUBK	; 39	2
     131  050a		       ea		      nop		; 41	1
     132  050b		       86 08		      stx	COLUPF	; 44	2
-    133  050d		       a5 bd		      lda	RamMenuCatPfR+3	; 47	2
+    133  050d		       a5 be		      lda	RamMenuCatPfR+3	; 47	2
     134  050f		       85 0f		      sta	PF2	; 50	2
-    135  0511		       a5 ee		      lda	MenuBgColor	; 53	2
+    135  0511		       a5 ef		      lda	MenuBgColor	; 53	2
     136  0513		       85 08		      sta	COLUPF	; 56	2
     137  0515		       85 09		      sta	COLUBK	; 59	2
 ------- FILE bank1/code/kernel.asm
@@ -2033,7 +2067,7 @@
       1  0517
       2  0517							; 59
       3  0517		       84 1d		      sty	ENAM0	; 62	2
-      4  0519		       a5 99		      lda	RamMenuCatGfx	; 65	2
+      4  0519		       a5 9a		      lda	RamMenuCatGfx	; 65	2
       5  051b		       85 1c		      sta	GRP1	; 68	2
       6  051d		       a9 60		      lda	#$60	; 70	2
       7  051f		       85 21		      sta	HMP1	; 73	2
@@ -2043,18 +2077,18 @@
      11  0525							; 02	2
      12  0525		       85 04		      sta	NUSIZ0	; 05	2
      13  0527
-     14  0527		       a5 dc		      lda	RamBowColorsBk+2	; 08	2
+     14  0527		       a5 dd		      lda	RamBowColorsBk+2	; 08	2
      15  0529		       85 09		      sta	COLUBK	; 11	2
      16  052b		       85 08		      sta	COLUPF	; 14	2
      17  052d
      18  052d		       a0 02		      ldy	#2	; 16	2
      19  052f		       ea		      nop		; 18	1
-     20  0530		       a6 ee		      ldx	MenuBgColor	; 21	2
+     20  0530		       a6 ef		      ldx	MenuBgColor	; 21	2
      21  0532		       9a		      txs		; 23	1
      22  0533
      23  0533				   .Loop18
      24  0533
-     25  0533		       a5 ad		      lda	RamMenuCatPfL+2	; 26	2
+     25  0533		       a5 ae		      lda	RamMenuCatPfL+2	; 26	2
      26  0535		       85 0f		      sta	PF2	; 29	2
      27  0537
      28  0537		       a9 08		      lda	#COL_CAT_FACE	; 31	2
@@ -2063,7 +2097,7 @@
      31  053d		       85 09		      sta	COLUBK	; 39	2
      32  053f		       86 08		      stx	COLUPF	; 42	2
      33  0541		       85 12		      sta	RESM0	; 45	2
-     34  0543		       a5 bc		      lda	RamMenuCatPfR+2	; 48	2
+     34  0543		       a5 bd		      lda	RamMenuCatPfR+2	; 48	2
      35  0545		       85 0f		      sta	PF2	; 51	2
      36  0547		       ba		      tsx		; 53	1
      37  0548		       86 08		      stx	COLUPF	; 56	2
@@ -2098,15 +2132,15 @@
      18  0552		       ea		      nop
      19  0553					      REPEND
      43  0553
-     44  0553		       a5 dc		      lda	RamBowColorsBk+2	; 74	2
+     44  0553		       a5 dd		      lda	RamBowColorsBk+2	; 74	2
      45  0555		       85 09		      sta	COLUBK	; 01	2
      46  0557		       85 08		      sta	COLUPF	; 04	2
      47  0559
-     48  0559		       84 9b		      sty	RainbowColorBk	; 07
+     48  0559		       84 9c		      sty	RainbowColorBk	; 07
      49  055b		       a0 0d		      ldy	#13	; 09
-     50  055d		       b1 93		      lda	(MenuCatHmvPtrP),y	; 14
+     50  055d		       b1 94		      lda	(MenuCatHmvPtrP),y	; 14
      51  055f		       85 21		      sta	HMP1	; 17
-     52  0561		       a4 9b		      ldy	RainbowColorBk	; 20
+     52  0561		       a4 9c		      ldy	RainbowColorBk	; 20
      53  0563
      54  0563		       d0 ce		      bne	.Loop18	; 23	2
      55  0565
@@ -2114,14 +2148,14 @@
      57  0565
      58  0565		       85 02		      sta	WSYNC	; 00
      59  0567
-     60  0567		       a5 dc		      lda	RamBowColorsBk+2	; 03
+     60  0567		       a5 dd		      lda	RamBowColorsBk+2	; 03
      61  0569		       85 09		      sta	COLUBK	; 06
      62  056b		       85 08		      sta	COLUPF	; 09
      63  056d
-     64  056d		       a5 97		      lda	BowColorsPfPtr	; 12
+     64  056d		       a5 98		      lda	BowColorsPfPtr	; 12
      65  056f		       38		      sec		; 14
      66  0570		       e9 03		      sbc	#3	; 16
-     67  0572		       85 97		      sta	BowColorsPfPtr	; 19
+     67  0572		       85 98		      sta	BowColorsPfPtr	; 19
       0  0574					      SLEEP	4	; 23
       1  0574				   .CYCLES    SET	4
       2  0574
@@ -2145,7 +2179,7 @@
      18  0575		       ea		      nop
      19  0576					      REPEND
      69  0576
-     70  0576		       a5 ad		      lda	RamMenuCatPfL+2	; 26	2
+     70  0576		       a5 ae		      lda	RamMenuCatPfL+2	; 26	2
      71  0578		       85 0f		      sta	PF2	; 29	2
      72  057a
      73  057a		       a9 08		      lda	#COL_CAT_FACE	; 31	2
@@ -2154,7 +2188,7 @@
      76  0580		       85 09		      sta	COLUBK	; 39	2
      77  0582		       86 08		      stx	COLUPF	; 42	2
      78  0584		       85 12		      sta	RESM0	; 45	2
-     79  0586		       a5 bc		      lda	RamMenuCatPfR+2	; 48	2
+     79  0586		       a5 bd		      lda	RamMenuCatPfR+2	; 48	2
      80  0588		       85 0f		      sta	PF2	; 51	2
      81  058a		       ba		      tsx		; 53	1
      82  058b		       86 08		      stx	COLUPF	; 56	2
@@ -2189,17 +2223,17 @@
       4  0594
       5  0594				   MenuCatKernel19_20
       6  0594
-      7  0594		       b9 9d 00 	      lda	RamMenuCatGfxL,y	; 70	3
+      7  0594		       b9 9e 00 	      lda	RamMenuCatGfxL,y	; 70	3
       8  0597		       85 1b		      sta	GRP0	; 73	2
       9  0599		       85 2a		      sta	HMOVE	; 00	2
-     10  059b		       b9 c9 00 	      lda	RamMenuCatGfxR,y	; 04	3
+     10  059b		       b9 ca 00 	      lda	RamMenuCatGfxR,y	; 04	3
      11  059e		       85 1c		      sta	GRP1	; 07	2
      12  05a0
-     13  05a0		       b9 da 00 	      lda	RamBowColorsBk,y	; 11	3
+     13  05a0		       b9 db 00 	      lda	RamBowColorsBk,y	; 11	3
      14  05a3		       85 09		      sta	COLUBK	; 14	2
-     15  05a5		       b1 97		      lda	(BowColorsPfPtr),y	; 19	2
+     15  05a5		       b1 98		      lda	(BowColorsPfPtr),y	; 19	2
      16  05a7		       85 08		      sta	COLUPF	; 22	2
-     17  05a9		       b9 ab 00 	      lda	RamMenuCatPfL,y	; 26	3
+     17  05a9		       b9 ac 00 	      lda	RamMenuCatPfL,y	; 26	3
      18  05ac		       85 0f		      sta	PF2	; 29	2
       0  05ae					      SLEEP	2	; 31	1
       1  05ae				   .CYCLES    SET	2
@@ -2223,10 +2257,10 @@
      19  05af					      REPEND
      20  05af
      21  05af		       a9 08		      lda	#COL_CAT_FACE	; 33	2
-     22  05b1		       a6 ee		      ldx	MenuBgColor	; 36	2
+     22  05b1		       a6 ef		      ldx	MenuBgColor	; 36	2
      23  05b3		       85 09		      sta	COLUBK	; 39	2
      24  05b5		       8e 08 00 	      stx.w	COLUPF	; 43	3
-     25  05b8		       b9 ba 00 	      lda	RamMenuCatPfR,y	; 47	3
+     25  05b8		       b9 bb 00 	      lda	RamMenuCatPfR,y	; 47	3
      26  05bb		       85 0f		      sta	PF2	; 50	2
      27  05bd
      28  05bd		       85 2b		      sta	HMCLR	; 53	2
@@ -2254,11 +2288,11 @@
      31  05c0		       86 09		      stx	COLUBK	; 58	2
      32  05c2		       85 02		      sta	WSYNC	; 00	2
      33  05c4
-     34  05c4		       b9 da 00 	      lda	RamBowColorsBk,y	; 04	3
+     34  05c4		       b9 db 00 	      lda	RamBowColorsBk,y	; 04	3
      35  05c7		       85 09		      sta	COLUBK	; 07	2
-     36  05c9		       b1 97		      lda	(BowColorsPfPtr),y	; 12	2
+     36  05c9		       b1 98		      lda	(BowColorsPfPtr),y	; 12	2
      37  05cb		       85 08		      sta	COLUPF	; 15	2
-     38  05cd		       b9 ab 00 	      lda	RamMenuCatPfL,y	; 19	3
+     38  05cd		       b9 ac 00 	      lda	RamMenuCatPfL,y	; 19	3
      39  05d0		       85 0f		      sta	PF2	; 22	2
      40  05d2
      41  05d2		       a9 00		      lda	#$00	; 24	2
@@ -2266,10 +2300,10 @@
      43  05d6		       8d 21 00 	      sta.w	HMP1	; 31	3
      44  05d9
      45  05d9		       a9 08		      lda	#COL_CAT_FACE	; 33	2
-     46  05db		       a6 ee		      ldx	MenuBgColor	; 36	2
+     46  05db		       a6 ef		      ldx	MenuBgColor	; 36	2
      47  05dd		       85 09		      sta	COLUBK	; 39	2
      48  05df		       8e 08 00 	      stx.w	COLUPF	; 43	3
-     49  05e2		       b9 ba 00 	      lda	RamMenuCatPfR,y	; 47	3
+     49  05e2		       b9 bb 00 	      lda	RamMenuCatPfR,y	; 47	3
      50  05e5		       85 0f		      sta	PF2	; 50	2
      51  05e7
      52  05e7		       a9 20		      lda	#$20	; 52	2
@@ -2278,11 +2312,11 @@
      55  05eb		       86 09		      stx	COLUBK	; 58	2
      56  05ed		       85 02		      sta	WSYNC	; 00	2
      57  05ef
-     58  05ef		       b9 da 00 	      lda	RamBowColorsBk,y	; 04	3
+     58  05ef		       b9 db 00 	      lda	RamBowColorsBk,y	; 04	3
      59  05f2		       85 09		      sta	COLUBK	; 07	2
-     60  05f4		       b1 97		      lda	(BowColorsPfPtr),y	; 12	2
+     60  05f4		       b1 98		      lda	(BowColorsPfPtr),y	; 12	2
      61  05f6		       85 08		      sta	COLUPF	; 15	2
-     62  05f8		       b9 ab 00 	      lda	RamMenuCatPfL,y	; 19	3
+     62  05f8		       b9 ac 00 	      lda	RamMenuCatPfL,y	; 19	3
      63  05fb		       85 0f		      sta	PF2	; 22	2
      64  05fd
      65  05fd		       a9 e0		      lda	#$E0	; 24	2
@@ -2311,10 +2345,10 @@
      19  0603					      REPEND
      68  0603
      69  0603		       a9 08		      lda	#COL_CAT_FACE	; 33	2
-     70  0605		       a6 ee		      ldx	MenuBgColor	; 36	2
+     70  0605		       a6 ef		      ldx	MenuBgColor	; 36	2
      71  0607		       85 09		      sta	COLUBK	; 39	2
      72  0609		       8e 08 00 	      stx.w	COLUPF	; 43	3
-     73  060c		       b9 ba 00 	      lda	RamMenuCatPfR,y	; 47	3
+     73  060c		       b9 bb 00 	      lda	RamMenuCatPfR,y	; 47	3
      74  060f		       85 0f		      sta	PF2	; 50	2
      75  0611
       0  0611					      SLEEP	5	; 55	3
@@ -2423,38 +2457,42 @@
      48  066e				   UpdateNote
      49  066e
      50  066e		       e6 85		      inc	NoteData	; move to the next step of this note
-     51  0670		       a5 85		      lda	NoteData
-     52  0672		       29 07		      and	#7
-     53  0674		       a8		      tay
-     54  0675		       24 81		      bit	Variation
-     55  0677		       10 07		      bpl	.PAL
-     56  0679		       d9 01 19 	      cmp	NoteLenNTSC,y	; check for end of note in NTSC mode
-     57  067c		       d0 18		      bne	.Same
-     58  067e		       f0 05		      beq	.NTSC
-     59  0680		       d9 13 19    .PAL       cmp	NoteLenPAL,y	; check for end of note in PAL mode
-     60  0683		       d0 11		      bne	.Same	; branch if note not over yet
-     61  0685		       a5 85	   .NTSC      lda	NoteData	; otherwise...
-     62  0687		       29 f8		      and	#$F8	; reset 3 low bits of NoteData
-     63  0689		       18		      clc
-     64  068a		       69 08		      adc	#1<<3	; step forward to the next note length
-     65  068c		       c9 90		      cmp	#18<<3
-     66  068e		       d0 02		      bne	.NoRoll
-     67  0690		       a9 00		      lda	#0	; roll note length counter after 18 notes
-     68  0692		       85 85	   .NoRoll    sta	NoteData
-     69  0694		       e6 84		      inc	MusicNote	; step forward to the next note
-     70  0696		       60	   .Same      rts
-     71  0697
+     51  0670		       a7 85		      lax	NoteData
+     52  0672		       4a		      lsr
+     53  0673		       4a		      lsr
+     54  0674		       4a		      lsr
+     55  0675		       a8		      tay
+     56  0676		       8a		      txa
+     57  0677		       29 07		      and	#7
+     58  0679		       24 81		      bit	Variation
+     59  067b		       10 07		      bpl	.PAL
+     60  067d		       d9 01 19 	      cmp	NoteLenNTSC,y	; check for end of note in NTSC mode
+     61  0680		       d0 18		      bne	.Same
+     62  0682		       f0 05		      beq	.NTSC
+     63  0684		       d9 13 19    .PAL       cmp	NoteLenPAL,y	; check for end of note in PAL mode
+     64  0687		       d0 11		      bne	.Same	; branch if note not over yet
+     65  0689		       a5 85	   .NTSC      lda	NoteData	; otherwise...
+     66  068b		       29 f8		      and	#$F8	; reset 3 low bits of NoteData
+     67  068d		       18		      clc
+     68  068e		       69 08		      adc	#1<<3	; step forward to the next note length
+     69  0690		       c9 90		      cmp	#18<<3
+     70  0692		       d0 02		      bne	.NoRoll
+     71  0694		       a9 00		      lda	#0	; roll note length counter after 18 notes
+     72  0696		       85 85	   .NoRoll    sta	NoteData
+     73  0698		       e6 84		      inc	MusicNote	; step forward to the next note
+     74  069a		       60	   .Same      rts
+     75  069b
 ------- FILE bank1.asm
 ------- FILE bank1/data/menucatgfx.asm LEVEL 3 PASS 2
-      0  0697					      include	bank1/data/menucatgfx.asm
-      1  0697							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      2  0697							; Menu Cat Graphics
-      3  0697							;
-      4  0697							; Graphics for drawing the menu cat display
-      5  0697							;
-      6  0697							; Uses 1 page + 173 bytes of ROM
-      7  0697							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      8  0697
+      0  069b					      include	bank1/data/menucatgfx.asm
+      1  069b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      2  069b							; Menu Cat Graphics
+      3  069b							;
+      4  069b							; Graphics for drawing the menu cat display
+      5  069b							;
+      6  069b							; Uses 1 page + 173 bytes of ROM
+      7  069b							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      8  069b
       9  0700		       00 00 00 00*	      ALIGN	$100
      10  0700
      11  0700				   MenuCatGfxPage1
@@ -3223,358 +3261,459 @@
       0  08c9					      include	bank1/data/music.asm
       1  08c9							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
       2  08c9							; Music Data Tables
-      3  08c9							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-      4  08c9
-      5  0900		       00 00 00 00*	      ALIGN	$100
-      6  0900
-      7  0900							; equates for main voice's note frequencies
-      8  0900		       00 00	   NOTE_HOLD  equ	0
-      9  0900		       00 10	   NOTE_D4S   equ	16
-     10  0900		       00 0f	   NOTE_E4    equ	15
-     11  0900		       00 0d	   NOTE_F4S   equ	13
-     12  0900		       00 0c	   NOTE_G4S   equ	12
-     13  0900		       00 0a	   NOTE_A4S   equ	10
-     14  0900		       00 9f	   NOTE_B4    equ	128 + 31
-     15  0900		       00 9b	   NOTE_C5S   equ	128 + 27
-     16  0900		       00 9a	   NOTE_D5    equ	128 + 26
-     17  0900		       00 98	   NOTE_D5S   equ	128 + 24
-     18  0900		       00 97	   NOTE_E5    equ	128 + 23
-     19  0900		       00 94	   NOTE_F5S   equ	128 + 20
-     20  0900		       00 92	   NOTE_G5S   equ	128 + 18
-     21  0900		       00 8f	   NOTE_B5    equ	128 + 15
-     22  0900		       00 8d	   NOTE_C6S   equ	128 + 13
-     23  0900		       00 8c	   NOTE_D6    equ	128 + 12
-     24  0900		       00 8b	   NOTE_E6    equ	128 + 11
-     25  0900		       00 8a	   NOTE_F6    equ	128 + 10
-     26  0900		       00 89	   NOTE_G6    equ	128 + 9
-     27  0900		       00 88	   NOTE_A6    equ	128 + 8
-     28  0900
-     29  0900							; note lengths in frames - 37 bytes
-     30  0900		       06		      .byte.b	6
-     31  0901				   NoteLenNTSC
-     32  0901		       06		      .byte.b	6
-     33  0902		       07		      .byte.b	7
-     34  0903		       06		      .byte.b	6
-     35  0904		       06		      .byte.b	6
-     36  0905		       07		      .byte.b	7
-     37  0906		       06		      .byte.b	6
-     38  0907		       06		      .byte.b	6
-     39  0908		       07		      .byte.b	7
-     40  0909		       06		      .byte.b	6
-     41  090a		       06		      .byte.b	6
-     42  090b		       07		      .byte.b	7
-     43  090c		       06		      .byte.b	6
-     44  090d		       06		      .byte.b	6
-     45  090e		       07		      .byte.b	7
-     46  090f		       06		      .byte.b	6
-     47  0910		       06		      .byte.b	6
-     48  0911		       07		      .byte.b	7
-     49  0912		       06		      .byte.b	6
-     50  0913
-     51  0913				   NoteLenPAL
-     52  0913		       05		      .byte.b	5
-     53  0914		       05		      .byte.b	5
-     54  0915		       05		      .byte.b	5
-     55  0916		       06		      .byte.b	6
-     56  0917		       05		      .byte.b	5
-     57  0918		       05		      .byte.b	5
-     58  0919		       05		      .byte.b	5
-     59  091a		       06		      .byte.b	6
-     60  091b		       05		      .byte.b	5
-     61  091c		       05		      .byte.b	5
-     62  091d		       06		      .byte.b	6
-     63  091e		       05		      .byte.b	5
-     64  091f		       05		      .byte.b	5
-     65  0920		       05		      .byte.b	5
-     66  0921		       06		      .byte.b	6
-     67  0922		       05		      .byte.b	5
-     68  0923		       05		      .byte.b	5
-     69  0924		       06		      .byte.b	6
-     70  0925
-     71  0925				   BassSeq
-     72  0925		       0b		      .byte.b	$0B
-     73  0926		       0a		      .byte.b	$0A
-     74  0927		       0c		      .byte.b	$0C
-     75  0928		       09		      .byte.b	$09
-     76  0929		       0d		      .byte.b	$0D
-     77  092a		       0a		      .byte.b	$0A
-     78  092b		       0f		      .byte.b	$0F
-     79  092c		       0f		      .byte.b	$0F
-     80  092d
-     81  092d							; main voice volume envelope - 14 bytes
-     82  092d				   VlmEnvelope
-     83  092d		       09 0b 0d 0e*	      HEX	09 0B 0D 0E 0F 0F 0F
-     84  0934		       0e 0d 0c 0a*	      HEX	0E 0D 0C 0A 09 07 05
-     85  093b
-     86  093b				   IntroVlm
-     87  093b		       0f 0e 0d 0b*	      HEX	0F 0E 0D 0B 0A 09 08
-     88  0942		       07 06 05 04*	      HEX	07 06 05 04 03 02 01
-     89  0949
-     90  0949				   IntroSeq
-     91  0949		       98		      .byte.b	NOTE_D5S
-     92  094a		       97		      .byte.b	NOTE_E5
-     93  094b		       94		      .byte.b	NOTE_F5S
-     94  094c		       00		      .byte.b	NOTE_HOLD
-     95  094d		       8f		      .byte.b	NOTE_B5
-     96  094e		       00		      .byte.b	NOTE_HOLD
-     97  094f		       98		      .byte.b	NOTE_D5S
-     98  0950		       97		      .byte.b	NOTE_E5
-     99  0951
-    100  0951		       94		      .byte.b	NOTE_F5S
-    101  0952		       8f		      .byte.b	NOTE_B5
-    102  0953		       8d		      .byte.b	NOTE_C6S
-    103  0954		       00		      .byte.b	NOTE_HOLD
-    104  0955		       8d		      .byte.b	NOTE_C6S
-    105  0956		       97		      .byte.b	NOTE_E5
-    106  0957		       94		      .byte.b	NOTE_F5S
-    107  0958		       00		      .byte.b	NOTE_HOLD
-    108  0959
-    109  0959		       94		      .byte.b	NOTE_F5S
-    110  095a		       00		      .byte.b	NOTE_HOLD
-    111  095b		       98		      .byte.b	NOTE_D5S
-    112  095c		       97		      .byte.b	NOTE_E5
-    113  095d		       94		      .byte.b	NOTE_F5S
-    114  095e		       00		      .byte.b	NOTE_HOLD
-    115  095f		       8f		      .byte.b	NOTE_B5
-    116  0960		       00		      .byte.b	NOTE_HOLD
-    117  0961
-    118  0961		       8d		      .byte.b	NOTE_C6S
-    119  0962		       90		      .byte.b	128 + 16
-    120  0963		       8f		      .byte.b	NOTE_B5
-    121  0964		       8d		      .byte.b	NOTE_C6S
-    122  0965		       8b		      .byte.b	NOTE_E6
-    123  0966		       8d		      .byte.b	NOTE_C6S
-    124  0967		       8b		      .byte.b	NOTE_E6
-    125  0968		       8f		      .byte.b	NOTE_B5
-    126  0969
-    127  0969							; music sequence order for main voice - 16 bytes
-    128  0969				   MusicSeqs
-    129  0969		       00		      HEX	00
-    130  096a		       10		      HEX	10
-    131  096b		       20		      HEX	20
-    132  096c		       30		      HEX	30
-    133  096d		       00		      HEX	00
-    134  096e		       10		      HEX	10
-    135  096f		       20		      HEX	20
-    136  0970		       40		      HEX	40
-    137  0971		       50		      HEX	50
-    138  0972		       60		      HEX	60
-    139  0973		       70		      HEX	70
-    140  0974		       80		      HEX	80
-    141  0975		       50		      HEX	50
-    142  0976		       60		      HEX	60
-    143  0977		       70		      HEX	70
-    144  0978		       90		      HEX	90
-    145  0979
-    146  0979							; music note sequences for main voice - 160 bytes
-    147  0979				   MusicSeq0
-    148  0979		       94		      .byte.b	NOTE_F5S
-    149  097a		       00		      .byte.b	NOTE_HOLD
-    150  097b		       92		      .byte.b	NOTE_G5S
-    151  097c		       00		      .byte.b	NOTE_HOLD
-    152  097d		       98		      .byte.b	NOTE_D5S
-    153  097e		       98		      .byte.b	NOTE_D5S
-    154  097f		       00		      .byte.b	NOTE_HOLD
-    155  0980		       9f		      .byte.b	NOTE_B4
-    156  0981		       9a		      .byte.b	NOTE_D5
-    157  0982		       9b		      .byte.b	NOTE_C5S
-    158  0983		       9f		      .byte.b	NOTE_B4
-    159  0984		       00		      .byte.b	NOTE_HOLD
-    160  0985		       9f		      .byte.b	NOTE_B4
-    161  0986		       00		      .byte.b	NOTE_HOLD
-    162  0987		       9b		      .byte.b	NOTE_C5S
-    163  0988		       00		      .byte.b	NOTE_HOLD
-    164  0989
-    165  0989		       9a		      .byte.b	NOTE_D5
-    166  098a		       00		      .byte.b	NOTE_HOLD
-    167  098b		       9a		      .byte.b	NOTE_D5
-    168  098c		       9b		      .byte.b	NOTE_C5S
-    169  098d		       9f		      .byte.b	NOTE_B4
-    170  098e		       9b		      .byte.b	NOTE_C5S
-    171  098f		       98		      .byte.b	NOTE_D5S
-    172  0990		       94		      .byte.b	NOTE_F5S
-    173  0991		       92		      .byte.b	NOTE_G5S
-    174  0992		       98		      .byte.b	NOTE_D5S
-    175  0993		       94		      .byte.b	NOTE_F5S
-    176  0994		       9b		      .byte.b	NOTE_C5S
-    177  0995		       98		      .byte.b	NOTE_D5S
-    178  0996		       9f		      .byte.b	NOTE_B4
-    179  0997		       9b		      .byte.b	NOTE_C5S
-    180  0998		       9f		      .byte.b	NOTE_B4
-    181  0999
-    182  0999		       98		      .byte.b	NOTE_D5S
-    183  099a		       00		      .byte.b	NOTE_HOLD
-    184  099b		       94		      .byte.b	NOTE_F5S
-    185  099c		       00		      .byte.b	NOTE_HOLD
-    186  099d		       92		      .byte.b	NOTE_G5S
-    187  099e		       98		      .byte.b	NOTE_D5S
-    188  099f		       94		      .byte.b	NOTE_F5S
-    189  09a0		       9b		      .byte.b	NOTE_C5S
-    190  09a1		       98		      .byte.b	NOTE_D5S
-    191  09a2		       9f		      .byte.b	NOTE_B4
-    192  09a3		       9b		      .byte.b	NOTE_C5S
-    193  09a4		       98		      .byte.b	NOTE_D5S
-    194  09a5		       9a		      .byte.b	NOTE_D5
-    195  09a6		       9b		      .byte.b	NOTE_C5S
-    196  09a7		       9f		      .byte.b	NOTE_B4
-    197  09a8		       9b		      .byte.b	NOTE_C5S
-    198  09a9
-    199  09a9		       9a		      .byte.b	NOTE_D5
-    200  09aa		       00		      .byte.b	NOTE_HOLD
-    201  09ab		       9f		      .byte.b	NOTE_B4
-    202  09ac		       9b		      .byte.b	NOTE_C5S
-    203  09ad		       98		      .byte.b	NOTE_D5S
-    204  09ae		       94		      .byte.b	NOTE_F5S
-    205  09af		       9b		      .byte.b	NOTE_C5S
-    206  09b0		       9a		      .byte.b	NOTE_D5
-    207  09b1		       9b		      .byte.b	NOTE_C5S
-    208  09b2		       9f		      .byte.b	NOTE_B4
-    209  09b3		       9b		      .byte.b	NOTE_C5S
-    210  09b4		       00		      .byte.b	NOTE_HOLD
-    211  09b5		       9f		      .byte.b	NOTE_B4
-    212  09b6		       00		      .byte.b	NOTE_HOLD
-    213  09b7		       9b		      .byte.b	NOTE_C5S
-    214  09b8		       00		      .byte.b	NOTE_HOLD
-    215  09b9
-    216  09b9		       9a		      .byte.b	NOTE_D5
-    217  09ba		       00		      .byte.b	NOTE_HOLD
-    218  09bb		       9f		      .byte.b	NOTE_B4
-    219  09bc		       9b		      .byte.b	NOTE_C5S
-    220  09bd		       98		      .byte.b	NOTE_D5S
-    221  09be		       94		      .byte.b	NOTE_F5S
-    222  09bf		       9b		      .byte.b	NOTE_C5S
-    223  09c0		       9a		      .byte.b	NOTE_D5
-    224  09c1		       9b		      .byte.b	NOTE_C5S
-    225  09c2		       9f		      .byte.b	NOTE_B4
-    226  09c3		       9b		      .byte.b	NOTE_C5S
-    227  09c4		       00		      .byte.b	NOTE_HOLD
-    228  09c5		       9f		      .byte.b	NOTE_B4
-    229  09c6		       00		      .byte.b	NOTE_HOLD
-    230  09c7		       9f		      .byte.b	NOTE_B4
-    231  09c8		       00		      .byte.b	NOTE_HOLD
-    232  09c9
-    233  09c9		       9f		      .byte.b	NOTE_B4
-    234  09ca		       00		      .byte.b	NOTE_HOLD
-    235  09cb		       0d		      .byte.b	NOTE_F4S
-    236  09cc		       0c		      .byte.b	NOTE_G4S
-    237  09cd		       9f		      .byte.b	NOTE_B4
-    238  09ce		       00		      .byte.b	NOTE_HOLD
-    239  09cf		       0d		      .byte.b	NOTE_F4S
-    240  09d0		       0c		      .byte.b	NOTE_G4S
-    241  09d1		       9f		      .byte.b	NOTE_B4
-    242  09d2		       9b		      .byte.b	NOTE_C5S
-    243  09d3		       98		      .byte.b	NOTE_D5S
-    244  09d4		       9f		      .byte.b	NOTE_B4
-    245  09d5		       97		      .byte.b	NOTE_E5
-    246  09d6		       98		      .byte.b	NOTE_D5S
-    247  09d7		       97		      .byte.b	NOTE_E5
-    248  09d8		       94		      .byte.b	NOTE_F5S
-    249  09d9
-    250  09d9		       9f		      .byte.b	NOTE_B4
-    251  09da		       00		      .byte.b	NOTE_HOLD
-    252  09db		       9f		      .byte.b	NOTE_B4
-    253  09dc		       00		      .byte.b	NOTE_HOLD
-    254  09dd		       0d		      .byte.b	NOTE_F4S
-    255  09de		       0c		      .byte.b	NOTE_G4S
-    256  09df		       9f		      .byte.b	NOTE_B4
-    257  09e0		       0d		      .byte.b	NOTE_F4S
-    258  09e1		       97		      .byte.b	NOTE_E5
-    259  09e2		       98		      .byte.b	NOTE_D5S
-    260  09e3		       9b		      .byte.b	NOTE_C5S
-    261  09e4		       9f		      .byte.b	NOTE_B4
-    262  09e5		       0d		      .byte.b	NOTE_F4S
-    263  09e6		       10		      .byte.b	NOTE_D4S
-    264  09e7		       0f		      .byte.b	NOTE_E4
-    265  09e8		       0d		      .byte.b	NOTE_F4S
-    266  09e9
-    267  09e9		       9f		      .byte.b	NOTE_B4
-    268  09ea		       00		      .byte.b	NOTE_HOLD
-    269  09eb		       0d		      .byte.b	NOTE_F4S
-    270  09ec		       0c		      .byte.b	NOTE_G4S
-    271  09ed		       9f		      .byte.b	NOTE_B4
-    272  09ee		       00		      .byte.b	NOTE_HOLD
-    273  09ef		       0d		      .byte.b	NOTE_F4S
-    274  09f0		       0c		      .byte.b	NOTE_G4S
-    275  09f1		       9f		      .byte.b	NOTE_B4
-    276  09f2		       9f		      .byte.b	NOTE_B4
-    277  09f3		       9b		      .byte.b	NOTE_C5S
-    278  09f4		       98		      .byte.b	NOTE_D5S
-    279  09f5		       9f		      .byte.b	NOTE_B4
-    280  09f6		       0d		      .byte.b	NOTE_F4S
-    281  09f7		       0c		      .byte.b	NOTE_G4S
-    282  09f8		       0d		      .byte.b	NOTE_F4S
-    283  09f9
-    284  09f9		       9f		      .byte.b	NOTE_B4
-    285  09fa		       00		      .byte.b	NOTE_HOLD
-    286  09fb		       9f		      .byte.b	NOTE_B4
-    287  09fc		       0a		      .byte.b	NOTE_A4S
-    288  09fd		       9f		      .byte.b	NOTE_B4
-    289  09fe		       0d		      .byte.b	NOTE_F4S
-    290  09ff		       0c		      .byte.b	NOTE_G4S
-    291  0a00		       9f		      .byte.b	NOTE_B4
-    292  0a01		       97		      .byte.b	NOTE_E5
-    293  0a02		       98		      .byte.b	NOTE_D5S
-    294  0a03		       97		      .byte.b	NOTE_E5
-    295  0a04		       94		      .byte.b	NOTE_F5S
-    296  0a05		       9f		      .byte.b	NOTE_B4
-    297  0a06		       00		      .byte.b	NOTE_HOLD
-    298  0a07		       0a		      .byte.b	NOTE_A4S
-    299  0a08		       00		      .byte.b	NOTE_HOLD
-    300  0a09
-    301  0a09		       9f		      .byte.b	NOTE_B4
-    302  0a0a		       00		      .byte.b	NOTE_HOLD
-    303  0a0b		       9f		      .byte.b	NOTE_B4
-    304  0a0c		       0a		      .byte.b	NOTE_A4S
-    305  0a0d		       9f		      .byte.b	NOTE_B4
-    306  0a0e		       0d		      .byte.b	NOTE_F4S
-    307  0a0f		       0c		      .byte.b	NOTE_G4S
-    308  0a10		       9f		      .byte.b	NOTE_B4
-    309  0a11		       97		      .byte.b	NOTE_E5
-    310  0a12		       98		      .byte.b	NOTE_D5S
-    311  0a13		       97		      .byte.b	NOTE_E5
-    312  0a14		       94		      .byte.b	NOTE_F5S
-    313  0a15		       9f		      .byte.b	NOTE_B4
-    314  0a16		       00		      .byte.b	NOTE_HOLD
-    315  0a17		       9b		      .byte.b	NOTE_C5S
-    316  0a18		       00		      .byte.b	NOTE_HOLD
-    317  0a19
-    318  0a19		       10		      .byte.b	NOTE_D4S
-    319  0a1a		       0f		      .byte.b	NOTE_E4
-    320  0a1b		       0d		      .byte.b	NOTE_F4S
-    321  0a1c		       00		      .byte.b	NOTE_HOLD
-    322  0a1d		       9f		      .byte.b	NOTE_B4
-    323  0a1e		       00		      .byte.b	NOTE_HOLD
-    324  0a1f		       10		      .byte.b	NOTE_D4S
-    325  0a20		       0f		      .byte.b	NOTE_E4
-    326  0a21		       0d		      .byte.b	NOTE_F4S
-    327  0a22		       9f		      .byte.b	NOTE_B4
-    328  0a23		       9b		      .byte.b	NOTE_C5S
-    329  0a24		       98		      .byte.b	NOTE_D5S
-    330  0a25		       9b		      .byte.b	NOTE_C5S
-    331  0a26		       0a		      .byte.b	NOTE_A4S
-    332  0a27		       9f		      .byte.b	NOTE_B4
-    333  0a28		       00		      .byte.b	NOTE_HOLD
-    334  0a29
-    335  0a29		       0d		      .byte.b	NOTE_F4S
-    336  0a2a		       00		      .byte.b	NOTE_HOLD
-    337  0a2b		       10		      .byte.b	NOTE_D4S
-    338  0a2c		       0f		      .byte.b	NOTE_E4
-    339  0a2d		       0d		      .byte.b	NOTE_F4S
-    340  0a2e		       00		      .byte.b	NOTE_HOLD
-    341  0a2f		       9f		      .byte.b	NOTE_B4
-    342  0a30		       00		      .byte.b	NOTE_HOLD
-    343  0a31		       9b		      .byte.b	NOTE_C5S
-    344  0a32		       0a		      .byte.b	NOTE_A4S
-    345  0a33		       9f		      .byte.b	NOTE_B4
-    346  0a34		       9b		      .byte.b	NOTE_C5S
-    347  0a35		       97		      .byte.b	NOTE_E5
-    348  0a36		       98		      .byte.b	NOTE_D5S
-    349  0a37		       97		      .byte.b	NOTE_E5
-    350  0a38		       9b		      .byte.b	NOTE_C5S
-    351  0a39
+      3  08c9							;
+      4  08c9							; Uses 311 bytes total of ROM
+      5  08c9							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+      6  08c9
+      7  0900		       00 00 00 00*	      ALIGN	$100
+      8  0900
+      9  0900							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     10  0900							; Equates for note frequencies
+     11  0900							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     12  0900
+     13  0900		       00 00	   NOTE_HOLD  equ	0
+     14  0900		       00 10	   NOTE_D4S   equ	16
+     15  0900		       00 0f	   NOTE_E4    equ	15
+     16  0900		       00 0d	   NOTE_F4S   equ	13
+     17  0900		       00 0c	   NOTE_G4S   equ	12
+     18  0900		       00 0a	   NOTE_A4S   equ	10
+     19  0900		       00 9f	   NOTE_B4    equ	128 + 31
+     20  0900		       00 9b	   NOTE_C5S   equ	128 + 27
+     21  0900		       00 9a	   NOTE_D5    equ	128 + 26
+     22  0900		       00 98	   NOTE_D5S   equ	128 + 24
+     23  0900		       00 97	   NOTE_E5    equ	128 + 23
+     24  0900		       00 94	   NOTE_F5S   equ	128 + 20
+     25  0900		       00 92	   NOTE_G5S   equ	128 + 18
+     26  0900		       00 90	   NOTE_A5S   equ	128 + 16
+     27  0900		       00 8f	   NOTE_B5    equ	128 + 15
+     28  0900		       00 8d	   NOTE_C6S   equ	128 + 13
+     29  0900		       00 8b	   NOTE_E6    equ	128 + 11
+     30  0900
+     31  0900
+     32  0900
+     33  0900							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     34  0900							; Note lengths in frames for each 18-note cycle, for 60Hz NTSC and 50Hz PAL.
+     35  0900							; A full cycle in 60Hz mode is 114 frames long, or 95 frames for 50Hz mode.
+     36  0900							; Either mode spends exactly 1.9 seconds for each 18-note cycle.
+     37  0900							; At 4 notes per beat, this is very close to 142 BPM.
+     38  0900							;
+     39  0900							; Uses 37 bytes of ROM
+     40  0900							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     41  0900
+     42  0900		       06		      .byte.b	6
+     43  0901				   NoteLenNTSC
+     44  0901		       06		      .byte.b	6
+     45  0902		       07		      .byte.b	7
+     46  0903		       06		      .byte.b	6
+     47  0904		       06		      .byte.b	6
+     48  0905		       07		      .byte.b	7
+     49  0906		       06		      .byte.b	6
+     50  0907		       06		      .byte.b	6
+     51  0908		       07		      .byte.b	7
+     52  0909		       06		      .byte.b	6
+     53  090a		       06		      .byte.b	6
+     54  090b		       07		      .byte.b	7
+     55  090c		       06		      .byte.b	6
+     56  090d		       06		      .byte.b	6
+     57  090e		       07		      .byte.b	7
+     58  090f		       06		      .byte.b	6
+     59  0910		       06		      .byte.b	6
+     60  0911		       07		      .byte.b	7
+     61  0912		       06		      .byte.b	6
+     62  0913				   NoteLenPAL
+     63  0913		       05		      .byte.b	5
+     64  0914		       05		      .byte.b	5
+     65  0915		       05		      .byte.b	5
+     66  0916		       06		      .byte.b	6
+     67  0917		       05		      .byte.b	5
+     68  0918		       05		      .byte.b	5
+     69  0919		       05		      .byte.b	5
+     70  091a		       06		      .byte.b	6
+     71  091b		       05		      .byte.b	5
+     72  091c		       05		      .byte.b	5
+     73  091d		       06		      .byte.b	6
+     74  091e		       05		      .byte.b	5
+     75  091f		       05		      .byte.b	5
+     76  0920		       05		      .byte.b	5
+     77  0921		       06		      .byte.b	6
+     78  0922		       05		      .byte.b	5
+     79  0923		       05		      .byte.b	5
+     80  0924		       06		      .byte.b	6
+     81  0925
+     82  0925
+     83  0925
+     84  0925							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     85  0925							; Volume envelopes for intro and song
+     86  0925							;
+     87  0925							; Uses 26 bytes of ROM
+     88  0925							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     89  0925
+     90  0925				   IntroVlm
+     91  0925		       0f 0e 0d 0b*	      HEX	0F 0E 0D 0B 0A 09 08 07 06 05 04 03 02
+     92  0932
+     93  0932				   MusicVlm
+     94  0932		       09 0b 0d 0e*	      HEX	09 0B 0D 0E 0F 0F 0F 0E 0D 0C 0A 09 07
+     95  093f
+     96  093f
+     97  093f
+     98  093f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+     99  093f							; Melody Intro Sequence
+    100  093f							;
+    101  093f							; Uses 32 bytes of ROM
+    102  093f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    103  093f
+    104  093f				   IntroSeq
+    105  093f		       98		      .byte.b	NOTE_D5S
+    106  0940		       97		      .byte.b	NOTE_E5
+    107  0941		       94		      .byte.b	NOTE_F5S
+    108  0942		       00		      .byte.b	NOTE_HOLD
+    109  0943		       8f		      .byte.b	NOTE_B5
+    110  0944		       00		      .byte.b	NOTE_HOLD
+    111  0945		       98		      .byte.b	NOTE_D5S
+    112  0946		       97		      .byte.b	NOTE_E5
+    113  0947		       94		      .byte.b	NOTE_F5S
+    114  0948		       8f		      .byte.b	NOTE_B5
+    115  0949		       8d		      .byte.b	NOTE_C6S
+    116  094a		       00		      .byte.b	NOTE_HOLD
+    117  094b		       8d		      .byte.b	NOTE_C6S
+    118  094c		       97		      .byte.b	NOTE_E5
+    119  094d		       94		      .byte.b	NOTE_F5S
+    120  094e		       00		      .byte.b	NOTE_HOLD
+    121  094f
+    122  094f		       94		      .byte.b	NOTE_F5S
+    123  0950		       00		      .byte.b	NOTE_HOLD
+    124  0951		       98		      .byte.b	NOTE_D5S
+    125  0952		       97		      .byte.b	NOTE_E5
+    126  0953		       94		      .byte.b	NOTE_F5S
+    127  0954		       00		      .byte.b	NOTE_HOLD
+    128  0955		       8f		      .byte.b	NOTE_B5
+    129  0956		       00		      .byte.b	NOTE_HOLD
+    130  0957		       8d		      .byte.b	NOTE_C6S
+    131  0958		       90		      .byte.b	NOTE_A5S
+    132  0959		       8f		      .byte.b	NOTE_B5
+    133  095a		       8d		      .byte.b	NOTE_C6S
+    134  095b		       8b		      .byte.b	NOTE_E6
+    135  095c		       8d		      .byte.b	NOTE_C6S
+    136  095d		       8b		      .byte.b	NOTE_E6
+    137  095e		       8f		      .byte.b	NOTE_B5
+    138  095f
+    139  095f
+    140  095f
+    141  095f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    142  095f							; Melody Bass Sequence
+    143  095f							;
+    144  095f							; Uses 8 bytes of ROM
+    145  095f							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    146  095f
+    147  095f				   BassSeq
+    148  095f		       0b 0a 0c 09*	      HEX	0B 0A 0C 09 0D 0A 0F 0F
+    149  0967
+    150  0967
+    151  0967
+    152  0967							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    153  0967							; Melody Lead Sequence Order
+    154  0967							;
+    155  0967							; Uses 16 bytes of ROM
+    156  0967							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    157  0967
+    158  0967				   MusicSeqs
+    159  0967		       00		      HEX	00
+    160  0968		       10		      HEX	10
+    161  0969		       20		      HEX	20
+    162  096a		       30		      HEX	30
+    163  096b		       00		      HEX	00
+    164  096c		       10		      HEX	10
+    165  096d		       20		      HEX	20
+    166  096e		       40		      HEX	40
+    167  096f		       50		      HEX	50
+    168  0970		       60		      HEX	60
+    169  0971		       70		      HEX	70
+    170  0972		       80		      HEX	80
+    171  0973		       50		      HEX	50
+    172  0974		       60		      HEX	60
+    173  0975		       70		      HEX	70
+    174  0976		       90		      HEX	90
+    175  0977
+    176  0977
+    177  0977
+    178  0977							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    179  0977							; Melody Lead Sequences
+    180  0977							;
+    181  0977							; Uses 192 bytes of ROM
+    182  0977							; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+    183  0977
+    184  0977				   MusicSeq0
+    185  0977		       94		      .byte.b	NOTE_F5S
+    186  0978		       00		      .byte.b	NOTE_HOLD
+    187  0979		       92		      .byte.b	NOTE_G5S
+    188  097a		       00		      .byte.b	NOTE_HOLD
+    189  097b		       98		      .byte.b	NOTE_D5S
+    190  097c		       98		      .byte.b	NOTE_D5S
+    191  097d		       00		      .byte.b	NOTE_HOLD
+    192  097e		       9f		      .byte.b	NOTE_B4
+    193  097f		       9a		      .byte.b	NOTE_D5
+    194  0980		       9b		      .byte.b	NOTE_C5S
+    195  0981		       9f		      .byte.b	NOTE_B4
+    196  0982		       00		      .byte.b	NOTE_HOLD
+    197  0983		       9f		      .byte.b	NOTE_B4
+    198  0984		       00		      .byte.b	NOTE_HOLD
+    199  0985		       9b		      .byte.b	NOTE_C5S
+    200  0986		       00		      .byte.b	NOTE_HOLD
+    201  0987
+    202  0987		       9a		      .byte.b	NOTE_D5
+    203  0988		       00		      .byte.b	NOTE_HOLD
+    204  0989		       9a		      .byte.b	NOTE_D5
+    205  098a		       9b		      .byte.b	NOTE_C5S
+    206  098b		       9f		      .byte.b	NOTE_B4
+    207  098c		       9b		      .byte.b	NOTE_C5S
+    208  098d		       98		      .byte.b	NOTE_D5S
+    209  098e		       94		      .byte.b	NOTE_F5S
+    210  098f		       92		      .byte.b	NOTE_G5S
+    211  0990		       98		      .byte.b	NOTE_D5S
+    212  0991		       94		      .byte.b	NOTE_F5S
+    213  0992		       9b		      .byte.b	NOTE_C5S
+    214  0993		       98		      .byte.b	NOTE_D5S
+    215  0994		       9f		      .byte.b	NOTE_B4
+    216  0995		       9b		      .byte.b	NOTE_C5S
+    217  0996		       9f		      .byte.b	NOTE_B4
+    218  0997
+    219  0997		       98		      .byte.b	NOTE_D5S
+    220  0998		       00		      .byte.b	NOTE_HOLD
+    221  0999		       94		      .byte.b	NOTE_F5S
+    222  099a		       00		      .byte.b	NOTE_HOLD
+    223  099b		       92		      .byte.b	NOTE_G5S
+    224  099c		       98		      .byte.b	NOTE_D5S
+    225  099d		       94		      .byte.b	NOTE_F5S
+    226  099e		       9b		      .byte.b	NOTE_C5S
+    227  099f		       98		      .byte.b	NOTE_D5S
+    228  09a0		       9f		      .byte.b	NOTE_B4
+    229  09a1		       9b		      .byte.b	NOTE_C5S
+    230  09a2		       98		      .byte.b	NOTE_D5S
+    231  09a3		       9a		      .byte.b	NOTE_D5
+    232  09a4		       9b		      .byte.b	NOTE_C5S
+    233  09a5		       9f		      .byte.b	NOTE_B4
+    234  09a6		       9b		      .byte.b	NOTE_C5S
+    235  09a7
+    236  09a7		       9a		      .byte.b	NOTE_D5
+    237  09a8		       00		      .byte.b	NOTE_HOLD
+    238  09a9		       9f		      .byte.b	NOTE_B4
+    239  09aa		       9b		      .byte.b	NOTE_C5S
+    240  09ab		       98		      .byte.b	NOTE_D5S
+    241  09ac		       94		      .byte.b	NOTE_F5S
+    242  09ad		       9b		      .byte.b	NOTE_C5S
+    243  09ae		       9a		      .byte.b	NOTE_D5
+    244  09af		       9b		      .byte.b	NOTE_C5S
+    245  09b0		       9f		      .byte.b	NOTE_B4
+    246  09b1		       9b		      .byte.b	NOTE_C5S
+    247  09b2		       00		      .byte.b	NOTE_HOLD
+    248  09b3		       9f		      .byte.b	NOTE_B4
+    249  09b4		       00		      .byte.b	NOTE_HOLD
+    250  09b5		       9b		      .byte.b	NOTE_C5S
+    251  09b6		       00		      .byte.b	NOTE_HOLD
+    252  09b7
+    253  09b7		       9a		      .byte.b	NOTE_D5
+    254  09b8		       00		      .byte.b	NOTE_HOLD
+    255  09b9		       9f		      .byte.b	NOTE_B4
+    256  09ba		       9b		      .byte.b	NOTE_C5S
+    257  09bb		       98		      .byte.b	NOTE_D5S
+    258  09bc		       94		      .byte.b	NOTE_F5S
+    259  09bd		       9b		      .byte.b	NOTE_C5S
+    260  09be		       9a		      .byte.b	NOTE_D5
+    261  09bf		       9b		      .byte.b	NOTE_C5S
+    262  09c0		       9f		      .byte.b	NOTE_B4
+    263  09c1		       9b		      .byte.b	NOTE_C5S
+    264  09c2		       00		      .byte.b	NOTE_HOLD
+    265  09c3		       9f		      .byte.b	NOTE_B4
+    266  09c4		       00		      .byte.b	NOTE_HOLD
+    267  09c5		       9f		      .byte.b	NOTE_B4
+    268  09c6		       00		      .byte.b	NOTE_HOLD
+    269  09c7
+    270  09c7		       9f		      .byte.b	NOTE_B4
+    271  09c8		       00		      .byte.b	NOTE_HOLD
+    272  09c9		       0d		      .byte.b	NOTE_F4S
+    273  09ca		       0c		      .byte.b	NOTE_G4S
+    274  09cb		       9f		      .byte.b	NOTE_B4
+    275  09cc		       00		      .byte.b	NOTE_HOLD
+    276  09cd		       0d		      .byte.b	NOTE_F4S
+    277  09ce		       0c		      .byte.b	NOTE_G4S
+    278  09cf		       9f		      .byte.b	NOTE_B4
+    279  09d0		       9b		      .byte.b	NOTE_C5S
+    280  09d1		       98		      .byte.b	NOTE_D5S
+    281  09d2		       9f		      .byte.b	NOTE_B4
+    282  09d3		       97		      .byte.b	NOTE_E5
+    283  09d4		       98		      .byte.b	NOTE_D5S
+    284  09d5		       97		      .byte.b	NOTE_E5
+    285  09d6		       94		      .byte.b	NOTE_F5S
+    286  09d7
+    287  09d7		       9f		      .byte.b	NOTE_B4
+    288  09d8		       00		      .byte.b	NOTE_HOLD
+    289  09d9		       9f		      .byte.b	NOTE_B4
+    290  09da		       00		      .byte.b	NOTE_HOLD
+    291  09db		       0d		      .byte.b	NOTE_F4S
+    292  09dc		       0c		      .byte.b	NOTE_G4S
+    293  09dd		       9f		      .byte.b	NOTE_B4
+    294  09de		       0d		      .byte.b	NOTE_F4S
+    295  09df		       97		      .byte.b	NOTE_E5
+    296  09e0		       98		      .byte.b	NOTE_D5S
+    297  09e1		       9b		      .byte.b	NOTE_C5S
+    298  09e2		       9f		      .byte.b	NOTE_B4
+    299  09e3		       0d		      .byte.b	NOTE_F4S
+    300  09e4		       10		      .byte.b	NOTE_D4S
+    301  09e5		       0f		      .byte.b	NOTE_E4
+    302  09e6		       0d		      .byte.b	NOTE_F4S
+    303  09e7
+    304  09e7		       9f		      .byte.b	NOTE_B4
+    305  09e8		       00		      .byte.b	NOTE_HOLD
+    306  09e9		       0d		      .byte.b	NOTE_F4S
+    307  09ea		       0c		      .byte.b	NOTE_G4S
+    308  09eb		       9f		      .byte.b	NOTE_B4
+    309  09ec		       00		      .byte.b	NOTE_HOLD
+    310  09ed		       0d		      .byte.b	NOTE_F4S
+    311  09ee		       0c		      .byte.b	NOTE_G4S
+    312  09ef		       9f		      .byte.b	NOTE_B4
+    313  09f0		       9f		      .byte.b	NOTE_B4
+    314  09f1		       9b		      .byte.b	NOTE_C5S
+    315  09f2		       98		      .byte.b	NOTE_D5S
+    316  09f3		       9f		      .byte.b	NOTE_B4
+    317  09f4		       0d		      .byte.b	NOTE_F4S
+    318  09f5		       0c		      .byte.b	NOTE_G4S
+    319  09f6		       0d		      .byte.b	NOTE_F4S
+    320  09f7
+    321  09f7		       9f		      .byte.b	NOTE_B4
+    322  09f8		       00		      .byte.b	NOTE_HOLD
+    323  09f9		       9f		      .byte.b	NOTE_B4
+    324  09fa		       0a		      .byte.b	NOTE_A4S
+    325  09fb		       9f		      .byte.b	NOTE_B4
+    326  09fc		       0d		      .byte.b	NOTE_F4S
+    327  09fd		       0c		      .byte.b	NOTE_G4S
+    328  09fe		       9f		      .byte.b	NOTE_B4
+    329  09ff		       97		      .byte.b	NOTE_E5
+    330  0a00		       98		      .byte.b	NOTE_D5S
+    331  0a01		       97		      .byte.b	NOTE_E5
+    332  0a02		       94		      .byte.b	NOTE_F5S
+    333  0a03		       9f		      .byte.b	NOTE_B4
+    334  0a04		       00		      .byte.b	NOTE_HOLD
+    335  0a05		       0a		      .byte.b	NOTE_A4S
+    336  0a06		       00		      .byte.b	NOTE_HOLD
+    337  0a07
+    338  0a07		       9f		      .byte.b	NOTE_B4
+    339  0a08		       00		      .byte.b	NOTE_HOLD
+    340  0a09		       9f		      .byte.b	NOTE_B4
+    341  0a0a		       0a		      .byte.b	NOTE_A4S
+    342  0a0b		       9f		      .byte.b	NOTE_B4
+    343  0a0c		       0d		      .byte.b	NOTE_F4S
+    344  0a0d		       0c		      .byte.b	NOTE_G4S
+    345  0a0e		       9f		      .byte.b	NOTE_B4
+    346  0a0f		       97		      .byte.b	NOTE_E5
+    347  0a10		       98		      .byte.b	NOTE_D5S
+    348  0a11		       97		      .byte.b	NOTE_E5
+    349  0a12		       94		      .byte.b	NOTE_F5S
+    350  0a13		       9f		      .byte.b	NOTE_B4
+    351  0a14		       00		      .byte.b	NOTE_HOLD
+    352  0a15		       9b		      .byte.b	NOTE_C5S
+    353  0a16		       00		      .byte.b	NOTE_HOLD
+    354  0a17
+    355  0a17		       10		      .byte.b	NOTE_D4S
+    356  0a18		       0f		      .byte.b	NOTE_E4
+    357  0a19		       0d		      .byte.b	NOTE_F4S
+    358  0a1a		       00		      .byte.b	NOTE_HOLD
+    359  0a1b		       9f		      .byte.b	NOTE_B4
+    360  0a1c		       00		      .byte.b	NOTE_HOLD
+    361  0a1d		       10		      .byte.b	NOTE_D4S
+    362  0a1e		       0f		      .byte.b	NOTE_E4
+    363  0a1f		       0d		      .byte.b	NOTE_F4S
+    364  0a20		       9f		      .byte.b	NOTE_B4
+    365  0a21		       9b		      .byte.b	NOTE_C5S
+    366  0a22		       98		      .byte.b	NOTE_D5S
+    367  0a23		       9b		      .byte.b	NOTE_C5S
+    368  0a24		       0a		      .byte.b	NOTE_A4S
+    369  0a25		       9f		      .byte.b	NOTE_B4
+    370  0a26		       00		      .byte.b	NOTE_HOLD
+    371  0a27
+    372  0a27		       0d		      .byte.b	NOTE_F4S
+    373  0a28		       00		      .byte.b	NOTE_HOLD
+    374  0a29		       10		      .byte.b	NOTE_D4S
+    375  0a2a		       0f		      .byte.b	NOTE_E4
+    376  0a2b		       0d		      .byte.b	NOTE_F4S
+    377  0a2c		       00		      .byte.b	NOTE_HOLD
+    378  0a2d		       9f		      .byte.b	NOTE_B4
+    379  0a2e		       00		      .byte.b	NOTE_HOLD
+    380  0a2f		       9b		      .byte.b	NOTE_C5S
+    381  0a30		       0a		      .byte.b	NOTE_A4S
+    382  0a31		       9f		      .byte.b	NOTE_B4
+    383  0a32		       9b		      .byte.b	NOTE_C5S
+    384  0a33		       97		      .byte.b	NOTE_E5
+    385  0a34		       98		      .byte.b	NOTE_D5S
+    386  0a35		       97		      .byte.b	NOTE_E5
+    387  0a36		       9b		      .byte.b	NOTE_C5S
+    388  0a37
+    389  0a37
+    390  0a37
+    391  0a37							;
+    392  0a37
+    393  0a37				   CatTimingNTSC
+    394  0a37		       04		      .byte.b	4
+    395  0a38		       04		      .byte.b	4
+    396  0a39		       04		      .byte.b	4
+    397  0a3a		       04		      .byte.b	4
+    398  0a3b		       05		      .byte.b	5
+    399  0a3c		       04		      .byte.b	4
+    400  0a3d		       04		      .byte.b	4
+    401  0a3e		       04		      .byte.b	4
+    402  0a3f		       05		      .byte.b	5
+    403  0a40		       04		      .byte.b	4
+    404  0a41		       04		      .byte.b	4
+    405  0a42		       04		      .byte.b	4
+    406  0a43		       04		      .byte.b	4
+    407  0a44		       05		      .byte.b	5
+    408  0a45		       04		      .byte.b	4
+    409  0a46		       04		      .byte.b	4
+    410  0a47		       04		      .byte.b	4
+    411  0a48		       05		      .byte.b	5
+    412  0a49		       04		      .byte.b	4
+    413  0a4a		       04		      .byte.b	4
+    414  0a4b		       04		      .byte.b	4
+    415  0a4c		       04		      .byte.b	4
+    416  0a4d		       05		      .byte.b	5
+    417  0a4e		       04		      .byte.b	4
+    418  0a4f		       04		      .byte.b	4
+    419  0a50		       04		      .byte.b	4
+    420  0a51		       05		      .byte.b	5
+    421  0a52
+    422  0a52				   CatTimingPAL
+    423  0a52		       03		      .byte.b	3
+    424  0a53		       04		      .byte.b	4
+    425  0a54		       03		      .byte.b	3
+    426  0a55		       04		      .byte.b	4
+    427  0a56		       03		      .byte.b	3
+    428  0a57		       04		      .byte.b	4
+    429  0a58		       03		      .byte.b	3
+    430  0a59		       04		      .byte.b	4
+    431  0a5a		       03		      .byte.b	3
+    432  0a5b		       04		      .byte.b	4
+    433  0a5c		       03		      .byte.b	3
+    434  0a5d		       04		      .byte.b	4
+    435  0a5e		       03		      .byte.b	3
+    436  0a5f		       04		      .byte.b	4
+    437  0a60		       03		      .byte.b	3
+    438  0a61		       04		      .byte.b	4
+    439  0a62		       03		      .byte.b	3
+    440  0a63		       04		      .byte.b	4
+    441  0a64		       03		      .byte.b	3
+    442  0a65		       04		      .byte.b	4
+    443  0a66		       03		      .byte.b	3
+    444  0a67		       04		      .byte.b	4
+    445  0a68		       03		      .byte.b	3
+    446  0a69		       04		      .byte.b	4
+    447  0a6a		       03		      .byte.b	3
+    448  0a6b		       04		      .byte.b	4
+    449  0a6c		       03		      .byte.b	3
+    450  0a6d		       04		      .byte.b	4
+    451  0a6e		       04		      .byte.b	4
+    452  0a6f
 ------- FILE bank1.asm
-     16  0a39
-      0  0a39					      END_BANK	1
+     16  0a6f
+      0  0a6f					      END_BANK	1
       1  0ffa					      ORG	[1 - 1] * $1000 + $0FFA
       2  0ffa
       3  0ffa		       00 10		      .word.w	JmpInitSystem

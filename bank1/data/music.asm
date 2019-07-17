@@ -1,10 +1,15 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Music Data Tables
+;
+; Uses 311 bytes total of ROM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 	ALIGN $100
 
-; equates for main voice's note frequencies
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Equates for note frequencies
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
 NOTE_HOLD	equ	0
 NOTE_D4S	equ	16
 NOTE_E4		equ	15
@@ -18,15 +23,22 @@ NOTE_D5S	equ	128 + 24
 NOTE_E5		equ	128 + 23
 NOTE_F5S	equ	128 + 20
 NOTE_G5S	equ	128 + 18
+NOTE_A5S	equ	128 + 16
 NOTE_B5		equ	128 + 15
 NOTE_C6S	equ	128 + 13
-NOTE_D6		equ	128 + 12
 NOTE_E6		equ	128 + 11
-NOTE_F6		equ	128 + 10
-NOTE_G6		equ	128 + 9
-NOTE_A6		equ	128 + 8
 
-; note lengths in frames - 37 bytes
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Note lengths in frames for each 18-note cycle, for 60Hz NTSC and 50Hz PAL.
+; A full cycle in 60Hz mode is 114 frames long, or 95 frames for 50Hz mode.
+; Either mode spends exactly 1.9 seconds for each 18-note cycle.
+; At 4 notes per beat, this is very close to 142 BPM.
+;
+; Uses 37 bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
 	.byte	6
 NoteLenNTSC
 	.byte	6
@@ -47,7 +59,6 @@ NoteLenNTSC
 	.byte	6
 	.byte	7
 	.byte	6
-
 NoteLenPAL
 	.byte	5
 	.byte	5
@@ -68,24 +79,27 @@ NoteLenPAL
 	.byte	5
 	.byte	6
 
-BassSeq
-	.byte $0B
-	.byte $0A
-	.byte $0C
-	.byte $09
-	.byte $0D
-	.byte $0A
-	.byte $0F
-	.byte $0F
 
-; main voice volume envelope - 14 bytes
-VlmEnvelope
-	HEX	09 0B 0D 0E 0F 0F 0F
-	HEX	0E 0D 0C 0A 09 07 05
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Volume envelopes for intro and song
+;
+; Uses 26 bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 IntroVlm
-	HEX	0F 0E 0D 0B 0A 09 08
-	HEX	07 06 05 04 03 02 01
+	HEX	0F 0E 0D 0B 0A 09 08 07 06 05 04 03 02
+
+MusicVlm
+	HEX	09 0B 0D 0E 0F 0F 0F 0E 0D 0C 0A 09 07
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Melody Intro Sequence
+;
+; Uses 32 bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 IntroSeq
 	.byte	NOTE_D5S
@@ -96,7 +110,6 @@ IntroSeq
 	.byte	NOTE_HOLD
 	.byte	NOTE_D5S
 	.byte	NOTE_E5
-
 	.byte	NOTE_F5S
 	.byte	NOTE_B5
 	.byte	NOTE_C6S
@@ -114,9 +127,8 @@ IntroSeq
 	.byte	NOTE_HOLD
 	.byte	NOTE_B5
 	.byte	NOTE_HOLD
-
 	.byte	NOTE_C6S
-	.byte	128 + 16
+	.byte	NOTE_A5S
 	.byte	NOTE_B5
 	.byte	NOTE_C6S
 	.byte	NOTE_E6
@@ -124,7 +136,25 @@ IntroSeq
 	.byte	NOTE_E6
 	.byte	NOTE_B5
 
-; music sequence order for main voice - 16 bytes
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Melody Bass Sequence
+;
+; Uses 8 bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+BassSeq
+	HEX	0B 0A 0C 09 0D 0A 0F 0F
+
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Melody Lead Sequence Order
+;
+; Uses 16 bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
 MusicSeqs
 	HEX	00
 	HEX	10
@@ -143,7 +173,14 @@ MusicSeqs
 	HEX	70
 	HEX	90
 
-; music note sequences for main voice - 160 bytes
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Melody Lead Sequences
+;
+; Uses 192 bytes of ROM
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
 MusicSeq0
 	.byte	NOTE_F5S
 	.byte	NOTE_HOLD
@@ -348,4 +385,68 @@ MusicSeq0
 	.byte	NOTE_D5S
 	.byte	NOTE_E5
 	.byte	NOTE_C5S
+
+
+
+;
+
+CatTimingNTSC
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 5
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 5
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 5
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 5
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 5
+	.byte 4
+	.byte 4
+	.byte 4
+	.byte 5
+
+CatTimingPAL
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 3
+	.byte 4
+	.byte 4
 

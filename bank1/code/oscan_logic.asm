@@ -12,17 +12,6 @@ MenuOverScan:
 .NoResetPress
 
 	inc Frame		; next frame
-	lda Frame
-	and #%00000011		; update animation every 4 frames
-	bne .NoFrameInc
-
-	ldx MenuCatFrame
-	inx
-	cpx #6
-	bne .NoReset
-	ldx #0
-.NoReset
-	stx MenuCatFrame
-.NoFrameInc
 
 	TIMER_LOOP
+

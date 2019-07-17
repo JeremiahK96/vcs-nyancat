@@ -48,9 +48,13 @@ SetVolume
 UpdateNote
 
 	inc NoteData		; move to the next step of this note
-	lda NoteData
-	and #7
+	lax NoteData
+	lsr
+	lsr
+	lsr
 	tay
+	txa
+	and #7
 	bit Variation
 	bpl .PAL
 	cmp NoteLenNTSC,y	; check for end of note in NTSC mode

@@ -37,7 +37,7 @@
 	sta MusicPtr
 	ldx #0
 	jsr SetNote2
-	lda #<VlmEnvelope
+	lda #<MusicVlm
 	sta MusicPtr
 	jsr SetVolume
 	

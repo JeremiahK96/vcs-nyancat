@@ -16,6 +16,8 @@ MenuCatFrame	; animation frame for menu cat
 	ds 1
 MenuCatFrameX14	; animation frame for menu cat times 14
 	ds 1
+MenuCatTiming	; xxxxx---	animation frame length offset from 0-26
+	ds 1	; -----xxx	game frames left in current animation frame
 
 ; Pointers - 8 bytes
 MenuCatRamPtr	; pointer for loading menu cat gfx to push to the stack

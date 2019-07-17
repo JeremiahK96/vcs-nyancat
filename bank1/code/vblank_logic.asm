@@ -6,6 +6,49 @@
 
 	include bank1/code/music.asm
 
+
+
+	lax MenuCatTiming
+	and #7
+	bne .KeepCatFrame
+
+	txa
+	clc
+	adc #1<<3
+	cmp #27<<3
+	bne .NoRollCatFrameLen
+	lda #0
+.NoRollCatFrameLen
+	sta MenuCatTiming
+
+	lsr
+	lsr
+	lsr
+	tay
+	bit Variation
+	bpl .CatTimingPAL
+	lda CatTimingNTSC,y
+	bne .CatTimingNTSC
+.CatTimingPAL
+	lda CatTimingPAL,y
+.CatTimingNTSC
+	clc
+	adc MenuCatTiming
+	sta MenuCatTiming
+
+	inc MenuCatFrame
+	lda MenuCatFrame
+	cmp #6
+	bne .NoRollCatFrame
+	lda #0
+	sta MenuCatFrame
+.NoRollCatFrame
+
+.KeepCatFrame
+	dec MenuCatTiming
+
+
+
 	ldx #RamBowColorsBk+19
 	lda Frame
 	and #%00001000
