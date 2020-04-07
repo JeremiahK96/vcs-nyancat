@@ -6,6 +6,7 @@ COLOR
 
 beginner (child)- rows always at identical speeds
 		- super easy level 1, slowly getting harder, never too hard
+		- no bombs
 
 novice (default)- rows at identical speeds until level 10
 		- easy until level 6, slowly getting more difficult
@@ -18,71 +19,92 @@ expert		- rows always at random speeds
 
 menu navigation:
 
-________	8
-___BY___	5
-__FIRE__	6
-__BACK__	6
-__NEXT__	6
-__GAME__	6
-__OVER__	6
-__KNOL__	6
-__MEME__	6
-__2019__	6
-__PRESS_	6
-__START_	7
-__SHADE_	7
-__COLOR_	7
-__READY_	7
-__CHRIS_	7
-_NOVICE_	7
-_EXPERT_	7
-_THANKS_	7
-_TO_THE_	7
-_TORRES_	7
-_SPECIAL	7
-_CREATED	7
-_CREATOR	7
-PLAYER_1	8
-_PLAYER_	8
-2_PLAYER	8
-BEGINNER	8
-ADVANCED	8
-JEREMIAH	8
-ORIGINAL	8
-NYAN_CAT	8
+SET NAME
+1 PLAYER
+START
+NOVICE
+SHADE
+COLOR
 
-PLAYER_1
-_PLAYER_
-2_PLAYER
-BEGINNER
-ADVANCED
-JEREMIAH
-ORIGINAL
-NYAN_CAT
-_CREATED
-_CREATOR
+SET NAME	SET NAME
+2 PLAYER	BACK
+NEXT		START
+NOVICE		NOVICE
+SHADE		SHADE
+COLOR		COLOR
 
-__PRESS
-__FIRE
-__BACK
-__NEXT
-__START
-_NOVICE
-_EXPERT_
-__SHADE
-__COLOR
-__READY
-__GAME
-__OVER
-_____
-___BY_
-__KNOL
-__2019
-__MEME
-__CHRIS
-_TORRES
-_SPECIAL
-_THANKS
-_TO_THE
+________*
 
+__PRESS_*
+__FIRE__*
+
+NEW_NAME*
+1_PLAYER*
+2_PLAYER*
+__BACK__*	
+__START_*
+__NEXT__*
+__EASY__*
+_NOVICE_*
+ADVANCED*
+_EXPERT_*
+__SHADE_*
+__COLOR_*
+
+__READY_*
+__GAME__*
+__OVER__*
+
+_CREATED*
+___BY___*
+JEREMIAH*
+__KNOL__*
+__2019__*
+
+_SPECIAL*
+_THANKS_*
+_TO_THE_*
+ORIGINAL*
+NYAN_CAT*
+__VIDEO_*
+_CREATOR*
+__CHRIS_*
+_TORRES_*
+
+Controller auto-detection will happen once for each player
+in the main menu.
+
+After the game starts, Player 1 is prompted to press the
+fire button. The game is now in "controller detect mode".
+First, INPT4 is checked. If the left joystick's fire button
+is pressed, joystick mode is selected.
+
+Otherwise, the paddle capacitor is dumped, and INPT0 is
+immedeately checked. If a paddle is suspected here,
+joystick mode is forced instead. This allows Genesis type
+controllers to be detected for joystick mode.
+
+Two frames later, the capacitor is checked again. If
+joystick mode was suspected before, but paddle mode is now,
+then and ONLY then, the first paddle in port 1's fire
+button is checked. If pressed, paddle mode is selected.
+Otherwise, it keeps looping until detection.
+
+If Player 1 selects 2-player mode, after he selects the
+"NEXT" option on the menu, Player 2 is prompted to press
+the fire button.
+
+First, Player 1's fire button is checked, and if it has
+been released and pressed again, the menu goes back to
+Player 1's menu options. This way, if a single player
+accidentally selects 2-player mode with only one controller
+attached, the game won't be completely frozen.
+
+The next step works exactly the same as for Player 1, except
+that INPT1 is also checked, in case both players are playing
+with paddles.
+
+--- SCRATCH THAT ---
+
+Controller auto-detection happens in the main menu.
 

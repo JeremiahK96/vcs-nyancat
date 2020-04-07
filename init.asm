@@ -1,7 +1,7 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Clear system registers and RAM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Uses 14 bytes of ROM
+; Uses 20 bytes of ROM
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
 InitSystem:
@@ -15,6 +15,9 @@ InitSystem:
 	txs
 	pha
 	bne .ClearStack
+
+	sta SWACNT
+	sta SWBCNT
 
 ; check for forced 50hz mode
 	lsr SWCHB	; reset switch state -> carry flag

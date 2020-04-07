@@ -2,14 +2,23 @@
 ; Overscan logic for menu
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-MenuOverScan:
-	SET_OSCAN_TIMER
+MenuOverScan:	SUBROUTINE
 
-	lda #2			; temp menu bypass
-	bit SWCHB
-	bne .NoResetPress
-	jmp JmpGamePlay
-.NoResetPress
+	TIMER_LOOP
+
+	lda #21
+	sta TIM64T
+
+	ldx #0
+	lda Variation
+	and #%00010000
+	beq .GetPdl
+	inx
+	bit CtrlType
+	bmi .GetPdl
+	inx
+.GetPdl
+	lda INPT0,x
 
 	inc Frame		; next frame
 

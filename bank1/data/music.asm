@@ -58,6 +58,8 @@ NoteLenNTSC
 	.byte	6
 	.byte	6
 	.byte	7
+;	.byte	6
+
 	.byte	6
 NoteLenPAL
 	.byte	5
@@ -394,7 +396,6 @@ CatTimingNTSC
 	.byte 4
 	.byte 4
 	.byte 4
-	.byte 4
 	.byte 5
 	.byte 4
 	.byte 4
@@ -418,9 +419,9 @@ CatTimingNTSC
 	.byte 4
 	.byte 4
 	.byte 5
+;	.byte 4
 
 CatTimingPAL
-	.byte 3
 	.byte 4
 	.byte 3
 	.byte 4
@@ -448,5 +449,6 @@ CatTimingPAL
 	.byte 4
 	.byte 3
 	.byte 4
+	.byte 3
 	.byte 4
 

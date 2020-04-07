@@ -1,8 +1,8 @@
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Music Engine
-;
 ; Handles the main music melody
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+	SUBROUTINE
 
 	; set bass frequency
 	lax MusicNote
@@ -11,12 +11,12 @@
 	tay
 	lda BassSeq,y
 	sta AUDF1
-	lda #6
-	ldy #7
+	ldy #6
+	lda #7
 	bcs .Loud
-	ldy #3
-.Loud	sta AUDC1
-	sty AUDV1
+	lsr
+.Loud	sty AUDC1
+	sta AUDV1
 
 	; get current note offset and store in Y
 	txa

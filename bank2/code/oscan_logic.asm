@@ -7,7 +7,7 @@
 Overscan:	SUBROUTINE
 
 	inc Frame	; increment the frame number
-	SET_OSCAN_TIMER
+	SET_OSCAN_TIMER 0
 
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 ; Proccess Joysticks
@@ -69,7 +69,7 @@ Overscan:	SUBROUTINE
 	SUBROUTINE
 
 	lda CatRow
-	and #$07
+	and #7
 	tax
 	lda RowPosition,x
 	cmp CatPosY

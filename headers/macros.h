@@ -22,9 +22,14 @@ JmpMenuOverScan
 	nop SelectBank1
 	jmp MenuOverScan
 JmpGamePlay
-;	nop SelectBank2
-;	jmp GameplayInit
-	jmp JmpInitSystem
+	nop SelectBank2
+	jmp GameplayInit
+JmpMenuTxtBtm
+	nop SelectBank3
+	jmp MenuTxtBtm
+JmpMenuBottom
+	nop SelectBank1
+	jmp MenuBottom
 
 	ENDM
 
@@ -59,12 +64,11 @@ JmpGamePlay
 	MAC SET_OSCAN_TIMER
 	SUBROUTINE
 
-	lda #OSCAN_NTSC
+	lda #OSCAN_PAL + {1}
 	bit Variation
-	bmi .NtscMode
-	lda #OSCAN_PAL
-.NtscMode
-	sta WSYNC
+	bpl .PAL
+	lda #OSCAN_NTSC + {1}
+.PAL	sta WSYNC
 	sta TIM64T		; set overscan timer
 
 	ENDM
@@ -81,19 +85,17 @@ JmpGamePlay
 	MAC VERT_SYNC
 	SUBROUTINE
 
-	ldx #VBLANK_NTSC	; TIM64T value for NTSC mode
-	bit Variation
-	bmi .NtscMode
 	ldx #VBLANK_PAL		; TIM64T value for PAL mode
-.NtscMode
-	lda #%1110
-.VsyncLoop
-	sta WSYNC
+	bit Variation
+	bpl .PAL
+	ldx #VBLANK_NTSC	; TIM64T value for NTSC mode
+.PAL	lda #%1110
+.Loop	sta WSYNC
 	sta VSYNC
 	sta VBLANK
 	stx TIM64T
 	lsr
-	bne .VsyncLoop
+	bne .Loop
 
 	ENDM
 
@@ -110,9 +112,8 @@ JmpGamePlay
 	MAC TIMER_LOOP
 	SUBROUTINE
 
-.TimerLoop
-	lda INTIM
-	bne .TimerLoop		; loop until end of vertical blanking
+.Loop	lda INTIM
+	bne .Loop		; loop until end of vertical blanking
 
 	ENDM
 
@@ -131,11 +132,10 @@ JmpGamePlay
 .X	SET {1}
 
 	lda RamBowColors+.X	; 3
-	bne .Rainbow		; 5/6
+	bne .Rbow		; 5/6
 	stx COLUBK		; 8
 	beq .End		; 11
-.Rainbow
-	sta COLUBK		; 9
+.Rbow	sta COLUBK		; 9
 	nop			; 11
 .End
 	ENDM
@@ -155,11 +155,10 @@ JmpGamePlay
 .X	SET {1}
 
 	lda RamBowColors+.X	; 3
-	bne .Rainbow		; 5/6
+	bne .Rbow		; 5/6
 	stx COLUPF		; 8
 	beq .End		; 11
-.Rainbow
-	sta COLUPF		; 9
+.Rbow	sta COLUPF		; 9
 	nop			; 11
 .End
 	ENDM
@@ -178,6 +177,18 @@ JmpGamePlay
 	ALIGN $100
 .NextPage
 
+	ENDM
+
+
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Skip Byte
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+; Gives a name to the opcode $08, which is a 2-cycle nop,
+; skipping the next byte of ROM.
+; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+
+	MAC SKIP_BYTE
+	HEX 80
 	ENDM
 
 

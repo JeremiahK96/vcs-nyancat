@@ -2,41 +2,38 @@
 ; Intro music sequence
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-Intro
+	SUBROUTINE
 
+Intro
 	lda #250
 	sta MusicNote
 
-.IntroOscan
-	SET_OSCAN_TIMER
+.Oscan	SET_OSCAN_TIMER 0
 	TIMER_LOOP
-
 	VERT_SYNC
 
 	lda MusicNote
-	bpl .IntroMusic
+	bpl .Music
 
 	ldx #8
 	cmp #252
-	beq .IntroClick
+	beq .Click
 	dex
 	cmp #253
-	beq .IntroClick
+	beq .Click
 
 	lda #0
 	sta AUDV0
 	beq .NoEcho
 
-.IntroClick
-	lda #$1F
+.Click	lda #$1F
 	sta AUDV0
 	lda #$8
 	sta AUDC0
 	stx AUDF0
 	bne .NoEcho
 
-.IntroMusic
-	lda #>IntroSeq
+.Music	lda #>IntroSeq
 	sta MusicPtr+1
 	lda #<IntroSeq
 	sta MusicPtr
@@ -65,18 +62,15 @@ Intro
 
 	TIMER_LOOP
 
-
 	ldx #193
-.IntroLoop
-	dex
+.Loop	dex
 	sta WSYNC
-	bne .IntroLoop
+	bne .Loop
 
 	lda MusicNote
 	cmp #32
-	beq .IntroEnd
-	jmp .IntroOscan
+	beq .End
+	jmp .Oscan
 
-.IntroEnd
-	stx MusicNote
+.End	stx MusicNote
 

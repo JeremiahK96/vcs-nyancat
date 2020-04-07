@@ -8,10 +8,6 @@
 
 	RORG RamLocal
 
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-; Variables that shouldn't be shared - ? bytes
-; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
 ; Pointers - 14 bytes
 
 ; The unused 3 bits of the high byte in each pointer
@@ -52,7 +48,7 @@ CatPosition	; data describing the cat's position
 		; bits 4-0 store the number of scanlines to skip after
 		; top of the cat's row before drawing the cat, from 0-18
 CatRow	ds 1	; the row that the cat is on or wants to be on/is moving towards
-JoyCenter	; least significant bit, true if joystick has been returned to center
+JoyCenter	; -------x	set if joystick has been returned to center
 	ds 1
 PreCatRows	; number of rows to draw before the two "cat" rows
 	ds 1
@@ -98,19 +94,19 @@ ThrobColor	ds 3	; 3-byte array for the colors used to draw the
 			; the last is brightest.
 CatThrobPF	ds 1
 
+; 51 bytes free
+
 ; Temporary variables - 2 bytes
 ProgressBar
 Temp		ds 1
 TempLoop	ds 1
-
-; 51 bytes free
 
 ; Variables which can be shared with the scoreboard stack - 3 bytes
 CurrentRow	ds 1	; the current row being drawn in the gameplay kernel
 FoodColor1	ds 1	; color of the 1st food item
 FoodColor2	ds 1	; color of the 2nd food item
 
-; 7 of 15 available temporary RAM bytes used (8 left)
+; 5 of 15 available temporary RAM bytes used (10 left)
 ; last 34 bytes of RAM are used to hold the rainbow color graphics
 
 	RORG $100 - 34

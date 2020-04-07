@@ -17,6 +17,7 @@
 	include headers/macros.h
 
 	include bank1.asm
-;	include bank2.asm
-;	include bank3.asm
-;	include bank4.asm
+	include bank2.asm
+	include bank3.asm
+	include bank4.asm
+

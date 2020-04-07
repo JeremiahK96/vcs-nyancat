@@ -2,11 +2,8 @@
 ; Music Engine
 ; <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 
-	SUBROUTINE
+SetNote	SUBROUTINE		; set voice and frequency
 
-SetNote
-
-; set voice and frequency
 	ldy MusicNote
 SetNote2
 	lda (MusicPtr),y	; get current note
@@ -22,9 +19,8 @@ SetNote2
 
 
 
-SetVolume
+SetVolume			; set note volume from envelope
 
-; set volume
 	stx TempX		; save voice number
 	lax NoteData		; get note data
 	lsr
@@ -45,7 +41,7 @@ SetVolume
 
 
 
-UpdateNote
+UpdateNote			; update note data for next frame
 
 	inc NoteData		; move to the next step of this note
 	lax NoteData
@@ -71,5 +67,6 @@ UpdateNote
 	lda #0			; roll note length counter after 18 notes
 .NoRoll	sta NoteData
 	inc MusicNote		; step forward to the next note
+
 .Same	rts
 

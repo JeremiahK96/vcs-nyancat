@@ -9,7 +9,8 @@
 	include bank1/code/menucat_prep.asm
 
 	lda MenuCatFrame
-	cmp #2
+	asl
+	cmp #4
 	bmi .HiCat
 	sta WSYNC
 	sta WSYNC
@@ -26,18 +27,15 @@
 	include bank1/code/menucat19_20.asm
 
 	lda MenuCatFrame
-	cmp #2
+	asl
+	cmp #4
 	bpl .LoCat
 	sta WSYNC
 	sta WSYNC
 	sta WSYNC
 .LoCat	sta WSYNC
 
-	ldy #62
-.Loop8
-	dey
-	sta WSYNC
-	bne .Loop8
+	include bank1/code/menu_bottom.asm
 
 	jmp MenuOverScan
 
