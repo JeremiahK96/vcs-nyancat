@@ -39,13 +39,13 @@ Txt_9	equ 35*7
 
 	ALIGN $100
 FontGfx0
-	incbin bank3/data/font_gfx0.bin
+	incbin "bank3/data/font_gfx0.bin"
 
 	ALIGN $100
-	incbin bank3/data/font_gfx1.bin
+	incbin "bank3/data/font_gfx1.bin"
 
 	ALIGN $100
-	incbin bank3/data/font_gfx2.bin
+	incbin "bank3/data/font_gfx2.bin"
 
 
 
